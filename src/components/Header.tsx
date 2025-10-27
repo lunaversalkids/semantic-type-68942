@@ -12,7 +12,7 @@ export const Header = ({
           <FileText className="w-6 h-6 text-primary-foreground" />
         </div>
         <div>
-          <h1 className="text-xl font-bold">A Professional Semantic Word Processor Editor</h1>
+          <h1 className="text-xl font-bold">Doc One</h1>
           <p className="text-xs text-muted-foreground">Doc One</p>
         </div>
       </div>
