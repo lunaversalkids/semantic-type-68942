@@ -9,6 +9,7 @@ interface PageNumberDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   onInsert: (position: 'left' | 'center' | 'right', format: 'page-x' | 'x' | 'x-of-total', applyToAll: boolean) => void;
+  onHide: () => void;
   currentPage: number;
   totalPages: number;
 }
@@ -17,6 +18,7 @@ export const PageNumberDialog = ({
   open,
   onOpenChange,
   onInsert,
+  onHide,
   currentPage,
   totalPages,
 }: PageNumberDialogProps) => {
@@ -26,6 +28,11 @@ export const PageNumberDialog = ({
 
   const handleInsert = () => {
     onInsert(position, format, applyToAll);
+    onOpenChange(false);
+  };
+
+  const handleHide = () => {
+    onHide();
     onOpenChange(false);
   };
 
@@ -100,6 +107,16 @@ export const PageNumberDialog = ({
             <Label htmlFor="apply-all" className="font-normal cursor-pointer">
               Apply to all pages consistently
             </Label>
+          </div>
+
+          <div className="pt-2">
+            <Button 
+              variant="outline" 
+              className="w-full" 
+              onClick={handleHide}
+            >
+              Hide page number on page {currentPage}
+            </Button>
           </div>
         </div>
 

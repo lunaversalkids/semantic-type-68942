@@ -223,6 +223,16 @@ const Index = () => {
         open={pageNumberDialogOpen}
         onOpenChange={setPageNumberDialogOpen}
         onInsert={handlePageNumberInsert}
+        onHide={() => {
+          setPageNumbersVisibility(prev => ({
+            ...prev,
+            [currentPageForNumber]: false
+          }));
+          toast({ 
+            title: 'Page Number Hidden', 
+            description: `Hidden on page ${currentPageForNumber}` 
+          });
+        }}
         currentPage={currentPageForNumber}
         totalPages={2}
       />
