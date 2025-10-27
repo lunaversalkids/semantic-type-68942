@@ -19,7 +19,7 @@ interface EditorProps {
   onInsertLineBreak?: () => void;
   onInsertSectionBreak?: () => void;
   onInsertColumnBreak?: () => void;
-  onInsertPageNumber?: () => void;
+  onInsertPageNumber?: (pageNum: number) => void;
   onInsertPageCount?: () => void;
   onInsertDateTime?: () => void;
   onInsertBookmark?: () => void;
@@ -99,7 +99,7 @@ export const Editor = ({
           onInsertLineBreak={onInsertLineBreak}
           onInsertSectionBreak={onInsertSectionBreak}
           onInsertColumnBreak={onInsertColumnBreak}
-          onInsertPageNumber={onInsertPageNumber}
+          onInsertPageNumber={() => onInsertPageNumber?.(1)}
           onInsertPageCount={onInsertPageCount}
           onInsertDateTime={onInsertDateTime}
           onInsertBookmark={onInsertBookmark}
@@ -127,7 +127,7 @@ export const Editor = ({
           onInsertLineBreak={onInsertLineBreak}
           onInsertSectionBreak={onInsertSectionBreak}
           onInsertColumnBreak={onInsertColumnBreak}
-          onInsertPageNumber={onInsertPageNumber}
+          onInsertPageNumber={() => onInsertPageNumber?.(2)}
           onInsertPageCount={onInsertPageCount}
           onInsertDateTime={onInsertDateTime}
           onInsertBookmark={onInsertBookmark}

@@ -4,6 +4,7 @@ import { Toolbar } from '@/components/Toolbar';
 import { StylePanel } from '@/components/StylePanel';
 import { Editor } from '@/components/Editor';
 import { ApplyToAllDialog } from '@/components/ApplyToAllDialog';
+import { PageNumberDialog } from '@/components/PageNumberDialog';
 import { OnboardingTour } from '@/components/OnboardingTour';
 import { HelpMode } from '@/components/HelpMode';
 import { defaultStyles } from '@/types/styles';
@@ -13,6 +14,8 @@ const Index = () => {
   const [selectedText, setSelectedText] = useState('');
   const [editor, setEditor] = useState<any>(null);
   const [applyToAllOpen, setApplyToAllOpen] = useState(false);
+  const [pageNumberDialogOpen, setPageNumberDialogOpen] = useState(false);
+  const [currentPageForNumber, setCurrentPageForNumber] = useState(1);
   const [helpModeActive, setHelpModeActive] = useState(false);
   const [stylePanelCollapsed, setStylePanelCollapsed] = useState(false);
   const [pageNumbersVisibility, setPageNumbersVisibility] = useState<Record<number, boolean>>({
@@ -87,10 +90,37 @@ const Index = () => {
     toast({ title: 'Column Break Inserted' });
   };
 
-  const handleInsertPageNumber = () => {
+  const handleInsertPageNumber = (pageNum: number) => {
+    setCurrentPageForNumber(pageNum);
+    setPageNumberDialogOpen(true);
+  };
+
+  const handlePageNumberInsert = (
+    position: 'left' | 'center' | 'right',
+    format: 'page-x' | 'x' | 'x-of-total'
+  ) => {
     if (!editor) return;
-    editor.chain().focus().insertContent('[Page Number]').run();
-    toast({ title: 'Page Number Placeholder Inserted' });
+    
+    let text = '';
+    const totalPages = 2; // Update this if you track total pages
+    
+    switch (format) {
+      case 'page-x':
+        text = `Page ${currentPageForNumber}`;
+        break;
+      case 'x':
+        text = `${currentPageForNumber}`;
+        break;
+      case 'x-of-total':
+        text = `${currentPageForNumber} of ${totalPages}`;
+        break;
+    }
+    
+    const align = position === 'center' ? 'center' : position === 'right' ? 'right' : 'left';
+    const content = `<p style="text-align: ${align}; margin: 0;">${text}</p>`;
+    
+    editor.chain().focus().insertContent(content).run();
+    toast({ title: 'Page Number Inserted', description: `${text} (${position})` });
   };
 
   const handleInsertPageCount = () => {
@@ -175,6 +205,14 @@ const Index = () => {
         selectedText={selectedText}
         styles={defaultStyles}
         editor={editor}
+      />
+      
+      <PageNumberDialog
+        open={pageNumberDialogOpen}
+        onOpenChange={setPageNumberDialogOpen}
+        onInsert={handlePageNumberInsert}
+        currentPage={currentPageForNumber}
+        totalPages={2}
       />
       
       <OnboardingTour />
