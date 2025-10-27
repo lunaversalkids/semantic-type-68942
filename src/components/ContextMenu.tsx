@@ -8,7 +8,7 @@ import {
   ContextMenuSubTrigger,
   ContextMenuTrigger,
 } from '@/components/ui/context-menu';
-import { Tag, Palette, Sparkles, FileText } from 'lucide-react';
+import { Tag, Palette, Sparkles, FileText, Hash } from 'lucide-react';
 import { ReactNode } from 'react';
 
 interface EditorContextMenuProps {
@@ -17,9 +17,21 @@ interface EditorContextMenuProps {
   onApplyToAll?: () => void;
   onAIAssist?: (action: string) => void;
   onInsertFootnote?: () => void;
+  onTogglePageNumber?: () => void;
+  showPageNumber?: boolean;
+  pageNumber?: number;
 }
 
-export const EditorContextMenu = ({ children, editor, onApplyToAll, onAIAssist, onInsertFootnote }: EditorContextMenuProps) => {
+export const EditorContextMenu = ({ 
+  children, 
+  editor, 
+  onApplyToAll, 
+  onAIAssist, 
+  onInsertFootnote,
+  onTogglePageNumber,
+  showPageNumber = true,
+  pageNumber = 1
+}: EditorContextMenuProps) => {
   if (!editor) return <>{children}</>;
 
   const applySemanticTag = (tag: string, color: string, weight?: number, italic?: boolean) => {
@@ -65,10 +77,21 @@ export const EditorContextMenu = ({ children, editor, onApplyToAll, onAIAssist, 
 
         <ContextMenuSeparator />
 
-        <ContextMenuItem onClick={onInsertFootnote}>
-          <FileText className="w-4 h-4 mr-2" />
-          Insert Footnote
-        </ContextMenuItem>
+        <ContextMenuSub>
+          <ContextMenuSubTrigger>
+            <FileText className="w-4 h-4 mr-2" />
+            Insert
+          </ContextMenuSubTrigger>
+          <ContextMenuSubContent>
+            <ContextMenuItem onClick={onInsertFootnote}>
+              Footnote
+            </ContextMenuItem>
+            <ContextMenuItem onClick={onTogglePageNumber}>
+              <Hash className="w-4 h-4 mr-2" />
+              {showPageNumber ? 'Hide' : 'Show'} Page Number
+            </ContextMenuItem>
+          </ContextMenuSubContent>
+        </ContextMenuSub>
 
         <ContextMenuItem onClick={onApplyToAll}>
           <Palette className="w-4 h-4 mr-2" />

@@ -14,10 +14,19 @@ interface EditorProps {
   onApplyToAll?: () => void;
   onAIAssist?: (action: string) => void;
   onInsertFootnote?: () => void;
-  showPageNumbers?: boolean;
+  pageNumbersVisibility?: Record<number, boolean>;
+  onTogglePageNumber?: (pageNum: number) => void;
 }
 
-export const Editor = ({ onSelectionChange, onEditorReady, onApplyToAll, onAIAssist, onInsertFootnote, showPageNumbers = true }: EditorProps) => {
+export const Editor = ({ 
+  onSelectionChange, 
+  onEditorReady, 
+  onApplyToAll, 
+  onAIAssist, 
+  onInsertFootnote, 
+  pageNumbersVisibility = { 1: true, 2: true },
+  onTogglePageNumber 
+}: EditorProps) => {
   const editor = useEditor({
     extensions: [
       StarterKit,
@@ -65,24 +74,37 @@ export const Editor = ({ onSelectionChange, onEditorReady, onApplyToAll, onAIAss
           onApplyToAll={onApplyToAll}
           onAIAssist={onAIAssist}
           onInsertFootnote={onInsertFootnote}
+          onTogglePageNumber={() => onTogglePageNumber?.(1)}
+          showPageNumber={pageNumbersVisibility[1]}
+          pageNumber={1}
         >
           <Card className="w-[8.5in] min-h-[11in] bg-[hsl(var(--page-bg))] shadow-lg p-16 relative">
             <EditorContent editor={editor} />
-            {showPageNumbers && (
+            {pageNumbersVisibility[1] && (
               <div className="absolute bottom-8 right-8 text-sm text-muted-foreground">
                 Page 1
               </div>
             )}
           </Card>
         </EditorContextMenu>
-        <Card className="w-[8.5in] min-h-[11in] bg-[hsl(var(--page-bg))] shadow-lg p-16 relative flex items-center justify-center text-muted-foreground">
-          <p>Page 2</p>
-          {showPageNumbers && (
-            <div className="absolute bottom-8 right-8 text-sm text-muted-foreground">
-              Page 2
-            </div>
-          )}
-        </Card>
+        <EditorContextMenu 
+          editor={editor}
+          onApplyToAll={onApplyToAll}
+          onAIAssist={onAIAssist}
+          onInsertFootnote={onInsertFootnote}
+          onTogglePageNumber={() => onTogglePageNumber?.(2)}
+          showPageNumber={pageNumbersVisibility[2]}
+          pageNumber={2}
+        >
+          <Card className="w-[8.5in] min-h-[11in] bg-[hsl(var(--page-bg))] shadow-lg p-16 relative flex items-center justify-center text-muted-foreground">
+            <p>Page 2</p>
+            {pageNumbersVisibility[2] && (
+              <div className="absolute bottom-8 right-8 text-sm text-muted-foreground">
+                Page 2
+              </div>
+            )}
+          </Card>
+        </EditorContextMenu>
       </div>
     </div>
   );

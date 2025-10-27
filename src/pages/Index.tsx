@@ -15,7 +15,10 @@ const Index = () => {
   const [applyToAllOpen, setApplyToAllOpen] = useState(false);
   const [helpModeActive, setHelpModeActive] = useState(false);
   const [stylePanelCollapsed, setStylePanelCollapsed] = useState(false);
-  const [showPageNumbers, setShowPageNumbers] = useState(true);
+  const [pageNumbersVisibility, setPageNumbersVisibility] = useState<Record<number, boolean>>({
+    1: true,
+    2: true,
+  });
   const [footnoteCounter, setFootnoteCounter] = useState(1);
   const { toast } = useToast();
 
@@ -62,9 +65,7 @@ const Index = () => {
     <div className="h-screen flex flex-col overflow-hidden">
       <Header onHelpClick={() => setHelpModeActive(true)} />
       <Toolbar 
-        editor={editor} 
-        showPageNumbers={showPageNumbers}
-        onTogglePageNumbers={() => setShowPageNumbers(!showPageNumbers)}
+        editor={editor}
       />
       <div className="flex-1 flex overflow-hidden">
         <StylePanel 
@@ -79,7 +80,13 @@ const Index = () => {
             onApplyToAll={handleApplyToAll}
             onAIAssist={handleAIAssist}
             onInsertFootnote={handleInsertFootnote}
-            showPageNumbers={showPageNumbers}
+            pageNumbersVisibility={pageNumbersVisibility}
+            onTogglePageNumber={(pageNum) => {
+              setPageNumbersVisibility(prev => ({
+                ...prev,
+                [pageNum]: !prev[pageNum]
+              }));
+            }}
           />
         </main>
       </div>
