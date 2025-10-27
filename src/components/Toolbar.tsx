@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import {
@@ -14,12 +15,17 @@ import {
   FileDown,
   Settings,
 } from 'lucide-react';
+import { FindReplaceDialog } from './FindReplaceDialog';
+import { ExportDialog } from './ExportDialog';
 
 interface ToolbarProps {
   editor?: any;
 }
 
 export const Toolbar = ({ editor }: ToolbarProps) => {
+  const [findReplaceOpen, setFindReplaceOpen] = useState(false);
+  const [exportOpen, setExportOpen] = useState(false);
+  
   if (!editor) return null;
   return (
     <div className="h-14 border-b border-border bg-background px-4 flex items-center gap-2">
@@ -118,11 +124,11 @@ export const Toolbar = ({ editor }: ToolbarProps) => {
       </div>
 
       <div className="ml-auto flex items-center gap-2">
-        <Button variant="ghost" size="sm">
+        <Button variant="ghost" size="sm" onClick={() => setFindReplaceOpen(true)}>
           <Search className="w-4 h-4 mr-2" />
           Find & Replace
         </Button>
-        <Button variant="ghost" size="sm">
+        <Button variant="ghost" size="sm" onClick={() => setExportOpen(true)}>
           <FileDown className="w-4 h-4 mr-2" />
           Export
         </Button>
@@ -130,6 +136,17 @@ export const Toolbar = ({ editor }: ToolbarProps) => {
           <Settings className="w-4 h-4" />
         </Button>
       </div>
+      
+      <FindReplaceDialog 
+        open={findReplaceOpen} 
+        onOpenChange={setFindReplaceOpen}
+        editor={editor}
+      />
+      <ExportDialog 
+        open={exportOpen} 
+        onOpenChange={setExportOpen}
+        editor={editor}
+      />
     </div>
   );
 };

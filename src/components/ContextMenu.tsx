@@ -14,9 +14,11 @@ import { ReactNode } from 'react';
 interface EditorContextMenuProps {
   children: ReactNode;
   editor?: any;
+  onApplyToAll?: () => void;
+  onAIAssist?: (action: string) => void;
 }
 
-export const EditorContextMenu = ({ children, editor }: EditorContextMenuProps) => {
+export const EditorContextMenu = ({ children, editor, onApplyToAll, onAIAssist }: EditorContextMenuProps) => {
   if (!editor) return <>{children}</>;
 
   const applySemanticTag = (tag: string, color: string, weight?: number, italic?: boolean) => {
@@ -61,7 +63,7 @@ export const EditorContextMenu = ({ children, editor }: EditorContextMenuProps) 
           Insert Footnote
         </ContextMenuItem>
 
-        <ContextMenuItem>
+        <ContextMenuItem onClick={onApplyToAll}>
           <Palette className="w-4 h-4 mr-2" />
           Apply to All Instances...
         </ContextMenuItem>
@@ -74,10 +76,10 @@ export const EditorContextMenu = ({ children, editor }: EditorContextMenuProps) 
             AI Assist
           </ContextMenuSubTrigger>
           <ContextMenuSubContent>
-            <ContextMenuItem>Grammar Check</ContextMenuItem>
-            <ContextMenuItem>Improve Clarity</ContextMenuItem>
-            <ContextMenuItem>Summarize</ContextMenuItem>
-            <ContextMenuItem>Alphabetize List</ContextMenuItem>
+            <ContextMenuItem onClick={() => onAIAssist?.('grammar')}>Grammar Check</ContextMenuItem>
+            <ContextMenuItem onClick={() => onAIAssist?.('clarity')}>Improve Clarity</ContextMenuItem>
+            <ContextMenuItem onClick={() => onAIAssist?.('summarize')}>Summarize</ContextMenuItem>
+            <ContextMenuItem onClick={() => onAIAssist?.('alphabetize')}>Alphabetize List</ContextMenuItem>
           </ContextMenuSubContent>
         </ContextMenuSub>
       </ContextMenuContent>

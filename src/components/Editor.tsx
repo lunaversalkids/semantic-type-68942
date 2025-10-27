@@ -11,9 +11,11 @@ import { EditorContextMenu } from './ContextMenu';
 interface EditorProps {
   onSelectionChange?: (text: string) => void;
   onEditorReady?: (editor: any) => void;
+  onApplyToAll?: () => void;
+  onAIAssist?: (action: string) => void;
 }
 
-export const Editor = ({ onSelectionChange, onEditorReady }: EditorProps) => {
+export const Editor = ({ onSelectionChange, onEditorReady, onApplyToAll, onAIAssist }: EditorProps) => {
   const editor = useEditor({
     extensions: [
       StarterKit,
@@ -56,7 +58,11 @@ export const Editor = ({ onSelectionChange, onEditorReady }: EditorProps) => {
   return (
     <div className="h-full flex items-start justify-center bg-[hsl(var(--editor-bg))] p-8 overflow-auto">
       <div className="flex gap-8">
-        <EditorContextMenu editor={editor}>
+        <EditorContextMenu 
+          editor={editor}
+          onApplyToAll={onApplyToAll}
+          onAIAssist={onAIAssist}
+        >
           <Card className="w-[8.5in] min-h-[11in] bg-[hsl(var(--page-bg))] shadow-lg p-16">
             <EditorContent editor={editor} />
           </Card>
