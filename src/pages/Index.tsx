@@ -1,11 +1,21 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import { useState } from 'react';
+import { Header } from '@/components/Header';
+import { Toolbar } from '@/components/Toolbar';
+import { StylePanel } from '@/components/StylePanel';
+import { Editor } from '@/components/Editor';
 
 const Index = () => {
+  const [selectedText, setSelectedText] = useState('');
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background">
-      <div className="text-center">
-        <h1 className="mb-4 text-4xl font-bold">Welcome to Your Blank App</h1>
-        <p className="text-xl text-muted-foreground">Start building your amazing project here!</p>
+    <div className="h-screen flex flex-col overflow-hidden">
+      <Header />
+      <Toolbar />
+      <div className="flex-1 flex overflow-hidden">
+        <StylePanel />
+        <main className="flex-1 overflow-hidden">
+          <Editor onSelectionChange={setSelectedText} />
+        </main>
       </div>
     </div>
   );
