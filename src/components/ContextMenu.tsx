@@ -18,6 +18,16 @@ interface EditorContextMenuProps {
   onAIAssist?: (action: string) => void;
   onInsertFootnote?: () => void;
   onTogglePageNumber?: () => void;
+  onInsertTab?: () => void;
+  onInsertPageBreak?: () => void;
+  onInsertLineBreak?: () => void;
+  onInsertSectionBreak?: () => void;
+  onInsertColumnBreak?: () => void;
+  onInsertPageNumber?: () => void;
+  onInsertPageCount?: () => void;
+  onInsertDateTime?: () => void;
+  onInsertBookmark?: () => void;
+  onInsertTableOfContents?: () => void;
   showPageNumber?: boolean;
   pageNumber?: number;
 }
@@ -29,6 +39,16 @@ export const EditorContextMenu = ({
   onAIAssist, 
   onInsertFootnote,
   onTogglePageNumber,
+  onInsertTab,
+  onInsertPageBreak,
+  onInsertLineBreak,
+  onInsertSectionBreak,
+  onInsertColumnBreak,
+  onInsertPageNumber,
+  onInsertPageCount,
+  onInsertDateTime,
+  onInsertBookmark,
+  onInsertTableOfContents,
   showPageNumber = true,
   pageNumber = 1
 }: EditorContextMenuProps) => {
@@ -83,9 +103,40 @@ export const EditorContextMenu = ({
             Insert
           </ContextMenuSubTrigger>
           <ContextMenuSubContent>
+            <ContextMenuItem onClick={onInsertTab}>
+              Tab
+            </ContextMenuItem>
+            <ContextMenuItem onClick={onInsertPageBreak}>
+              Page Break
+            </ContextMenuItem>
+            <ContextMenuItem onClick={onInsertLineBreak}>
+              Line Break
+            </ContextMenuItem>
+            <ContextMenuItem onClick={onInsertSectionBreak}>
+              Section Break
+            </ContextMenuItem>
+            <ContextMenuItem onClick={onInsertColumnBreak}>
+              Column Break
+            </ContextMenuItem>
+            <ContextMenuItem onClick={onInsertPageNumber}>
+              Page Number
+            </ContextMenuItem>
+            <ContextMenuItem onClick={onInsertPageCount}>
+              Page Count
+            </ContextMenuItem>
+            <ContextMenuItem onClick={onInsertDateTime}>
+              Date & Time
+            </ContextMenuItem>
+            <ContextMenuItem onClick={onInsertBookmark}>
+              Bookmark
+            </ContextMenuItem>
             <ContextMenuItem onClick={onInsertFootnote}>
               Footnote
             </ContextMenuItem>
+            <ContextMenuItem onClick={onInsertTableOfContents}>
+              Table of Contents
+            </ContextMenuItem>
+            <ContextMenuSeparator />
             <ContextMenuItem onClick={onTogglePageNumber}>
               <Hash className="w-4 h-4 mr-2" />
               {showPageNumber ? 'Hide' : 'Show'} Page Number

@@ -14,6 +14,16 @@ interface EditorProps {
   onApplyToAll?: () => void;
   onAIAssist?: (action: string) => void;
   onInsertFootnote?: () => void;
+  onInsertTab?: () => void;
+  onInsertPageBreak?: () => void;
+  onInsertLineBreak?: () => void;
+  onInsertSectionBreak?: () => void;
+  onInsertColumnBreak?: () => void;
+  onInsertPageNumber?: () => void;
+  onInsertPageCount?: () => void;
+  onInsertDateTime?: () => void;
+  onInsertBookmark?: () => void;
+  onInsertTableOfContents?: () => void;
   pageNumbersVisibility?: Record<number, boolean>;
   onTogglePageNumber?: (pageNum: number) => void;
 }
@@ -23,7 +33,17 @@ export const Editor = ({
   onEditorReady, 
   onApplyToAll, 
   onAIAssist, 
-  onInsertFootnote, 
+  onInsertFootnote,
+  onInsertTab,
+  onInsertPageBreak,
+  onInsertLineBreak,
+  onInsertSectionBreak,
+  onInsertColumnBreak,
+  onInsertPageNumber,
+  onInsertPageCount,
+  onInsertDateTime,
+  onInsertBookmark,
+  onInsertTableOfContents,
   pageNumbersVisibility = { 1: true, 2: true },
   onTogglePageNumber 
 }: EditorProps) => {
@@ -74,6 +94,16 @@ export const Editor = ({
           onApplyToAll={onApplyToAll}
           onAIAssist={onAIAssist}
           onInsertFootnote={onInsertFootnote}
+          onInsertTab={onInsertTab}
+          onInsertPageBreak={onInsertPageBreak}
+          onInsertLineBreak={onInsertLineBreak}
+          onInsertSectionBreak={onInsertSectionBreak}
+          onInsertColumnBreak={onInsertColumnBreak}
+          onInsertPageNumber={onInsertPageNumber}
+          onInsertPageCount={onInsertPageCount}
+          onInsertDateTime={onInsertDateTime}
+          onInsertBookmark={onInsertBookmark}
+          onInsertTableOfContents={onInsertTableOfContents}
           onTogglePageNumber={() => onTogglePageNumber?.(1)}
           showPageNumber={pageNumbersVisibility[1]}
           pageNumber={1}
@@ -92,6 +122,16 @@ export const Editor = ({
           onApplyToAll={onApplyToAll}
           onAIAssist={onAIAssist}
           onInsertFootnote={onInsertFootnote}
+          onInsertTab={onInsertTab}
+          onInsertPageBreak={onInsertPageBreak}
+          onInsertLineBreak={onInsertLineBreak}
+          onInsertSectionBreak={onInsertSectionBreak}
+          onInsertColumnBreak={onInsertColumnBreak}
+          onInsertPageNumber={onInsertPageNumber}
+          onInsertPageCount={onInsertPageCount}
+          onInsertDateTime={onInsertDateTime}
+          onInsertBookmark={onInsertBookmark}
+          onInsertTableOfContents={onInsertTableOfContents}
           onTogglePageNumber={() => onTogglePageNumber?.(2)}
           showPageNumber={pageNumbersVisibility[2]}
           pageNumber={2}

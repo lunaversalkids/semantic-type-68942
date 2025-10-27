@@ -45,9 +45,7 @@ const Index = () => {
     if (!editor) return;
     
     const footnoteNumber = footnoteCounter;
-    const { from } = editor.state.selection;
     
-    // Insert superscript footnote number at cursor position
     editor.chain()
       .focus()
       .insertContent(`<sup>${footnoteNumber}</sup>`)
@@ -57,8 +55,78 @@ const Index = () => {
     
     toast({
       title: 'Footnote Inserted',
-      description: `Footnote ${footnoteNumber} added at cursor position`,
+      description: `Footnote ${footnoteNumber} added`,
     });
+  };
+
+  const handleInsertTab = () => {
+    if (!editor) return;
+    editor.chain().focus().insertContent('&nbsp;&nbsp;&nbsp;&nbsp;').run();
+  };
+
+  const handleInsertPageBreak = () => {
+    if (!editor) return;
+    editor.chain().focus().insertContent('<div style="page-break-after: always;"></div>').run();
+    toast({ title: 'Page Break Inserted' });
+  };
+
+  const handleInsertLineBreak = () => {
+    if (!editor) return;
+    editor.chain().focus().insertContent('<br>').run();
+  };
+
+  const handleInsertSectionBreak = () => {
+    if (!editor) return;
+    editor.chain().focus().insertContent('<hr style="page-break-after: always; border: none; margin: 2rem 0;">').run();
+    toast({ title: 'Section Break Inserted' });
+  };
+
+  const handleInsertColumnBreak = () => {
+    if (!editor) return;
+    editor.chain().focus().insertContent('<div style="break-after: column;"></div>').run();
+    toast({ title: 'Column Break Inserted' });
+  };
+
+  const handleInsertPageNumber = () => {
+    if (!editor) return;
+    editor.chain().focus().insertContent('[Page Number]').run();
+    toast({ title: 'Page Number Placeholder Inserted' });
+  };
+
+  const handleInsertPageCount = () => {
+    if (!editor) return;
+    editor.chain().focus().insertContent('[Page Count]').run();
+    toast({ title: 'Page Count Placeholder Inserted' });
+  };
+
+  const handleInsertDateTime = () => {
+    if (!editor) return;
+    const now = new Date().toLocaleString();
+    editor.chain().focus().insertContent(now).run();
+    toast({ title: 'Date & Time Inserted' });
+  };
+
+  const handleInsertBookmark = () => {
+    if (!editor) return;
+    const bookmarkId = `bookmark-${Date.now()}`;
+    editor.chain().focus().insertContent(`<span id="${bookmarkId}" style="background: #fef3c7; padding: 0 4px;">📌 Bookmark</span>`).run();
+    toast({ title: 'Bookmark Inserted', description: `ID: ${bookmarkId}` });
+  };
+
+  const handleInsertTableOfContents = () => {
+    if (!editor) return;
+    const content = `
+      <div style="border: 1px solid #e5e7eb; padding: 1rem; margin: 1rem 0; background: #f9fafb;">
+        <h3 style="margin-top: 0;">Table of Contents</h3>
+        <ul style="list-style: none; padding-left: 0;">
+          <li>1. Introduction</li>
+          <li>2. Main Content</li>
+          <li>3. Conclusion</li>
+        </ul>
+      </div>
+    `;
+    editor.chain().focus().insertContent(content).run();
+    toast({ title: 'Table of Contents Inserted' });
   };
 
   return (
@@ -80,6 +148,16 @@ const Index = () => {
             onApplyToAll={handleApplyToAll}
             onAIAssist={handleAIAssist}
             onInsertFootnote={handleInsertFootnote}
+            onInsertTab={handleInsertTab}
+            onInsertPageBreak={handleInsertPageBreak}
+            onInsertLineBreak={handleInsertLineBreak}
+            onInsertSectionBreak={handleInsertSectionBreak}
+            onInsertColumnBreak={handleInsertColumnBreak}
+            onInsertPageNumber={handleInsertPageNumber}
+            onInsertPageCount={handleInsertPageCount}
+            onInsertDateTime={handleInsertDateTime}
+            onInsertBookmark={handleInsertBookmark}
+            onInsertTableOfContents={handleInsertTableOfContents}
             pageNumbersVisibility={pageNumbersVisibility}
             onTogglePageNumber={(pageNum) => {
               setPageNumbersVisibility(prev => ({
