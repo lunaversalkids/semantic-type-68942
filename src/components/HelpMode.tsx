@@ -55,60 +55,72 @@ interface HelpModeProps {
 }
 
 export const HelpMode = ({ isActive, onClose }: HelpModeProps) => {
-  const [boxPositions, setBoxPositions] = useState<Record<string, { top: number; left: number; targetRect: DOMRect } | null>>({});
+  const [currentStep, setCurrentStep] = useState(0);
+  const [boxPosition, setBoxPosition] = useState<{ top: number; left: number; targetRect: DOMRect } | null>(null);
+
+  const currentBox = helpBoxes[currentStep];
 
   useEffect(() => {
     if (!isActive) return;
 
-    const calculatePositions = () => {
-      const positions: Record<string, { top: number; left: number; targetRect: DOMRect } | null> = {};
-      
-      helpBoxes.forEach((box) => {
-        const element = document.querySelector(box.target);
-        if (element) {
-          const rect = element.getBoundingClientRect();
-          const boxWidth = 280;
-          const boxHeight = 120;
-          const arrowSize = 20;
-          const gap = 15;
+    const calculatePosition = () => {
+      const element = document.querySelector(currentBox.target);
+      if (!element) {
+        setBoxPosition(null);
+        return;
+      }
 
-          let top = 0;
-          let left = 0;
+      const rect = element.getBoundingClientRect();
+      const boxWidth = 320;
+      const boxHeight = 150;
+      const arrowSize = 20;
+      const gap = 15;
 
-          switch (box.position) {
-            case 'right':
-              top = rect.top + rect.height / 2 - boxHeight / 2;
-              left = rect.right + gap + arrowSize;
-              break;
-            case 'left':
-              top = rect.top + rect.height / 2 - boxHeight / 2;
-              left = rect.left - boxWidth - gap - arrowSize;
-              break;
-            case 'bottom':
-              top = rect.bottom + gap + arrowSize;
-              left = rect.left + rect.width / 2 - boxWidth / 2;
-              break;
-            case 'top':
-              top = rect.top - boxHeight - gap - arrowSize;
-              left = rect.left + rect.width / 2 - boxWidth / 2;
-              break;
-          }
+      let top = 0;
+      let left = 0;
 
-          positions[box.id] = { top, left, targetRect: rect };
-        } else {
-          positions[box.id] = null;
-        }
-      });
+      switch (currentBox.position) {
+        case 'right':
+          top = rect.top + rect.height / 2 - boxHeight / 2;
+          left = rect.right + gap + arrowSize;
+          break;
+        case 'left':
+          top = rect.top + rect.height / 2 - boxHeight / 2;
+          left = rect.left - boxWidth - gap - arrowSize;
+          break;
+        case 'bottom':
+          top = rect.bottom + gap + arrowSize;
+          left = rect.left + rect.width / 2 - boxWidth / 2;
+          break;
+        case 'top':
+          top = rect.top - boxHeight - gap - arrowSize;
+          left = rect.left + rect.width / 2 - boxWidth / 2;
+          break;
+      }
 
-      setBoxPositions(positions);
+      setBoxPosition({ top, left, targetRect: rect });
     };
 
-    calculatePositions();
-    window.addEventListener('resize', calculatePositions);
-    return () => window.removeEventListener('resize', calculatePositions);
-  }, [isActive]);
+    calculatePosition();
+    window.addEventListener('resize', calculatePosition);
+    return () => window.removeEventListener('resize', calculatePosition);
+  }, [isActive, currentStep, currentBox]);
 
-  if (!isActive) return null;
+  const handleNext = () => {
+    if (currentStep < helpBoxes.length - 1) {
+      setCurrentStep(currentStep + 1);
+    } else {
+      onClose();
+    }
+  };
+
+  const handlePrev = () => {
+    if (currentStep > 0) {
+      setCurrentStep(currentStep - 1);
+    }
+  };
+
+  if (!isActive || !boxPosition) return null;
 
   const getArrowStyles = (position: string, targetRect: DOMRect, boxTop: number, boxLeft: number) => {
     const baseArrow = "absolute w-0 h-0 border-solid z-50";
@@ -120,22 +132,22 @@ export const HelpMode = ({ isActive, onClose }: HelpModeProps) => {
           className: `${baseArrow} border-r-[${arrowSize}px] border-r-card border-t-[${arrowSize}px] border-t-transparent border-b-[${arrowSize}px] border-b-transparent`,
           style: {
             left: `${boxLeft - arrowSize}px`,
-            top: `${boxTop + 60 - arrowSize}px`,
+            top: `${boxTop + 75 - arrowSize}px`,
           },
         };
       case 'left':
         return {
           className: `${baseArrow} border-l-[${arrowSize}px] border-l-card border-t-[${arrowSize}px] border-t-transparent border-b-[${arrowSize}px] border-b-transparent`,
           style: {
-            left: `${boxLeft + 280}px`,
-            top: `${boxTop + 60 - arrowSize}px`,
+            left: `${boxLeft + 320}px`,
+            top: `${boxTop + 75 - arrowSize}px`,
           },
         };
       case 'bottom':
         return {
           className: `${baseArrow} border-b-[${arrowSize}px] border-b-card border-l-[${arrowSize}px] border-l-transparent border-r-[${arrowSize}px] border-r-transparent`,
           style: {
-            left: `${boxLeft + 140 - arrowSize}px`,
+            left: `${boxLeft + 160 - arrowSize}px`,
             top: `${boxTop - arrowSize}px`,
           },
         };
@@ -143,8 +155,8 @@ export const HelpMode = ({ isActive, onClose }: HelpModeProps) => {
         return {
           className: `${baseArrow} border-t-[${arrowSize}px] border-t-card border-l-[${arrowSize}px] border-l-transparent border-r-[${arrowSize}px] border-r-transparent`,
           style: {
-            left: `${boxLeft + 140 - arrowSize}px`,
-            top: `${boxTop + 120}px`,
+            left: `${boxLeft + 160 - arrowSize}px`,
+            top: `${boxTop + 150}px`,
           },
         };
       default:
@@ -152,53 +164,74 @@ export const HelpMode = ({ isActive, onClose }: HelpModeProps) => {
     }
   };
 
+  const arrow = getArrowStyles(currentBox.position, boxPosition.targetRect, boxPosition.top, boxPosition.left);
+
   return (
     <>
       {/* Overlay */}
       <div className="fixed inset-0 bg-black/30 z-40" onClick={onClose} />
 
-      {/* Help Boxes */}
-      {helpBoxes.map((box) => {
-        const position = boxPositions[box.id];
-        if (!position) return null;
+      {/* Highlight Box */}
+      <div
+        className="fixed z-40 border-2 border-primary rounded-lg pointer-events-none animate-pulse"
+        style={{
+          top: `${boxPosition.targetRect.top - 4}px`,
+          left: `${boxPosition.targetRect.left - 4}px`,
+          width: `${boxPosition.targetRect.width + 8}px`,
+          height: `${boxPosition.targetRect.height + 8}px`,
+        }}
+      />
 
-        const arrow = getArrowStyles(box.position, position.targetRect, position.top, position.left);
+      {/* Arrow */}
+      <div
+        className={arrow.className}
+        style={arrow.style}
+      />
 
-        return (
-          <div key={box.id}>
-            {/* Highlight Box */}
-            <div
-              className="fixed z-40 border-2 border-primary rounded-lg pointer-events-none animate-pulse"
-              style={{
-                top: `${position.targetRect.top - 4}px`,
-                left: `${position.targetRect.left - 4}px`,
-                width: `${position.targetRect.width + 8}px`,
-                height: `${position.targetRect.height + 8}px`,
-              }}
-            />
-
-            {/* Arrow */}
-            <div
-              className={arrow.className}
-              style={arrow.style}
-            />
-
-            {/* Instruction Box */}
-            <Card
-              className="fixed z-50 w-[280px] p-4 shadow-lg animate-fade-in"
-              style={{
-                top: `${position.top}px`,
-                left: `${position.left}px`,
-              }}
-            >
-              <h3 className="font-semibold text-sm mb-2">{box.title}</h3>
-              <p className="text-xs text-muted-foreground">{box.description}</p>
-            </Card>
+      {/* Instruction Box */}
+      <Card
+        className="fixed z-50 w-[320px] p-5 shadow-lg animate-fade-in"
+        style={{
+          top: `${boxPosition.top}px`,
+          left: `${boxPosition.left}px`,
+        }}
+      >
+        <div className="flex items-center justify-between mb-3">
+          <h3 className="font-semibold text-base">{currentBox.title}</h3>
+          <span className="text-xs text-muted-foreground">
+            {currentStep + 1}/{helpBoxes.length}
+          </span>
+        </div>
+        <p className="text-sm text-muted-foreground mb-4">{currentBox.description}</p>
+        
+        <div className="flex items-center justify-between gap-2">
+          <Button
+            size="sm"
+            variant="outline"
+            onClick={handlePrev}
+            disabled={currentStep === 0}
+          >
+            Back
+          </Button>
+          
+          <div className="flex gap-1">
+            {helpBoxes.map((_, index) => (
+              <div
+                key={index}
+                className={`h-1.5 w-1.5 rounded-full transition-colors ${
+                  index === currentStep ? 'bg-primary' : 'bg-muted'
+                }`}
+              />
+            ))}
           </div>
-        );
-      })}
+          
+          <Button size="sm" onClick={handleNext}>
+            {currentStep === helpBoxes.length - 1 ? 'Finish' : 'Next'}
+          </Button>
+        </div>
+      </Card>
 
-      {/* Close Button */}
+      {/* Skip Button */}
       <Button
         size="sm"
         variant="secondary"
@@ -206,7 +239,7 @@ export const HelpMode = ({ isActive, onClose }: HelpModeProps) => {
         onClick={onClose}
       >
         <X className="w-4 h-4 mr-2" />
-        Close Help
+        Skip Tour
       </Button>
     </>
   );
