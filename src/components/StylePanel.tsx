@@ -6,7 +6,7 @@ import { Label } from '@/components/ui/label';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
 import { Badge } from '@/components/ui/badge';
-import { Plus, Palette, Type, Sparkles } from 'lucide-react';
+import { Plus, Palette, Type, Sparkles, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { TextStyle, defaultStyles } from '@/types/styles';
 
@@ -25,9 +25,11 @@ const AVAILABLE_FONTS = [
 
 interface StylePanelProps {
   editor?: any;
+  collapsed?: boolean;
+  onToggleCollapse?: () => void;
 }
 
-export const StylePanel = ({ editor }: StylePanelProps) => {
+export const StylePanel = ({ editor, collapsed = false, onToggleCollapse }: StylePanelProps) => {
   const [styles, setStyles] = useState<TextStyle[]>(defaultStyles);
   const [selectedStyle, setSelectedStyle] = useState<TextStyle | null>(null);
 
@@ -60,23 +62,42 @@ export const StylePanel = ({ editor }: StylePanelProps) => {
   };
 
   return (
-    <div className="w-80 h-full bg-sidebar border-r border-sidebar-border flex flex-col style-panel">
-      <div className="p-4 border-b border-sidebar-border">
+    <div className={`h-full bg-sidebar border-r border-sidebar-border flex flex-col style-panel transition-all duration-300 ${collapsed ? 'w-12' : 'w-80'}`}>
+      <div className={`p-4 border-b border-sidebar-border ${collapsed ? 'p-2' : ''}`}>
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg font-semibold flex items-center gap-2">
-            <Palette className="w-5 h-5 text-primary" />
-            Styles
-          </h2>
-          <Button size="sm" variant="ghost" className="h-8 w-8 p-0">
-            <Plus className="w-4 h-4" />
-          </Button>
+          {!collapsed && (
+            <h2 className="text-lg font-semibold flex items-center gap-2">
+              <Palette className="w-5 h-5 text-primary" />
+              Styles
+            </h2>
+          )}
+          {collapsed && (
+            <Palette className="w-5 h-5 text-primary mx-auto" />
+          )}
+          {!collapsed && (
+            <Button size="sm" variant="ghost" className="h-8 w-8 p-0">
+              <Plus className="w-4 h-4" />
+            </Button>
+          )}
         </div>
-        <p className="text-xs text-muted-foreground">
-          Define semantic styles for your document
-        </p>
+        <Button 
+          size="sm" 
+          variant="ghost" 
+          className="h-8 w-full p-0 hover:bg-sidebar-accent"
+          onClick={onToggleCollapse}
+        >
+          {collapsed ? <ChevronRight className="w-4 h-4" /> : <ChevronLeft className="w-4 h-4" />}
+        </Button>
+        {!collapsed && (
+          <p className="text-xs text-muted-foreground">
+            Define semantic styles for your document
+          </p>
+        )}
       </div>
 
-      <ScrollArea className="flex-1">
+      {!collapsed && (
+        <>
+          <ScrollArea className="flex-1">
         <div className="p-4 space-y-2">
           <div className="text-xs font-medium text-muted-foreground mb-2 flex items-center gap-1">
             <Type className="w-3 h-3" />
@@ -195,6 +216,8 @@ export const StylePanel = ({ editor }: StylePanelProps) => {
             </Button>
           </div>
         </div>
+      )}
+        </>
       )}
     </div>
   );

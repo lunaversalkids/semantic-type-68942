@@ -14,6 +14,7 @@ const Index = () => {
   const [editor, setEditor] = useState<any>(null);
   const [applyToAllOpen, setApplyToAllOpen] = useState(false);
   const [helpModeActive, setHelpModeActive] = useState(false);
+  const [stylePanelCollapsed, setStylePanelCollapsed] = useState(false);
   const { toast } = useToast();
 
   const handleApplyToAll = () => {
@@ -40,7 +41,11 @@ const Index = () => {
       <Header onHelpClick={() => setHelpModeActive(true)} />
       <Toolbar editor={editor} />
       <div className="flex-1 flex overflow-hidden">
-        <StylePanel editor={editor} />
+        <StylePanel 
+          editor={editor} 
+          collapsed={stylePanelCollapsed}
+          onToggleCollapse={() => setStylePanelCollapsed(!stylePanelCollapsed)}
+        />
         <main className="flex-1 overflow-hidden">
           <Editor 
             onSelectionChange={setSelectedText} 
