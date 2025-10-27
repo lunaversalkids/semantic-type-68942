@@ -1,5 +1,6 @@
 import { Button } from '@/components/ui/button';
-import { FileText, Sparkles, HelpCircle } from 'lucide-react';
+import { Sparkles, HelpCircle } from 'lucide-react';
+import logo from '@/assets/logo.png';
 
 interface HeaderProps {
   onHelpClick?: () => void;
@@ -9,8 +10,8 @@ export const Header = ({ onHelpClick }: HeaderProps) => {
   return (
     <header className="h-16 border-b border-border bg-background px-6 flex items-center justify-between">
       <div className="flex items-center gap-3">
-        <div className="w-10 h-10 rounded-lg bg-primary flex items-center justify-center">
-          <FileText className="w-6 h-6 text-primary-foreground" />
+        <div className="w-10 h-10 rounded-lg flex items-center justify-center overflow-hidden">
+          <img src={logo} alt="Semantic Editor Logo" className="w-full h-full object-cover" />
         </div>
         <div>
           <h1 className="text-xl font-bold">Semantic Editor</h1>
