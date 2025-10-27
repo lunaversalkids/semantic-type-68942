@@ -15,6 +15,8 @@ const Index = () => {
   const [applyToAllOpen, setApplyToAllOpen] = useState(false);
   const [helpModeActive, setHelpModeActive] = useState(false);
   const [stylePanelCollapsed, setStylePanelCollapsed] = useState(false);
+  const [showPageNumbers, setShowPageNumbers] = useState(true);
+  const [footnoteCounter, setFootnoteCounter] = useState(1);
   const { toast } = useToast();
 
   const handleApplyToAll = () => {
@@ -36,10 +38,34 @@ const Index = () => {
     });
   };
 
+  const handleInsertFootnote = () => {
+    if (!editor) return;
+    
+    const footnoteNumber = footnoteCounter;
+    const { from } = editor.state.selection;
+    
+    // Insert superscript footnote number at cursor position
+    editor.chain()
+      .focus()
+      .insertContent(`<sup>${footnoteNumber}</sup>`)
+      .run();
+    
+    setFootnoteCounter(prev => prev + 1);
+    
+    toast({
+      title: 'Footnote Inserted',
+      description: `Footnote ${footnoteNumber} added at cursor position`,
+    });
+  };
+
   return (
     <div className="h-screen flex flex-col overflow-hidden">
       <Header onHelpClick={() => setHelpModeActive(true)} />
-      <Toolbar editor={editor} />
+      <Toolbar 
+        editor={editor} 
+        showPageNumbers={showPageNumbers}
+        onTogglePageNumbers={() => setShowPageNumbers(!showPageNumbers)}
+      />
       <div className="flex-1 flex overflow-hidden">
         <StylePanel 
           editor={editor} 
@@ -52,6 +78,8 @@ const Index = () => {
             onEditorReady={setEditor}
             onApplyToAll={handleApplyToAll}
             onAIAssist={handleAIAssist}
+            onInsertFootnote={handleInsertFootnote}
+            showPageNumbers={showPageNumbers}
           />
         </main>
       </div>

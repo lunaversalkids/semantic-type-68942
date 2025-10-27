@@ -13,9 +13,11 @@ interface EditorProps {
   onEditorReady?: (editor: any) => void;
   onApplyToAll?: () => void;
   onAIAssist?: (action: string) => void;
+  onInsertFootnote?: () => void;
+  showPageNumbers?: boolean;
 }
 
-export const Editor = ({ onSelectionChange, onEditorReady, onApplyToAll, onAIAssist }: EditorProps) => {
+export const Editor = ({ onSelectionChange, onEditorReady, onApplyToAll, onAIAssist, onInsertFootnote, showPageNumbers = true }: EditorProps) => {
   const editor = useEditor({
     extensions: [
       StarterKit,
@@ -62,13 +64,24 @@ export const Editor = ({ onSelectionChange, onEditorReady, onApplyToAll, onAIAss
           editor={editor}
           onApplyToAll={onApplyToAll}
           onAIAssist={onAIAssist}
+          onInsertFootnote={onInsertFootnote}
         >
-          <Card className="w-[8.5in] min-h-[11in] bg-[hsl(var(--page-bg))] shadow-lg p-16">
+          <Card className="w-[8.5in] min-h-[11in] bg-[hsl(var(--page-bg))] shadow-lg p-16 relative">
             <EditorContent editor={editor} />
+            {showPageNumbers && (
+              <div className="absolute bottom-8 right-8 text-sm text-muted-foreground">
+                Page 1
+              </div>
+            )}
           </Card>
         </EditorContextMenu>
-        <Card className="w-[8.5in] min-h-[11in] bg-[hsl(var(--page-bg))] shadow-lg p-16 flex items-center justify-center text-muted-foreground">
+        <Card className="w-[8.5in] min-h-[11in] bg-[hsl(var(--page-bg))] shadow-lg p-16 relative flex items-center justify-center text-muted-foreground">
           <p>Page 2</p>
+          {showPageNumbers && (
+            <div className="absolute bottom-8 right-8 text-sm text-muted-foreground">
+              Page 2
+            </div>
+          )}
         </Card>
       </div>
     </div>

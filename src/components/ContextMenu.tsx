@@ -16,9 +16,10 @@ interface EditorContextMenuProps {
   editor?: any;
   onApplyToAll?: () => void;
   onAIAssist?: (action: string) => void;
+  onInsertFootnote?: () => void;
 }
 
-export const EditorContextMenu = ({ children, editor, onApplyToAll, onAIAssist }: EditorContextMenuProps) => {
+export const EditorContextMenu = ({ children, editor, onApplyToAll, onAIAssist, onInsertFootnote }: EditorContextMenuProps) => {
   if (!editor) return <>{children}</>;
 
   const applySemanticTag = (tag: string, color: string, weight?: number, italic?: boolean) => {
@@ -64,7 +65,7 @@ export const EditorContextMenu = ({ children, editor, onApplyToAll, onAIAssist }
 
         <ContextMenuSeparator />
 
-        <ContextMenuItem>
+        <ContextMenuItem onClick={onInsertFootnote}>
           <FileText className="w-4 h-4 mr-2" />
           Insert Footnote
         </ContextMenuItem>

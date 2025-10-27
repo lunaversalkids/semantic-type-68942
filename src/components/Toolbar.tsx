@@ -15,6 +15,7 @@ import {
   FileDown,
   FileUp,
   Settings,
+  Hash,
 } from 'lucide-react';
 import { FindReplaceDialog } from './FindReplaceDialog';
 import { ExportDialog } from './ExportDialog';
@@ -22,9 +23,11 @@ import { ImportDialog } from './ImportDialog';
 
 interface ToolbarProps {
   editor?: any;
+  showPageNumbers?: boolean;
+  onTogglePageNumbers?: () => void;
 }
 
-export const Toolbar = ({ editor }: ToolbarProps) => {
+export const Toolbar = ({ editor, showPageNumbers = true, onTogglePageNumbers }: ToolbarProps) => {
   const [findReplaceOpen, setFindReplaceOpen] = useState(false);
   const [exportOpen, setExportOpen] = useState(false);
   const [importOpen, setImportOpen] = useState(false);
@@ -157,6 +160,16 @@ export const Toolbar = ({ editor }: ToolbarProps) => {
         <Button variant="ghost" size="sm" onClick={() => setExportOpen(true)} className="export-btn">
           <FileDown className="w-4 h-4 mr-2" />
           Export
+        </Button>
+        <Button 
+          variant="ghost" 
+          size="sm" 
+          onClick={onTogglePageNumbers}
+          data-active={showPageNumbers}
+          title={showPageNumbers ? "Hide page numbers" : "Show page numbers"}
+        >
+          <Hash className="w-4 h-4 mr-2" />
+          {showPageNumbers ? "Hide" : "Show"} Numbers
         </Button>
         <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
           <Settings className="w-4 h-4" />
