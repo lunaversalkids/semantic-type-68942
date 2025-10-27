@@ -2,12 +2,13 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/u
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { Checkbox } from '@/components/ui/checkbox';
 import { useState } from 'react';
 
 interface PageNumberDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onInsert: (position: 'left' | 'center' | 'right', format: 'page-x' | 'x' | 'x-of-total') => void;
+  onInsert: (position: 'left' | 'center' | 'right', format: 'page-x' | 'x' | 'x-of-total', applyToAll: boolean) => void;
   currentPage: number;
   totalPages: number;
 }
@@ -21,9 +22,10 @@ export const PageNumberDialog = ({
 }: PageNumberDialogProps) => {
   const [position, setPosition] = useState<'left' | 'center' | 'right'>('right');
   const [format, setFormat] = useState<'page-x' | 'x' | 'x-of-total'>('page-x');
+  const [applyToAll, setApplyToAll] = useState(true);
 
   const handleInsert = () => {
-    onInsert(position, format);
+    onInsert(position, format, applyToAll);
     onOpenChange(false);
   };
 
@@ -87,6 +89,17 @@ export const PageNumberDialog = ({
             <p className={`mt-2 text-${position === 'center' ? 'center' : position === 'right' ? 'right' : 'left'}`}>
               {getPreview()}
             </p>
+          </div>
+
+          <div className="flex items-center space-x-2">
+            <Checkbox 
+              id="apply-all" 
+              checked={applyToAll} 
+              onCheckedChange={(checked) => setApplyToAll(checked as boolean)}
+            />
+            <Label htmlFor="apply-all" className="font-normal cursor-pointer">
+              Apply to all pages consistently
+            </Label>
           </div>
         </div>
 

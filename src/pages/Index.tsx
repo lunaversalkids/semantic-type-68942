@@ -22,6 +22,13 @@ const Index = () => {
     1: true,
     2: true,
   });
+  const [pageNumberSettings, setPageNumberSettings] = useState<{
+    position: 'left' | 'center' | 'right';
+    format: 'page-x' | 'x' | 'x-of-total';
+  }>({
+    position: 'right',
+    format: 'page-x',
+  });
   const [footnoteCounter, setFootnoteCounter] = useState(1);
   const { toast } = useToast();
 
@@ -97,30 +104,33 @@ const Index = () => {
 
   const handlePageNumberInsert = (
     position: 'left' | 'center' | 'right',
-    format: 'page-x' | 'x' | 'x-of-total'
+    format: 'page-x' | 'x' | 'x-of-total',
+    applyToAll: boolean
   ) => {
-    if (!editor) return;
+    setPageNumberSettings({ position, format });
     
-    let text = '';
-    const totalPages = 2; // Update this if you track total pages
-    
-    switch (format) {
-      case 'page-x':
-        text = `Page ${currentPageForNumber}`;
-        break;
-      case 'x':
-        text = `${currentPageForNumber}`;
-        break;
-      case 'x-of-total':
-        text = `${currentPageForNumber} of ${totalPages}`;
-        break;
+    if (applyToAll) {
+      // Show page numbers on all pages
+      const updatedVisibility: Record<number, boolean> = {};
+      for (let i = 1; i <= 2; i++) {
+        updatedVisibility[i] = true;
+      }
+      setPageNumbersVisibility(updatedVisibility);
+      toast({ 
+        title: 'Page Numbers Applied', 
+        description: `Applied to all pages (${position}, ${format})` 
+      });
+    } else {
+      // Show only on current page
+      setPageNumbersVisibility(prev => ({
+        ...prev,
+        [currentPageForNumber]: true
+      }));
+      toast({ 
+        title: 'Page Number Applied', 
+        description: `Applied to page ${currentPageForNumber}` 
+      });
     }
-    
-    const align = position === 'center' ? 'center' : position === 'right' ? 'right' : 'left';
-    const content = `<p style="text-align: ${align}; margin: 0;">${text}</p>`;
-    
-    editor.chain().focus().insertContent(content).run();
-    toast({ title: 'Page Number Inserted', description: `${text} (${position})` });
   };
 
   const handleInsertPageCount = () => {
@@ -189,6 +199,8 @@ const Index = () => {
             onInsertBookmark={handleInsertBookmark}
             onInsertTableOfContents={handleInsertTableOfContents}
             pageNumbersVisibility={pageNumbersVisibility}
+            pageNumberSettings={pageNumberSettings}
+            totalPages={2}
             onTogglePageNumber={(pageNum) => {
               setPageNumbersVisibility(prev => ({
                 ...prev,

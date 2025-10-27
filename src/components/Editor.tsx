@@ -25,6 +25,11 @@ interface EditorProps {
   onInsertBookmark?: () => void;
   onInsertTableOfContents?: () => void;
   pageNumbersVisibility?: Record<number, boolean>;
+  pageNumberSettings?: {
+    position: 'left' | 'center' | 'right';
+    format: 'page-x' | 'x' | 'x-of-total';
+  };
+  totalPages?: number;
   onTogglePageNumber?: (pageNum: number) => void;
 }
 
@@ -45,8 +50,26 @@ export const Editor = ({
   onInsertBookmark,
   onInsertTableOfContents,
   pageNumbersVisibility = { 1: true, 2: true },
+  pageNumberSettings = { position: 'right', format: 'page-x' },
+  totalPages = 2,
   onTogglePageNumber 
 }: EditorProps) => {
+  const getPageNumberText = (pageNum: number) => {
+    const { format } = pageNumberSettings;
+    switch (format) {
+      case 'page-x':
+        return `Page ${pageNum}`;
+      case 'x':
+        return `${pageNum}`;
+      case 'x-of-total':
+        return `${pageNum} of ${totalPages}`;
+    }
+  };
+
+  const getPageNumberAlignment = () => {
+    const { position } = pageNumberSettings;
+    return position === 'center' ? 'center' : position === 'left' ? 'left' : 'right';
+  };
   const editor = useEditor({
     extensions: [
       StarterKit,
@@ -111,8 +134,14 @@ export const Editor = ({
           <Card className="w-[8.5in] min-h-[11in] bg-[hsl(var(--page-bg))] shadow-lg p-16 relative">
             <EditorContent editor={editor} />
             {pageNumbersVisibility[1] && (
-              <div className="absolute bottom-8 right-8 text-sm text-muted-foreground">
-                Page 1
+              <div 
+                className={`absolute bottom-8 text-sm text-muted-foreground ${
+                  getPageNumberAlignment() === 'left' ? 'left-8' : 
+                  getPageNumberAlignment() === 'center' ? 'left-1/2 -translate-x-1/2' : 
+                  'right-8'
+                }`}
+              >
+                {getPageNumberText(1)}
               </div>
             )}
           </Card>
@@ -139,8 +168,14 @@ export const Editor = ({
           <Card className="w-[8.5in] min-h-[11in] bg-[hsl(var(--page-bg))] shadow-lg p-16 relative flex items-center justify-center text-muted-foreground">
             <p>Page 2</p>
             {pageNumbersVisibility[2] && (
-              <div className="absolute bottom-8 right-8 text-sm text-muted-foreground">
-                Page 2
+              <div 
+                className={`absolute bottom-8 text-sm text-muted-foreground ${
+                  getPageNumberAlignment() === 'left' ? 'left-8' : 
+                  getPageNumberAlignment() === 'center' ? 'left-1/2 -translate-x-1/2' : 
+                  'right-8'
+                }`}
+              >
+                {getPageNumberText(2)}
               </div>
             )}
           </Card>
