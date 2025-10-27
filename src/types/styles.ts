@@ -76,4 +76,15 @@ export const defaultStyles: TextStyle[] = [
     lineHeight: 1.6,
     color: '#A28CFF',
   },
+  {
+    id: 'footnote',
+    name: 'Footnote',
+    tag: 'footnote',
+    font: 'Inter',
+    size: 12,
+    weight: 400,
+    lineHeight: 1.4,
+    color: '#666666',
+    superscript: true,
+  },
 ];
