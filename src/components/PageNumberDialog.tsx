@@ -3,13 +3,14 @@ import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Checkbox } from '@/components/ui/checkbox';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useState } from 'react';
 
 interface PageNumberDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   onInsert: (position: 'left' | 'center' | 'right', format: 'page-x' | 'x' | 'x-of-total', applyToAll: boolean) => void;
-  onHide: () => void;
+  onHide: (pageNum: number) => void;
   currentPage: number;
   totalPages: number;
 }
@@ -25,6 +26,7 @@ export const PageNumberDialog = ({
   const [position, setPosition] = useState<'left' | 'center' | 'right'>('right');
   const [format, setFormat] = useState<'page-x' | 'x' | 'x-of-total'>('page-x');
   const [applyToAll, setApplyToAll] = useState(true);
+  const [pageToHide, setPageToHide] = useState<string>(currentPage.toString());
 
   const handleInsert = () => {
     onInsert(position, format, applyToAll);
@@ -32,7 +34,7 @@ export const PageNumberDialog = ({
   };
 
   const handleHide = () => {
-    onHide();
+    onHide(parseInt(pageToHide));
     onOpenChange(false);
   };
 
@@ -109,14 +111,29 @@ export const PageNumberDialog = ({
             </Label>
           </div>
 
-          <div className="pt-2">
-            <Button 
-              variant="outline" 
-              className="w-full" 
-              onClick={handleHide}
-            >
-              Hide page number on page {currentPage}
-            </Button>
+          <div className="pt-2 space-y-3">
+            <Label>Hide page number</Label>
+            <div className="flex gap-2">
+              <Select value={pageToHide} onValueChange={setPageToHide}>
+                <SelectTrigger className="w-32">
+                  <SelectValue placeholder="Select page" />
+                </SelectTrigger>
+                <SelectContent>
+                  {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                    <SelectItem key={page} value={page.toString()}>
+                      Page {page}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <Button 
+                variant="outline" 
+                className="flex-1" 
+                onClick={handleHide}
+              >
+                Hide Selected Page
+              </Button>
+            </div>
           </div>
         </div>
 
