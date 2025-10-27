@@ -4,6 +4,7 @@ import { Toolbar } from '@/components/Toolbar';
 import { StylePanel } from '@/components/StylePanel';
 import { Editor } from '@/components/Editor';
 import { ApplyToAllDialog } from '@/components/ApplyToAllDialog';
+import { OnboardingTour } from '@/components/OnboardingTour';
 import { defaultStyles } from '@/types/styles';
 import { useToast } from '@/hooks/use-toast';
 
@@ -55,6 +56,8 @@ const Index = () => {
         styles={defaultStyles}
         editor={editor}
       />
+      
+      <OnboardingTour />
     </div>
   );
 };

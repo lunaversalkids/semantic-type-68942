@@ -57,7 +57,7 @@ export const Editor = ({ onSelectionChange, onEditorReady, onApplyToAll, onAIAss
 
   return (
     <div className="h-full flex items-start justify-center bg-[hsl(var(--editor-bg))] p-8 overflow-auto">
-      <div className="flex gap-8">
+      <div className="flex gap-8 editor-pages">
         <EditorContextMenu 
           editor={editor}
           onApplyToAll={onApplyToAll}

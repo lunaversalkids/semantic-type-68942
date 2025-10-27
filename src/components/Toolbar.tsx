@@ -28,7 +28,7 @@ export const Toolbar = ({ editor }: ToolbarProps) => {
   
   if (!editor) return null;
   return (
-    <div className="h-14 border-b border-border bg-background px-4 flex items-center gap-2">
+    <div className="h-14 border-b border-border bg-background px-4 flex items-center gap-2 toolbar">
       <div className="flex items-center gap-1">
         <Button 
           variant="ghost" 
@@ -124,11 +124,11 @@ export const Toolbar = ({ editor }: ToolbarProps) => {
       </div>
 
       <div className="ml-auto flex items-center gap-2">
-        <Button variant="ghost" size="sm" onClick={() => setFindReplaceOpen(true)}>
+        <Button variant="ghost" size="sm" onClick={() => setFindReplaceOpen(true)} className="find-replace-btn">
           <Search className="w-4 h-4 mr-2" />
           Find & Replace
         </Button>
-        <Button variant="ghost" size="sm" onClick={() => setExportOpen(true)}>
+        <Button variant="ghost" size="sm" onClick={() => setExportOpen(true)} className="export-btn">
           <FileDown className="w-4 h-4 mr-2" />
           Export
         </Button>

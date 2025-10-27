@@ -60,7 +60,7 @@ export const StylePanel = ({ editor }: StylePanelProps) => {
   };
 
   return (
-    <div className="w-80 h-full bg-sidebar border-r border-sidebar-border flex flex-col">
+    <div className="w-80 h-full bg-sidebar border-r border-sidebar-border flex flex-col style-panel">
       <div className="p-4 border-b border-sidebar-border">
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-lg font-semibold flex items-center gap-2">
