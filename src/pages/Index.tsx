@@ -11,7 +11,7 @@ const Index = () => {
   return (
     <div className="h-screen flex flex-col overflow-hidden">
       <Header />
-      <Toolbar />
+      <Toolbar editor={editor} />
       <div className="flex-1 flex overflow-hidden">
         <StylePanel editor={editor} />
         <main className="flex-1 overflow-hidden">

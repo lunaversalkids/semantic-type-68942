@@ -181,3 +181,9 @@ All colors MUST be HSL.
   font-family: 'Monaco', 'Courier New', monospace;
   font-size: 0.875em;
 }
+
+/* Active state for toolbar buttons */
+button[data-active="true"] {
+  background-color: hsl(var(--accent));
+  color: hsl(var(--accent-foreground));
+}

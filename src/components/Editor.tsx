@@ -3,7 +3,10 @@ import StarterKit from '@tiptap/starter-kit';
 import { TextStyle } from '@tiptap/extension-text-style';
 import { Color } from '@tiptap/extension-color';
 import Highlight from '@tiptap/extension-highlight';
+import Underline from '@tiptap/extension-underline';
+import TextAlign from '@tiptap/extension-text-align';
 import { Card } from '@/components/ui/card';
+import { EditorContextMenu } from './ContextMenu';
 
 interface EditorProps {
   onSelectionChange?: (text: string) => void;
@@ -17,6 +20,10 @@ export const Editor = ({ onSelectionChange, onEditorReady }: EditorProps) => {
       TextStyle,
       Color,
       Highlight.configure({ multicolor: true }),
+      Underline,
+      TextAlign.configure({
+        types: ['heading', 'paragraph'],
+      }),
     ],
     content: `
       <h1>The Semantic Editor</h1>
@@ -49,9 +56,11 @@ export const Editor = ({ onSelectionChange, onEditorReady }: EditorProps) => {
   return (
     <div className="h-full flex items-start justify-center bg-[hsl(var(--editor-bg))] p-8 overflow-auto">
       <div className="flex gap-8">
-        <Card className="w-[8.5in] min-h-[11in] bg-[hsl(var(--page-bg))] shadow-lg p-16">
-          <EditorContent editor={editor} />
-        </Card>
+        <EditorContextMenu editor={editor}>
+          <Card className="w-[8.5in] min-h-[11in] bg-[hsl(var(--page-bg))] shadow-lg p-16">
+            <EditorContent editor={editor} />
+          </Card>
+        </EditorContextMenu>
         <Card className="w-[8.5in] min-h-[11in] bg-[hsl(var(--page-bg))] shadow-lg p-16 flex items-center justify-center text-muted-foreground">
           <p>Page 2</p>
         </Card>
