@@ -1,7 +1,11 @@
 import { Button } from '@/components/ui/button';
-import { FileText, Sparkles } from 'lucide-react';
+import { FileText, Sparkles, HelpCircle } from 'lucide-react';
 
-export const Header = () => {
+interface HeaderProps {
+  onHelpClick?: () => void;
+}
+
+export const Header = ({ onHelpClick }: HeaderProps) => {
   return (
     <header className="h-16 border-b border-border bg-background px-6 flex items-center justify-between">
       <div className="flex items-center gap-3">
@@ -15,6 +19,10 @@ export const Header = () => {
       </div>
 
       <div className="flex items-center gap-3">
+        <Button variant="outline" size="sm" onClick={onHelpClick}>
+          <HelpCircle className="w-4 h-4 mr-2" />
+          Help
+        </Button>
         <Button variant="outline" size="sm">
           <Sparkles className="w-4 h-4 mr-2" />
           AI Assist

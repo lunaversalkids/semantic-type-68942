@@ -5,6 +5,7 @@ import { StylePanel } from '@/components/StylePanel';
 import { Editor } from '@/components/Editor';
 import { ApplyToAllDialog } from '@/components/ApplyToAllDialog';
 import { OnboardingTour } from '@/components/OnboardingTour';
+import { HelpMode } from '@/components/HelpMode';
 import { defaultStyles } from '@/types/styles';
 import { useToast } from '@/hooks/use-toast';
 
@@ -12,6 +13,7 @@ const Index = () => {
   const [selectedText, setSelectedText] = useState('');
   const [editor, setEditor] = useState<any>(null);
   const [applyToAllOpen, setApplyToAllOpen] = useState(false);
+  const [helpModeActive, setHelpModeActive] = useState(false);
   const { toast } = useToast();
 
   const handleApplyToAll = () => {
@@ -35,7 +37,7 @@ const Index = () => {
 
   return (
     <div className="h-screen flex flex-col overflow-hidden">
-      <Header />
+      <Header onHelpClick={() => setHelpModeActive(true)} />
       <Toolbar editor={editor} />
       <div className="flex-1 flex overflow-hidden">
         <StylePanel editor={editor} />
@@ -58,6 +60,7 @@ const Index = () => {
       />
       
       <OnboardingTour />
+      <HelpMode isActive={helpModeActive} onClose={() => setHelpModeActive(false)} />
     </div>
   );
 };
