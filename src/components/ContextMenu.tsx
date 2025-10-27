@@ -56,6 +56,9 @@ export const EditorContextMenu = ({ children, editor, onApplyToAll, onAIAssist }
             <ContextMenuItem onClick={() => applySemanticTag('footnote', '#666666', 400)}>
               <span style={{ color: '#666666', fontSize: '12px' }}>Footnote</span>
             </ContextMenuItem>
+            <ContextMenuItem onClick={() => applySemanticTag('notes', '#888888', 400, true)}>
+              <span className="italic" style={{ color: '#888888' }}>Additional Notes</span>
+            </ContextMenuItem>
           </ContextMenuSubContent>
         </ContextMenuSub>
 

@@ -87,4 +87,15 @@ export const defaultStyles: TextStyle[] = [
     color: '#666666',
     superscript: true,
   },
+  {
+    id: 'notes',
+    name: 'Additional Notes',
+    tag: 'notes',
+    font: 'Inter',
+    size: 14,
+    weight: 400,
+    italic: true,
+    lineHeight: 1.5,
+    color: '#888888',
+  },
 ];
