@@ -7,11 +7,57 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
 import { Badge } from '@/components/ui/badge';
 import { Plus, Palette, Type, Sparkles } from 'lucide-react';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { TextStyle, defaultStyles } from '@/types/styles';
 
-export const StylePanel = () => {
+const AVAILABLE_FONTS = [
+  'Inter',
+  'Georgia',
+  'Monaco',
+  'Times New Roman',
+  'Arial',
+  'Helvetica',
+  'Courier New',
+  'Palatino',
+  'Garamond',
+  'Bookman',
+];
+
+interface StylePanelProps {
+  editor?: any;
+}
+
+export const StylePanel = ({ editor }: StylePanelProps) => {
   const [styles, setStyles] = useState<TextStyle[]>(defaultStyles);
   const [selectedStyle, setSelectedStyle] = useState<TextStyle | null>(null);
+
+  const applyStyleToSelection = (style: TextStyle) => {
+    if (!editor) return;
+    
+    const chain = editor.chain().focus();
+    
+    if (style.color) {
+      chain.setColor(style.color);
+    }
+    if (style.weight) {
+      if (style.weight >= 600) {
+        chain.setBold();
+      }
+    }
+    if (style.italic) {
+      chain.setItalic();
+    }
+    
+    chain.run();
+  };
+
+  const updateSelectedStyle = (updates: Partial<TextStyle>) => {
+    if (!selectedStyle) return;
+    
+    const updatedStyle = { ...selectedStyle, ...updates };
+    setSelectedStyle(updatedStyle);
+    setStyles(styles.map(s => s.id === selectedStyle.id ? updatedStyle : s));
+  };
 
   return (
     <div className="w-80 h-full bg-sidebar border-r border-sidebar-border flex flex-col">
@@ -42,7 +88,10 @@ export const StylePanel = () => {
               className={`p-3 cursor-pointer transition-all hover:border-primary/50 ${
                 selectedStyle?.id === style.id ? 'border-primary' : ''
               }`}
-              onClick={() => setSelectedStyle(style)}
+              onClick={() => {
+                setSelectedStyle(style);
+                applyStyleToSelection(style);
+              }}
             >
               <div className="flex items-center justify-between mb-1">
                 <span className="font-medium text-sm">{style.name}</span>
@@ -72,31 +121,75 @@ export const StylePanel = () => {
           <div className="space-y-3">
             <div>
               <Label className="text-xs">Font Family</Label>
-              <Input
+              <Select
                 value={selectedStyle.font}
-                className="mt-1 h-8 text-sm"
-                readOnly
-              />
+                onValueChange={(value) => updateSelectedStyle({ font: value })}
+              >
+                <SelectTrigger className="mt-1 h-8 text-sm">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {AVAILABLE_FONTS.map((font) => (
+                    <SelectItem key={font} value={font}>
+                      {font}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
             <div className="grid grid-cols-2 gap-2">
               <div>
                 <Label className="text-xs">Size</Label>
                 <Input
+                  type="number"
                   value={selectedStyle.size}
+                  onChange={(e) => updateSelectedStyle({ size: parseInt(e.target.value) })}
                   className="mt-1 h-8 text-sm"
-                  readOnly
                 />
               </div>
               <div>
                 <Label className="text-xs">Weight</Label>
+                <Select
+                  value={selectedStyle.weight?.toString()}
+                  onValueChange={(value) => updateSelectedStyle({ weight: parseInt(value) })}
+                >
+                  <SelectTrigger className="mt-1 h-8 text-sm">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="300">Light</SelectItem>
+                    <SelectItem value="400">Normal</SelectItem>
+                    <SelectItem value="500">Medium</SelectItem>
+                    <SelectItem value="600">Semibold</SelectItem>
+                    <SelectItem value="700">Bold</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+            <div>
+              <Label className="text-xs">Color</Label>
+              <div className="flex gap-2 mt-1">
                 <Input
-                  value={selectedStyle.weight}
-                  className="mt-1 h-8 text-sm"
-                  readOnly
+                  type="color"
+                  value={selectedStyle.color}
+                  onChange={(e) => updateSelectedStyle({ color: e.target.value })}
+                  className="h-8 w-16 p-1 cursor-pointer"
+                />
+                <Input
+                  type="text"
+                  value={selectedStyle.color}
+                  onChange={(e) => updateSelectedStyle({ color: e.target.value })}
+                  className="h-8 text-sm flex-1"
+                  placeholder="#000000"
                 />
               </div>
             </div>
-            <Button size="sm" variant="secondary" className="w-full">
+            <Button 
+              size="sm" 
+              variant="secondary" 
+              className="w-full"
+              onClick={() => applyStyleToSelection(selectedStyle)}
+            >
               <Sparkles className="w-3 h-3 mr-2" />
               Apply to Selection
             </Button>

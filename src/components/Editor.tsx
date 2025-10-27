@@ -7,9 +7,10 @@ import { Card } from '@/components/ui/card';
 
 interface EditorProps {
   onSelectionChange?: (text: string) => void;
+  onEditorReady?: (editor: any) => void;
 }
 
-export const Editor = ({ onSelectionChange }: EditorProps) => {
+export const Editor = ({ onSelectionChange, onEditorReady }: EditorProps) => {
   const editor = useEditor({
     extensions: [
       StarterKit,
@@ -40,13 +41,21 @@ export const Editor = ({ onSelectionChange }: EditorProps) => {
       const text = editor.state.doc.textBetween(from, to, ' ');
       onSelectionChange?.(text);
     },
+    onCreate: ({ editor }) => {
+      onEditorReady?.(editor);
+    },
   });
 
   return (
     <div className="h-full flex items-start justify-center bg-[hsl(var(--editor-bg))] p-8 overflow-auto">
-      <Card className="w-full max-w-4xl min-h-[11in] bg-[hsl(var(--page-bg))] shadow-lg p-16">
-        <EditorContent editor={editor} />
-      </Card>
+      <div className="flex gap-8">
+        <Card className="w-[8.5in] min-h-[11in] bg-[hsl(var(--page-bg))] shadow-lg p-16">
+          <EditorContent editor={editor} />
+        </Card>
+        <Card className="w-[8.5in] min-h-[11in] bg-[hsl(var(--page-bg))] shadow-lg p-16 flex items-center justify-center text-muted-foreground">
+          <p>Page 2</p>
+        </Card>
+      </div>
     </div>
   );
 };
