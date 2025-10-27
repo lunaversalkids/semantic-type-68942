@@ -118,10 +118,57 @@ export const OnboardingTour = () => {
 
   const step = tourSteps[currentStep];
 
+  const getArrowStyles = () => {
+    const baseArrow = "absolute w-0 h-0 border-solid";
+    
+    switch (step.position) {
+      case 'right':
+        return {
+          arrow: `${baseArrow} border-r-[15px] border-r-card border-t-[10px] border-t-transparent border-b-[10px] border-b-transparent left-[-15px] top-1/2 -translate-y-1/2`,
+        };
+      case 'left':
+        return {
+          arrow: `${baseArrow} border-l-[15px] border-l-card border-t-[10px] border-t-transparent border-b-[10px] border-b-transparent right-[-15px] top-1/2 -translate-y-1/2`,
+        };
+      case 'bottom':
+        return {
+          arrow: `${baseArrow} border-b-[15px] border-b-card border-l-[10px] border-l-transparent border-r-[10px] border-r-transparent top-[-15px] left-1/2 -translate-x-1/2`,
+        };
+      case 'top':
+        return {
+          arrow: `${baseArrow} border-t-[15px] border-t-card border-l-[10px] border-l-transparent border-r-[10px] border-r-transparent bottom-[-15px] left-1/2 -translate-x-1/2`,
+        };
+      default:
+        return { arrow: '' };
+    }
+  };
+
+  const highlightElement = () => {
+    const element = document.querySelector(step.target);
+    if (element) {
+      const rect = element.getBoundingClientRect();
+      return (
+        <div
+          className="fixed z-40 border-4 border-primary rounded-lg pointer-events-none animate-pulse"
+          style={{
+            top: `${rect.top - 4}px`,
+            left: `${rect.left - 4}px`,
+            width: `${rect.width + 8}px`,
+            height: `${rect.height + 8}px`,
+          }}
+        />
+      );
+    }
+    return null;
+  };
+
   return (
     <>
       {/* Overlay */}
       <div className="fixed inset-0 bg-black/50 z-40" onClick={handleClose} />
+      
+      {/* Highlight Box */}
+      {highlightElement()}
       
       {/* Tour Card */}
       <Card
@@ -136,6 +183,8 @@ export const OnboardingTour = () => {
               : 'translate(-100%, -50%)',
         }}
       >
+        {/* Arrow Pointer */}
+        <div className={getArrowStyles().arrow} />
         <div className="flex items-start justify-between mb-3">
           <div>
             <h3 className="font-semibold text-lg">{step.title}</h3>
