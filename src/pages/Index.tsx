@@ -65,24 +65,33 @@ const Index = () => {
       .toggleSuperscript()
       .run();
     
-    // Move to end of document and add footnote reference
-    const docSize = editor.state.doc.content.size;
+    // Get the current document size after insertion
+    const currentDoc = editor.state.doc;
+    const endPos = currentDoc.content.size - 1;
+    
+    // Add footnote reference at the bottom
     editor.chain()
-      .setTextSelection(docSize - 1)
-      .insertContent('<hr style="margin: 2rem 0; border: none; border-top: 1px solid #ddd;">')
-      .insertContent('<p style="margin: 0.5rem 0;">')
+      .focus()
+      .setTextSelection(endPos)
+      .insertContent('<p></p>')
+      .insertContent('<hr>')
+      .insertContent('<p>')
       .toggleSuperscript()
       .insertContent(footnoteNumber.toString())
       .toggleSuperscript()
-      .insertContent(' [Enter footnote text here]</p>')
-      .setTextSelection(from + 1)
+      .insertContent(' Enter footnote text here</p>')
       .run();
+    
+    // Return cursor to original position
+    setTimeout(() => {
+      editor.chain().focus().setTextSelection(from + 1).run();
+    }, 0);
     
     setFootnoteCounter(prev => prev + 1);
     
     toast({
       title: 'Footnote Inserted',
-      description: `Footnote ${footnoteNumber} added. Edit the footnote text at the bottom of the page.`,
+      description: `Footnote ${footnoteNumber} added with reference at bottom. Edit the text after the number.`,
     });
   };
 
