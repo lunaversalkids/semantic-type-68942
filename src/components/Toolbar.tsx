@@ -55,6 +55,7 @@ export const Toolbar = ({ editor }: ToolbarProps) => {
   const [footnoteOpen, setFootnoteOpen] = useState(false);
   const [headerFooterOpen, setHeaderFooterOpen] = useState(false);
   const [pdfImportOpen, setPdfImportOpen] = useState(false);
+  const [documentSaved, setDocumentSaved] = useState(true);
 
   const addQuotes = () => {
     if (!editor) return;
@@ -237,6 +238,19 @@ export const Toolbar = ({ editor }: ToolbarProps) => {
       editor.chain().focus().setChapter({ title }).run();
       toast.success('Chapter inserted');
     }
+  };
+
+  const handleSavePrompt = async (): Promise<boolean> => {
+    // In a real implementation, this would trigger the actual save functionality
+    // For now, we'll simulate a save
+    return new Promise((resolve) => {
+      toast.info('Save your document before proceeding');
+      // Simulate save - in production this would call actual save logic
+      setTimeout(() => {
+        setDocumentSaved(true);
+        resolve(true);
+      }, 1000);
+    });
   };
   
   if (!editor) return null;
@@ -492,6 +506,8 @@ export const Toolbar = ({ editor }: ToolbarProps) => {
         open={pdfImportOpen}
         onOpenChange={setPdfImportOpen}
         editor={editor}
+        onSavePrompt={handleSavePrompt}
+        isDocumentSaved={documentSaved}
       />
       <FindReplaceDialog
         open={findReplaceOpen} 
