@@ -138,7 +138,7 @@ const Index = () => {
       .setTextSelection(docSize - 1)
       .run();
     
-    // Add separator if this is the first footnote
+    // Add separator line if this is the first footnote (Apple Pages style)
     if (!hasFootnoteSeparator) {
       editor.chain()
         .focus()
@@ -146,13 +146,13 @@ const Index = () => {
         .run();
     }
     
-    // Add the footnote reference at the bottom
+    // Add the footnote reference at the bottom (Apple Pages style: superscript number + text)
     editor.chain()
       .focus()
       .insertContent(`<p class="footnote-reference"><sup>${footnoteNumber}</sup> Enter footnote text here</p>`)
       .run();
     
-    // Return cursor to position after the superscript
+    // Return cursor to position after the inline superscript
     setTimeout(() => {
       editor.chain().focus().setTextSelection(from + 1).run();
     }, 10);
@@ -161,7 +161,7 @@ const Index = () => {
     
     toast({
       title: 'Footnote Inserted',
-      description: `Footnote ${footnoteNumber} added. Scroll down to edit the footnote text.`,
+      description: `Footnote ${footnoteNumber} added at bottom of page.`,
     });
   };
 

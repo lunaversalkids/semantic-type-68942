@@ -189,21 +189,28 @@ button[data-active="true"] {
 
 /* Superscript styling for footnotes */
 .ProseMirror sup {
-  font-size: 0.7em;
+  font-size: 0.6em;
   vertical-align: super;
   line-height: 0;
+  font-weight: normal;
 }
 
 .ProseMirror hr {
   border: none;
-  border-top: 1px solid hsl(var(--border));
-  margin: 2rem 0;
+  border-top: 0.5px solid hsl(var(--border));
+  margin: 2rem 0 0.5rem 0;
+  opacity: 0.5;
 }
 
-/* Footnote references at bottom */
+/* Footnote references at bottom - Apple Pages style */
 .ProseMirror .footnote-reference {
-  font-size: 0.75rem;
-  color: hsl(var(--muted-foreground));
+  font-size: 0.8rem;
+  color: hsl(var(--foreground));
   margin: 0.25rem 0;
   padding-left: 0;
+  line-height: 1.4;
+}
+
+.ProseMirror .footnote-reference sup {
+  margin-right: 0.25rem;
 }
