@@ -244,3 +244,59 @@ button[data-active="true"] {
 .ProseMirror .section-break {
   user-select: none;
 }
+
+/* Editor container and page layout */
+.editor-container {
+  position: relative;
+  padding: 0;
+  overflow: visible;
+}
+
+.editor-pages-wrapper {
+  min-height: 11in;
+  padding: 4rem;
+}
+
+.editor-pages-wrapper .ProseMirror {
+  outline: none;
+  min-height: calc(11in - 8rem);
+}
+
+/* Page break styling */
+.ProseMirror .page-break {
+  page-break-after: always;
+  break-after: page;
+  margin: 2rem 0 4rem 0;
+  padding: 0.75rem 0;
+  border-bottom: 2px dashed hsl(var(--border));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: hsl(var(--muted-foreground));
+  font-size: 0.75rem;
+  user-select: none;
+  position: relative;
+}
+
+.ProseMirror .page-break::after {
+  content: '';
+  display: block;
+  height: 3rem;
+  width: 100%;
+}
+
+/* Print support for page breaks */
+@media print {
+  .page-break {
+    page-break-after: always;
+    break-after: page;
+    margin: 0;
+    padding: 0;
+    border: none;
+    height: 0;
+  }
+  
+  .page-break::after {
+    display: none;
+  }
+}

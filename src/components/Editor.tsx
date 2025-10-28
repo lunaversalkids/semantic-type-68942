@@ -123,80 +123,44 @@ export const Editor = ({
 
   return (
     <div className="h-full flex items-start justify-center bg-[hsl(var(--editor-bg))] p-8 overflow-auto">
-      <div className="flex gap-8 editor-pages">
-        <EditorContextMenu 
-          editor={editor}
-          onApplyToAll={onApplyToAll}
-          onAIAssist={onAIAssist}
-          onInsertFootnote={onInsertFootnote}
-          onInsertTab={onInsertTab}
-          onInsertPageBreak={onInsertPageBreak}
-          onInsertLineBreak={onInsertLineBreak}
-          onInsertSectionBreak={onInsertSectionBreak}
-          onInsertColumnBreak={onInsertColumnBreak}
-          onInsertPageNumber={() => onInsertPageNumber?.(1)}
-          onInsertPageCount={onInsertPageCount}
-          onInsertDateTime={onInsertDateTime}
-          onInsertBookmark={onInsertBookmark}
-          onInsertTableOfContents={onInsertTableOfContents}
-          onHighlight={onHighlight}
-          onTranslate={onTranslate}
-          onTogglePageNumber={() => onTogglePageNumber?.(1)}
-          showPageNumber={pageNumbersVisibility[1]}
-          pageNumber={1}
-        >
-          <Card className="w-[8.5in] min-h-[11in] bg-[hsl(var(--page-bg))] shadow-lg p-16 relative">
+      <EditorContextMenu 
+        editor={editor}
+        onApplyToAll={onApplyToAll}
+        onAIAssist={onAIAssist}
+        onInsertFootnote={onInsertFootnote}
+        onInsertTab={onInsertTab}
+        onInsertPageBreak={onInsertPageBreak}
+        onInsertLineBreak={onInsertLineBreak}
+        onInsertSectionBreak={onInsertSectionBreak}
+        onInsertColumnBreak={onInsertColumnBreak}
+        onInsertPageNumber={() => onInsertPageNumber?.(1)}
+        onInsertPageCount={onInsertPageCount}
+        onInsertDateTime={onInsertDateTime}
+        onInsertBookmark={onInsertBookmark}
+        onInsertTableOfContents={onInsertTableOfContents}
+        onHighlight={onHighlight}
+        onTranslate={onTranslate}
+        onTogglePageNumber={() => onTogglePageNumber?.(1)}
+        showPageNumber={pageNumbersVisibility[1]}
+        pageNumber={1}
+      >
+        <Card className="w-[8.5in] bg-[hsl(var(--page-bg))] shadow-lg editor-container">
+          <div className="editor-pages-wrapper">
             <EditorContent editor={editor} />
-            {pageNumbersVisibility[1] && (
-              <div 
-                className={`absolute bottom-8 text-sm text-muted-foreground ${
-                  getPageNumberAlignment() === 'left' ? 'left-8' : 
-                  getPageNumberAlignment() === 'center' ? 'left-1/2 -translate-x-1/2' : 
-                  'right-8'
-                }`}
-              >
-                {getPageNumberText(1)}
-              </div>
-            )}
-          </Card>
-        </EditorContextMenu>
-        <EditorContextMenu 
-          editor={editor}
-          onApplyToAll={onApplyToAll}
-          onAIAssist={onAIAssist}
-          onInsertFootnote={onInsertFootnote}
-          onInsertTab={onInsertTab}
-          onInsertPageBreak={onInsertPageBreak}
-          onInsertLineBreak={onInsertLineBreak}
-          onInsertSectionBreak={onInsertSectionBreak}
-          onInsertColumnBreak={onInsertColumnBreak}
-          onInsertPageNumber={() => onInsertPageNumber?.(2)}
-          onInsertPageCount={onInsertPageCount}
-          onInsertDateTime={onInsertDateTime}
-          onInsertBookmark={onInsertBookmark}
-          onInsertTableOfContents={onInsertTableOfContents}
-          onHighlight={onHighlight}
-          onTranslate={onTranslate}
-          onTogglePageNumber={() => onTogglePageNumber?.(2)}
-          showPageNumber={pageNumbersVisibility[2]}
-          pageNumber={2}
-        >
-          <Card className="w-[8.5in] min-h-[11in] bg-[hsl(var(--page-bg))] shadow-lg p-16 relative flex items-center justify-center text-muted-foreground">
-            <p>Page 2</p>
-            {pageNumbersVisibility[2] && (
-              <div 
-                className={`absolute bottom-8 text-sm text-muted-foreground ${
-                  getPageNumberAlignment() === 'left' ? 'left-8' : 
-                  getPageNumberAlignment() === 'center' ? 'left-1/2 -translate-x-1/2' : 
-                  'right-8'
-                }`}
-              >
-                {getPageNumberText(2)}
-              </div>
-            )}
-          </Card>
-        </EditorContextMenu>
-      </div>
+          </div>
+          {pageNumbersVisibility[1] && (
+            <div 
+              className={`page-number-overlay text-sm text-muted-foreground ${
+                getPageNumberAlignment() === 'left' ? 'left-8' : 
+                getPageNumberAlignment() === 'center' ? 'left-1/2 -translate-x-1/2' : 
+                'right-8'
+              }`}
+            >
+              {getPageNumberText(1)}
+            </div>
+          )}
+        </Card>
+      </EditorContextMenu>
     </div>
   );
 };

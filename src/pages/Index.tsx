@@ -174,9 +174,9 @@ const Index = () => {
 
   const handleInsertPageBreak = () => {
     if (!editor) return;
-    // Insert a visible page break that forces content to next page
-    editor.chain().focus().insertContent('<div class="page-break" style="page-break-after: always; height: 2rem; border-bottom: 1px dashed hsl(var(--border)); margin: 1rem 0; display: flex; align-items: center; justify-content: center; color: hsl(var(--muted-foreground)); font-size: 0.75rem;">Page Break</div>').run();
-    toast({ title: 'Page Break Inserted' });
+    // Insert a page break that visually separates content
+    editor.chain().focus().insertContent('<div class="page-break">Page Break</div>').run();
+    toast({ title: 'Page Break Inserted', description: 'Content below will appear on a new page' });
   };
 
   const handleInsertLineBreak = () => {
