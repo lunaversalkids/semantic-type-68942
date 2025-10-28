@@ -14,6 +14,11 @@ import { FontSize } from './extensions/FontSize';
 import { FontWeight } from './extensions/FontWeight';
 import { SmallCaps } from './extensions/SmallCaps';
 import { IconNode } from './extensions/IconNode';
+import { Table } from '@tiptap/extension-table';
+import { TableRow } from '@tiptap/extension-table-row';
+import { TableCell } from '@tiptap/extension-table-cell';
+import { TableHeader } from '@tiptap/extension-table-header';
+import { Image } from '@tiptap/extension-image';
 
 interface EditorProps {
   onSelectionChange?: (text: string) => void;
@@ -97,6 +102,13 @@ export const Editor = ({
       Superscript,
       SmallCaps,
       IconNode,
+      Image,
+      Table.configure({
+        resizable: true,
+      }),
+      TableRow,
+      TableHeader,
+      TableCell,
       TextAlign.configure({
         types: ['heading', 'paragraph'],
       }),

@@ -159,6 +159,30 @@ export const Toolbar = ({ editor }: ToolbarProps) => {
   const handleIconSelect = (iconId: string, category: string) => {
     editor.commands.insertIcon({ iconId, category, width: 100, height: 100, color: '#000000' });
   };
+
+  const handleInsertTable = () => {
+    editor.chain().focus().insertTable({ rows: 3, cols: 3, withHeaderRow: true }).run();
+  };
+
+  const handleInsertImage = () => {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'image/*,video/*';
+    input.onchange = (e) => {
+      const file = (e.target as HTMLInputElement).files?.[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          const url = event.target?.result as string;
+          if (file.type.startsWith('image/')) {
+            editor.chain().focus().setImage({ src: url }).run();
+          }
+        };
+        reader.readAsDataURL(file);
+      }
+    };
+    input.click();
+  };
   
   if (!editor) return null;
   return (
@@ -312,11 +336,15 @@ export const Toolbar = ({ editor }: ToolbarProps) => {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="bg-background w-56">
+            <DropdownMenuItem onClick={handleInsertTable}>
+              <Settings className="w-4 h-4 mr-2" />
+              Column
+            </DropdownMenuItem>
             <DropdownMenuItem onClick={() => setIconPickerOpen(true)}>
               <Shapes className="w-4 h-4 mr-2" />
               Shapes
             </DropdownMenuItem>
-            <DropdownMenuItem disabled>
+            <DropdownMenuItem onClick={handleInsertImage}>
               <Image className="w-4 h-4 mr-2" />
               Photo or Video
             </DropdownMenuItem>
