@@ -163,7 +163,6 @@ All colors MUST be HSL.
 
 .ProseMirror em {
   font-style: italic;
-  color: hsl(var(--accent));
 }
 
 .ProseMirror blockquote {
