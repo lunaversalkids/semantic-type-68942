@@ -39,6 +39,10 @@ import { FindReplaceDialog } from './FindReplaceDialog';
 import { ExportDialog } from './ExportDialog';
 import { ImportDialog } from './ImportDialog';
 import { IconPicker } from './IconPicker';
+import { ImagePlaygroundDialog } from './ImagePlaygroundDialog';
+import { WebVideoDialog } from './WebVideoDialog';
+import { EquationDialog } from './EquationDialog';
+import { toast } from 'sonner';
 
 interface ToolbarProps {
   editor?: any;
@@ -50,6 +54,9 @@ export const Toolbar = ({ editor }: ToolbarProps) => {
   const [importOpen, setImportOpen] = useState(false);
   const [currentCapitalization, setCurrentCapitalization] = useState<string>('none');
   const [iconPickerOpen, setIconPickerOpen] = useState(false);
+  const [imagePlaygroundOpen, setImagePlaygroundOpen] = useState(false);
+  const [webVideoOpen, setWebVideoOpen] = useState(false);
+  const [equationOpen, setEquationOpen] = useState(false);
 
   const addQuotes = () => {
     if (!editor) return;
@@ -176,12 +183,86 @@ export const Toolbar = ({ editor }: ToolbarProps) => {
           const url = event.target?.result as string;
           if (file.type.startsWith('image/')) {
             editor.chain().focus().setImage({ src: url }).run();
+            toast.success('Image inserted!');
           }
         };
         reader.readAsDataURL(file);
       }
     };
     input.click();
+  };
+
+  const handleCameraCapture = () => {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'image/*';
+    input.capture = 'environment' as any;
+    input.onchange = (e) => {
+      const file = (e.target as HTMLInputElement).files?.[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          const url = event.target?.result as string;
+          editor.chain().focus().setImage({ src: url }).run();
+          toast.success('Photo captured!');
+        };
+        reader.readAsDataURL(file);
+      }
+    };
+    input.click();
+  };
+
+  const handleRecordAudio = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      const mediaRecorder = new MediaRecorder(stream);
+      const chunks: Blob[] = [];
+
+      mediaRecorder.ondataavailable = (e) => chunks.push(e.data);
+      mediaRecorder.onstop = () => {
+        const blob = new Blob(chunks, { type: 'audio/webm' });
+        const url = URL.createObjectURL(blob);
+        const audioHtml = `<audio controls src="${url}"></audio>`;
+        editor.chain().focus().insertContent(audioHtml).run();
+        stream.getTracks().forEach(track => track.stop());
+        toast.success('Audio recorded!');
+      };
+
+      mediaRecorder.start();
+      toast.info('Recording... Click again to stop');
+      
+      setTimeout(() => {
+        if (mediaRecorder.state === 'recording') {
+          mediaRecorder.stop();
+        }
+      }, 30000);
+    } catch (error) {
+      toast.error('Could not access microphone');
+    }
+  };
+
+  const handleImageGenerated = (imageUrl: string) => {
+    editor.chain().focus().setImage({ src: imageUrl }).run();
+  };
+
+  const handleVideoInsert = (embedHtml: string) => {
+    editor.chain().focus().insertContent(embedHtml).run();
+  };
+
+  const handleEquationInsert = (equation: string) => {
+    editor.chain().focus().insertContent(`<span class="equation" style="font-family: 'Times New Roman', serif; font-size: 1.1em; font-style: italic;">${equation}</span>`).run();
+  };
+
+  const handleImageGallery = () => {
+    toast.info('Image Gallery feature coming soon!');
+  };
+
+  const handleInsertFrom = () => {
+    toast.info('Insert from external sources coming soon!');
+  };
+
+  const handleDrawing = () => {
+    toast.info('Drawing canvas feature coming soon!');
   };
   
   if (!editor) return null;
@@ -348,35 +429,35 @@ export const Toolbar = ({ editor }: ToolbarProps) => {
               <Image className="w-4 h-4 mr-2" />
               Photo or Video
             </DropdownMenuItem>
-            <DropdownMenuItem disabled>
+            <DropdownMenuItem onClick={() => setImagePlaygroundOpen(true)}>
               <Sparkles className="w-4 h-4 mr-2" />
               Image Playground
             </DropdownMenuItem>
-            <DropdownMenuItem disabled>
+            <DropdownMenuItem onClick={handleCameraCapture}>
               <Camera className="w-4 h-4 mr-2" />
               Camera
             </DropdownMenuItem>
-            <DropdownMenuItem disabled>
+            <DropdownMenuItem onClick={handleRecordAudio}>
               <Mic className="w-4 h-4 mr-2" />
               Record Audio
             </DropdownMenuItem>
-            <DropdownMenuItem disabled>
+            <DropdownMenuItem onClick={() => setWebVideoOpen(true)}>
               <Video className="w-4 h-4 mr-2" />
               Web Video
             </DropdownMenuItem>
-            <DropdownMenuItem disabled>
+            <DropdownMenuItem onClick={handleImageGallery}>
               <Images className="w-4 h-4 mr-2" />
               Image Gallery
             </DropdownMenuItem>
-            <DropdownMenuItem disabled>
+            <DropdownMenuItem onClick={handleInsertFrom}>
               <FolderOpen className="w-4 h-4 mr-2" />
               Insert from...
             </DropdownMenuItem>
-            <DropdownMenuItem disabled>
+            <DropdownMenuItem onClick={handleDrawing}>
               <Pencil className="w-4 h-4 mr-2" />
               Drawing
             </DropdownMenuItem>
-            <DropdownMenuItem disabled>
+            <DropdownMenuItem onClick={() => setEquationOpen(true)}>
               <Calculator className="w-4 h-4 mr-2" />
               Equation
             </DropdownMenuItem>
@@ -403,6 +484,21 @@ export const Toolbar = ({ editor }: ToolbarProps) => {
         open={iconPickerOpen}
         onOpenChange={setIconPickerOpen}
         onIconSelect={handleIconSelect}
+      />
+      <ImagePlaygroundDialog
+        open={imagePlaygroundOpen}
+        onOpenChange={setImagePlaygroundOpen}
+        onImageGenerated={handleImageGenerated}
+      />
+      <WebVideoDialog
+        open={webVideoOpen}
+        onOpenChange={setWebVideoOpen}
+        onVideoInsert={handleVideoInsert}
+      />
+      <EquationDialog
+        open={equationOpen}
+        onOpenChange={setEquationOpen}
+        onEquationInsert={handleEquationInsert}
       />
       <FindReplaceDialog 
         open={findReplaceOpen} 
