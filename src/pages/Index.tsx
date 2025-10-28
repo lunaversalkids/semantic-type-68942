@@ -57,21 +57,23 @@ const Index = () => {
     const footnoteNumber = footnoteCounter;
     const { from } = editor.state.selection;
     
-    // Insert superscript number at cursor position (right after the word)
+    // Insert superscript number at cursor position
     editor.chain()
       .focus()
+      .toggleSuperscript()
       .insertContent(footnoteNumber.toString())
       .toggleSuperscript()
       .run();
     
-    // Move to end of document and add footnote reference with separator
+    // Move to end of document and add footnote reference
     const docSize = editor.state.doc.content.size;
     editor.chain()
       .setTextSelection(docSize - 1)
       .insertContent('<hr style="margin: 2rem 0; border: none; border-top: 1px solid #ddd;">')
-      .insertContent('<p style="margin: 0.5rem 0; font-size: 0.9rem;"><sup style="margin-right: 0.25rem;">')
+      .insertContent('<p style="margin: 0.5rem 0;">')
+      .toggleSuperscript()
       .insertContent(footnoteNumber.toString())
-      .insertContent('</sup>')
+      .toggleSuperscript()
       .insertContent(' [Enter footnote text here]</p>')
       .setTextSelection(from + 1)
       .run();
