@@ -45,7 +45,7 @@ export const StylePanel = ({ editor, collapsed = false, onToggleCollapse }: Styl
     
     // Apply font size
     if (style.size) {
-      chain.setMark('textStyle', { fontSize: `${style.size}px` });
+      chain.setFontSize(`${style.size}px`);
     }
     
     // Apply color
@@ -55,12 +55,12 @@ export const StylePanel = ({ editor, collapsed = false, onToggleCollapse }: Styl
     
     // Apply weight
     if (style.weight) {
+      chain.setFontWeight(style.weight.toString());
       if (style.weight >= 600) {
         chain.setBold();
       } else {
         chain.unsetBold();
       }
-      chain.setMark('textStyle', { fontWeight: style.weight.toString() });
     }
     
     // Apply italic

@@ -8,6 +8,8 @@ import Underline from '@tiptap/extension-underline';
 import TextAlign from '@tiptap/extension-text-align';
 import { Card } from '@/components/ui/card';
 import { EditorContextMenu } from './ContextMenu';
+import { FontSize } from './extensions/FontSize';
+import { FontWeight } from './extensions/FontWeight';
 
 interface EditorProps {
   onSelectionChange?: (text: string) => void;
@@ -78,42 +80,10 @@ export const Editor = ({
   const editor = useEditor({
     extensions: [
       StarterKit,
-      TextStyle.configure({
-        HTMLAttributes: {
-          class: 'text-style',
-        },
-      }).extend({
-        addAttributes() {
-          return {
-            ...this.parent?.(),
-            fontSize: {
-              default: null,
-              parseHTML: element => element.style.fontSize || null,
-              renderHTML: attributes => {
-                if (!attributes.fontSize) {
-                  return {};
-                }
-                return {
-                  style: `font-size: ${attributes.fontSize}`,
-                };
-              },
-            },
-            fontWeight: {
-              default: null,
-              parseHTML: element => element.style.fontWeight || null,
-              renderHTML: attributes => {
-                if (!attributes.fontWeight) {
-                  return {};
-                }
-                return {
-                  style: `font-weight: ${attributes.fontWeight}`,
-                };
-              },
-            },
-          };
-        },
-      }),
+      TextStyle,
       FontFamily,
+      FontSize,
+      FontWeight,
       Color,
       Highlight.configure({ multicolor: true }),
       Underline,
