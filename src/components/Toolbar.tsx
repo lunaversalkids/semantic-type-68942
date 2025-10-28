@@ -36,6 +36,7 @@ export const Toolbar = ({ editor }: ToolbarProps) => {
   const [findReplaceOpen, setFindReplaceOpen] = useState(false);
   const [exportOpen, setExportOpen] = useState(false);
   const [importOpen, setImportOpen] = useState(false);
+  const [currentCapitalization, setCurrentCapitalization] = useState<string>('none');
 
   const addQuotes = () => {
     if (!editor) return;
@@ -80,10 +81,11 @@ export const Toolbar = ({ editor }: ToolbarProps) => {
     
     switch (type) {
       case 'none':
-        // Remove any existing small caps mark, but keep text as-is
+        // Remove any existing small caps mark
         if (editor.isActive('smallCaps')) {
           editor.chain().focus().unsetMark('smallCaps').run();
         }
+        setCurrentCapitalization('none');
         return;
       case 'allCaps':
         // Remove small caps if active
@@ -91,10 +93,18 @@ export const Toolbar = ({ editor }: ToolbarProps) => {
           editor.chain().focus().unsetMark('smallCaps').run();
         }
         transformedText = selectedText.toUpperCase();
+        setCurrentCapitalization('allCaps');
         break;
       case 'smallCaps':
-        // Toggle small caps mark without changing the actual text case
-        editor.chain().focus().toggleSmallCaps().run();
+        // Remove small caps if it's already active (toggle off)
+        if (editor.isActive('smallCaps')) {
+          editor.chain().focus().unsetMark('smallCaps').run();
+          setCurrentCapitalization('none');
+        } else {
+          // Apply small caps mark without changing the actual text case
+          editor.chain().focus().toggleSmallCaps().run();
+          setCurrentCapitalization('smallCaps');
+        }
         return;
       case 'titleCase':
         // Remove small caps if active
@@ -108,6 +118,7 @@ export const Toolbar = ({ editor }: ToolbarProps) => {
           }
           return word;
         }).join(' ');
+        setCurrentCapitalization('titleCase');
         break;
       case 'startCase':
         // Remove small caps if active
@@ -119,6 +130,7 @@ export const Toolbar = ({ editor }: ToolbarProps) => {
         if (transformedText.length > 0) {
           transformedText = transformedText.charAt(0).toUpperCase() + transformedText.slice(1);
         }
+        setCurrentCapitalization('startCase');
         break;
     }
     
@@ -176,25 +188,25 @@ export const Toolbar = ({ editor }: ToolbarProps) => {
               <span className="text-lg leading-none">•••</span>
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent>
+          <DropdownMenuContent className="bg-background">
             <DropdownMenuItem onClick={() => applyCapitalization('none')}>
-              <Check className={`w-4 h-4 mr-2 ${!editor.isActive('smallCaps') ? 'opacity-100' : 'opacity-0'}`} />
+              <Check className={`w-4 h-4 mr-2 ${currentCapitalization === 'none' ? 'opacity-100' : 'opacity-0'}`} />
               None
             </DropdownMenuItem>
             <DropdownMenuItem onClick={() => applyCapitalization('allCaps')}>
-              <Check className="w-4 h-4 mr-2 opacity-0" />
+              <Check className={`w-4 h-4 mr-2 ${currentCapitalization === 'allCaps' ? 'opacity-100' : 'opacity-0'}`} />
               All Caps
             </DropdownMenuItem>
             <DropdownMenuItem onClick={() => applyCapitalization('smallCaps')}>
-              <Check className={`w-4 h-4 mr-2 ${editor.isActive('smallCaps') ? 'opacity-100' : 'opacity-0'}`} />
+              <Check className={`w-4 h-4 mr-2 ${currentCapitalization === 'smallCaps' ? 'opacity-100' : 'opacity-0'}`} />
               Small Caps
             </DropdownMenuItem>
             <DropdownMenuItem onClick={() => applyCapitalization('titleCase')}>
-              <Check className="w-4 h-4 mr-2 opacity-0" />
+              <Check className={`w-4 h-4 mr-2 ${currentCapitalization === 'titleCase' ? 'opacity-100' : 'opacity-0'}`} />
               Title Case
             </DropdownMenuItem>
             <DropdownMenuItem onClick={() => applyCapitalization('startCase')}>
-              <Check className="w-4 h-4 mr-2 opacity-0" />
+              <Check className={`w-4 h-4 mr-2 ${currentCapitalization === 'startCase' ? 'opacity-100' : 'opacity-0'}`} />
               Start Case
             </DropdownMenuItem>
           </DropdownMenuContent>
