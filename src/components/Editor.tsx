@@ -2,6 +2,7 @@ import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import { TextStyle } from '@tiptap/extension-text-style';
 import { Color } from '@tiptap/extension-color';
+import { FontFamily } from '@tiptap/extension-font-family';
 import Highlight from '@tiptap/extension-highlight';
 import Underline from '@tiptap/extension-underline';
 import TextAlign from '@tiptap/extension-text-align';
@@ -77,7 +78,42 @@ export const Editor = ({
   const editor = useEditor({
     extensions: [
       StarterKit,
-      TextStyle,
+      TextStyle.configure({
+        HTMLAttributes: {
+          class: 'text-style',
+        },
+      }).extend({
+        addAttributes() {
+          return {
+            ...this.parent?.(),
+            fontSize: {
+              default: null,
+              parseHTML: element => element.style.fontSize || null,
+              renderHTML: attributes => {
+                if (!attributes.fontSize) {
+                  return {};
+                }
+                return {
+                  style: `font-size: ${attributes.fontSize}`,
+                };
+              },
+            },
+            fontWeight: {
+              default: null,
+              parseHTML: element => element.style.fontWeight || null,
+              renderHTML: attributes => {
+                if (!attributes.fontWeight) {
+                  return {};
+                }
+                return {
+                  style: `font-weight: ${attributes.fontWeight}`,
+                };
+              },
+            },
+          };
+        },
+      }),
+      FontFamily,
       Color,
       Highlight.configure({ multicolor: true }),
       Underline,

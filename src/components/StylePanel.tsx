@@ -38,16 +38,36 @@ export const StylePanel = ({ editor, collapsed = false, onToggleCollapse }: Styl
     
     const chain = editor.chain().focus();
     
+    // Apply font family
+    if (style.font) {
+      chain.setFontFamily(style.font);
+    }
+    
+    // Apply font size
+    if (style.size) {
+      chain.setMark('textStyle', { fontSize: `${style.size}px` });
+    }
+    
+    // Apply color
     if (style.color) {
       chain.setColor(style.color);
     }
+    
+    // Apply weight
     if (style.weight) {
       if (style.weight >= 600) {
         chain.setBold();
+      } else {
+        chain.unsetBold();
       }
+      chain.setMark('textStyle', { fontWeight: style.weight.toString() });
     }
+    
+    // Apply italic
     if (style.italic) {
       chain.setItalic();
+    } else {
+      chain.unsetItalic();
     }
     
     chain.run();
