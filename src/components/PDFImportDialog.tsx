@@ -6,6 +6,9 @@ import { Loader2, FileText, Save } from 'lucide-react';
 import * as pdfjsLib from 'pdfjs-dist';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 
+// Import worker using Vite's special syntax
+import pdfjsWorker from 'pdfjs-dist/build/pdf.worker.mjs?url';
+
 interface PDFImportDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
@@ -14,8 +17,8 @@ interface PDFImportDialogProps {
   isDocumentSaved?: boolean;
 }
 
-// Configure PDF.js worker - using local copy
-pdfjsLib.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.mjs';
+// Configure PDF.js worker
+pdfjsLib.GlobalWorkerOptions.workerSrc = pdfjsWorker;
 
 export const PDFImportDialog = ({ 
   open, 
