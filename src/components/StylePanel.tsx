@@ -79,9 +79,6 @@ export const StylePanel = ({ editor, collapsed = false, onToggleCollapse }: Styl
     const updatedStyle = { ...selectedStyle, ...updates };
     setSelectedStyle(updatedStyle);
     setStyles(styles.map(s => s.id === selectedStyle.id ? updatedStyle : s));
-    
-    // Automatically apply the updated style to the selection
-    applyStyleToSelection(updatedStyle);
   };
 
   return (
@@ -174,6 +171,13 @@ export const StylePanel = ({ editor, collapsed = false, onToggleCollapse }: Styl
                 <X className="w-4 h-4" />
               </Button>
             </div>
+            <Button 
+              size="sm" 
+              className="w-full"
+              onClick={() => applyStyleToSelection(selectedStyle)}
+            >
+              Apply Selection
+            </Button>
             <div>
               <Label className="text-xs">Font Family</Label>
               <Select
