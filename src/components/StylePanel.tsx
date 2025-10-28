@@ -170,12 +170,20 @@ export const StylePanel = ({
             <div>
               <Label className="text-xs">Color</Label>
               <div className="flex gap-2 mt-1">
-                <Input type="color" value={selectedStyle.color} onChange={e => updateSelectedStyle({
-                color: e.target.value
-              })} className="h-8 w-16 p-1 cursor-pointer" />
-                <Input type="text" value={selectedStyle.color} onChange={e => updateSelectedStyle({
-                color: e.target.value
-              })} className="h-8 text-sm flex-1" placeholder="#000000" />
+                <Input type="color" value={selectedStyle.color} onChange={e => {
+                const newColor = e.target.value;
+                updateSelectedStyle({ color: newColor });
+                if (editor) {
+                  editor.chain().focus().setColor(newColor).run();
+                }
+              }} className="h-8 w-16 p-1 cursor-pointer" />
+                <Input type="text" value={selectedStyle.color} onChange={e => {
+                const newColor = e.target.value;
+                updateSelectedStyle({ color: newColor });
+                if (editor) {
+                  editor.chain().focus().setColor(newColor).run();
+                }
+              }} className="h-8 text-sm flex-1" placeholder="#000000" />
               </div>
             </div>
           </div>
