@@ -6,7 +6,7 @@ import { Label } from '@/components/ui/label';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
 import { Badge } from '@/components/ui/badge';
-import { Plus, Palette, Type, Sparkles, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Plus, Palette, Type, ChevronLeft, ChevronRight, X } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { TextStyle, defaultStyles } from '@/types/styles';
 
@@ -79,6 +79,9 @@ export const StylePanel = ({ editor, collapsed = false, onToggleCollapse }: Styl
     const updatedStyle = { ...selectedStyle, ...updates };
     setSelectedStyle(updatedStyle);
     setStyles(styles.map(s => s.id === selectedStyle.id ? updatedStyle : s));
+    
+    // Automatically apply the updated style to the selection
+    applyStyleToSelection(updatedStyle);
   };
 
   return (
@@ -160,6 +163,17 @@ export const StylePanel = ({ editor, collapsed = false, onToggleCollapse }: Styl
       {selectedStyle && (
         <div className="border-t border-sidebar-border p-4 bg-sidebar-accent/30">
           <div className="space-y-3">
+            <div className="flex items-center justify-between mb-2">
+              <Label className="text-sm font-semibold">Edit Style</Label>
+              <Button 
+                size="sm" 
+                variant="ghost" 
+                className="h-6 w-6 p-0"
+                onClick={() => setSelectedStyle(null)}
+              >
+                <X className="w-4 h-4" />
+              </Button>
+            </div>
             <div>
               <Label className="text-xs">Font Family</Label>
               <Select
@@ -225,15 +239,6 @@ export const StylePanel = ({ editor, collapsed = false, onToggleCollapse }: Styl
                 />
               </div>
             </div>
-            <Button 
-              size="sm" 
-              variant="secondary" 
-              className="w-full"
-              onClick={() => applyStyleToSelection(selectedStyle)}
-            >
-              <Sparkles className="w-3 h-3 mr-2" />
-              Apply to Selection
-            </Button>
           </div>
         </div>
       )}
