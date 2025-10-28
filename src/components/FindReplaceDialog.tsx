@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { Checkbox } from '@/components/ui/checkbox';
 import { Search, Replace } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
@@ -22,13 +23,24 @@ export const FindReplaceDialog = ({ open, onOpenChange, editor }: FindReplaceDia
   const [findText, setFindText] = useState('');
   const [replaceText, setReplaceText] = useState('');
   const [mode, setMode] = useState<'keep-style' | 'reapply-rules'>('keep-style');
+  const [wholeWords, setWholeWords] = useState(false);
+  const [matchCase, setMatchCase] = useState(false);
   const { toast } = useToast();
 
   const handleFind = () => {
     if (!editor || !findText) return;
     
     const content = editor.getText();
-    const matches = content.match(new RegExp(findText, 'gi'));
+    let pattern = findText;
+    
+    // Add word boundary if whole words is selected
+    if (wholeWords) {
+      pattern = `\\b${pattern}\\b`;
+    }
+    
+    // Set flags based on match case option
+    const flags = matchCase ? 'g' : 'gi';
+    const matches = content.match(new RegExp(pattern, flags));
     
     toast({
       title: 'Search Results',
@@ -40,7 +52,16 @@ export const FindReplaceDialog = ({ open, onOpenChange, editor }: FindReplaceDia
     if (!editor || !findText) return;
 
     const content = editor.getText();
-    const regex = new RegExp(findText, 'g');
+    let pattern = findText;
+    
+    // Add word boundary if whole words is selected
+    if (wholeWords) {
+      pattern = `\\b${pattern}\\b`;
+    }
+    
+    // Set flags based on match case option
+    const flags = matchCase ? 'g' : 'gi';
+    const regex = new RegExp(pattern, flags);
     const newContent = content.replace(regex, replaceText);
     
     // This is a simplified version - in production you'd preserve marks/styles
@@ -74,6 +95,29 @@ export const FindReplaceDialog = ({ open, onOpenChange, editor }: FindReplaceDia
               placeholder="Search text..."
               className="mt-1"
             />
+          </div>
+
+          <div className="flex gap-4">
+            <div className="flex items-center space-x-2">
+              <Checkbox 
+                id="whole-words" 
+                checked={wholeWords}
+                onCheckedChange={(checked) => setWholeWords(checked as boolean)}
+              />
+              <Label htmlFor="whole-words" className="font-normal cursor-pointer">
+                Whole Words
+              </Label>
+            </div>
+            <div className="flex items-center space-x-2">
+              <Checkbox 
+                id="match-case" 
+                checked={matchCase}
+                onCheckedChange={(checked) => setMatchCase(checked as boolean)}
+              />
+              <Label htmlFor="match-case" className="font-normal cursor-pointer">
+                Match Case
+              </Label>
+            </div>
           </div>
 
           <div>
