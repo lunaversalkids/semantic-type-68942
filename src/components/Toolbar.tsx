@@ -27,13 +27,9 @@ import {
   Shapes,
   Image,
   Sparkles,
-  Camera,
-  Mic,
   Video,
   Images,
   FolderOpen,
-  Pencil,
-  Calculator,
 } from 'lucide-react';
 import { FindReplaceDialog } from './FindReplaceDialog';
 import { ExportDialog } from './ExportDialog';
@@ -41,7 +37,7 @@ import { ImportDialog } from './ImportDialog';
 import { IconPicker } from './IconPicker';
 import { ImagePlaygroundDialog } from './ImagePlaygroundDialog';
 import { WebVideoDialog } from './WebVideoDialog';
-import { EquationDialog } from './EquationDialog';
+
 import { toast } from 'sonner';
 
 interface ToolbarProps {
@@ -56,7 +52,6 @@ export const Toolbar = ({ editor }: ToolbarProps) => {
   const [iconPickerOpen, setIconPickerOpen] = useState(false);
   const [imagePlaygroundOpen, setImagePlaygroundOpen] = useState(false);
   const [webVideoOpen, setWebVideoOpen] = useState(false);
-  const [equationOpen, setEquationOpen] = useState(false);
 
   const addQuotes = () => {
     if (!editor) return;
@@ -192,54 +187,6 @@ export const Toolbar = ({ editor }: ToolbarProps) => {
     input.click();
   };
 
-  const handleCameraCapture = () => {
-    const input = document.createElement('input');
-    input.type = 'file';
-    input.accept = 'image/*';
-    input.capture = 'environment' as any;
-    input.onchange = (e) => {
-      const file = (e.target as HTMLInputElement).files?.[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = (event) => {
-          const url = event.target?.result as string;
-          editor.chain().focus().setImage({ src: url }).run();
-          toast.success('Photo captured!');
-        };
-        reader.readAsDataURL(file);
-      }
-    };
-    input.click();
-  };
-
-  const handleRecordAudio = async () => {
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      const mediaRecorder = new MediaRecorder(stream);
-      const chunks: Blob[] = [];
-
-      mediaRecorder.ondataavailable = (e) => chunks.push(e.data);
-      mediaRecorder.onstop = () => {
-        const blob = new Blob(chunks, { type: 'audio/webm' });
-        const url = URL.createObjectURL(blob);
-        const audioHtml = `<audio controls src="${url}"></audio>`;
-        editor.chain().focus().insertContent(audioHtml).run();
-        stream.getTracks().forEach(track => track.stop());
-        toast.success('Audio recorded!');
-      };
-
-      mediaRecorder.start();
-      toast.info('Recording... Click again to stop');
-      
-      setTimeout(() => {
-        if (mediaRecorder.state === 'recording') {
-          mediaRecorder.stop();
-        }
-      }, 30000);
-    } catch (error) {
-      toast.error('Could not access microphone');
-    }
-  };
 
   const handleImageGenerated = (imageUrl: string) => {
     editor.chain().focus().setImage({ src: imageUrl }).run();
@@ -249,20 +196,12 @@ export const Toolbar = ({ editor }: ToolbarProps) => {
     editor.chain().focus().insertContent(embedHtml).run();
   };
 
-  const handleEquationInsert = (equation: string) => {
-    editor.chain().focus().insertContent(`<span class="equation" style="font-family: 'Times New Roman', serif; font-size: 1.1em; font-style: italic;">${equation}</span>`).run();
-  };
-
   const handleImageGallery = () => {
     toast.info('Image Gallery feature coming soon!');
   };
 
   const handleInsertFrom = () => {
     toast.info('Insert from external sources coming soon!');
-  };
-
-  const handleDrawing = () => {
-    toast.info('Drawing canvas feature coming soon!');
   };
   
   if (!editor) return null;
@@ -433,14 +372,6 @@ export const Toolbar = ({ editor }: ToolbarProps) => {
               <Sparkles className="w-4 h-4 mr-2" />
               Image Playground
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={handleCameraCapture}>
-              <Camera className="w-4 h-4 mr-2" />
-              Camera
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={handleRecordAudio}>
-              <Mic className="w-4 h-4 mr-2" />
-              Record Audio
-            </DropdownMenuItem>
             <DropdownMenuItem onClick={() => setWebVideoOpen(true)}>
               <Video className="w-4 h-4 mr-2" />
               Web Video
@@ -452,14 +383,6 @@ export const Toolbar = ({ editor }: ToolbarProps) => {
             <DropdownMenuItem onClick={handleInsertFrom}>
               <FolderOpen className="w-4 h-4 mr-2" />
               Insert from...
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={handleDrawing}>
-              <Pencil className="w-4 h-4 mr-2" />
-              Drawing
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => setEquationOpen(true)}>
-              <Calculator className="w-4 h-4 mr-2" />
-              Equation
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
@@ -494,11 +417,6 @@ export const Toolbar = ({ editor }: ToolbarProps) => {
         open={webVideoOpen}
         onOpenChange={setWebVideoOpen}
         onVideoInsert={handleVideoInsert}
-      />
-      <EquationDialog
-        open={equationOpen}
-        onOpenChange={setEquationOpen}
-        onEquationInsert={handleEquationInsert}
       />
       <FindReplaceDialog 
         open={findReplaceOpen} 
