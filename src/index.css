@@ -419,3 +419,132 @@ button[data-active="true"] {
 .ProseMirror img.ProseMirror-selectednode {
   outline: 2px solid hsl(var(--primary));
 }
+
+/* Footnote styling */
+.ProseMirror .footnote-ref {
+  color: hsl(var(--primary));
+  cursor: pointer;
+  font-size: 0.85em;
+  vertical-align: super;
+}
+
+.ProseMirror .footnote-ref:hover {
+  text-decoration: underline;
+}
+
+/* Page break styling */
+.ProseMirror .page-break {
+  page-break-after: always;
+  break-after: page;
+  border-top: 2px dashed hsl(var(--border));
+  margin: 2rem 0;
+  padding: 1rem 0;
+  text-align: center;
+  position: relative;
+}
+
+.ProseMirror .page-break::after {
+  content: 'Page Break';
+  color: hsl(var(--muted-foreground));
+  font-size: 0.875rem;
+}
+
+/* Chapter styling */
+.ProseMirror .chapter {
+  page-break-before: always;
+  break-before: page;
+  margin-top: 3rem;
+  padding-top: 2rem;
+  border-top: 3px solid hsl(var(--border));
+}
+
+.ProseMirror .chapter::before {
+  content: 'Chapter ' attr(data-chapter-number);
+  display: block;
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  color: hsl(var(--primary));
+}
+
+/* Table of Contents styling */
+.ProseMirror .table-of-contents {
+  background: hsl(var(--muted) / 0.3);
+  border: 1px solid hsl(var(--border));
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin: 2rem 0;
+}
+
+.ProseMirror .table-of-contents h2 {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  border-bottom: 2px solid hsl(var(--border));
+  padding-bottom: 0.5rem;
+}
+
+.ProseMirror .table-of-contents ul {
+  list-style: none;
+  padding: 0;
+}
+
+.ProseMirror .table-of-contents li {
+  padding: 0.25rem 0;
+}
+
+.ProseMirror .table-of-contents a {
+  color: hsl(var(--primary));
+  text-decoration: none;
+}
+
+.ProseMirror .table-of-contents a:hover {
+  text-decoration: underline;
+}
+
+/* Print styles for headers/footers */
+@media print {
+  @page {
+    margin: 2cm;
+    
+    @top-left {
+      content: var(--header-left, '');
+    }
+    
+    @top-center {
+      content: var(--header-center, '');
+    }
+    
+    @top-right {
+      content: var(--header-right, '');
+    }
+    
+    @bottom-left {
+      content: var(--footer-left, '');
+    }
+    
+    @bottom-center {
+      content: var(--footer-center, counter(page));
+    }
+    
+    @bottom-right {
+      content: var(--footer-right, '');
+    }
+  }
+
+  .page-break {
+    page-break-after: always;
+    break-after: page;
+    border: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .page-break::after {
+    display: none;
+  }
+
+  .chapter {
+    page-break-before: always;
+    break-before: page;
+  }
+}

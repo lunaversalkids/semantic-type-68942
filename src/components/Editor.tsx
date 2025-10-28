@@ -19,6 +19,9 @@ import { TableRow } from '@tiptap/extension-table-row';
 import { TableCell } from '@tiptap/extension-table-cell';
 import { TableHeader } from '@tiptap/extension-table-header';
 import { Image } from '@tiptap/extension-image';
+import { Footnote } from './extensions/FootnoteExtension';
+import { Chapter } from './extensions/ChapterNode';
+import { PageBreak } from './extensions/PageBreak';
 
 interface EditorProps {
   onSelectionChange?: (text: string) => void;
@@ -103,6 +106,9 @@ export const Editor = ({
       SmallCaps,
       IconNode,
       Image,
+      Footnote,
+      Chapter,
+      PageBreak,
       Table.configure({
         resizable: true,
       }),

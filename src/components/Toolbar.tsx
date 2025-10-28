@@ -34,7 +34,10 @@ import { ExportDialog } from './ExportDialog';
 import { ImportDialog } from './ImportDialog';
 import { IconPicker } from './IconPicker';
 import { WebVideoDialog } from './WebVideoDialog';
-
+import { TableOfContentsDialog } from './TableOfContentsDialog';
+import { FootnoteDialog } from './FootnoteDialog';
+import { HeaderFooterDialog, HeaderFooterSettings } from './HeaderFooterDialog';
+import { PDFImportDialog } from './PDFImportDialog';
 import { toast } from 'sonner';
 
 interface ToolbarProps {
@@ -48,6 +51,10 @@ export const Toolbar = ({ editor }: ToolbarProps) => {
   const [currentCapitalization, setCurrentCapitalization] = useState<string>('none');
   const [iconPickerOpen, setIconPickerOpen] = useState(false);
   const [webVideoOpen, setWebVideoOpen] = useState(false);
+  const [tocOpen, setTocOpen] = useState(false);
+  const [footnoteOpen, setFootnoteOpen] = useState(false);
+  const [headerFooterOpen, setHeaderFooterOpen] = useState(false);
+  const [pdfImportOpen, setPdfImportOpen] = useState(false);
 
   const addQuotes = () => {
     if (!editor) return;
@@ -190,6 +197,46 @@ export const Toolbar = ({ editor }: ToolbarProps) => {
 
   const handleInsertFrom = () => {
     toast.info('Insert from external sources coming soon!');
+  };
+
+  const handleFootnoteInsert = (content: string) => {
+    if (!editor) return;
+    
+    // Count existing footnotes
+    let footnoteCount = 0;
+    editor.state.doc.descendants((node: any) => {
+      if (node.marks.some((mark: any) => mark.type.name === 'footnote')) {
+        footnoteCount++;
+      }
+    });
+    
+    const footnoteNumber = footnoteCount + 1;
+    const footnoteId = `fn-${footnoteNumber}`;
+    
+    editor.chain().focus()
+      .setFootnote({ id: footnoteId, number: footnoteNumber, content })
+      .run();
+    
+    toast.success('Footnote added');
+  };
+
+  const handleHeaderFooterSave = (settings: HeaderFooterSettings) => {
+    // Store settings in localStorage or state management
+    localStorage.setItem('headerFooterSettings', JSON.stringify(settings));
+    toast.success('Header/Footer settings saved');
+  };
+
+  const handleInsertPageBreak = () => {
+    editor.chain().focus().insertPageBreak().run();
+    toast.success('Page break inserted');
+  };
+
+  const handleInsertChapter = () => {
+    const title = prompt('Enter chapter title:');
+    if (title) {
+      editor.chain().focus().setChapter({ title }).run();
+      toast.success('Chapter inserted');
+    }
   };
   
   if (!editor) return null;
@@ -370,17 +417,50 @@ export const Toolbar = ({ editor }: ToolbarProps) => {
           <Search className="w-4 h-4 mr-2" />
           Find & Replace
         </Button>
-        <Button variant="ghost" size="sm" onClick={() => setImportOpen(true)} className="import-btn">
-          <FileUp className="w-4 h-4 mr-2" />
-          Import
-        </Button>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" size="sm" className="import-btn">
+              <FileUp className="w-4 h-4 mr-2" />
+              Import
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="bg-background">
+            <DropdownMenuItem onClick={() => setImportOpen(true)}>
+              Standard Import
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => setPdfImportOpen(true)}>
+              PDF with Style Inference
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
         <Button variant="ghost" size="sm" onClick={() => setExportOpen(true)} className="export-btn">
           <FileDown className="w-4 h-4 mr-2" />
           Export
         </Button>
-        <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
-          <Settings className="w-4 h-4" />
-        </Button>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+              <Settings className="w-4 h-4" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="bg-background">
+            <DropdownMenuItem onClick={() => setTocOpen(true)}>
+              Table of Contents
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => setFootnoteOpen(true)}>
+              Insert Footnote
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => setHeaderFooterOpen(true)}>
+              Headers & Footers
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={handleInsertPageBreak}>
+              Insert Page Break
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={handleInsertChapter}>
+              New Chapter
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
       
       <IconPicker
@@ -393,7 +473,27 @@ export const Toolbar = ({ editor }: ToolbarProps) => {
         onOpenChange={setWebVideoOpen}
         onVideoInsert={handleVideoInsert}
       />
-      <FindReplaceDialog 
+      <TableOfContentsDialog
+        open={tocOpen}
+        onOpenChange={setTocOpen}
+        editor={editor}
+      />
+      <FootnoteDialog
+        open={footnoteOpen}
+        onOpenChange={setFootnoteOpen}
+        onInsert={handleFootnoteInsert}
+      />
+      <HeaderFooterDialog
+        open={headerFooterOpen}
+        onOpenChange={setHeaderFooterOpen}
+        onSave={handleHeaderFooterSave}
+      />
+      <PDFImportDialog
+        open={pdfImportOpen}
+        onOpenChange={setPdfImportOpen}
+        editor={editor}
+      />
+      <FindReplaceDialog
         open={findReplaceOpen} 
         onOpenChange={setFindReplaceOpen}
         editor={editor}
