@@ -114,6 +114,9 @@ All colors MUST be HSL.
   font-size: 16px;
   line-height: 1.6;
   color: hsl(var(--foreground));
+  tab-size: 48px; /* 0.5 inch at 96 DPI */
+  -moz-tab-size: 48px;
+  white-space: pre-wrap;
 }
 
 .ProseMirror h1 {
@@ -213,4 +216,31 @@ button[data-active="true"] {
 
 .ProseMirror .footnote-reference sup {
   margin-right: 0.25rem;
+}
+
+/* Dynamic page count styling */
+.ProseMirror .page-count-dynamic {
+  font-weight: 500;
+  color: hsl(var(--primary));
+}
+
+/* Date/time stamp styling */
+.ProseMirror .datetime-stamp {
+  color: hsl(var(--muted-foreground));
+  font-style: italic;
+}
+
+/* Table of contents styling */
+.ProseMirror .table-of-contents {
+  border-radius: 0.5rem;
+}
+
+.ProseMirror .table-of-contents ul li {
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+/* Section break styling */
+.ProseMirror .section-break {
+  user-select: none;
 }

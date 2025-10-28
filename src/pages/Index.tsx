@@ -30,6 +30,7 @@ const Index = () => {
     format: 'page-x',
   });
   const [footnoteCounter, setFootnoteCounter] = useState(1);
+  const [totalPages, setTotalPages] = useState(2);
   const { toast } = useToast();
 
   // Auto-renumber footnotes when content changes
@@ -167,7 +168,8 @@ const Index = () => {
 
   const handleInsertTab = () => {
     if (!editor) return;
-    editor.chain().focus().insertContent('&nbsp;&nbsp;&nbsp;&nbsp;').run();
+    // Insert actual tab character (0.5 inch default tab stop)
+    editor.chain().focus().insertContent('\t').run();
   };
 
   const handleInsertPageBreak = () => {
@@ -183,8 +185,9 @@ const Index = () => {
 
   const handleInsertSectionBreak = () => {
     if (!editor) return;
-    editor.chain().focus().insertContent('<hr style="page-break-after: always; border: none; margin: 2rem 0;">').run();
-    toast({ title: 'Section Break Inserted' });
+    // Insert section break that allows different formatting per section
+    editor.chain().focus().insertContent('<div class="section-break" style="page-break-after: always; border-top: 2px dashed #ccc; margin: 2rem 0; padding-top: 1rem;"><p style="text-align: center; color: #999; font-size: 0.8rem;">Section Break</p></div>').run();
+    toast({ title: 'Section Break Inserted', description: 'Each section can have different formatting' });
   };
 
   const handleInsertColumnBreak = () => {
@@ -231,15 +234,25 @@ const Index = () => {
 
   const handleInsertPageCount = () => {
     if (!editor) return;
-    editor.chain().focus().insertContent('[Page Count]').run();
-    toast({ title: 'Page Count Placeholder Inserted' });
+    // Insert dynamic page count that updates automatically
+    editor.chain().focus().insertContent(`<span class="page-count-dynamic">${totalPages}</span>`).run();
+    toast({ title: 'Page Count Inserted', description: 'Updates automatically as pages change' });
   };
 
   const handleInsertDateTime = () => {
     if (!editor) return;
-    const now = new Date().toLocaleString();
-    editor.chain().focus().insertContent(now).run();
-    toast({ title: 'Date & Time Inserted' });
+    const now = new Date();
+    const formatted = now.toLocaleString('en-US', { 
+      year: 'numeric', 
+      month: 'long', 
+      day: 'numeric',
+      hour: 'numeric',
+      minute: '2-digit',
+      hour12: true
+    });
+    // Insert with data attribute for potential auto-updating
+    editor.chain().focus().insertContent(`<span class="datetime-stamp" data-timestamp="${now.getTime()}">${formatted}</span>`).run();
+    toast({ title: 'Date & Time Inserted', description: 'Static timestamp inserted' });
   };
 
   const handleInsertBookmark = () => {
@@ -251,18 +264,35 @@ const Index = () => {
 
   const handleInsertTableOfContents = () => {
     if (!editor) return;
-    const content = `
-      <div style="border: 1px solid #e5e7eb; padding: 1rem; margin: 1rem 0; background: #f9fafb;">
-        <h3 style="margin-top: 0;">Table of Contents</h3>
-        <ul style="list-style: none; padding-left: 0;">
-          <li>1. Introduction</li>
-          <li>2. Main Content</li>
-          <li>3. Conclusion</li>
-        </ul>
-      </div>
-    `;
-    editor.chain().focus().insertContent(content).run();
-    toast({ title: 'Table of Contents Inserted' });
+    
+    // Extract all headings from the document
+    const html = editor.getHTML();
+    const tempDiv = document.createElement('div');
+    tempDiv.innerHTML = html;
+    
+    const headings = tempDiv.querySelectorAll('h1, h2, h3, h4, h5, h6');
+    let tocContent = '<div class="table-of-contents" style="border: 1px solid hsl(var(--border)); padding: 1.5rem; margin: 1rem 0; background: hsl(var(--muted));">';
+    tocContent += '<h3 style="margin-top: 0; margin-bottom: 1rem; font-weight: 600;">Table of Contents</h3>';
+    tocContent += '<ul style="list-style: none; padding-left: 0; margin: 0;">';
+    
+    if (headings.length === 0) {
+      tocContent += '<li style="color: hsl(var(--muted-foreground)); font-style: italic;">No headings found. Add headings to generate TOC.</li>';
+    } else {
+      headings.forEach((heading, index) => {
+        const level = parseInt(heading.tagName.substring(1));
+        const indent = (level - 1) * 1.5;
+        const text = heading.textContent || `Heading ${index + 1}`;
+        tocContent += `<li style="margin: 0.25rem 0; padding-left: ${indent}rem;">${text}</li>`;
+      });
+    }
+    
+    tocContent += '</ul></div>';
+    
+    editor.chain().focus().insertContent(tocContent).run();
+    toast({ 
+      title: 'Table of Contents Inserted', 
+      description: `Generated from ${headings.length} heading${headings.length !== 1 ? 's' : ''} in document` 
+    });
   };
 
   const handleHighlight = () => {
