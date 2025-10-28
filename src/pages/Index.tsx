@@ -122,35 +122,83 @@ const Index = () => {
     const footnoteNumber = footnoteCounter;
     const { from } = editor.state.selection;
     
-    // Insert superscript number at cursor position using HTML
+    // Insert superscript number at cursor position
     editor.chain()
       .focus()
       .insertContent(`<sup>${footnoteNumber}</sup>`)
       .run();
     
-    // Get current content and add footnote reference at the bottom
+    // Get current HTML to find page breaks
     const currentContent = editor.getHTML();
-    const hasFootnoteSeparator = currentContent.includes('<!-- FOOTNOTES -->');
     
-    // Navigate to end of document
-    const docSize = editor.state.doc.content.size;
+    // Find position of cursor in HTML
+    const tempDiv = document.createElement('div');
+    tempDiv.innerHTML = currentContent;
+    
+    // Find all page breaks
+    const pageBreaks = tempDiv.querySelectorAll('.page-break');
+    
+    // Determine where to insert footnote (before next page break or at end)
+    let insertPosition = editor.state.doc.content.size - 1;
+    
+    if (pageBreaks.length > 0) {
+      // Find the next page break after cursor
+      const html = editor.getHTML();
+      const beforeCursor = html.substring(0, from);
+      const afterCursor = html.substring(from);
+      
+      // Find next page break in the content after cursor
+      const nextPageBreakMatch = afterCursor.match(/<div class="page-break">/);
+      
+      if (nextPageBreakMatch && nextPageBreakMatch.index !== undefined) {
+        // Calculate position just before the page break
+        const pageBreakPos = from + nextPageBreakMatch.index;
+        insertPosition = pageBreakPos;
+      }
+    }
+    
+    // Check if this page already has a footnote separator
+    const htmlBeforeInsert = editor.getHTML().substring(0, insertPosition);
+    const lastPageBreak = htmlBeforeInsert.lastIndexOf('<div class="page-break">');
+    const sectionToCheck = lastPageBreak >= 0 ? htmlBeforeInsert.substring(lastPageBreak) : htmlBeforeInsert;
+    const hasFootnoteSeparator = sectionToCheck.includes('class="footnotes-section"');
+    
+    // Navigate to insertion point
     editor.chain()
       .focus()
-      .setTextSelection(docSize - 1)
+      .setTextSelection(insertPosition)
       .run();
     
-    // Add separator line if this is the first footnote (Apple Pages style)
+    // Add separator if this is the first footnote on this page
     if (!hasFootnoteSeparator) {
       editor.chain()
         .focus()
-        .insertContent('<p></p><hr><!-- FOOTNOTES -->')
+        .insertContent('<div class="footnotes-section"><hr class="footnotes-separator"></div>')
         .run();
+      
+      // Update insertion position after adding separator
+      insertPosition = editor.state.selection.from;
+    } else {
+      // Find the footnotes section and insert at the end of it
+      const content = editor.getHTML();
+      const footnoteSectionStart = content.lastIndexOf('<div class="footnotes-section">', insertPosition);
+      if (footnoteSectionStart >= 0) {
+        const afterSection = content.substring(footnoteSectionStart);
+        const sectionEnd = afterSection.indexOf('</div>');
+        if (sectionEnd >= 0) {
+          insertPosition = footnoteSectionStart + sectionEnd;
+          editor.chain()
+            .focus()
+            .setTextSelection(insertPosition)
+            .run();
+        }
+      }
     }
     
-    // Add the footnote reference at the bottom (Apple Pages style: superscript number + text)
+    // Add the footnote text
     editor.chain()
       .focus()
-      .insertContent(`<p class="footnote-reference"><sup>${footnoteNumber}</sup> Enter footnote text here</p>`)
+      .insertContent(`<p class="footnote-text"><sup>${footnoteNumber}</sup> Enter footnote text here</p>`)
       .run();
     
     // Return cursor to position after the inline superscript
@@ -162,7 +210,7 @@ const Index = () => {
     
     toast({
       title: 'Footnote Inserted',
-      description: `Footnote ${footnoteNumber} added at bottom of page.`,
+      description: `Footnote ${footnoteNumber} added at bottom of current page.`,
     });
   };
 
