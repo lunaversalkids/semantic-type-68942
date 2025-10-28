@@ -79,16 +79,14 @@ export const Toolbar = ({ editor }: ToolbarProps) => {
     
     switch (type) {
       case 'none':
-        // Leave text exactly as typed
-        transformedText = selectedText;
-        break;
+        // Leave text exactly as typed - do nothing
+        return;
       case 'allCaps':
         transformedText = selectedText.toUpperCase();
         break;
       case 'smallCaps':
-        // Apply small caps CSS styling
-        editor.chain().focus().deleteRange({ from, to }).run();
-        editor.chain().focus().insertContent(`<span style="font-variant-caps: small-caps;">${selectedText}</span>`).run();
+        // Toggle small caps mark
+        editor.chain().focus().toggleSmallCaps().run();
         return;
       case 'titleCase':
         // Capitalize first letter of main words, except minor words (unless first word)

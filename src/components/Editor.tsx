@@ -12,6 +12,7 @@ import { Card } from '@/components/ui/card';
 import { EditorContextMenu } from './ContextMenu';
 import { FontSize } from './extensions/FontSize';
 import { FontWeight } from './extensions/FontWeight';
+import { SmallCaps } from './extensions/SmallCaps';
 
 interface EditorProps {
   onSelectionChange?: (text: string) => void;
@@ -93,6 +94,7 @@ export const Editor = ({
       Highlight.configure({ multicolor: true }),
       Underline,
       Superscript,
+      SmallCaps,
       TextAlign.configure({
         types: ['heading', 'paragraph'],
       }),
