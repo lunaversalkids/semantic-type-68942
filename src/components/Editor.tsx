@@ -13,6 +13,7 @@ import { EditorContextMenu } from './ContextMenu';
 import { FontSize } from './extensions/FontSize';
 import { FontWeight } from './extensions/FontWeight';
 import { SmallCaps } from './extensions/SmallCaps';
+import { IconNode } from './extensions/IconNode';
 
 interface EditorProps {
   onSelectionChange?: (text: string) => void;
@@ -95,6 +96,7 @@ export const Editor = ({
       Underline,
       Superscript,
       SmallCaps,
+      IconNode,
       TextAlign.configure({
         types: ['heading', 'paragraph'],
       }),

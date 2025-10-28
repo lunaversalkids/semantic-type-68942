@@ -23,10 +23,12 @@ import {
   FileUp,
   Settings,
   Check,
+  Shapes,
 } from 'lucide-react';
 import { FindReplaceDialog } from './FindReplaceDialog';
 import { ExportDialog } from './ExportDialog';
 import { ImportDialog } from './ImportDialog';
+import { IconPicker } from './IconPicker';
 
 interface ToolbarProps {
   editor?: any;
@@ -37,6 +39,7 @@ export const Toolbar = ({ editor }: ToolbarProps) => {
   const [exportOpen, setExportOpen] = useState(false);
   const [importOpen, setImportOpen] = useState(false);
   const [currentCapitalization, setCurrentCapitalization] = useState<string>('none');
+  const [iconPickerOpen, setIconPickerOpen] = useState(false);
 
   const addQuotes = () => {
     if (!editor) return;
@@ -141,6 +144,10 @@ export const Toolbar = ({ editor }: ToolbarProps) => {
     
     editor.chain().focus().insertContentAt({ from, to }, transformedText).run();
     editor.commands.setTextSelection({ from, to: from + transformedText.length });
+  };
+
+  const handleIconSelect = (iconId: string, category: string) => {
+    editor.commands.insertIcon({ iconId, category, width: 100, height: 100, color: '#000000' });
   };
   
   if (!editor) return null;
@@ -283,6 +290,15 @@ export const Toolbar = ({ editor }: ToolbarProps) => {
       </div>
 
       <div className="ml-auto flex items-center gap-2">
+        <Button 
+          variant="ghost" 
+          size="sm" 
+          onClick={() => setIconPickerOpen(true)} 
+          className="h-8 w-8 p-0"
+          title="Insert Shape or Icon"
+        >
+          <Shapes className="w-4 h-4" />
+        </Button>
         <Button variant="ghost" size="sm" onClick={() => setFindReplaceOpen(true)} className="find-replace-btn">
           <Search className="w-4 h-4 mr-2" />
           Find & Replace
@@ -300,6 +316,11 @@ export const Toolbar = ({ editor }: ToolbarProps) => {
         </Button>
       </div>
       
+      <IconPicker
+        open={iconPickerOpen}
+        onOpenChange={setIconPickerOpen}
+        onIconSelect={handleIconSelect}
+      />
       <FindReplaceDialog 
         open={findReplaceOpen} 
         onOpenChange={setFindReplaceOpen}
