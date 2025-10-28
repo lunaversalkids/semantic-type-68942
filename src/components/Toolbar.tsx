@@ -26,16 +26,13 @@ import {
   Plus,
   Shapes,
   Image,
-  Sparkles,
   Video,
-  Images,
   FolderOpen,
 } from 'lucide-react';
 import { FindReplaceDialog } from './FindReplaceDialog';
 import { ExportDialog } from './ExportDialog';
 import { ImportDialog } from './ImportDialog';
 import { IconPicker } from './IconPicker';
-import { ImagePlaygroundDialog } from './ImagePlaygroundDialog';
 import { WebVideoDialog } from './WebVideoDialog';
 
 import { toast } from 'sonner';
@@ -50,7 +47,6 @@ export const Toolbar = ({ editor }: ToolbarProps) => {
   const [importOpen, setImportOpen] = useState(false);
   const [currentCapitalization, setCurrentCapitalization] = useState<string>('none');
   const [iconPickerOpen, setIconPickerOpen] = useState(false);
-  const [imagePlaygroundOpen, setImagePlaygroundOpen] = useState(false);
   const [webVideoOpen, setWebVideoOpen] = useState(false);
 
   const addQuotes = () => {
@@ -188,16 +184,8 @@ export const Toolbar = ({ editor }: ToolbarProps) => {
   };
 
 
-  const handleImageGenerated = (imageUrl: string) => {
-    editor.chain().focus().setImage({ src: imageUrl }).run();
-  };
-
   const handleVideoInsert = (embedHtml: string) => {
     editor.chain().focus().insertContent(embedHtml).run();
-  };
-
-  const handleImageGallery = () => {
-    toast.info('Image Gallery feature coming soon!');
   };
 
   const handleInsertFrom = () => {
@@ -368,17 +356,9 @@ export const Toolbar = ({ editor }: ToolbarProps) => {
               <Image className="w-4 h-4 mr-2" />
               Photo or Video
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => setImagePlaygroundOpen(true)}>
-              <Sparkles className="w-4 h-4 mr-2" />
-              Image Playground
-            </DropdownMenuItem>
             <DropdownMenuItem onClick={() => setWebVideoOpen(true)}>
               <Video className="w-4 h-4 mr-2" />
               Web Video
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={handleImageGallery}>
-              <Images className="w-4 h-4 mr-2" />
-              Image Gallery
             </DropdownMenuItem>
             <DropdownMenuItem onClick={handleInsertFrom}>
               <FolderOpen className="w-4 h-4 mr-2" />
@@ -407,11 +387,6 @@ export const Toolbar = ({ editor }: ToolbarProps) => {
         open={iconPickerOpen}
         onOpenChange={setIconPickerOpen}
         onIconSelect={handleIconSelect}
-      />
-      <ImagePlaygroundDialog
-        open={imagePlaygroundOpen}
-        onOpenChange={setImagePlaygroundOpen}
-        onImageGenerated={handleImageGenerated}
       />
       <WebVideoDialog
         open={webVideoOpen}
