@@ -8,7 +8,7 @@ import {
   ContextMenuSubTrigger,
   ContextMenuTrigger,
 } from '@/components/ui/context-menu';
-import { Tag, Palette, Sparkles, FileText, Hash } from 'lucide-react';
+import { Tag, Palette, Sparkles, FileText, Hash, Bookmark, Highlighter, Languages } from 'lucide-react';
 import { ReactNode } from 'react';
 
 interface EditorContextMenuProps {
@@ -28,6 +28,8 @@ interface EditorContextMenuProps {
   onInsertDateTime?: () => void;
   onInsertBookmark?: () => void;
   onInsertTableOfContents?: () => void;
+  onHighlight?: () => void;
+  onTranslate?: (language: string) => void;
   showPageNumber?: boolean;
   pageNumber?: number;
 }
@@ -49,6 +51,8 @@ export const EditorContextMenu = ({
   onInsertDateTime,
   onInsertBookmark,
   onInsertTableOfContents,
+  onHighlight,
+  onTranslate,
   showPageNumber = true,
   pageNumber = 1
 }: EditorContextMenuProps) => {
@@ -148,6 +152,47 @@ export const EditorContextMenu = ({
           <Palette className="w-4 h-4 mr-2" />
           Apply to All Instances...
         </ContextMenuItem>
+
+        <ContextMenuSeparator />
+
+        <ContextMenuItem onClick={onInsertBookmark}>
+          <Bookmark className="w-4 h-4 mr-2" />
+          Bookmark
+        </ContextMenuItem>
+
+        <ContextMenuItem onClick={onHighlight}>
+          <Highlighter className="w-4 h-4 mr-2" />
+          Highlight
+        </ContextMenuItem>
+
+        <ContextMenuSub>
+          <ContextMenuSubTrigger>
+            <Languages className="w-4 h-4 mr-2" />
+            Translate
+          </ContextMenuSubTrigger>
+          <ContextMenuSubContent>
+            <ContextMenuItem onClick={() => onTranslate?.('es')}>Spanish</ContextMenuItem>
+            <ContextMenuItem onClick={() => onTranslate?.('fr')}>French</ContextMenuItem>
+            <ContextMenuItem onClick={() => onTranslate?.('de')}>German</ContextMenuItem>
+            <ContextMenuItem onClick={() => onTranslate?.('it')}>Italian</ContextMenuItem>
+            <ContextMenuItem onClick={() => onTranslate?.('pt')}>Portuguese</ContextMenuItem>
+            <ContextMenuItem onClick={() => onTranslate?.('ru')}>Russian</ContextMenuItem>
+            <ContextMenuItem onClick={() => onTranslate?.('ja')}>Japanese</ContextMenuItem>
+            <ContextMenuItem onClick={() => onTranslate?.('ko')}>Korean</ContextMenuItem>
+            <ContextMenuItem onClick={() => onTranslate?.('zh')}>Chinese</ContextMenuItem>
+            <ContextMenuItem onClick={() => onTranslate?.('ar')}>Arabic</ContextMenuItem>
+            <ContextMenuItem onClick={() => onTranslate?.('hi')}>Hindi</ContextMenuItem>
+            <ContextMenuItem onClick={() => onTranslate?.('he')}>Hebrew</ContextMenuItem>
+            <ContextMenuItem onClick={() => onTranslate?.('el')}>Greek</ContextMenuItem>
+            <ContextMenuItem onClick={() => onTranslate?.('nl')}>Dutch</ContextMenuItem>
+            <ContextMenuItem onClick={() => onTranslate?.('pl')}>Polish</ContextMenuItem>
+            <ContextMenuItem onClick={() => onTranslate?.('tr')}>Turkish</ContextMenuItem>
+            <ContextMenuItem onClick={() => onTranslate?.('sv')}>Swedish</ContextMenuItem>
+            <ContextMenuItem onClick={() => onTranslate?.('no')}>Norwegian</ContextMenuItem>
+            <ContextMenuItem onClick={() => onTranslate?.('da')}>Danish</ContextMenuItem>
+            <ContextMenuItem onClick={() => onTranslate?.('fi')}>Finnish</ContextMenuItem>
+          </ContextMenuSubContent>
+        </ContextMenuSub>
 
         <ContextMenuSeparator />
 

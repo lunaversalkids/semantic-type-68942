@@ -24,6 +24,8 @@ interface EditorProps {
   onInsertDateTime?: () => void;
   onInsertBookmark?: () => void;
   onInsertTableOfContents?: () => void;
+  onHighlight?: () => void;
+  onTranslate?: (language: string) => void;
   pageNumbersVisibility?: Record<number, boolean>;
   pageNumberSettings?: {
     position: 'left' | 'center' | 'right';
@@ -49,6 +51,8 @@ export const Editor = ({
   onInsertDateTime,
   onInsertBookmark,
   onInsertTableOfContents,
+  onHighlight,
+  onTranslate,
   pageNumbersVisibility = { 1: true, 2: true },
   pageNumberSettings = { position: 'right', format: 'page-x' },
   totalPages = 2,
@@ -127,6 +131,8 @@ export const Editor = ({
           onInsertDateTime={onInsertDateTime}
           onInsertBookmark={onInsertBookmark}
           onInsertTableOfContents={onInsertTableOfContents}
+          onHighlight={onHighlight}
+          onTranslate={onTranslate}
           onTogglePageNumber={() => onTogglePageNumber?.(1)}
           showPageNumber={pageNumbersVisibility[1]}
           pageNumber={1}
@@ -161,6 +167,8 @@ export const Editor = ({
           onInsertDateTime={onInsertDateTime}
           onInsertBookmark={onInsertBookmark}
           onInsertTableOfContents={onInsertTableOfContents}
+          onHighlight={onHighlight}
+          onTranslate={onTranslate}
           onTogglePageNumber={() => onTogglePageNumber?.(2)}
           showPageNumber={pageNumbersVisibility[2]}
           pageNumber={2}

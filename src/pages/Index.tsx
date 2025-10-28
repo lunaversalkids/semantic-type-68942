@@ -169,6 +169,62 @@ const Index = () => {
     toast({ title: 'Table of Contents Inserted' });
   };
 
+  const handleHighlight = () => {
+    if (!editor) return;
+    editor.chain().focus().toggleHighlight({ color: '#fef08a' }).run();
+    toast({ title: 'Highlight Applied' });
+  };
+
+  const handleTranslate = async (language: string) => {
+    if (!editor || !selectedText) {
+      toast({
+        title: 'No Text Selected',
+        description: 'Please select text to translate',
+        variant: 'destructive',
+      });
+      return;
+    }
+
+    try {
+      const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/translate`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+        },
+        body: JSON.stringify({
+          text: selectedText,
+          targetLanguage: language,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Translation failed');
+      }
+
+      const { translatedText } = await response.json();
+      
+      // Replace selected text with translation
+      const { from, to } = editor.state.selection;
+      editor.chain()
+        .focus()
+        .deleteRange({ from, to })
+        .insertContent(translatedText)
+        .run();
+
+      toast({
+        title: 'Translation Complete',
+        description: `Text translated to ${language}`,
+      });
+    } catch (error) {
+      toast({
+        title: 'Translation Error',
+        description: 'Failed to translate text. Please try again.',
+        variant: 'destructive',
+      });
+    }
+  };
+
   return (
     <div className="h-screen flex flex-col overflow-hidden">
       <Header onHelpClick={() => setHelpModeActive(true)} />
@@ -198,6 +254,8 @@ const Index = () => {
             onInsertDateTime={handleInsertDateTime}
             onInsertBookmark={handleInsertBookmark}
             onInsertTableOfContents={handleInsertTableOfContents}
+            onHighlight={handleHighlight}
+            onTranslate={handleTranslate}
             pageNumbersVisibility={pageNumbersVisibility}
             pageNumberSettings={pageNumberSettings}
             totalPages={2}
