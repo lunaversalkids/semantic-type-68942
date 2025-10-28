@@ -31,6 +31,8 @@ const Index = () => {
   });
   const [footnoteCounter, setFootnoteCounter] = useState(1);
   const [totalPages, setTotalPages] = useState(2);
+  const [documentSaved, setDocumentSaved] = useState(false);
+  const [saveDialogOpen, setSaveDialogOpen] = useState(false);
   const { toast } = useToast();
 
   // Auto-renumber footnotes when content changes
@@ -389,9 +391,17 @@ const Index = () => {
 
   return (
     <div className="h-screen flex flex-col overflow-hidden">
-      <Header onHelpClick={() => setHelpModeActive(true)} />
+      <Header 
+        onHelpClick={() => setHelpModeActive(true)} 
+        onSaveClick={() => setSaveDialogOpen(true)}
+        documentSaved={documentSaved}
+      />
       <Toolbar 
         editor={editor}
+        documentSaved={documentSaved}
+        onDocumentSavedChange={setDocumentSaved}
+        saveDialogOpen={saveDialogOpen}
+        onSaveDialogChange={setSaveDialogOpen}
       />
       <div className="flex-1 flex overflow-hidden">
         <StylePanel 

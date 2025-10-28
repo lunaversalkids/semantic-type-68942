@@ -1,11 +1,17 @@
 import { Button } from '@/components/ui/button';
-import { Sparkles, HelpCircle } from 'lucide-react';
+import { Sparkles, HelpCircle, Save } from 'lucide-react';
 import logo from '@/assets/logo.png';
+
 interface HeaderProps {
   onHelpClick?: () => void;
+  onSaveClick?: () => void;
+  documentSaved?: boolean;
 }
+
 export const Header = ({
-  onHelpClick
+  onHelpClick,
+  onSaveClick,
+  documentSaved = true
 }: HeaderProps) => {
   return <header className="h-16 border-b border-border bg-background px-6 flex items-center justify-between">
       <div className="flex items-center gap-3">
@@ -25,8 +31,14 @@ export const Header = ({
           <Sparkles className="w-4 h-4 mr-2" />
           AI Assist
         </Button>
-        <Button size="sm">
-          Save Document
+        <Button 
+          size="sm" 
+          onClick={onSaveClick}
+          variant={documentSaved ? "default" : "default"}
+          className={!documentSaved ? "animate-pulse" : ""}
+        >
+          <Save className="w-4 h-4 mr-2" />
+          {documentSaved ? 'Save Document' : 'Save Changes'}
         </Button>
       </div>
     </header>;

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import {
@@ -38,13 +38,24 @@ import { TableOfContentsDialog } from './TableOfContentsDialog';
 import { FootnoteDialog } from './FootnoteDialog';
 import { HeaderFooterDialog, HeaderFooterSettings } from './HeaderFooterDialog';
 import { PDFImportDialog } from './PDFImportDialog';
+import { SaveDocumentDialog } from './SaveDocumentDialog';
 import { toast } from 'sonner';
 
 interface ToolbarProps {
   editor?: any;
+  documentSaved?: boolean;
+  onDocumentSavedChange?: (saved: boolean) => void;
+  saveDialogOpen?: boolean;
+  onSaveDialogChange?: (open: boolean) => void;
 }
 
-export const Toolbar = ({ editor }: ToolbarProps) => {
+export const Toolbar = ({ 
+  editor,
+  documentSaved: propDocumentSaved = false,
+  onDocumentSavedChange,
+  saveDialogOpen: propSaveDialogOpen = false,
+  onSaveDialogChange
+}: ToolbarProps) => {
   const [findReplaceOpen, setFindReplaceOpen] = useState(false);
   const [exportOpen, setExportOpen] = useState(false);
   const [importOpen, setImportOpen] = useState(false);
@@ -55,7 +66,14 @@ export const Toolbar = ({ editor }: ToolbarProps) => {
   const [footnoteOpen, setFootnoteOpen] = useState(false);
   const [headerFooterOpen, setHeaderFooterOpen] = useState(false);
   const [pdfImportOpen, setPdfImportOpen] = useState(false);
-  const [documentSaved, setDocumentSaved] = useState(true);
+  const [documentSaved, setDocumentSaved] = useState(propDocumentSaved);
+  const [documentName, setDocumentName] = useState('Untitled Document');
+  const [savedContent, setSavedContent] = useState<string>('');
+
+  // Sync with parent state
+  useEffect(() => {
+    setDocumentSaved(propDocumentSaved);
+  }, [propDocumentSaved]);
 
   const addQuotes = () => {
     if (!editor) return;
@@ -240,18 +258,74 @@ export const Toolbar = ({ editor }: ToolbarProps) => {
     }
   };
 
+  const handleSaveDocument = (filename: string) => {
+    if (!editor) return;
+    
+    const content = editor.getHTML();
+    
+    // Store in localStorage
+    const savedDoc = {
+      name: filename,
+      content,
+      savedAt: new Date().toISOString()
+    };
+    
+    localStorage.setItem('currentDocument', JSON.stringify(savedDoc));
+    
+    setDocumentName(filename);
+    setSavedContent(content);
+    setDocumentSaved(true);
+    
+    // Notify parent
+    if (onDocumentSavedChange) {
+      onDocumentSavedChange(true);
+    }
+    
+    toast.success(`Document "${filename}" saved successfully!`);
+  };
+
   const handleSavePrompt = async (): Promise<boolean> => {
-    // In a real implementation, this would trigger the actual save functionality
-    // For now, we'll simulate a save
     return new Promise((resolve) => {
-      toast.info('Save your document before proceeding');
-      // Simulate save - in production this would call actual save logic
+      if (onSaveDialogChange) {
+        onSaveDialogChange(true);
+      }
+      
+      // Wait for save dialog to complete
+      const checkSaved = setInterval(() => {
+        if (documentSaved) {
+          clearInterval(checkSaved);
+          resolve(true);
+        }
+      }, 500);
+      
+      // Timeout after 30 seconds
       setTimeout(() => {
-        setDocumentSaved(true);
-        resolve(true);
-      }, 1000);
+        clearInterval(checkSaved);
+        resolve(false);
+      }, 30000);
     });
   };
+
+  // Track content changes to mark document as unsaved
+  useEffect(() => {
+    if (!editor) return;
+
+    const updateHandler = () => {
+      const currentContent = editor.getHTML();
+      if (currentContent !== savedContent && savedContent !== '') {
+        setDocumentSaved(false);
+        if (onDocumentSavedChange) {
+          onDocumentSavedChange(false);
+        }
+      }
+    };
+
+    editor.on('update', updateHandler);
+
+    return () => {
+      editor.off('update', updateHandler);
+    };
+  }, [editor, savedContent, onDocumentSavedChange]);
   
   if (!editor) return null;
   return (
@@ -501,6 +575,12 @@ export const Toolbar = ({ editor }: ToolbarProps) => {
         open={headerFooterOpen}
         onOpenChange={setHeaderFooterOpen}
         onSave={handleHeaderFooterSave}
+      />
+      <SaveDocumentDialog
+        open={propSaveDialogOpen}
+        onOpenChange={(open) => onSaveDialogChange && onSaveDialogChange(open)}
+        onSave={handleSaveDocument}
+        defaultFilename={documentName}
       />
       <PDFImportDialog
         open={pdfImportOpen}
