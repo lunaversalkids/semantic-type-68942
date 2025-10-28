@@ -149,7 +149,7 @@ const Index = () => {
     // Add the footnote reference at the bottom
     editor.chain()
       .focus()
-      .insertContent(`<p><sup>${footnoteNumber}</sup> Enter footnote text here</p>`)
+      .insertContent(`<p class="footnote-reference"><sup>${footnoteNumber}</sup> Enter footnote text here</p>`)
       .run();
     
     // Return cursor to position after the superscript

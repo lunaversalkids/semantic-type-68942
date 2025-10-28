@@ -199,3 +199,11 @@ button[data-active="true"] {
   border-top: 1px solid hsl(var(--border));
   margin: 2rem 0;
 }
+
+/* Footnote references at bottom */
+.ProseMirror .footnote-reference {
+  font-size: 0.75rem;
+  color: hsl(var(--muted-foreground));
+  margin: 0.25rem 0;
+  padding-left: 0;
+}
