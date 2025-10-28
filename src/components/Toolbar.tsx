@@ -40,9 +40,14 @@ export const Toolbar = ({ editor }: ToolbarProps) => {
         // Remove quotes
         const withoutQuotes = selectedText.slice(1, -1);
         editor.chain().focus().insertContentAt({ from, to }, withoutQuotes).run();
+        // Re-select the text without quotes
+        editor.commands.setTextSelection({ from, to: from + withoutQuotes.length });
       } else {
         // Add quotes
-        editor.chain().focus().insertContentAt({ from, to }, `"${selectedText}"`).run();
+        const quotedText = `"${selectedText}"`;
+        editor.chain().focus().insertContentAt({ from, to }, quotedText).run();
+        // Re-select the text including quotes
+        editor.commands.setTextSelection({ from, to: from + quotedText.length });
       }
     } else {
       // If no text selected, insert quotes at cursor position
