@@ -2,6 +2,12 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import {
   Bold,
   Italic,
   Underline,
@@ -58,6 +64,39 @@ export const Toolbar = ({ editor }: ToolbarProps) => {
       editor.commands.setTextSelection(newPos);
     }
   };
+
+  const applyCapitalization = (type: string) => {
+    if (!editor) return;
+    const { from, to } = editor.state.selection;
+    const selectedText = editor.state.doc.textBetween(from, to, '');
+    
+    if (!selectedText) return;
+    
+    let transformedText = selectedText;
+    
+    switch (type) {
+      case 'none':
+        transformedText = selectedText.toLowerCase();
+        break;
+      case 'allCaps':
+        transformedText = selectedText.toUpperCase();
+        break;
+      case 'smallCaps':
+        transformedText = selectedText.toUpperCase();
+        break;
+      case 'titleCase':
+        transformedText = selectedText.toLowerCase().replace(/\b\w/g, (char) => char.toUpperCase());
+        break;
+      case 'startCase':
+        transformedText = selectedText.toLowerCase().split(' ').map(word => 
+          word.charAt(0).toUpperCase() + word.slice(1)
+        ).join(' ');
+        break;
+    }
+    
+    editor.chain().focus().insertContentAt({ from, to }, transformedText).run();
+    editor.commands.setTextSelection({ from, to: from + transformedText.length });
+  };
   
   if (!editor) return null;
   return (
@@ -99,13 +138,34 @@ export const Toolbar = ({ editor }: ToolbarProps) => {
         >
           <Strikethrough className="w-4 h-4" />
         </Button>
-        <Button 
-          variant="ghost" 
-          size="sm" 
-          className="h-8 w-8 p-0"
-        >
-          <span className="text-lg leading-none">•••</span>
-        </Button>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              className="h-8 w-8 p-0"
+            >
+              <span className="text-lg leading-none">•••</span>
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuItem onClick={() => applyCapitalization('none')}>
+              None
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => applyCapitalization('allCaps')}>
+              All Caps
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => applyCapitalization('smallCaps')}>
+              Small Caps
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => applyCapitalization('titleCase')}>
+              Title Case
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => applyCapitalization('startCase')}>
+              Start Case
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
 
       <Separator orientation="vertical" className="h-6" />
