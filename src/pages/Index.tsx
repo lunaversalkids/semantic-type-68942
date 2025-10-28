@@ -145,6 +145,13 @@ const Index = () => {
     const footnoteNumber = footnoteCounter;
     const { from } = editor.state.selection;
     
+    // Get footnote style settings
+    const footnoteStyle = defaultStyles.find(s => s.id === 'footnote');
+    const fontSize = footnoteStyle?.size || 12;
+    const fontFamily = footnoteStyle?.font || 'Inter';
+    const color = footnoteStyle?.color || '#666666';
+    const lineHeight = footnoteStyle?.lineHeight || 1.4;
+    
     // Insert superscript number at cursor position with a unique ID
     editor.chain()
       .focus()
@@ -163,22 +170,21 @@ const Index = () => {
       .run();
     
     if (!hasFootnoteSection) {
-      // Create the entire footnotes section at once
+      // Create the entire footnotes section at once with style applied
       editor.chain()
         .focus()
         .insertContent(`
           <div class="footnotes-section">
             <hr class="footnotes-separator" />
-            <p class="footnote-text" data-footnote="${footnoteNumber}"><sup>${footnoteNumber}</sup> Enter footnote text here</p>
+            <p class="footnote-text" data-footnote="${footnoteNumber}" style="font-family: ${fontFamily}; font-size: ${fontSize}px; color: ${color}; line-height: ${lineHeight};"><sup>${footnoteNumber}</sup> Enter footnote text here</p>
           </div>
         `)
         .run();
     } else {
-      // Just add the new footnote text to existing section
-      // Find the closing div of footnotes section and insert before it
+      // Just add the new footnote text to existing section with style
       editor.chain()
         .focus()
-        .insertContent(`<p class="footnote-text" data-footnote="${footnoteNumber}"><sup>${footnoteNumber}</sup> Enter footnote text here</p>`)
+        .insertContent(`<p class="footnote-text" data-footnote="${footnoteNumber}" style="font-family: ${fontFamily}; font-size: ${fontSize}px; color: ${color}; line-height: ${lineHeight};"><sup>${footnoteNumber}</sup> Enter footnote text here</p>`)
         .run();
     }
     

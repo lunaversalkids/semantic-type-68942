@@ -269,6 +269,12 @@ button[data-active="true"] {
 
 .editor-content-wrapper {
   min-height: 11in;
+  position: relative;
+}
+
+.editor-page {
+  position: relative;
+  min-height: 11in;
 }
 
 /* Page break styling - creates visual page separation */
@@ -298,10 +304,11 @@ button[data-active="true"] {
   margin-top: 2rem;
 }
 
-/* Footnotes section styling */
+/* Footnotes section styling - large top margin pushes to bottom */
 .ProseMirror .footnotes-section {
-  margin-top: 3rem;
-  padding-top: 1rem;
+  margin-top: 20rem;
+  padding-top: 2rem;
+  padding-bottom: 1rem;
   text-align: left;
 }
 
@@ -314,12 +321,9 @@ button[data-active="true"] {
 }
 
 .ProseMirror .footnote-text {
-  font-size: 0.75rem;
-  line-height: 1.4;
   margin: 0.25rem 0;
   padding-left: 0;
   text-align: left;
-  color: hsl(var(--foreground));
 }
 
 .ProseMirror .footnote-text sup {
