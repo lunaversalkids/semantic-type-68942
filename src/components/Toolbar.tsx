@@ -23,7 +23,17 @@ import {
   FileUp,
   Settings,
   Check,
+  Plus,
   Shapes,
+  Image,
+  Sparkles,
+  Camera,
+  Mic,
+  Video,
+  Images,
+  FolderOpen,
+  Pencil,
+  Calculator,
 } from 'lucide-react';
 import { FindReplaceDialog } from './FindReplaceDialog';
 import { ExportDialog } from './ExportDialog';
@@ -290,15 +300,60 @@ export const Toolbar = ({ editor }: ToolbarProps) => {
       </div>
 
       <div className="ml-auto flex items-center gap-2">
-        <Button 
-          variant="ghost" 
-          size="sm" 
-          onClick={() => setIconPickerOpen(true)} 
-          className="h-8 w-8 p-0"
-          title="Insert Shape or Icon"
-        >
-          <Shapes className="w-4 h-4" />
-        </Button>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              className="h-8 w-8 p-0"
+              title="Insert"
+            >
+              <Plus className="w-4 h-4" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="bg-background w-56">
+            <DropdownMenuItem onClick={() => setIconPickerOpen(true)}>
+              <Shapes className="w-4 h-4 mr-2" />
+              Shapes
+            </DropdownMenuItem>
+            <DropdownMenuItem disabled>
+              <Image className="w-4 h-4 mr-2" />
+              Photo or Video
+            </DropdownMenuItem>
+            <DropdownMenuItem disabled>
+              <Sparkles className="w-4 h-4 mr-2" />
+              Image Playground
+            </DropdownMenuItem>
+            <DropdownMenuItem disabled>
+              <Camera className="w-4 h-4 mr-2" />
+              Camera
+            </DropdownMenuItem>
+            <DropdownMenuItem disabled>
+              <Mic className="w-4 h-4 mr-2" />
+              Record Audio
+            </DropdownMenuItem>
+            <DropdownMenuItem disabled>
+              <Video className="w-4 h-4 mr-2" />
+              Web Video
+            </DropdownMenuItem>
+            <DropdownMenuItem disabled>
+              <Images className="w-4 h-4 mr-2" />
+              Image Gallery
+            </DropdownMenuItem>
+            <DropdownMenuItem disabled>
+              <FolderOpen className="w-4 h-4 mr-2" />
+              Insert from...
+            </DropdownMenuItem>
+            <DropdownMenuItem disabled>
+              <Pencil className="w-4 h-4 mr-2" />
+              Drawing
+            </DropdownMenuItem>
+            <DropdownMenuItem disabled>
+              <Calculator className="w-4 h-4 mr-2" />
+              Equation
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
         <Button variant="ghost" size="sm" onClick={() => setFindReplaceOpen(true)} className="find-replace-btn">
           <Search className="w-4 h-4 mr-2" />
           Find & Replace
