@@ -35,7 +35,14 @@ export const Toolbar = ({ editor }: ToolbarProps) => {
     const selectedText = editor.state.doc.textBetween(from, to, '');
     
     if (selectedText) {
+      // If text is selected, wrap it with quotes
       editor.chain().focus().insertContentAt({ from, to }, `"${selectedText}"`).run();
+    } else {
+      // If no text selected, insert quotes at cursor position
+      editor.chain().focus().insertContent('""').run();
+      // Move cursor between the quotes
+      const newPos = editor.state.selection.from - 1;
+      editor.commands.setTextSelection(newPos);
     }
   };
   
@@ -128,18 +135,9 @@ export const Toolbar = ({ editor }: ToolbarProps) => {
         <Button 
           variant="ghost" 
           size="sm" 
-          className="h-8 w-8 p-0"
-          onClick={() => editor.chain().focus().toggleBlockquote().run()}
-          data-active={editor.isActive('blockquote')}
-        >
-          <Quote className="w-4 h-4" />
-        </Button>
-        <Button 
-          variant="ghost" 
-          size="sm" 
           className="h-8 w-8 p-0 font-bold text-base"
           onClick={addQuotes}
-          title="Add quotation marks"
+          title="Add quotation marks (wraps selected text or inserts at cursor)"
         >
           "
         </Button>
