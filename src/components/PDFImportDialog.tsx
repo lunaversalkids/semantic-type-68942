@@ -14,8 +14,8 @@ interface PDFImportDialogProps {
   isDocumentSaved?: boolean;
 }
 
-// Configure PDF.js worker - using unpkg as reliable source
-pdfjsLib.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${pdfjsLib.version}/build/pdf.worker.min.js`;
+// Configure PDF.js worker - using local copy
+pdfjsLib.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.mjs';
 
 export const PDFImportDialog = ({ 
   open, 
@@ -64,6 +64,14 @@ export const PDFImportDialog = ({
 
   const importPDF = async (file: File) => {
     setImporting(true);
+    
+    // Check file size (50MB limit)
+    const maxSize = 50 * 1024 * 1024; // 50MB in bytes
+    if (file.size > maxSize) {
+      toast.error('PDF file is too large. Maximum size is 50MB.');
+      setImporting(false);
+      return;
+    }
     
     try {
       const arrayBuffer = await file.arrayBuffer();
@@ -160,7 +168,7 @@ export const PDFImportDialog = ({
         <DialogHeader>
           <DialogTitle>Import PDF with Style Inference</DialogTitle>
           <DialogDescription>
-            Import a PDF document and automatically detect fonts, sizes, and formatting styles.
+            Import a PDF document and automatically detect fonts, sizes, and formatting styles. Maximum file size: 50MB.
           </DialogDescription>
         </DialogHeader>
         <div className="space-y-4">
