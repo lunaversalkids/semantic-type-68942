@@ -99,6 +99,13 @@ export const Toolbar = ({ editor }: ToolbarProps) => {
         >
           <Strikethrough className="w-4 h-4" />
         </Button>
+        <Button 
+          variant="ghost" 
+          size="sm" 
+          className="h-8 w-8 p-0"
+        >
+          <span className="text-lg leading-none">•••</span>
+        </Button>
       </div>
 
       <Separator orientation="vertical" className="h-6" />
