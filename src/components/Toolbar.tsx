@@ -5,6 +5,7 @@ import {
   Bold,
   Italic,
   Underline,
+  Strikethrough,
   AlignLeft,
   AlignCenter,
   AlignRight,
@@ -88,6 +89,15 @@ export const Toolbar = ({ editor }: ToolbarProps) => {
           data-active={editor.isActive('underline')}
         >
           <Underline className="w-4 h-4" />
+        </Button>
+        <Button 
+          variant="ghost" 
+          size="sm" 
+          className="h-8 w-8 p-0"
+          onClick={() => editor.chain().focus().toggleStrike().run()}
+          data-active={editor.isActive('strike')}
+        >
+          <Strikethrough className="w-4 h-4" />
         </Button>
       </div>
 
