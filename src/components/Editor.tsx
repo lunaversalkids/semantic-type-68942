@@ -125,15 +125,18 @@ export const Editor = ({
     },
   });
 
-  // Split content into pages based on page breaks
+  // Count page breaks to determine number of pages
   useEffect(() => {
     if (!editor) return;
     
     const updatePages = () => {
       const html = editor.getHTML();
-      // Split by page break divs
-      const pageContents = html.split(/<div class="page-break">Page Break<\/div>/);
-      setPages(pageContents.length > 0 ? pageContents : [html]);
+      const pageBreakCount = (html.match(/<div class="page-break">/g) || []).length;
+      const pageCount = pageBreakCount + 1;
+      
+      // Create array of page numbers
+      const newPages = Array.from({ length: pageCount }, (_, i) => `page-${i + 1}`);
+      setPages(newPages);
     };
 
     updatePages();
@@ -146,40 +149,36 @@ export const Editor = ({
 
   return (
     <div className="h-full flex items-start justify-center bg-[hsl(var(--editor-bg))] p-8 overflow-auto">
-      <div className="flex gap-8 flex-wrap">
-        {pages.map((pageContent, index) => {
-          const pageNum = index + 1;
-          return (
-            <EditorContextMenu 
-              key={pageNum}
-              editor={editor}
-              onApplyToAll={onApplyToAll}
-              onAIAssist={onAIAssist}
-              onInsertFootnote={onInsertFootnote}
-              onInsertTab={onInsertTab}
-              onInsertPageBreak={onInsertPageBreak}
-              onInsertLineBreak={onInsertLineBreak}
-              onInsertSectionBreak={onInsertSectionBreak}
-              onInsertColumnBreak={onInsertColumnBreak}
-              onInsertPageNumber={() => onInsertPageNumber?.(pageNum)}
-              onInsertPageCount={onInsertPageCount}
-              onInsertDateTime={onInsertDateTime}
-              onInsertBookmark={onInsertBookmark}
-              onInsertTableOfContents={onInsertTableOfContents}
-              onHighlight={onHighlight}
-              onTranslate={onTranslate}
-              onTogglePageNumber={() => onTogglePageNumber?.(pageNum)}
-              showPageNumber={pageNumbersVisibility[pageNum] ?? true}
-              pageNumber={pageNum}
-            >
-              <Card className="w-[8.5in] min-h-[11in] bg-[hsl(var(--page-bg))] shadow-lg p-16 relative">
+      <EditorContextMenu 
+        editor={editor}
+        onApplyToAll={onApplyToAll}
+        onAIAssist={onAIAssist}
+        onInsertFootnote={onInsertFootnote}
+        onInsertTab={onInsertTab}
+        onInsertPageBreak={onInsertPageBreak}
+        onInsertLineBreak={onInsertLineBreak}
+        onInsertSectionBreak={onInsertSectionBreak}
+        onInsertColumnBreak={onInsertColumnBreak}
+        onInsertPageNumber={() => onInsertPageNumber?.(1)}
+        onInsertPageCount={onInsertPageCount}
+        onInsertDateTime={onInsertDateTime}
+        onInsertBookmark={onInsertBookmark}
+        onInsertTableOfContents={onInsertTableOfContents}
+        onHighlight={onHighlight}
+        onTranslate={onTranslate}
+        onTogglePageNumber={() => onTogglePageNumber?.(1)}
+        showPageNumber={pageNumbersVisibility[1] ?? true}
+        pageNumber={1}
+      >
+        <div className="editor-pages-container space-y-8">
+          {pages.map((_, index) => {
+            const pageNum = index + 1;
+            return (
+              <Card key={pageNum} className="w-[8.5in] min-h-[11in] bg-[hsl(var(--page-bg))] shadow-lg p-16 relative editor-page">
                 {index === 0 ? (
-                  <EditorContent editor={editor} />
+                  <EditorContent editor={editor} className="editor-content-wrapper" />
                 ) : (
-                  <div 
-                    className="prose prose-sm sm:prose lg:prose-lg xl:prose-xl"
-                    dangerouslySetInnerHTML={{ __html: pageContent }}
-                  />
+                  <div className="page-continuation" />
                 )}
                 {pageNumbersVisibility[pageNum] !== false && (
                   <div 
@@ -193,10 +192,10 @@ export const Editor = ({
                   </div>
                 )}
               </Card>
-            </EditorContextMenu>
-          );
-        })}
-      </div>
+            );
+          })}
+        </div>
+      </EditorContextMenu>
     </div>
   );
 };

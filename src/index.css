@@ -262,41 +262,58 @@ button[data-active="true"] {
   min-height: calc(11in - 8rem);
 }
 
-/* Page break styling */
-.ProseMirror .page-break {
-  page-break-after: always;
-  break-after: page;
-  margin: 2rem 0 4rem 0;
-  padding: 0.75rem 0;
-  border-bottom: 2px dashed hsl(var(--border));
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: hsl(var(--muted-foreground));
-  font-size: 0.75rem;
-  user-select: none;
+/* Editor pages container */
+.editor-pages-container {
   position: relative;
 }
 
+.editor-content-wrapper {
+  min-height: 11in;
+}
+
+/* Page break styling - creates visual page separation */
+.ProseMirror .page-break {
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-top: 2px dashed hsl(var(--border));
+  position: relative;
+  margin: 0;
+  page-break-after: always;
+  break-after: page;
+  clear: both;
+}
+
 .ProseMirror .page-break::after {
-  content: '';
-  display: block;
-  height: 3rem;
-  width: 100%;
+  content: 'Page Break';
+  font-size: 0.75rem;
+  color: hsl(var(--muted-foreground));
+  background: hsl(var(--background));
+  padding: 0 0.5rem;
+}
+
+/* Make page breaks create actual visual page separation */
+.editor-page:not(:first-child) {
+  margin-top: 2rem;
 }
 
 /* Print support for page breaks */
 @media print {
-  .page-break {
-    page-break-after: always;
-    break-after: page;
+  .ProseMirror .page-break {
+    border: 0;
     margin: 0;
     padding: 0;
-    border: none;
     height: 0;
+    page-break-after: always;
   }
   
-  .page-break::after {
-    display: none;
+  .ProseMirror .page-break::after {
+    content: '';
+  }
+  
+  .editor-page:not(:first-child) {
+    margin-top: 0;
+    page-break-before: always;
   }
 }
