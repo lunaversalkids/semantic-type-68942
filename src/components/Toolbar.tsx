@@ -74,23 +74,37 @@ export const Toolbar = ({ editor }: ToolbarProps) => {
     
     let transformedText = selectedText;
     
+    // Words to keep lowercase in Title Case
+    const minorWords = ['a', 'an', 'and', 'as', 'at', 'but', 'by', 'for', 'in', 'of', 'on', 'or', 'the', 'to', 'up', 'via'];
+    
     switch (type) {
       case 'none':
-        transformedText = selectedText.toLowerCase();
+        // Leave text exactly as typed
+        transformedText = selectedText;
         break;
       case 'allCaps':
         transformedText = selectedText.toUpperCase();
         break;
       case 'smallCaps':
-        transformedText = selectedText.toUpperCase();
-        break;
+        // Apply small caps CSS styling
+        editor.chain().focus().deleteRange({ from, to }).run();
+        editor.chain().focus().insertContent(`<span style="font-variant-caps: small-caps;">${selectedText}</span>`).run();
+        return;
       case 'titleCase':
-        transformedText = selectedText.toLowerCase().replace(/\b\w/g, (char) => char.toUpperCase());
+        // Capitalize first letter of main words, except minor words (unless first word)
+        transformedText = selectedText.toLowerCase().split(' ').map((word, index) => {
+          if (index === 0 || !minorWords.includes(word)) {
+            return word.charAt(0).toUpperCase() + word.slice(1);
+          }
+          return word;
+        }).join(' ');
         break;
       case 'startCase':
-        transformedText = selectedText.toLowerCase().split(' ').map(word => 
-          word.charAt(0).toUpperCase() + word.slice(1)
-        ).join(' ');
+        // Sentence case: only capitalize first letter of first word
+        transformedText = selectedText.toLowerCase();
+        if (transformedText.length > 0) {
+          transformedText = transformedText.charAt(0).toUpperCase() + transformedText.slice(1);
+        }
         break;
     }
     
