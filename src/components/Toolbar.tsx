@@ -81,10 +81,17 @@ export const Toolbar = ({ editor }: ToolbarProps) => {
     
     switch (type) {
       case 'none':
-        // Remove any existing small caps mark
+        // Remove small caps mark if active
         if (editor.isActive('smallCaps')) {
           editor.chain().focus().unsetMark('smallCaps').run();
         }
+        // Convert to sentence case (first letter capitalized, rest lowercase)
+        transformedText = selectedText.toLowerCase();
+        if (transformedText.length > 0) {
+          transformedText = transformedText.charAt(0).toUpperCase() + transformedText.slice(1);
+        }
+        editor.chain().focus().insertContentAt({ from, to }, transformedText).run();
+        editor.commands.setTextSelection({ from, to: from + transformedText.length });
         setCurrentCapitalization('none');
         return;
       case 'allCaps':
@@ -96,15 +103,13 @@ export const Toolbar = ({ editor }: ToolbarProps) => {
         setCurrentCapitalization('allCaps');
         break;
       case 'smallCaps':
-        // Remove small caps if it's already active (toggle off)
-        if (editor.isActive('smallCaps')) {
-          editor.chain().focus().unsetMark('smallCaps').run();
-          setCurrentCapitalization('none');
-        } else {
-          // Apply small caps mark without changing the actual text case
-          editor.chain().focus().toggleSmallCaps().run();
-          setCurrentCapitalization('smallCaps');
-        }
+        // First convert text to lowercase, then apply small caps styling
+        transformedText = selectedText.toLowerCase();
+        editor.chain().focus().insertContentAt({ from, to }, transformedText).run();
+        editor.commands.setTextSelection({ from, to: from + transformedText.length });
+        // Now apply small caps mark
+        editor.chain().focus().setMark('smallCaps').run();
+        setCurrentCapitalization('smallCaps');
         return;
       case 'titleCase':
         // Remove small caps if active
