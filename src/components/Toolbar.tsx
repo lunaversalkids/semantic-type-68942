@@ -22,6 +22,7 @@ import {
   FileDown,
   FileUp,
   Settings,
+  Check,
 } from 'lucide-react';
 import { FindReplaceDialog } from './FindReplaceDialog';
 import { ExportDialog } from './ExportDialog';
@@ -79,16 +80,27 @@ export const Toolbar = ({ editor }: ToolbarProps) => {
     
     switch (type) {
       case 'none':
-        // Leave text exactly as typed - do nothing
+        // Remove any existing small caps mark, but keep text as-is
+        if (editor.isActive('smallCaps')) {
+          editor.chain().focus().unsetMark('smallCaps').run();
+        }
         return;
       case 'allCaps':
+        // Remove small caps if active
+        if (editor.isActive('smallCaps')) {
+          editor.chain().focus().unsetMark('smallCaps').run();
+        }
         transformedText = selectedText.toUpperCase();
         break;
       case 'smallCaps':
-        // Toggle small caps mark
+        // Toggle small caps mark without changing the actual text case
         editor.chain().focus().toggleSmallCaps().run();
         return;
       case 'titleCase':
+        // Remove small caps if active
+        if (editor.isActive('smallCaps')) {
+          editor.chain().focus().unsetMark('smallCaps').run();
+        }
         // Capitalize first letter of main words, except minor words (unless first word)
         transformedText = selectedText.toLowerCase().split(' ').map((word, index) => {
           if (index === 0 || !minorWords.includes(word)) {
@@ -98,6 +110,10 @@ export const Toolbar = ({ editor }: ToolbarProps) => {
         }).join(' ');
         break;
       case 'startCase':
+        // Remove small caps if active
+        if (editor.isActive('smallCaps')) {
+          editor.chain().focus().unsetMark('smallCaps').run();
+        }
         // Sentence case: only capitalize first letter of first word
         transformedText = selectedText.toLowerCase();
         if (transformedText.length > 0) {
@@ -162,18 +178,23 @@ export const Toolbar = ({ editor }: ToolbarProps) => {
           </DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuItem onClick={() => applyCapitalization('none')}>
+              <Check className={`w-4 h-4 mr-2 ${!editor.isActive('smallCaps') ? 'opacity-100' : 'opacity-0'}`} />
               None
             </DropdownMenuItem>
             <DropdownMenuItem onClick={() => applyCapitalization('allCaps')}>
+              <Check className="w-4 h-4 mr-2 opacity-0" />
               All Caps
             </DropdownMenuItem>
             <DropdownMenuItem onClick={() => applyCapitalization('smallCaps')}>
+              <Check className={`w-4 h-4 mr-2 ${editor.isActive('smallCaps') ? 'opacity-100' : 'opacity-0'}`} />
               Small Caps
             </DropdownMenuItem>
             <DropdownMenuItem onClick={() => applyCapitalization('titleCase')}>
+              <Check className="w-4 h-4 mr-2 opacity-0" />
               Title Case
             </DropdownMenuItem>
             <DropdownMenuItem onClick={() => applyCapitalization('startCase')}>
+              <Check className="w-4 h-4 mr-2 opacity-0" />
               Start Case
             </DropdownMenuItem>
           </DropdownMenuContent>
