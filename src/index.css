@@ -186,3 +186,16 @@ button[data-active="true"] {
   background-color: hsl(var(--accent));
   color: hsl(var(--accent-foreground));
 }
+
+/* Superscript styling for footnotes */
+.ProseMirror sup {
+  font-size: 0.7em;
+  vertical-align: super;
+  line-height: 0;
+}
+
+.ProseMirror hr {
+  border: none;
+  border-top: 1px solid hsl(var(--border));
+  margin: 2rem 0;
+}

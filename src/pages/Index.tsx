@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Header } from '@/components/Header';
 import { Toolbar } from '@/components/Toolbar';
 import { StylePanel } from '@/components/StylePanel';
@@ -32,6 +32,70 @@ const Index = () => {
   const [footnoteCounter, setFootnoteCounter] = useState(1);
   const { toast } = useToast();
 
+  // Auto-renumber footnotes when content changes
+  useEffect(() => {
+    if (!editor) return;
+
+    const renumberFootnotes = () => {
+      const html = editor.getHTML();
+      
+      // Find all superscript elements (footnote markers)
+      const supMatches = html.match(/<sup>(\d+)<\/sup>/g);
+      if (!supMatches || supMatches.length === 0) {
+        setFootnoteCounter(1);
+        return;
+      }
+
+      // Check if they are already sequential
+      const numbers = supMatches.map(match => {
+        const numMatch = match.match(/\d+/);
+        return numMatch ? parseInt(numMatch[0]) : 0;
+      }).filter(n => n > 0);
+      
+      const needsRenumbering = numbers.some((num, idx) => num !== idx + 1);
+
+      if (needsRenumbering) {
+        // Renumber all footnotes sequentially
+        let newHtml = html;
+        const uniqueNumbers: number[] = Array.from(new Set<number>(numbers)).sort((a, b) => a - b);
+        
+        uniqueNumbers.forEach((oldNum, idx) => {
+          const newNum = idx + 1;
+          if (oldNum !== newNum) {
+            // Replace all instances of this number
+            newHtml = newHtml.replace(
+              new RegExp(`<sup>${oldNum}</sup>`, 'g'),
+              `<sup data-temp="${newNum}"></sup>`
+            );
+          }
+        });
+        
+        // Replace temp markers with final numbers
+        newHtml = newHtml.replace(
+          /<sup data-temp="(\d+)"><\/sup>/g,
+          '<sup>$1</sup>'
+        );
+        
+        // Update editor content without triggering another update
+        editor.commands.setContent(newHtml, false);
+      }
+
+      // Update counter to next available number
+      const maxNumber = numbers.length > 0 ? Math.max.apply(null, numbers) : 0;
+      setFootnoteCounter(maxNumber + 1);
+    };
+
+    const handleUpdate = () => {
+      renumberFootnotes();
+    };
+
+    editor.on('update', handleUpdate);
+    
+    return () => {
+      editor.off('update', handleUpdate);
+    };
+  }, [editor]);
+
   const handleApplyToAll = () => {
     if (!selectedText) {
       toast({
@@ -57,41 +121,47 @@ const Index = () => {
     const footnoteNumber = footnoteCounter;
     const { from } = editor.state.selection;
     
-    // Insert superscript number at cursor position
+    // Insert superscript number at cursor position using HTML
     editor.chain()
       .focus()
-      .toggleSuperscript()
-      .insertContent(footnoteNumber.toString())
-      .toggleSuperscript()
+      .insertContent(`<sup>${footnoteNumber}</sup>`)
       .run();
     
-    // Get the current document size after insertion
-    const currentDoc = editor.state.doc;
-    const endPos = currentDoc.content.size - 1;
+    // Get current content and add footnote reference at the bottom
+    const currentContent = editor.getHTML();
+    const hasFootnoteSeparator = currentContent.includes('<!-- FOOTNOTES -->');
     
-    // Add footnote reference at the bottom
+    // Navigate to end of document
+    const docSize = editor.state.doc.content.size;
     editor.chain()
       .focus()
-      .setTextSelection(endPos)
-      .insertContent('<p></p>')
-      .insertContent('<hr>')
-      .insertContent('<p>')
-      .toggleSuperscript()
-      .insertContent(footnoteNumber.toString())
-      .toggleSuperscript()
-      .insertContent(' Enter footnote text here</p>')
+      .setTextSelection(docSize - 1)
       .run();
     
-    // Return cursor to original position
+    // Add separator if this is the first footnote
+    if (!hasFootnoteSeparator) {
+      editor.chain()
+        .focus()
+        .insertContent('<p></p><hr><!-- FOOTNOTES -->')
+        .run();
+    }
+    
+    // Add the footnote reference at the bottom
+    editor.chain()
+      .focus()
+      .insertContent(`<p><sup>${footnoteNumber}</sup> Enter footnote text here</p>`)
+      .run();
+    
+    // Return cursor to position after the superscript
     setTimeout(() => {
       editor.chain().focus().setTextSelection(from + 1).run();
-    }, 0);
+    }, 10);
     
     setFootnoteCounter(prev => prev + 1);
     
     toast({
       title: 'Footnote Inserted',
-      description: `Footnote ${footnoteNumber} added with reference at bottom. Edit the text after the number.`,
+      description: `Footnote ${footnoteNumber} added. Scroll down to edit the footnote text.`,
     });
   };
 
