@@ -143,6 +143,7 @@ const Index = () => {
     if (!editor) return;
     
     const footnoteNumber = footnoteCounter;
+    const { from } = editor.state.selection;
     
     // Insert superscript number at cursor position with a unique ID
     editor.chain()
@@ -150,51 +151,47 @@ const Index = () => {
       .insertContent(`<sup data-footnote="${footnoteNumber}">${footnoteNumber}</sup>`)
       .run();
     
-    // Navigate to end of document to add footnote text
+    // Get current content to check for existing footnotes section
+    const currentContent = editor.getHTML();
+    const hasFootnoteSection = currentContent.includes('class="footnotes-section"');
+    
+    // Navigate to end of document
     const docSize = editor.state.doc.content.size;
     editor.chain()
       .focus()
       .setTextSelection(docSize - 1)
       .run();
     
-    // Check if we already have a footnotes section
-    const currentContent = editor.getHTML();
-    const hasFootnoteSection = currentContent.includes('class="footnotes-section"');
-    
     if (!hasFootnoteSection) {
-      // Add the footnotes section with separator
+      // Create the entire footnotes section at once
       editor.chain()
         .focus()
-        .insertContent('<div class="footnotes-section"><hr class="footnotes-separator" />')
+        .insertContent(`
+          <div class="footnotes-section">
+            <hr class="footnotes-separator" />
+            <p class="footnote-text" data-footnote="${footnoteNumber}"><sup>${footnoteNumber}</sup> Enter footnote text here</p>
+          </div>
+        `)
         .run();
     } else {
-      // Navigate to end of footnotes section
-      const docSize = editor.state.doc.content.size;
+      // Just add the new footnote text to existing section
+      // Find the closing div of footnotes section and insert before it
       editor.chain()
         .focus()
-        .setTextSelection(docSize - 1)
+        .insertContent(`<p class="footnote-text" data-footnote="${footnoteNumber}"><sup>${footnoteNumber}</sup> Enter footnote text here</p>`)
         .run();
     }
     
-    // Add the footnote text with matching ID
-    editor.chain()
-      .focus()
-      .insertContent(`<p class="footnote-text" data-footnote="${footnoteNumber}"><sup>${footnoteNumber}</sup> Enter footnote text here</p>`)
-      .run();
-    
-    if (!hasFootnoteSection) {
-      // Close the footnotes section div
-      editor.chain()
-        .focus()
-        .insertContent('</div>')
-        .run();
-    }
+    // Return cursor to original position
+    setTimeout(() => {
+      editor.chain().focus().setTextSelection(from + 1).run();
+    }, 10);
     
     setFootnoteCounter(prev => prev + 1);
     
     toast({
       title: 'Footnote Inserted',
-      description: `Footnote ${footnoteNumber} added. Edit the text at the bottom of the page.`,
+      description: `Footnote ${footnoteNumber} added at bottom of page.`,
     });
   };
 

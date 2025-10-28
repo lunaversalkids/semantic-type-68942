@@ -300,8 +300,9 @@ button[data-active="true"] {
 
 /* Footnotes section styling */
 .ProseMirror .footnotes-section {
-  margin-top: 2rem;
+  margin-top: 3rem;
   padding-top: 1rem;
+  text-align: left;
 }
 
 .ProseMirror .footnotes-separator {
@@ -309,17 +310,21 @@ button[data-active="true"] {
   margin: 0 0 0.5rem 0;
   border: none;
   border-top: 1px solid hsl(var(--border));
+  text-align: left;
 }
 
 .ProseMirror .footnote-text {
-  font-size: 0.875rem;
+  font-size: 0.75rem;
   line-height: 1.4;
   margin: 0.25rem 0;
+  padding-left: 0;
+  text-align: left;
   color: hsl(var(--foreground));
 }
 
 .ProseMirror .footnote-text sup {
   margin-right: 0.25rem;
+  font-size: 0.6em;
 }
 
 /* Print support for page breaks */
