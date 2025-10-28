@@ -1,4 +1,5 @@
 import { useEditor, EditorContent } from '@tiptap/react';
+import { useEffect, useState } from 'react';
 import StarterKit from '@tiptap/starter-kit';
 import { TextStyle } from '@tiptap/extension-text-style';
 import { Color } from '@tiptap/extension-color';
@@ -78,6 +79,9 @@ export const Editor = ({
     const { position } = pageNumberSettings;
     return position === 'center' ? 'center' : position === 'left' ? 'left' : 'right';
   };
+
+  const [pages, setPages] = useState<string[]>([]);
+
   const editor = useEditor({
     extensions: [
       StarterKit,
@@ -121,46 +125,78 @@ export const Editor = ({
     },
   });
 
+  // Split content into pages based on page breaks
+  useEffect(() => {
+    if (!editor) return;
+    
+    const updatePages = () => {
+      const html = editor.getHTML();
+      // Split by page break divs
+      const pageContents = html.split(/<div class="page-break">Page Break<\/div>/);
+      setPages(pageContents.length > 0 ? pageContents : [html]);
+    };
+
+    updatePages();
+    editor.on('update', updatePages);
+
+    return () => {
+      editor.off('update', updatePages);
+    };
+  }, [editor]);
+
   return (
     <div className="h-full flex items-start justify-center bg-[hsl(var(--editor-bg))] p-8 overflow-auto">
-      <EditorContextMenu 
-        editor={editor}
-        onApplyToAll={onApplyToAll}
-        onAIAssist={onAIAssist}
-        onInsertFootnote={onInsertFootnote}
-        onInsertTab={onInsertTab}
-        onInsertPageBreak={onInsertPageBreak}
-        onInsertLineBreak={onInsertLineBreak}
-        onInsertSectionBreak={onInsertSectionBreak}
-        onInsertColumnBreak={onInsertColumnBreak}
-        onInsertPageNumber={() => onInsertPageNumber?.(1)}
-        onInsertPageCount={onInsertPageCount}
-        onInsertDateTime={onInsertDateTime}
-        onInsertBookmark={onInsertBookmark}
-        onInsertTableOfContents={onInsertTableOfContents}
-        onHighlight={onHighlight}
-        onTranslate={onTranslate}
-        onTogglePageNumber={() => onTogglePageNumber?.(1)}
-        showPageNumber={pageNumbersVisibility[1]}
-        pageNumber={1}
-      >
-        <Card className="w-[8.5in] bg-[hsl(var(--page-bg))] shadow-lg editor-container">
-          <div className="editor-pages-wrapper">
-            <EditorContent editor={editor} />
-          </div>
-          {pageNumbersVisibility[1] && (
-            <div 
-              className={`page-number-overlay text-sm text-muted-foreground ${
-                getPageNumberAlignment() === 'left' ? 'left-8' : 
-                getPageNumberAlignment() === 'center' ? 'left-1/2 -translate-x-1/2' : 
-                'right-8'
-              }`}
+      <div className="flex gap-8 flex-wrap">
+        {pages.map((pageContent, index) => {
+          const pageNum = index + 1;
+          return (
+            <EditorContextMenu 
+              key={pageNum}
+              editor={editor}
+              onApplyToAll={onApplyToAll}
+              onAIAssist={onAIAssist}
+              onInsertFootnote={onInsertFootnote}
+              onInsertTab={onInsertTab}
+              onInsertPageBreak={onInsertPageBreak}
+              onInsertLineBreak={onInsertLineBreak}
+              onInsertSectionBreak={onInsertSectionBreak}
+              onInsertColumnBreak={onInsertColumnBreak}
+              onInsertPageNumber={() => onInsertPageNumber?.(pageNum)}
+              onInsertPageCount={onInsertPageCount}
+              onInsertDateTime={onInsertDateTime}
+              onInsertBookmark={onInsertBookmark}
+              onInsertTableOfContents={onInsertTableOfContents}
+              onHighlight={onHighlight}
+              onTranslate={onTranslate}
+              onTogglePageNumber={() => onTogglePageNumber?.(pageNum)}
+              showPageNumber={pageNumbersVisibility[pageNum] ?? true}
+              pageNumber={pageNum}
             >
-              {getPageNumberText(1)}
-            </div>
-          )}
-        </Card>
-      </EditorContextMenu>
+              <Card className="w-[8.5in] min-h-[11in] bg-[hsl(var(--page-bg))] shadow-lg p-16 relative">
+                {index === 0 ? (
+                  <EditorContent editor={editor} />
+                ) : (
+                  <div 
+                    className="prose prose-sm sm:prose lg:prose-lg xl:prose-xl"
+                    dangerouslySetInnerHTML={{ __html: pageContent }}
+                  />
+                )}
+                {pageNumbersVisibility[pageNum] !== false && (
+                  <div 
+                    className={`absolute bottom-8 text-sm text-muted-foreground ${
+                      getPageNumberAlignment() === 'left' ? 'left-8' : 
+                      getPageNumberAlignment() === 'center' ? 'left-1/2 -translate-x-1/2' : 
+                      'right-8'
+                    }`}
+                  >
+                    {getPageNumberText(pageNum)}
+                  </div>
+                )}
+              </Card>
+            </EditorContextMenu>
+          );
+        })}
+      </div>
     </div>
   );
 };
