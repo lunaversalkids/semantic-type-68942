@@ -154,16 +154,16 @@ export const FindReplaceDialog = ({ open, onOpenChange, editor }: FindReplaceDia
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-none w-[calc(100vw-2rem)] sm:w-[calc(100vw-4rem)] top-auto bottom-4 translate-y-0 data-[state=open]:slide-in-from-bottom-4 mx-4 sm:mx-8">
-        <DialogHeader className="pb-2">
+      <DialogContent className="max-w-none w-[calc(100vw-2rem)] sm:w-[calc(100vw-4rem)] top-auto bottom-2 translate-y-0 data-[state=open]:slide-in-from-bottom-2 mx-4 sm:mx-8 py-3">
+        <DialogHeader className="pb-1">
           <DialogTitle className="flex items-center gap-2 text-base">
             <Search className="w-4 h-4" />
             Find & Replace
           </DialogTitle>
         </DialogHeader>
         
-        <div className="space-y-3">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2">
+        <div className="space-y-2">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-[1fr_1fr_2fr] gap-2 items-end">
             <div>
               <Label htmlFor="find" className="text-xs">Find</Label>
               <Input
@@ -171,7 +171,7 @@ export const FindReplaceDialog = ({ open, onOpenChange, editor }: FindReplaceDia
                 value={findText}
                 onChange={(e) => setFindText(e.target.value)}
                 placeholder="Search..."
-                className="h-8 text-sm"
+                className="h-7 text-xs"
               />
             </div>
             <div>
@@ -181,13 +181,27 @@ export const FindReplaceDialog = ({ open, onOpenChange, editor }: FindReplaceDia
                 value={replaceText}
                 onChange={(e) => setReplaceText(e.target.value)}
                 placeholder="Replace..."
-                className="h-8 text-sm"
+                className="h-7 text-xs"
               />
+            </div>
+            <div className="flex gap-2">
+              <Button onClick={handleFindPrevious} variant="outline" size="sm" className="h-7 text-xs flex-1" disabled={totalMatches === 0}>
+                Previous
+              </Button>
+              <Button onClick={handleFindNext} variant="outline" size="sm" className="h-7 text-xs flex-1" disabled={totalMatches === 0}>
+                Next
+              </Button>
+              <Button onClick={handleFind} variant="outline" size="sm" className="h-7 text-xs flex-1">
+                Find All
+              </Button>
+              <Button onClick={handleReplace} size="sm" className="h-7 text-xs flex-1">
+                Replace All
+              </Button>
             </div>
           </div>
 
-          <div className="flex flex-wrap items-center gap-4 text-xs">
-            <div className="flex gap-3 flex-wrap">
+          <div className="flex flex-wrap items-center justify-between gap-3 text-xs">
+            <div className="flex gap-4 flex-wrap items-center">
               <div className="flex items-center space-x-1">
                 <Checkbox 
                   id="whole-words" 
@@ -210,26 +224,15 @@ export const FindReplaceDialog = ({ open, onOpenChange, editor }: FindReplaceDia
                   Match Case
                 </Label>
               </div>
-            </div>
-            
-            {totalMatches > 0 && (
-              <div className="text-xs text-muted-foreground">
-                {currentMatch} of {totalMatches}
-              </div>
-            )}
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-            <div>
-              <Label className="text-xs mb-1.5 block">Replace Mode</Label>
-              <RadioGroup value={mode} onValueChange={(v: any) => setMode(v)} className="gap-2">
-                <div className="flex items-center space-x-1.5">
+              
+              <RadioGroup value={mode} onValueChange={(v: any) => setMode(v)} className="flex gap-3">
+                <div className="flex items-center space-x-1">
                   <RadioGroupItem value="keep-style" id="keep-style" className="h-3 w-3" />
                   <Label htmlFor="keep-style" className="font-normal cursor-pointer text-xs">
                     Keep existing styles
                   </Label>
                 </div>
-                <div className="flex items-center space-x-1.5">
+                <div className="flex items-center space-x-1">
                   <RadioGroupItem value="reapply-rules" id="reapply-rules" className="h-3 w-3" />
                   <Label htmlFor="reapply-rules" className="font-normal cursor-pointer text-xs">
                     Re-apply semantic rules
@@ -237,21 +240,12 @@ export const FindReplaceDialog = ({ open, onOpenChange, editor }: FindReplaceDia
                 </div>
               </RadioGroup>
             </div>
-
-            <div className="flex gap-2 items-end">
-              <Button onClick={handleFindPrevious} variant="outline" size="sm" className="h-7 text-xs flex-1" disabled={totalMatches === 0}>
-                Previous
-              </Button>
-              <Button onClick={handleFindNext} variant="outline" size="sm" className="h-7 text-xs flex-1" disabled={totalMatches === 0}>
-                Next
-              </Button>
-              <Button onClick={handleFind} variant="outline" size="sm" className="h-7 text-xs flex-1">
-                Find All
-              </Button>
-              <Button onClick={handleReplace} size="sm" className="h-7 text-xs flex-1">
-                Replace All
-              </Button>
-            </div>
+            
+            {totalMatches > 0 && (
+              <div className="text-xs text-muted-foreground font-medium">
+                {currentMatch} of {totalMatches}
+              </div>
+            )}
           </div>
         </div>
       </DialogContent>
