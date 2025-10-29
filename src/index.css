@@ -366,13 +366,13 @@ button[data-active="true"] {
   grid-column: 1 / -1;
   grid-row: 1 / -1;
   position: relative;
-  pointer-events: none;
+  pointer-events: auto !important;
   z-index: 10;
 }
 
 .editor-overlay .ProseMirror {
   position: absolute;
-  /* Position at page 1 (right column, first row) */
+  /* Position at page 1 location (right column) */
   top: 0;
   left: calc(8.5in + 0.75rem);
   width: 8.5in;
@@ -381,14 +381,8 @@ button[data-active="true"] {
   pointer-events: auto !important;
   user-select: text !important;
   -webkit-user-select: text !important;
-  min-height: calc((11in * 3) + (1rem * 2)); /* Cover all 3 pages + gaps */
   box-sizing: border-box;
-  background: transparent;
-}
-
-/* Make sure all content inside is editable */
-.editor-overlay .ProseMirror * {
-  pointer-events: auto !important;
+  min-height: calc((11in * 3) + (1rem * 2)); /* Cover all 3 pages vertically */
 }
 
 /* Ensure all editor content is clickable and editable */

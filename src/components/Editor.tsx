@@ -315,15 +315,10 @@ export const Editor = ({
               {/* Editable content overlay */}
               <div 
                 className="editor-overlay"
-                style={{
-                  cursor: 'text',
-                  pointerEvents: 'auto'
-                }}
                 onClick={(e) => {
-                  // Always focus editor when clicking in the overlay area
+                  // Focus editor when clicking anywhere
                   if (editor) {
                     editor.commands.focus();
-                    e.stopPropagation();
                   }
                 }}
               >
