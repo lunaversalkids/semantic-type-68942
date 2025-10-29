@@ -149,27 +149,10 @@ export const Editor = ({
     },
   });
 
-  // Count page breaks to determine number of pages
+  // Always show 2 pages for book layout
   useEffect(() => {
-    if (!editor) return;
-    
-    const updatePages = () => {
-      const html = editor.getHTML();
-      const pageBreakCount = (html.match(/<div class="page-break">/g) || []).length;
-      const pageCount = pageBreakCount + 1;
-      
-      // Create array of page numbers
-      const newPages = Array.from({ length: pageCount }, (_, i) => `page-${i + 1}`);
-      setPages(newPages);
-    };
-
-    updatePages();
-    editor.on('update', updatePages);
-
-    return () => {
-      editor.off('update', updatePages);
-    };
-  }, [editor]);
+    setPages(['page-1', 'page-2']);
+  }, []);
 
   return (
     <div className="h-full flex items-start justify-center bg-[hsl(var(--editor-bg))] p-8 overflow-auto">
@@ -195,7 +178,7 @@ export const Editor = ({
         showPageNumber={pageNumbersVisibility[1] ?? true}
         pageNumber={1}
       >
-        <div className="editor-pages-container space-y-8">
+        <div className="editor-pages-container flex gap-8">
           {pages.map((_, index) => {
             const pageNum = index + 1;
             return (
