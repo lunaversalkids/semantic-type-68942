@@ -1,10 +1,9 @@
 import { useState, useEffect } from 'react';
-import { supabase } from '@/integrations/supabase/client';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { FileText, Trash2, Download, Search, Loader2 } from 'lucide-react';
+import { FileText, Trash2, Download, Search } from 'lucide-react';
 import { toast } from 'sonner';
 import { formatDistanceToNow } from 'date-fns';
 
@@ -12,8 +11,7 @@ interface Document {
   id: string;
   name: string;
   content: string;
-  created_at: string;
-  updated_at: string;
+  savedAt: string;
 }
 
 interface DocumentManagerProps {
@@ -24,23 +22,17 @@ interface DocumentManagerProps {
 
 export const DocumentManager = ({ open, onOpenChange, onLoadDocument }: DocumentManagerProps) => {
   const [documents, setDocuments] = useState<Document[]>([]);
-  const [loading, setLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
 
-  const fetchDocuments = async () => {
-    setLoading(true);
+  const fetchDocuments = () => {
     try {
-      const { data, error } = await supabase
-        .from('documents')
-        .select('*')
-        .order('updated_at', { ascending: false });
-
-      if (error) throw error;
-      setDocuments(data || []);
+      const savedDocs = localStorage.getItem('savedDocuments');
+      if (savedDocs) {
+        const docs = JSON.parse(savedDocs);
+        setDocuments(docs);
+      }
     } catch (error: any) {
-      toast.error('Failed to load documents: ' + error.message);
-    } finally {
-      setLoading(false);
+      toast.error('Failed to load documents');
     }
   };
 
@@ -50,21 +42,20 @@ export const DocumentManager = ({ open, onOpenChange, onLoadDocument }: Document
     }
   }, [open]);
 
-  const handleDeleteDocument = async (id: string, name: string) => {
+  const handleDeleteDocument = (id: string, name: string) => {
     if (!confirm(`Delete "${name}"?`)) return;
 
     try {
-      const { error } = await supabase
-        .from('documents')
-        .delete()
-        .eq('id', id);
-
-      if (error) throw error;
-      
-      toast.success('Document deleted');
-      fetchDocuments();
+      const savedDocs = localStorage.getItem('savedDocuments');
+      if (savedDocs) {
+        const docs = JSON.parse(savedDocs);
+        const updatedDocs = docs.filter((doc: Document) => doc.id !== id);
+        localStorage.setItem('savedDocuments', JSON.stringify(updatedDocs));
+        setDocuments(updatedDocs);
+        toast.success('Document deleted');
+      }
     } catch (error: any) {
-      toast.error('Failed to delete: ' + error.message);
+      toast.error('Failed to delete document');
     }
   };
 
@@ -100,12 +91,7 @@ export const DocumentManager = ({ open, onOpenChange, onLoadDocument }: Document
           />
         </div>
 
-        {loading ? (
-          <div className="flex-1 flex items-center justify-center">
-            <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
-          </div>
-        ) : (
-          <ScrollArea className="flex-1 -mx-6 px-6">
+        <ScrollArea className="flex-1 -mx-6 px-6">
             {filteredDocuments.length === 0 ? (
               <div className="flex flex-col items-center justify-center py-12 text-center">
                 <FileText className="h-12 w-12 text-muted-foreground mb-3" />
@@ -124,7 +110,7 @@ export const DocumentManager = ({ open, onOpenChange, onLoadDocument }: Document
                     <div className="flex-1 min-w-0">
                       <p className="font-medium truncate">{doc.name}</p>
                       <p className="text-xs text-muted-foreground">
-                        Updated {formatDistanceToNow(new Date(doc.updated_at), { addSuffix: true })}
+                        Saved {formatDistanceToNow(new Date(doc.savedAt), { addSuffix: true })}
                       </p>
                     </div>
                     <div className="flex items-center gap-1">
@@ -148,7 +134,6 @@ export const DocumentManager = ({ open, onOpenChange, onLoadDocument }: Document
               </div>
             )}
           </ScrollArea>
-        )}
       </DialogContent>
     </Dialog>
   );

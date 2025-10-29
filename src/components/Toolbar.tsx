@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
-import { supabase } from '@/integrations/supabase/client';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -259,44 +258,39 @@ export const Toolbar = ({
     }
   };
 
-  const handleSaveDocument = async (filename: string) => {
+  const handleSaveDocument = (filename: string) => {
     if (!editor) return;
     
     const content = editor.getHTML();
     
     try {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) throw new Error('Not authenticated');
-
-      // Check if document exists
-      const { data: existing } = await supabase
-        .from('documents')
-        .select('id')
-        .eq('name', filename)
-        .eq('user_id', user.id)
-        .single();
-
-      if (existing) {
-        // Update existing
-        const { error } = await supabase
-          .from('documents')
-          .update({ content })
-          .eq('id', existing.id);
-        
-        if (error) throw error;
+      // Get existing documents from localStorage
+      const savedDocs = localStorage.getItem('savedDocuments');
+      let documents = savedDocs ? JSON.parse(savedDocs) : [];
+      
+      // Check if document with this name exists
+      const existingIndex = documents.findIndex((doc: any) => doc.name === filename);
+      
+      if (existingIndex >= 0) {
+        // Update existing document
+        documents[existingIndex] = {
+          ...documents[existingIndex],
+          content,
+          savedAt: new Date().toISOString()
+        };
       } else {
-        // Create new
-        const { error } = await supabase
-          .from('documents')
-          .insert({
-            user_id: user.id,
-            name: filename,
-            content
-          });
-        
-        if (error) throw error;
+        // Create new document
+        documents.push({
+          id: crypto.randomUUID(),
+          name: filename,
+          content,
+          savedAt: new Date().toISOString()
+        });
       }
-
+      
+      // Save back to localStorage
+      localStorage.setItem('savedDocuments', JSON.stringify(documents));
+      
       setDocumentName(filename);
       setSavedContent(content);
       setDocumentSaved(true);
@@ -305,7 +299,7 @@ export const Toolbar = ({
         onDocumentSavedChange(true);
       }
       
-      toast.success(`Document "${filename}" saved to cloud!`);
+      toast.success(`Document "${filename}" saved!`);
     } catch (error: any) {
       toast.error('Failed to save: ' + error.message);
     }
