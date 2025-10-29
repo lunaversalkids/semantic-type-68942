@@ -94,7 +94,7 @@ export const PDFImportDialog = ({
         let lineFontFamily = '';
         let lineBold = false;
         
-        textContent.items.forEach((item: any) => {
+        textContent.items.forEach((item: any, index: number) => {
           // Type guard to check if item is a TextItem (has 'str' property)
           if (!('str' in item)) return;
           
@@ -103,6 +103,13 @@ export const PDFImportDialog = ({
           const fontSize = Math.round(item.transform[0]);
           const fontName = item.fontName || 'default';
           const isBold = fontName.toLowerCase().includes('bold');
+          
+          // Initialize font size on first item
+          if (index === 0 || lineFontSize === 0) {
+            lineFontSize = fontSize;
+            lineFontFamily = fontName;
+            lineBold = isBold;
+          }
           
           // Detect new lines based on Y position change
           if (lastY !== 0 && Math.abs(y - lastY) > 5) {
@@ -120,13 +127,15 @@ export const PDFImportDialog = ({
                 pageText += `<p ${styleAttr}>${lineText.trim()}</p>`;
               }
             }
+            // Start new line with current item's properties
             lineText = text;
             lineFontSize = fontSize;
             lineFontFamily = fontName;
             lineBold = isBold;
           } else {
+            // Continue current line
             lineText += text;
-            // Use the largest font size in the line
+            // Use the largest font size in the line for heading detection
             if (fontSize > lineFontSize) {
               lineFontSize = fontSize;
               lineFontFamily = fontName;
