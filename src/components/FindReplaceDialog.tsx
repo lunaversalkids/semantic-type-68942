@@ -146,101 +146,83 @@ export const FindReplaceDialog = ({ open, onOpenChange, editor }: FindReplaceDia
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[500px]">
-        <DialogHeader>
-          <DialogTitle className="flex items-center gap-2">
-            <Search className="w-5 h-5" />
+      <DialogContent className="sm:max-w-[600px] top-auto bottom-4 translate-y-0 data-[state=open]:slide-in-from-bottom-4">
+        <DialogHeader className="pb-2">
+          <DialogTitle className="flex items-center gap-2 text-base">
+            <Search className="w-4 h-4" />
             Find & Replace
           </DialogTitle>
         </DialogHeader>
         
-        <div className="space-y-4 pt-4">
-          <div>
-            <Label htmlFor="find">Find</Label>
-            <Input
-              id="find"
-              value={findText}
-              onChange={(e) => setFindText(e.target.value)}
-              placeholder="Search text..."
-              className="mt-1"
-            />
-          </div>
-
-          <div className="flex gap-4">
-            <div className="flex items-center space-x-2">
-              <Checkbox 
-                id="whole-words" 
-                checked={wholeWords}
-                onCheckedChange={(checked) => setWholeWords(checked as boolean)}
+        <div className="space-y-3">
+          <div className="grid grid-cols-2 gap-2">
+            <div>
+              <Label htmlFor="find" className="text-xs">Find</Label>
+              <Input
+                id="find"
+                value={findText}
+                onChange={(e) => setFindText(e.target.value)}
+                placeholder="Search..."
+                className="h-8 text-sm"
               />
-              <Label htmlFor="whole-words" className="font-normal cursor-pointer">
-                Whole Words
-              </Label>
             </div>
-            <div className="flex items-center space-x-2">
-              <Checkbox 
-                id="match-case" 
-                checked={matchCase}
-                onCheckedChange={(checked) => setMatchCase(checked as boolean)}
+            <div>
+              <Label htmlFor="replace" className="text-xs">Replace</Label>
+              <Input
+                id="replace"
+                value={replaceText}
+                onChange={(e) => setReplaceText(e.target.value)}
+                placeholder="Replace..."
+                className="h-8 text-sm"
               />
-              <Label htmlFor="match-case" className="font-normal cursor-pointer">
-                Match Case
-              </Label>
             </div>
           </div>
 
-          <div>
-            <Label htmlFor="replace">Replace with</Label>
-            <Input
-              id="replace"
-              value={replaceText}
-              onChange={(e) => setReplaceText(e.target.value)}
-              placeholder="Replacement text..."
-              className="mt-1"
-            />
-          </div>
-
-          <div>
-            <Label className="mb-3 block">Replace Mode</Label>
-            <RadioGroup value={mode} onValueChange={(v: any) => setMode(v)}>
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem value="keep-style" id="keep-style" />
-                <Label htmlFor="keep-style" className="font-normal cursor-pointer">
-                  Keep existing styles (preserve formatting)
+          <div className="flex items-center justify-between gap-4 text-xs">
+            <div className="flex gap-3">
+              <div className="flex items-center space-x-1">
+                <Checkbox 
+                  id="whole-words" 
+                  checked={wholeWords}
+                  onCheckedChange={(checked) => setWholeWords(checked as boolean)}
+                  className="h-3 w-3"
+                />
+                <Label htmlFor="whole-words" className="font-normal cursor-pointer text-xs">
+                  Whole Words
                 </Label>
               </div>
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem value="reapply-rules" id="reapply-rules" />
-                <Label htmlFor="reapply-rules" className="font-normal cursor-pointer">
-                  Re-apply semantic rules (update styling)
+              <div className="flex items-center space-x-1">
+                <Checkbox 
+                  id="match-case" 
+                  checked={matchCase}
+                  onCheckedChange={(checked) => setMatchCase(checked as boolean)}
+                  className="h-3 w-3"
+                />
+                <Label htmlFor="match-case" className="font-normal cursor-pointer text-xs">
+                  Match Case
                 </Label>
               </div>
-            </RadioGroup>
-          </div>
-
-          {totalMatches > 0 && (
-            <div className="text-sm text-muted-foreground text-center">
-              Match {currentMatch} of {totalMatches}
             </div>
-          )}
-
-          <div className="flex gap-2 pt-4">
-            <Button onClick={handleFind} variant="outline" className="flex-1">
-              <Search className="w-4 h-4 mr-2" />
-              Find All
-            </Button>
-            <Button onClick={handleReplace} className="flex-1">
-              <Replace className="w-4 h-4 mr-2" />
-              Replace All
-            </Button>
+            
+            {totalMatches > 0 && (
+              <div className="text-xs text-muted-foreground">
+                {currentMatch} of {totalMatches}
+              </div>
+            )}
           </div>
-          
+
           <div className="flex gap-2">
-            <Button onClick={handleFindPrevious} variant="outline" className="flex-1" disabled={totalMatches === 0}>
+            <Button onClick={handleFindPrevious} variant="outline" size="sm" className="h-7 text-xs" disabled={totalMatches === 0}>
               Previous
             </Button>
-            <Button onClick={handleFindNext} variant="outline" className="flex-1" disabled={totalMatches === 0}>
+            <Button onClick={handleFindNext} variant="outline" size="sm" className="h-7 text-xs" disabled={totalMatches === 0}>
               Next
+            </Button>
+            <Button onClick={handleFind} variant="outline" size="sm" className="h-7 text-xs flex-1">
+              Find All
+            </Button>
+            <Button onClick={handleReplace} size="sm" className="h-7 text-xs flex-1">
+              Replace All
             </Button>
           </div>
         </div>
