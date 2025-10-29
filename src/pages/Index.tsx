@@ -5,6 +5,7 @@ import { StylePanel } from '@/components/StylePanel';
 import { Editor } from '@/components/Editor';
 import { ApplyToAllDialog } from '@/components/ApplyToAllDialog';
 import { PageNumberDialog } from '@/components/PageNumberDialog';
+import { FindReplaceDialog } from '@/components/FindReplaceDialog';
 import { OnboardingTour } from '@/components/OnboardingTour';
 import { HelpMode } from '@/components/HelpMode';
 import { DocumentManager } from '@/components/DocumentManager';
@@ -36,6 +37,7 @@ const Index = () => {
   const [documentSaved, setDocumentSaved] = useState(false);
   const [saveDialogOpen, setSaveDialogOpen] = useState(false);
   const [documentManagerOpen, setDocumentManagerOpen] = useState(false);
+  const [findReplaceOpen, setFindReplaceOpen] = useState(false);
   const { toast } = useToast();
 
   // Auto-renumber footnotes when content changes
@@ -399,6 +401,10 @@ const Index = () => {
     }
   };
 
+  const handleFind = () => {
+    setFindReplaceOpen(true);
+  };
+
   return (
     <div className="h-screen flex flex-col overflow-hidden">
       <Header 
@@ -439,6 +445,7 @@ const Index = () => {
             onInsertTableOfContents={handleInsertTableOfContents}
             onHighlight={handleHighlight}
             onTranslate={handleTranslate}
+            onFind={handleFind}
             pageNumbersVisibility={pageNumbersVisibility}
             pageNumberSettings={pageNumberSettings}
             totalPages={2}
@@ -482,6 +489,12 @@ const Index = () => {
         open={documentManagerOpen}
         onOpenChange={setDocumentManagerOpen}
         onLoadDocument={handleLoadDocument}
+      />
+
+      <FindReplaceDialog
+        open={findReplaceOpen}
+        onOpenChange={setFindReplaceOpen}
+        editor={editor}
       />
       
       <OnboardingTour />

@@ -41,6 +41,7 @@ interface EditorProps {
   onInsertTableOfContents?: () => void;
   onHighlight?: () => void;
   onTranslate?: (language: string) => void;
+  onFind?: () => void;
   pageNumbersVisibility?: Record<number, boolean>;
   pageNumberSettings?: {
     position: 'left' | 'center' | 'right';
@@ -68,6 +69,7 @@ export const Editor = ({
   onInsertTableOfContents,
   onHighlight,
   onTranslate,
+  onFind,
   pageNumbersVisibility = { 1: true, 2: true },
   pageNumberSettings = { position: 'right', format: 'page-x' },
   totalPages = 2,
@@ -188,6 +190,7 @@ export const Editor = ({
         onInsertTableOfContents={onInsertTableOfContents}
         onHighlight={onHighlight}
         onTranslate={onTranslate}
+        onFind={onFind}
         onTogglePageNumber={() => onTogglePageNumber?.(1)}
         showPageNumber={pageNumbersVisibility[1] ?? true}
         pageNumber={1}

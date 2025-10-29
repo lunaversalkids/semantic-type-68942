@@ -8,7 +8,7 @@ import {
   ContextMenuSubTrigger,
   ContextMenuTrigger,
 } from '@/components/ui/context-menu';
-import { Tag, Palette, Sparkles, FileText, Hash, Bookmark, Highlighter, Languages } from 'lucide-react';
+import { Tag, Palette, Sparkles, FileText, Hash, Bookmark, Highlighter, Languages, Search } from 'lucide-react';
 import { ReactNode } from 'react';
 
 interface EditorContextMenuProps {
@@ -30,6 +30,7 @@ interface EditorContextMenuProps {
   onInsertTableOfContents?: () => void;
   onHighlight?: () => void;
   onTranslate?: (language: string) => void;
+  onFind?: () => void;
   showPageNumber?: boolean;
   pageNumber?: number;
 }
@@ -53,6 +54,7 @@ export const EditorContextMenu = ({
   onInsertTableOfContents,
   onHighlight,
   onTranslate,
+  onFind,
   showPageNumber = true,
   pageNumber = 1
 }: EditorContextMenuProps) => {
@@ -107,6 +109,11 @@ export const EditorContextMenu = ({
             Insert
           </ContextMenuSubTrigger>
           <ContextMenuSubContent>
+            <ContextMenuItem onClick={onFind}>
+              <Search className="w-4 h-4 mr-2" />
+              Find & Replace...
+            </ContextMenuItem>
+            <ContextMenuSeparator />
             <ContextMenuItem onClick={onInsertTab}>
               Tab
             </ContextMenuItem>
