@@ -198,7 +198,7 @@ export const Editor = ({
             </div>
             
             {/* Bottom two-page spread */}
-            <div className="bottom-pages-wrapper flex gap-6 mt-8">
+            <div className="bottom-pages-wrapper flex gap-3 mt-4">
               <Card className="w-[8.5in] h-[11in] bg-[hsl(var(--page-bg))] shadow-2xl p-0 relative overflow-hidden">
                 {pageNumbersVisibility[2] !== false && (
                   <div 
