@@ -331,29 +331,40 @@ button[data-active="true"] {
   font-size: 0.6em;
 }
 
-/* Book layout with two pages side by side */
-.book-layout {
+/* Three-page layout: one page top right, two pages bottom */
+.three-page-layout {
   position: relative;
   z-index: 1;
 }
 
-.book-editor-wrapper {
+.top-page-wrapper {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 2rem;
+}
+
+.bottom-pages-wrapper {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.three-page-editor-wrapper {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
-  height: 11in;
+  height: calc(11in * 2 + 2rem); /* Two rows of pages plus gap */
   z-index: 10;
   pointer-events: auto;
 }
 
-.book-editor-wrapper .ProseMirror {
-  column-count: 2;
+.three-page-editor-wrapper .ProseMirror {
+  column-count: 3;
   column-gap: 1.5rem;
   column-fill: auto;
   height: 100%;
   padding: 4rem;
-  padding-bottom: 4rem; /* Extra space for page numbers */
+  padding-bottom: 4rem;
   box-sizing: border-box;
 }
 

@@ -179,35 +179,55 @@ export const Editor = ({
           showPageNumber={pageNumbersVisibility[1] ?? true}
           pageNumber={1}
         >
-          <div className="book-layout flex gap-6">
-            <Card className="w-[8.5in] h-[11in] bg-[hsl(var(--page-bg))] shadow-2xl p-0 relative overflow-hidden">
-              {pageNumbersVisibility[1] !== false && (
-                <div 
-                  className={`absolute bottom-8 text-sm text-muted-foreground z-20 ${
-                    getPageNumberAlignment() === 'left' ? 'left-12' : 
-                    getPageNumberAlignment() === 'center' ? 'left-1/2 -translate-x-1/2' : 
-                    'right-12'
-                  }`}
-                >
-                  {getPageNumberText(1)}
-                </div>
-              )}
-            </Card>
-            <Card className="w-[8.5in] h-[11in] bg-[hsl(var(--page-bg))] shadow-2xl p-0 relative overflow-hidden">
-              {pageNumbersVisibility[2] !== false && (
-                <div 
-                  className={`absolute bottom-8 text-sm text-muted-foreground z-20 ${
-                    getPageNumberAlignment() === 'left' ? 'left-12' : 
-                    getPageNumberAlignment() === 'center' ? 'left-1/2 -translate-x-1/2' : 
-                    'right-12'
-                  }`}
-                >
-                  {getPageNumberText(2)}
-                </div>
-              )}
-            </Card>
+          <div className="three-page-layout">
+            {/* Top single page on the right */}
+            <div className="top-page-wrapper">
+              <Card className="w-[8.5in] h-[11in] bg-[hsl(var(--page-bg))] shadow-2xl p-0 relative overflow-hidden">
+                {pageNumbersVisibility[1] !== false && (
+                  <div 
+                    className={`absolute bottom-8 text-sm text-muted-foreground z-20 ${
+                      getPageNumberAlignment() === 'left' ? 'left-12' : 
+                      getPageNumberAlignment() === 'center' ? 'left-1/2 -translate-x-1/2' : 
+                      'right-12'
+                    }`}
+                  >
+                    {getPageNumberText(1)}
+                  </div>
+                )}
+              </Card>
+            </div>
+            
+            {/* Bottom two-page spread */}
+            <div className="bottom-pages-wrapper flex gap-6 mt-8">
+              <Card className="w-[8.5in] h-[11in] bg-[hsl(var(--page-bg))] shadow-2xl p-0 relative overflow-hidden">
+                {pageNumbersVisibility[2] !== false && (
+                  <div 
+                    className={`absolute bottom-8 text-sm text-muted-foreground z-20 ${
+                      getPageNumberAlignment() === 'left' ? 'left-12' : 
+                      getPageNumberAlignment() === 'center' ? 'left-1/2 -translate-x-1/2' : 
+                      'right-12'
+                    }`}
+                  >
+                    {getPageNumberText(2)}
+                  </div>
+                )}
+              </Card>
+              <Card className="w-[8.5in] h-[11in] bg-[hsl(var(--page-bg))] shadow-2xl p-0 relative overflow-hidden">
+                {pageNumbersVisibility[3] !== false && (
+                  <div 
+                    className={`absolute bottom-8 text-sm text-muted-foreground z-20 ${
+                      getPageNumberAlignment() === 'left' ? 'left-12' : 
+                      getPageNumberAlignment() === 'center' ? 'left-1/2 -translate-x-1/2' : 
+                      'right-12'
+                    }`}
+                  >
+                    {getPageNumberText(3)}
+                  </div>
+                )}
+              </Card>
+            </div>
           </div>
-          <div className="book-editor-wrapper">
+          <div className="three-page-editor-wrapper">
             <EditorContent editor={editor} />
           </div>
         </EditorContextMenu>
