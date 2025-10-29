@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
+import { supabase } from '@/integrations/supabase/client';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -258,30 +259,56 @@ export const Toolbar = ({
     }
   };
 
-  const handleSaveDocument = (filename: string) => {
+  const handleSaveDocument = async (filename: string) => {
     if (!editor) return;
     
     const content = editor.getHTML();
     
-    // Store in localStorage
-    const savedDoc = {
-      name: filename,
-      content,
-      savedAt: new Date().toISOString()
-    };
-    
-    localStorage.setItem('currentDocument', JSON.stringify(savedDoc));
-    
-    setDocumentName(filename);
-    setSavedContent(content);
-    setDocumentSaved(true);
-    
-    // Notify parent
-    if (onDocumentSavedChange) {
-      onDocumentSavedChange(true);
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error('Not authenticated');
+
+      // Check if document exists
+      const { data: existing } = await supabase
+        .from('documents')
+        .select('id')
+        .eq('name', filename)
+        .eq('user_id', user.id)
+        .single();
+
+      if (existing) {
+        // Update existing
+        const { error } = await supabase
+          .from('documents')
+          .update({ content })
+          .eq('id', existing.id);
+        
+        if (error) throw error;
+      } else {
+        // Create new
+        const { error } = await supabase
+          .from('documents')
+          .insert({
+            user_id: user.id,
+            name: filename,
+            content
+          });
+        
+        if (error) throw error;
+      }
+
+      setDocumentName(filename);
+      setSavedContent(content);
+      setDocumentSaved(true);
+      
+      if (onDocumentSavedChange) {
+        onDocumentSavedChange(true);
+      }
+      
+      toast.success(`Document "${filename}" saved to cloud!`);
+    } catch (error: any) {
+      toast.error('Failed to save: ' + error.message);
     }
-    
-    toast.success(`Document "${filename}" saved successfully!`);
   };
 
   const handleSavePrompt = async (): Promise<boolean> => {

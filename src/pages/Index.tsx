@@ -7,8 +7,11 @@ import { ApplyToAllDialog } from '@/components/ApplyToAllDialog';
 import { PageNumberDialog } from '@/components/PageNumberDialog';
 import { OnboardingTour } from '@/components/OnboardingTour';
 import { HelpMode } from '@/components/HelpMode';
+import { DocumentManager } from '@/components/DocumentManager';
 import { defaultStyles } from '@/types/styles';
 import { useToast } from '@/hooks/use-toast';
+import { supabase } from '@/integrations/supabase/client';
+import { toast as sonnerToast } from 'sonner';
 
 const Index = () => {
   const [selectedText, setSelectedText] = useState('');
@@ -33,7 +36,15 @@ const Index = () => {
   const [totalPages, setTotalPages] = useState(2);
   const [documentSaved, setDocumentSaved] = useState(false);
   const [saveDialogOpen, setSaveDialogOpen] = useState(false);
+  const [documentManagerOpen, setDocumentManagerOpen] = useState(false);
+  const [userEmail, setUserEmail] = useState<string>('');
   const { toast } = useToast();
+
+  useEffect(() => {
+    supabase.auth.getUser().then(({ data: { user } }) => {
+      if (user) setUserEmail(user.email || '');
+    });
+  }, []);
 
   // Auto-renumber footnotes when content changes
   useEffect(() => {
@@ -389,12 +400,27 @@ const Index = () => {
     }
   };
 
+  const handleLoadDocument = (content: string, name: string) => {
+    if (editor) {
+      editor.commands.setContent(content);
+      sonnerToast.success(`Loaded "${name}"`);
+    }
+  };
+
+  const handleSignOut = async () => {
+    await supabase.auth.signOut();
+    sonnerToast.success('Signed out successfully');
+  };
+
   return (
     <div className="h-screen flex flex-col overflow-hidden">
       <Header 
         onHelpClick={() => setHelpModeActive(true)} 
         onSaveClick={() => setSaveDialogOpen(true)}
+        onCloudClick={() => setDocumentManagerOpen(true)}
+        onSignOut={handleSignOut}
         documentSaved={documentSaved}
+        userEmail={userEmail}
       />
       <Toolbar 
         editor={editor}
@@ -465,6 +491,12 @@ const Index = () => {
         }}
         currentPage={currentPageForNumber}
         totalPages={2}
+      />
+      
+      <DocumentManager 
+        open={documentManagerOpen}
+        onOpenChange={setDocumentManagerOpen}
+        onLoadDocument={handleLoadDocument}
       />
       
       <OnboardingTour />
