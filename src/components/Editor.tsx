@@ -315,8 +315,13 @@ export const Editor = ({
               {/* Editable content overlay */}
               <div 
                 className="editor-overlay"
-                onClick={() => {
-                  // Clicking anywhere on the document focuses the editor
+                onClick={(e) => {
+                  // Calculate which page was clicked based on position
+                  const rect = e.currentTarget.getBoundingClientRect();
+                  const x = e.clientX - rect.left;
+                  const y = e.clientY - rect.top;
+                  
+                  // Focus the editor
                   if (editor && !editor.isFocused) {
                     editor.commands.focus('end');
                   }
