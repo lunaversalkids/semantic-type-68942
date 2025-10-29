@@ -38,12 +38,9 @@ All colors MUST be HSL.
 
     --radius: 0.5rem;
 
-    --editor-bg: 220 13% 91%;
+    --editor-bg: 0 0% 98%;
     --page-bg: 0 0% 100%;
-    --page-shadow: 220 13% 75%;
-    
-    --sidebar-dark: 220 13% 18%;
-    --sidebar-dark-foreground: 0 0% 85%;
+    --page-shadow: 240 5% 84%;
     
     --sidebar-background: 0 0% 100%;
     --sidebar-foreground: 0 0% 13%;
@@ -87,9 +84,6 @@ All colors MUST be HSL.
     --editor-bg: 240 10% 8%;
     --page-bg: 240 8% 12%;
     --page-shadow: 240 8% 6%;
-    
-    --sidebar-dark: 240 10% 12%;
-    --sidebar-dark-foreground: 0 0% 85%;
 
     --sidebar-background: 240 8% 12%;
     --sidebar-foreground: 0 0% 95%;

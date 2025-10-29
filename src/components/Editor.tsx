@@ -155,8 +155,8 @@ export const Editor = ({
   }, []);
 
   return (
-    <div className="h-full flex items-center justify-center bg-[hsl(var(--editor-bg))] overflow-auto">
-      <div className="relative py-12">
+    <div className="h-full flex items-start justify-center bg-[hsl(var(--editor-bg))] p-8 overflow-auto">
+      <div className="relative">
         <EditorContextMenu 
           editor={editor}
           onApplyToAll={onApplyToAll}
@@ -179,8 +179,8 @@ export const Editor = ({
           showPageNumber={pageNumbersVisibility[1] ?? true}
           pageNumber={1}
         >
-          <div className="book-layout flex gap-8">
-            <Card className="w-[8.5in] h-[11in] bg-[hsl(var(--page-bg))] border-0 p-0 relative overflow-hidden shadow-[0_8px_32px_rgba(0,0,0,0.12),0_2px_8px_rgba(0,0,0,0.08)]">
+          <div className="book-layout flex gap-6">
+            <Card className="w-[8.5in] h-[11in] bg-[hsl(var(--page-bg))] shadow-2xl p-0 relative overflow-hidden">
               {pageNumbersVisibility[1] !== false && (
                 <div 
                   className={`absolute bottom-8 text-sm text-muted-foreground z-20 ${
@@ -193,7 +193,7 @@ export const Editor = ({
                 </div>
               )}
             </Card>
-            <Card className="w-[8.5in] h-[11in] bg-[hsl(var(--page-bg))] border-0 p-0 relative overflow-hidden shadow-[0_8px_32px_rgba(0,0,0,0.12),0_2px_8px_rgba(0,0,0,0.08)]">
+            <Card className="w-[8.5in] h-[11in] bg-[hsl(var(--page-bg))] shadow-2xl p-0 relative overflow-hidden">
               {pageNumbersVisibility[2] !== false && (
                 <div 
                   className={`absolute bottom-8 text-sm text-muted-foreground z-20 ${

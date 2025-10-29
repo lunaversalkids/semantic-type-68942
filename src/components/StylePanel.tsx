@@ -68,8 +68,8 @@ export const StylePanel = ({
     setSelectedStyle(updatedStyle);
     setStyles(styles.map(s => s.id === selectedStyle.id ? updatedStyle : s));
   };
-  return <div className={`h-full bg-[hsl(var(--sidebar-dark))] text-[hsl(var(--sidebar-dark-foreground))] border-r border-[hsl(var(--sidebar-dark))] flex flex-col style-panel transition-all duration-300 ${collapsed ? 'w-12' : 'w-80'}`}>
-      <div className={`p-4 border-b border-white/10 ${collapsed ? 'p-2' : ''}`}>
+  return <div className={`h-full bg-sidebar border-r border-sidebar-border flex flex-col style-panel transition-all duration-300 ${collapsed ? 'w-12' : 'w-80'}`}>
+      <div className={`p-4 border-b border-sidebar-border ${collapsed ? 'p-2' : ''}`}>
         <div className="flex items-center justify-between mb-4">
           {!collapsed && <h2 className="text-lg font-semibold flex items-center gap-2">
               <Palette className="w-5 h-5 text-primary" />
@@ -80,7 +80,7 @@ export const StylePanel = ({
               <Plus className="w-4 h-4" />
             </Button>}
         </div>
-        <Button size="sm" variant="ghost" className="h-8 w-full p-0 hover:bg-white/10" onClick={onToggleCollapse}>
+        <Button size="sm" variant="ghost" className="h-8 w-full p-0 hover:bg-sidebar-accent" onClick={onToggleCollapse}>
           {collapsed ? <ChevronRight className="w-4 h-4" /> : <ChevronLeft className="w-4 h-4" />}
         </Button>
         {!collapsed && <p className="text-xs text-muted-foreground">
@@ -118,7 +118,7 @@ export const StylePanel = ({
         </div>
       </ScrollArea>
 
-      {selectedStyle && <div className="border-t border-white/10 p-4 bg-white/5">
+      {selectedStyle && <div className="border-t border-sidebar-border p-4 bg-sidebar-accent/30">
           <div className="space-y-3">
             <div className="flex items-center justify-between mb-2">
               <Label className="text-sm font-semibold">Edit Style</Label>
