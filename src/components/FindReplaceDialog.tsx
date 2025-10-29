@@ -211,6 +211,24 @@ export const FindReplaceDialog = ({ open, onOpenChange, editor }: FindReplaceDia
             )}
           </div>
 
+          <div>
+            <Label className="text-xs mb-1.5 block">Replace Mode</Label>
+            <RadioGroup value={mode} onValueChange={(v: any) => setMode(v)} className="gap-2">
+              <div className="flex items-center space-x-1.5">
+                <RadioGroupItem value="keep-style" id="keep-style" className="h-3 w-3" />
+                <Label htmlFor="keep-style" className="font-normal cursor-pointer text-xs">
+                  Keep existing styles (preserve formatting)
+                </Label>
+              </div>
+              <div className="flex items-center space-x-1.5">
+                <RadioGroupItem value="reapply-rules" id="reapply-rules" className="h-3 w-3" />
+                <Label htmlFor="reapply-rules" className="font-normal cursor-pointer text-xs">
+                  Re-apply semantic rules (update styling)
+                </Label>
+              </div>
+            </RadioGroup>
+          </div>
+
           <div className="flex gap-2">
             <Button onClick={handleFindPrevious} variant="outline" size="sm" className="h-7 text-xs" disabled={totalMatches === 0}>
               Previous
