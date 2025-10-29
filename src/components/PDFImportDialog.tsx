@@ -81,7 +81,6 @@ export const PDFImportDialog = ({
       const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
       
       let fullContent = `<h1>${file.name.replace('.pdf', '')}</h1>`;
-      const styles: Record<string, { fontSize: number; fontFamily: string; bold: boolean }> = {};
       
       // Extract text and style information from each page
       for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
@@ -91,6 +90,9 @@ export const PDFImportDialog = ({
         let pageText = '';
         let lastY = 0;
         let lineText = '';
+        let lineFontSize = 0;
+        let lineFontFamily = '';
+        let lineBold = false;
         
         textContent.items.forEach((item: any) => {
           // Type guard to check if item is a TextItem (has 'str' property)
@@ -100,31 +102,36 @@ export const PDFImportDialog = ({
           const y = item.transform[5];
           const fontSize = Math.round(item.transform[0]);
           const fontName = item.fontName || 'default';
-          
-          // Store style information
-          if (!styles[fontName]) {
-            styles[fontName] = {
-              fontSize,
-              fontFamily: fontName,
-              bold: fontName.toLowerCase().includes('bold')
-            };
-          }
+          const isBold = fontName.toLowerCase().includes('bold');
           
           // Detect new lines based on Y position change
           if (lastY !== 0 && Math.abs(y - lastY) > 5) {
             if (lineText.trim()) {
+              // Apply extracted styles to the line
+              const fontWeight = lineBold ? 700 : 400;
+              const styleAttr = `style="font-size: ${lineFontSize}px; font-weight: ${fontWeight};"`;
+              
               // Infer heading based on font size
-              if (fontSize > 18) {
-                pageText += `<h2>${lineText.trim()}</h2>`;
-              } else if (fontSize > 14) {
-                pageText += `<h3>${lineText.trim()}</h3>`;
+              if (lineFontSize > 18) {
+                pageText += `<h2 ${styleAttr}>${lineText.trim()}</h2>`;
+              } else if (lineFontSize > 14) {
+                pageText += `<h3 ${styleAttr}>${lineText.trim()}</h3>`;
               } else {
-                pageText += `<p>${lineText.trim()}</p>`;
+                pageText += `<p ${styleAttr}>${lineText.trim()}</p>`;
               }
             }
             lineText = text;
+            lineFontSize = fontSize;
+            lineFontFamily = fontName;
+            lineBold = isBold;
           } else {
             lineText += text;
+            // Use the largest font size in the line
+            if (fontSize > lineFontSize) {
+              lineFontSize = fontSize;
+              lineFontFamily = fontName;
+              lineBold = isBold;
+            }
           }
           
           lastY = y;
@@ -132,11 +139,13 @@ export const PDFImportDialog = ({
         
         // Add remaining text
         if (lineText.trim()) {
-          const firstItem = textContent.items.find((item: any) => 'str' in item) as any;
-          if (firstItem && styles[firstItem.fontName]?.fontSize > 14) {
-            pageText += `<h3>${lineText.trim()}</h3>`;
+          const fontWeight = lineBold ? 700 : 400;
+          const styleAttr = `style="font-size: ${lineFontSize}px; font-weight: ${fontWeight};"`;
+          
+          if (lineFontSize > 14) {
+            pageText += `<h3 ${styleAttr}>${lineText.trim()}</h3>`;
           } else {
-            pageText += `<p>${lineText.trim()}</p>`;
+            pageText += `<p ${styleAttr}>${lineText.trim()}</p>`;
           }
         }
         
