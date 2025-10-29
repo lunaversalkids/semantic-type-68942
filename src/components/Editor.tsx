@@ -308,13 +308,13 @@ export const Editor = ({
               <div 
                 className="editor-overlay"
                 style={{
-                  columnCount: pages.length,
-                  gridRow: `1 / ${Math.ceil(pages.length / 2) + 2}`
+                  columnCount: 2,
+                  gridRow: `1 / span ${Math.ceil(pages.length / 2)}`
                 }}
                 onClick={(e) => {
-                  // Ensure clicking anywhere on the overlay focuses the editor
-                  if (editor && e.target === e.currentTarget) {
-                    editor.commands.focus();
+                  // Ensure clicking anywhere focuses the editor
+                  if (editor) {
+                    editor.commands.focus('end');
                   }
                 }}
               >
