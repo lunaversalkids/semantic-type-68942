@@ -251,68 +251,66 @@ export const Editor = ({
           transition: isZooming ? 'none' : 'transform 0.1s ease-out'
         }}
       >
-        <div className="document-container">
-          <EditorContextMenu
-            editor={editor}
-            onApplyToAll={onApplyToAll}
-            onAIAssist={onAIAssist}
-            onInsertFootnote={onInsertFootnote}
-            onInsertTab={onInsertTab}
-            onInsertPageBreak={onInsertPageBreak}
-            onInsertLineBreak={onInsertLineBreak}
-            onInsertSectionBreak={onInsertSectionBreak}
-            onInsertColumnBreak={onInsertColumnBreak}
-            onInsertPageNumber={() => onInsertPageNumber?.(1)}
-            onInsertPageCount={onInsertPageCount}
-            onInsertDateTime={onInsertDateTime}
-            onInsertBookmark={onInsertBookmark}
-            onInsertTableOfContents={onInsertTableOfContents}
-            onHighlight={onHighlight}
-            onTranslate={onTranslate}
-            onFind={onFind}
-            onTogglePageNumber={() => onTogglePageNumber?.(1)}
-            showPageNumber={pageNumbersVisibility[1] ?? true}
-            pageNumber={1}
-          >
-            <div className="pages-grid-container">
-              {/* Background page cards */}
-              <div className="pages-background">
-                {pages.map((pageId, index) => {
-                  const pageNum = index + 1;
-                  return (
-                    <Card 
-                      key={pageId}
-                      className="page-card w-[8.5in] h-[11in] bg-[hsl(var(--page-bg))] shadow-2xl"
-                      style={{
-                        gridColumn: pageNum === 1 ? '2' : pageNum === 2 ? '1' : pageNum === 3 ? '2' : pageNum % 2 === 0 ? '1' : '2',
-                        gridRow: pageNum === 1 ? '1' : Math.ceil((pageNum - 1) / 2) + 1
-                      }}
-                    >
-                      {pageNumbersVisibility[pageNum] !== false && (
-                        <div 
-                          className={`absolute bottom-8 text-sm text-muted-foreground ${
-                            getPageNumberAlignment() === 'left' ? 'left-12' : 
-                            getPageNumberAlignment() === 'center' ? 'left-1/2 -translate-x-1/2' : 
-                            'right-12'
-                          }`}
-                        >
-                          {getPageNumberText(pageNum)}
-                        </div>
-                      )}
-                    </Card>
-                  );
-                })}
-              </div>
-
-              {/* Editable content overlay */}
+        <EditorContextMenu
+          editor={editor}
+          onApplyToAll={onApplyToAll}
+          onAIAssist={onAIAssist}
+          onInsertFootnote={onInsertFootnote}
+          onInsertTab={onInsertTab}
+          onInsertPageBreak={onInsertPageBreak}
+          onInsertLineBreak={onInsertLineBreak}
+          onInsertSectionBreak={onInsertSectionBreak}
+          onInsertColumnBreak={onInsertColumnBreak}
+          onInsertPageNumber={() => onInsertPageNumber?.(1)}
+          onInsertPageCount={onInsertPageCount}
+          onInsertDateTime={onInsertDateTime}
+          onInsertBookmark={onInsertBookmark}
+          onInsertTableOfContents={onInsertTableOfContents}
+          onHighlight={onHighlight}
+          onTranslate={onTranslate}
+          onFind={onFind}
+          onTogglePageNumber={() => onTogglePageNumber?.(1)}
+          showPageNumber={pageNumbersVisibility[1] ?? true}
+          pageNumber={1}
+        >
+          <div className="flex flex-col items-center">
+            {/* Continuous editor spanning all pages */}
+            <div className="relative">
+              {pages.map((pageId, index) => {
+                const pageNum = index + 1;
+                const isLastPage = index === pages.length - 1;
+                return (
+                  <Card 
+                    key={pageId}
+                    className={`relative w-[8.5in] h-[11in] bg-[hsl(var(--page-bg))] shadow-2xl overflow-visible ${!isLastPage ? 'mb-6' : ''}`}
+                  >
+                    {/* Page number display */}
+                    {pageNumbersVisibility[pageNum] !== false && (
+                      <div 
+                        className={`absolute bottom-8 text-sm text-muted-foreground z-20 pointer-events-none ${
+                          getPageNumberAlignment() === 'left' ? 'left-12' : 
+                          getPageNumberAlignment() === 'center' ? 'left-1/2 -translate-x-1/2' : 
+                          'right-12'
+                        }`}
+                      >
+                        {getPageNumberText(pageNum)}
+                      </div>
+                    )}
+                  </Card>
+                );
+              })}
+              
+              {/* Editor overlay spanning all pages */}
               <div 
-                className="editor-overlay"
+                className="absolute top-0 left-0 w-[8.5in]"
                 style={{
-                  columnCount: pages.length,
-                  gridRow: `1 / ${Math.ceil(pages.length / 2) + 2}`
+                  height: `calc(${pages.length * 11}in + ${(pages.length - 1) * 1.5}rem)`,
+                  pointerEvents: 'auto'
                 }}
               >
-                <EditorContent editor={editor} />
+                <div className="px-16 py-16">
+                  <EditorContent editor={editor} />
+                </div>
               </div>
             </div>
             
@@ -324,8 +322,8 @@ export const Editor = ({
             >
               + Add Page
             </button>
-          </EditorContextMenu>
-        </div>
+          </div>
+        </EditorContextMenu>
       </div>
     </div>
   );
