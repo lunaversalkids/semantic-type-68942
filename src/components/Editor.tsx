@@ -156,54 +156,62 @@ export const Editor = ({
 
   return (
     <div className="h-full flex items-start justify-center bg-[hsl(var(--editor-bg))] p-8 overflow-auto">
-      <EditorContextMenu 
-        editor={editor}
-        onApplyToAll={onApplyToAll}
-        onAIAssist={onAIAssist}
-        onInsertFootnote={onInsertFootnote}
-        onInsertTab={onInsertTab}
-        onInsertPageBreak={onInsertPageBreak}
-        onInsertLineBreak={onInsertLineBreak}
-        onInsertSectionBreak={onInsertSectionBreak}
-        onInsertColumnBreak={onInsertColumnBreak}
-        onInsertPageNumber={() => onInsertPageNumber?.(1)}
-        onInsertPageCount={onInsertPageCount}
-        onInsertDateTime={onInsertDateTime}
-        onInsertBookmark={onInsertBookmark}
-        onInsertTableOfContents={onInsertTableOfContents}
-        onHighlight={onHighlight}
-        onTranslate={onTranslate}
-        onFind={onFind}
-        onTogglePageNumber={() => onTogglePageNumber?.(1)}
-        showPageNumber={pageNumbersVisibility[1] ?? true}
-        pageNumber={1}
-      >
-        <div className="editor-pages-container flex gap-8">
-          {pages.map((_, index) => {
-            const pageNum = index + 1;
-            return (
-              <Card key={pageNum} className="w-[8.5in] min-h-[11in] bg-[hsl(var(--page-bg))] shadow-lg p-16 relative editor-page">
-                {index === 0 ? (
-                  <EditorContent editor={editor} className="editor-content-wrapper" />
-                ) : (
-                  <div className="page-continuation" />
-                )}
-                {pageNumbersVisibility[pageNum] !== false && (
-                  <div 
-                    className={`absolute bottom-8 text-sm text-muted-foreground ${
-                      getPageNumberAlignment() === 'left' ? 'left-8' : 
-                      getPageNumberAlignment() === 'center' ? 'left-1/2 -translate-x-1/2' : 
-                      'right-8'
-                    }`}
-                  >
-                    {getPageNumberText(pageNum)}
-                  </div>
-                )}
-              </Card>
-            );
-          })}
-        </div>
-      </EditorContextMenu>
+      <div className="relative">
+        <EditorContextMenu 
+          editor={editor}
+          onApplyToAll={onApplyToAll}
+          onAIAssist={onAIAssist}
+          onInsertFootnote={onInsertFootnote}
+          onInsertTab={onInsertTab}
+          onInsertPageBreak={onInsertPageBreak}
+          onInsertLineBreak={onInsertLineBreak}
+          onInsertSectionBreak={onInsertSectionBreak}
+          onInsertColumnBreak={onInsertColumnBreak}
+          onInsertPageNumber={() => onInsertPageNumber?.(1)}
+          onInsertPageCount={onInsertPageCount}
+          onInsertDateTime={onInsertDateTime}
+          onInsertBookmark={onInsertBookmark}
+          onInsertTableOfContents={onInsertTableOfContents}
+          onHighlight={onHighlight}
+          onTranslate={onTranslate}
+          onFind={onFind}
+          onTogglePageNumber={() => onTogglePageNumber?.(1)}
+          showPageNumber={pageNumbersVisibility[1] ?? true}
+          pageNumber={1}
+        >
+          <div className="book-layout flex gap-6">
+            <Card className="w-[8.5in] h-[11in] bg-[hsl(var(--page-bg))] shadow-2xl p-0 relative overflow-hidden">
+              {pageNumbersVisibility[1] !== false && (
+                <div 
+                  className={`absolute bottom-8 text-sm text-muted-foreground z-20 ${
+                    getPageNumberAlignment() === 'left' ? 'left-12' : 
+                    getPageNumberAlignment() === 'center' ? 'left-1/2 -translate-x-1/2' : 
+                    'right-12'
+                  }`}
+                >
+                  {getPageNumberText(1)}
+                </div>
+              )}
+            </Card>
+            <Card className="w-[8.5in] h-[11in] bg-[hsl(var(--page-bg))] shadow-2xl p-0 relative overflow-hidden">
+              {pageNumbersVisibility[2] !== false && (
+                <div 
+                  className={`absolute bottom-8 text-sm text-muted-foreground z-20 ${
+                    getPageNumberAlignment() === 'left' ? 'left-12' : 
+                    getPageNumberAlignment() === 'center' ? 'left-1/2 -translate-x-1/2' : 
+                    'right-12'
+                  }`}
+                >
+                  {getPageNumberText(2)}
+                </div>
+              )}
+            </Card>
+          </div>
+          <div className="book-editor-wrapper">
+            <EditorContent editor={editor} />
+          </div>
+        </EditorContextMenu>
+      </div>
     </div>
   );
 };

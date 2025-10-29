@@ -331,6 +331,32 @@ button[data-active="true"] {
   font-size: 0.6em;
 }
 
+/* Book layout with two pages side by side */
+.book-layout {
+  position: relative;
+  z-index: 1;
+}
+
+.book-editor-wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 11in;
+  z-index: 10;
+  pointer-events: auto;
+}
+
+.book-editor-wrapper .ProseMirror {
+  column-count: 2;
+  column-gap: 1.5rem;
+  column-fill: auto;
+  height: 100%;
+  padding: 4rem;
+  padding-bottom: 4rem; /* Extra space for page numbers */
+  box-sizing: border-box;
+}
+
 /* Print support for page breaks */
 @media print {
   .ProseMirror .page-break {
