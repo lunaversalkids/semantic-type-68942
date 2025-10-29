@@ -25,27 +25,96 @@ export const FindReplaceDialog = ({ open, onOpenChange, editor }: FindReplaceDia
   const [mode, setMode] = useState<'keep-style' | 'reapply-rules'>('keep-style');
   const [wholeWords, setWholeWords] = useState(false);
   const [matchCase, setMatchCase] = useState(false);
+  const [currentMatch, setCurrentMatch] = useState(0);
+  const [totalMatches, setTotalMatches] = useState(0);
   const { toast } = useToast();
 
-  const handleFind = () => {
-    if (!editor || !findText) return;
+  const findMatches = () => {
+    if (!editor || !findText) return [];
     
     const content = editor.getText();
     let pattern = findText;
     
-    // Add word boundary if whole words is selected
     if (wholeWords) {
       pattern = `\\b${pattern}\\b`;
     }
     
-    // Set flags based on match case option
     const flags = matchCase ? 'g' : 'gi';
     const matches = content.match(new RegExp(pattern, flags));
+    return matches || [];
+  };
+
+  const handleFind = () => {
+    const matches = findMatches();
+    setTotalMatches(matches.length);
     
-    toast({
-      title: 'Search Results',
-      description: matches ? `Found ${matches.length} matches` : 'No matches found',
-    });
+    if (matches.length > 0) {
+      setCurrentMatch(1);
+      highlightMatch(0);
+      toast({
+        title: 'Search Results',
+        description: `Found ${matches.length} matches`,
+      });
+    } else {
+      setCurrentMatch(0);
+      toast({
+        title: 'Search Results',
+        description: 'No matches found',
+      });
+    }
+  };
+
+  const highlightMatch = (index: number) => {
+    if (!editor || !findText) return;
+    
+    // Use Tiptap's search and replace functionality
+    const content = editor.getText();
+    const matches = findMatches();
+    
+    if (matches.length === 0 || index >= matches.length) return;
+    
+    // Find the position of the match in the text
+    let pattern = findText;
+    if (wholeWords) {
+      pattern = `\\b${pattern}\\b`;
+    }
+    
+    const flags = matchCase ? 'g' : 'gi';
+    const regex = new RegExp(pattern, flags);
+    const match = [...content.matchAll(regex)][index];
+    
+    if (match && match.index !== undefined) {
+      // Select the matched text in the editor
+      editor.commands.focus();
+      editor.commands.setTextSelection({
+        from: match.index + 1,
+        to: match.index + 1 + match[0].length,
+      });
+    }
+  };
+
+  const handleFindNext = () => {
+    const matches = findMatches();
+    if (matches.length === 0) {
+      handleFind();
+      return;
+    }
+    
+    const nextMatch = currentMatch >= matches.length ? 1 : currentMatch + 1;
+    setCurrentMatch(nextMatch);
+    highlightMatch(nextMatch - 1);
+  };
+
+  const handleFindPrevious = () => {
+    const matches = findMatches();
+    if (matches.length === 0) {
+      handleFind();
+      return;
+    }
+    
+    const prevMatch = currentMatch <= 1 ? matches.length : currentMatch - 1;
+    setCurrentMatch(prevMatch);
+    highlightMatch(prevMatch - 1);
   };
 
   const handleReplace = () => {
@@ -149,14 +218,29 @@ export const FindReplaceDialog = ({ open, onOpenChange, editor }: FindReplaceDia
             </RadioGroup>
           </div>
 
+          {totalMatches > 0 && (
+            <div className="text-sm text-muted-foreground text-center">
+              Match {currentMatch} of {totalMatches}
+            </div>
+          )}
+
           <div className="flex gap-2 pt-4">
             <Button onClick={handleFind} variant="outline" className="flex-1">
               <Search className="w-4 h-4 mr-2" />
-              Find
+              Find All
             </Button>
             <Button onClick={handleReplace} className="flex-1">
               <Replace className="w-4 h-4 mr-2" />
               Replace All
+            </Button>
+          </div>
+          
+          <div className="flex gap-2">
+            <Button onClick={handleFindPrevious} variant="outline" className="flex-1" disabled={totalMatches === 0}>
+              Previous
+            </Button>
+            <Button onClick={handleFindNext} variant="outline" className="flex-1" disabled={totalMatches === 0}>
+              Next
             </Button>
           </div>
         </div>

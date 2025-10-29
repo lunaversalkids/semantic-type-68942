@@ -31,8 +31,10 @@ export const PDFImportDialog = ({
   const [needsSave, setNeedsSave] = useState(false);
 
   const handleFileSelect = async () => {
-    // Check if document needs to be saved first
-    if (!isDocumentSaved) {
+    // Only prompt to save if document actually has unsaved changes
+    // Check if editor has content and if it's different from initial state
+    const hasContent = editor && editor.getText().trim().length > 0;
+    if (!isDocumentSaved && hasContent) {
       setNeedsSave(true);
       return;
     }
