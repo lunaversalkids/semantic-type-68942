@@ -157,6 +157,7 @@ export const FindReplaceDialog = ({ open, onOpenChange, editor }: FindReplaceDia
   const handleReplace = () => {
     if (!editor || !findText) return;
 
+    const content = editor.getText();
     const matches = findMatches();
     const matchCount = matches.length;
     
@@ -183,12 +184,78 @@ export const FindReplaceDialog = ({ open, onOpenChange, editor }: FindReplaceDia
       const newHtml = html.replace(regex, replaceText);
       editor.commands.setContent(newHtml);
     } else {
-      // Re-apply semantic rules: replace in plain text, editor will re-style
-      const text = editor.getText();
-      const newText = text.replace(regex, replaceText);
+      // Re-apply semantic rules: capture style from first match and apply to all
+      const allMatches = [...content.matchAll(regex)];
       
-      // Set as plain text in paragraph, let semantic styling apply
-      editor.commands.setContent(`<p>${newText}</p>`);
+      // Find the first match in the document to capture its marks
+      let firstMatchMarks: any[] = [];
+      let firstMatchPos = -1;
+      
+      editor.state.doc.descendants((node, pos) => {
+        if (node.isText && node.text && firstMatchPos === -1) {
+          const nodeText = node.text;
+          const match = nodeText.match(regex);
+          if (match && match.index !== undefined) {
+            firstMatchPos = pos + match.index;
+            firstMatchMarks = node.marks;
+            return false;
+          }
+        }
+        return true;
+      });
+      
+      // Replace all matches and apply the captured marks
+      let offset = 0;
+      allMatches.forEach((match) => {
+        if (match.index === undefined) return;
+        
+        let actualPos = 1;
+        let textPos = 0;
+        
+        editor.state.doc.descendants((node, nodePos) => {
+          if (node.isText && node.text) {
+            const nodeTextStart = textPos;
+            const nodeTextEnd = textPos + node.text.length;
+            
+            if (match.index! >= nodeTextStart && match.index! < nodeTextEnd) {
+              const offsetInNode = match.index! - nodeTextStart;
+              actualPos = nodePos + offsetInNode;
+              return false;
+            }
+            
+            textPos += node.text.length;
+          } else if (node.isText === false && node.textContent) {
+            textPos += node.textContent.length;
+          }
+          return true;
+        });
+        
+        const from = actualPos + offset;
+        const to = from + match[0].length;
+        
+        // Replace text and apply marks
+        editor.chain()
+          .focus()
+          .setTextSelection({ from, to })
+          .insertContent(replaceText)
+          .run();
+        
+        // Apply the captured marks to the replacement
+        if (firstMatchMarks.length > 0) {
+          const newFrom = from;
+          const newTo = from + replaceText.length;
+          
+          firstMatchMarks.forEach((mark) => {
+            editor.chain()
+              .focus()
+              .setTextSelection({ from: newFrom, to: newTo })
+              .setMark(mark.type.name, mark.attrs)
+              .run();
+          });
+        }
+        
+        offset += replaceText.length - match[0].length;
+      });
     }
     
     // Focus editor and scroll to first replacement
