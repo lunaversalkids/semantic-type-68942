@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   Dialog,
   DialogContent,
@@ -28,6 +28,17 @@ export const FindReplaceDialog = ({ open, onOpenChange, editor }: FindReplaceDia
   const [currentMatch, setCurrentMatch] = useState(0);
   const [totalMatches, setTotalMatches] = useState(0);
   const { toast } = useToast();
+
+  // Auto-populate find field with selected text when dialog opens
+  useEffect(() => {
+    if (open && editor) {
+      const { from, to } = editor.state.selection;
+      const selectedText = editor.state.doc.textBetween(from, to, '');
+      if (selectedText && selectedText.trim()) {
+        setFindText(selectedText.trim());
+      }
+    }
+  }, [open, editor]);
 
   const findMatches = () => {
     if (!editor || !findText) return [];
