@@ -331,51 +331,64 @@ button[data-active="true"] {
   font-size: 0.6em;
 }
 
-/* Three-page layout: one page top right, two pages bottom */
+/* Dynamic page layout */
 .editor-zoom-container {
   position: relative;
   will-change: transform;
 }
 
-.three-page-layout {
+.pages-container {
   position: relative;
   z-index: 1;
+  display: grid;
+  grid-template-columns: repeat(2, 8.5in);
+  gap: 0.75rem 0.75rem;
   pointer-events: none;
   user-select: none;
+  justify-content: center;
 }
 
-.three-page-layout .top-page-wrapper,
-.three-page-layout .bottom-pages-wrapper {
+.page-wrapper {
   pointer-events: none;
 }
 
-.top-page-wrapper {
-  display: flex;
-  justify-content: flex-end;
-  margin-bottom: 2rem;
+.page-wrapper.top-page-wrapper {
+  grid-column: 2;
 }
 
-.bottom-pages-wrapper {
-  display: flex;
-  gap: 0.75rem;
+.page-wrapper.bottom-page {
+  /* Normal grid flow */
 }
 
-.three-page-editor-wrapper {
+.page-wrapper.left-page {
+  grid-column: 1;
+}
+
+.page-wrapper.right-page {
+  grid-column: 2;
+}
+
+.page-card {
+  pointer-events: none !important;
+  user-select: none !important;
+}
+
+.multi-page-editor-wrapper {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
-  height: calc(11in * 2 + 2rem);
+  min-height: calc(11in * 2);
   z-index: 10;
   pointer-events: auto;
   cursor: text;
 }
 
-.three-page-editor-wrapper .ProseMirror {
+.multi-page-editor-wrapper .ProseMirror {
   column-count: 3;
   column-gap: 1.5rem;
   column-fill: auto;
-  height: 100%;
+  min-height: 100%;
   padding: 4rem;
   padding-bottom: 4rem;
   box-sizing: border-box;
@@ -387,66 +400,51 @@ button[data-active="true"] {
 }
 
 /* Ensure editor is fully interactive and clickable */
-.three-page-editor-wrapper,
-.three-page-editor-wrapper .ProseMirror,
-.three-page-editor-wrapper .ProseMirror *,
-.three-page-editor-wrapper .ProseMirror p,
-.three-page-editor-wrapper .ProseMirror h1,
-.three-page-editor-wrapper .ProseMirror h2,
-.three-page-editor-wrapper .ProseMirror h3,
-.three-page-editor-wrapper .ProseMirror ul,
-.three-page-editor-wrapper .ProseMirror ol,
-.three-page-editor-wrapper .ProseMirror li {
+.multi-page-editor-wrapper,
+.multi-page-editor-wrapper .ProseMirror,
+.multi-page-editor-wrapper .ProseMirror.editor-content,
+.multi-page-editor-wrapper .ProseMirror *,
+.multi-page-editor-wrapper .ProseMirror p,
+.multi-page-editor-wrapper .ProseMirror h1,
+.multi-page-editor-wrapper .ProseMirror h2,
+.multi-page-editor-wrapper .ProseMirror h3,
+.multi-page-editor-wrapper .ProseMirror ul,
+.multi-page-editor-wrapper .ProseMirror ol,
+.multi-page-editor-wrapper .ProseMirror li {
   pointer-events: auto !important;
   cursor: text !important;
 }
 
-.three-page-layout > *,
-.three-page-layout .top-page-wrapper *,
-.three-page-layout .bottom-pages-wrapper * {
+.pages-container > .page-wrapper,
+.pages-container > .page-wrapper *,
+.page-card,
+.page-card * {
   pointer-events: none !important;
   user-select: none !important;
 }
 
-/* Zoom slider styling */
-.zoom-slider {
-  -webkit-appearance: none;
-  appearance: none;
-  background: hsl(var(--muted));
-  outline: none;
-  border-radius: 8px;
-  width: 6px;
-}
-
-.zoom-slider::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 16px;
-  height: 16px;
+/* Page Adder Button */
+.page-adder-button {
+  grid-column: 1 / -1;
+  justify-self: center;
+  margin-top: 1rem;
+  padding: 0.5rem 1.5rem;
   background: hsl(var(--primary));
-  cursor: pointer;
-  border-radius: 50%;
-  transition: all 0.15s ease;
-}
-
-.zoom-slider::-webkit-slider-thumb:hover {
-  background: hsl(var(--primary) / 0.8);
-  transform: scale(1.1);
-}
-
-.zoom-slider::-moz-range-thumb {
-  width: 16px;
-  height: 16px;
-  background: hsl(var(--primary));
-  cursor: pointer;
-  border-radius: 50%;
+  color: hsl(var(--primary-foreground));
   border: none;
-  transition: all 0.15s ease;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  pointer-events: auto;
+  z-index: 20;
 }
 
-.zoom-slider::-moz-range-thumb:hover {
-  background: hsl(var(--primary) / 0.8);
-  transform: scale(1.1);
+.page-adder-button:hover {
+  background: hsl(var(--primary) / 0.9);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px hsl(var(--primary) / 0.3);
 }
 
 /* Print support for page breaks */

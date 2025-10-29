@@ -92,10 +92,14 @@ export const Editor = ({
     return position === 'center' ? 'center' : position === 'left' ? 'left' : 'right';
   };
 
-  const [pages, setPages] = useState<string[]>([]);
+  const [pages, setPages] = useState<string[]>(['page-1', 'page-2', 'page-3']);
   const [zoom, setZoom] = useState(1);
   const [targetZoom, setTargetZoom] = useState(1);
   const [isZooming, setIsZooming] = useState(false);
+
+  const addNewPage = () => {
+    setPages(prev => [...prev, `page-${prev.length + 1}`]);
+  };
 
   const editor = useEditor({
     extensions: [
@@ -139,7 +143,7 @@ export const Editor = ({
     `,
     editorProps: {
       attributes: {
-        class: 'prose prose-sm sm:prose lg:prose-lg xl:prose-xl focus:outline-none max-w-none',
+        class: 'prose prose-sm sm:prose lg:prose-lg xl:prose-xl focus:outline-none max-w-none editor-content',
       },
     },
     onSelectionUpdate: ({ editor }) => {
@@ -152,10 +156,7 @@ export const Editor = ({
     },
   });
 
-  // Always show 3 pages for the layout
-  useEffect(() => {
-    setPages(['page-1', 'page-2', 'page-3']);
-  }, []);
+  // Removed always show 3 pages - now dynamic
 
   // Smooth zoom animation with RAF
   useEffect(() => {
@@ -242,49 +243,6 @@ export const Editor = ({
 
   return (
     <div className="h-full flex items-start justify-center bg-[hsl(var(--editor-bg))] p-8 overflow-auto">
-      {/* Zoom controls */}
-      <div className="fixed top-20 right-8 z-30 flex flex-col gap-3 bg-background border border-border rounded-lg p-3 shadow-lg">
-        <button
-          onClick={() => setTargetZoom(prev => Math.min(3, prev + 0.1))}
-          className="px-3 py-1.5 text-sm hover:bg-accent rounded transition-colors"
-          title="Zoom in (Ctrl/Cmd + Scroll)"
-        >
-          +
-        </button>
-        
-        {/* Zoom slider */}
-        <div className="flex flex-col items-center gap-2 py-2">
-          <input
-            type="range"
-            min="50"
-            max="300"
-            value={Math.round(targetZoom * 100)}
-            onChange={(e) => setTargetZoom(Number(e.target.value) / 100)}
-            className="zoom-slider"
-            style={{ writingMode: 'vertical-lr', direction: 'rtl', height: '120px' }}
-            title="Adjust zoom level"
-          />
-          <span className="text-xs text-center text-muted-foreground font-medium min-w-[3rem]">
-            {Math.round(zoom * 100)}%
-          </span>
-        </div>
-
-        <button
-          onClick={() => setTargetZoom(prev => Math.max(0.5, prev - 0.1))}
-          className="px-3 py-1.5 text-sm hover:bg-accent rounded transition-colors"
-          title="Zoom out (Ctrl/Cmd + Scroll)"
-        >
-          −
-        </button>
-        <button
-          onClick={() => setTargetZoom(1)}
-          className="px-3 py-1 text-xs hover:bg-accent rounded transition-colors"
-          title="Reset zoom"
-        >
-          Reset
-        </button>
-      </div>
-
       <div 
         className="editor-zoom-container" 
         style={{ 
@@ -315,55 +273,50 @@ export const Editor = ({
           showPageNumber={pageNumbersVisibility[1] ?? true}
           pageNumber={1}
         >
-          <div className="three-page-layout">
-            {/* Top single page on the right */}
-            <div className="top-page-wrapper">
-              <Card className="w-[8.5in] h-[11in] bg-[hsl(var(--page-bg))] shadow-2xl p-0 relative overflow-hidden">
-                {pageNumbersVisibility[1] !== false && (
-                  <div 
-                    className={`absolute bottom-8 text-sm text-muted-foreground z-20 ${
-                      getPageNumberAlignment() === 'left' ? 'left-12' : 
-                      getPageNumberAlignment() === 'center' ? 'left-1/2 -translate-x-1/2' : 
-                      'right-12'
-                    }`}
-                  >
-                    {getPageNumberText(1)}
-                  </div>
-                )}
-              </Card>
-            </div>
+          <div className="pages-container">
+            {pages.map((pageId, index) => {
+              const pageNum = index + 1;
+              const isTopPage = pageNum === 1;
+              const isBottomRow = pageNum > 1;
+              const isLeftPage = pageNum === 2;
+              const isRightPage = pageNum === 3;
+              
+              return (
+                <div 
+                  key={pageId}
+                  className={`page-wrapper ${
+                    isTopPage ? 'top-page-wrapper' : 
+                    isBottomRow ? 'bottom-page' : ''
+                  } ${isLeftPage ? 'left-page' : ''} ${isRightPage ? 'right-page' : ''}`}
+                >
+                  <Card className="w-[8.5in] h-[11in] bg-[hsl(var(--page-bg))] shadow-2xl p-0 relative overflow-hidden page-card">
+                    {pageNumbersVisibility[pageNum] !== false && (
+                      <div 
+                        className={`absolute bottom-8 text-sm text-muted-foreground z-20 ${
+                          getPageNumberAlignment() === 'left' ? 'left-12' : 
+                          getPageNumberAlignment() === 'center' ? 'left-1/2 -translate-x-1/2' : 
+                          'right-12'
+                        }`}
+                      >
+                        {getPageNumberText(pageNum)}
+                      </div>
+                    )}
+                  </Card>
+                </div>
+              );
+            })}
             
-            {/* Bottom two-page spread */}
-            <div className="bottom-pages-wrapper flex gap-3 mt-4">
-              <Card className="w-[8.5in] h-[11in] bg-[hsl(var(--page-bg))] shadow-2xl p-0 relative overflow-hidden">
-                {pageNumbersVisibility[2] !== false && (
-                  <div 
-                    className={`absolute bottom-8 text-sm text-muted-foreground z-20 ${
-                      getPageNumberAlignment() === 'left' ? 'left-12' : 
-                      getPageNumberAlignment() === 'center' ? 'left-1/2 -translate-x-1/2' : 
-                      'right-12'
-                    }`}
-                  >
-                    {getPageNumberText(2)}
-                  </div>
-                )}
-              </Card>
-              <Card className="w-[8.5in] h-[11in] bg-[hsl(var(--page-bg))] shadow-2xl p-0 relative overflow-hidden">
-                {pageNumbersVisibility[3] !== false && (
-                  <div 
-                    className={`absolute bottom-8 text-sm text-muted-foreground z-20 ${
-                      getPageNumberAlignment() === 'left' ? 'left-12' : 
-                      getPageNumberAlignment() === 'center' ? 'left-1/2 -translate-x-1/2' : 
-                      'right-12'
-                    }`}
-                  >
-                    {getPageNumberText(3)}
-                  </div>
-                )}
-              </Card>
-            </div>
+            {/* Page Adder Button */}
+            <button
+              onClick={addNewPage}
+              className="page-adder-button"
+              title="Add new page"
+            >
+              + Add Page
+            </button>
           </div>
-          <div className="three-page-editor-wrapper">
+          
+          <div className="multi-page-editor-wrapper" style={{ height: `calc(11in * ${Math.ceil(pages.length / 2)})` }}>
             <EditorContent editor={editor} />
           </div>
         </EditorContextMenu>
