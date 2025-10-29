@@ -367,27 +367,45 @@ button[data-active="true"] {
   grid-row: 1 / -1;
   pointer-events: auto !important;
   z-index: 10;
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  display: grid;
+  grid-template-columns: 8.5in 8.5in;
+  column-gap: 0.75rem;
+  row-gap: 1rem;
   cursor: text;
 }
 
 .editor-overlay .ProseMirror {
-  position: absolute;
-  /* Start at page 1 (right column) */
-  top: 0;
-  left: calc(8.5in + 0.75rem);
-  width: 8.5in;
-  padding: 4rem;
+  /* Span the entire grid so clicks work everywhere */
+  grid-column: 1 / -1;
+  grid-row: 1 / -1;
   cursor: text !important;
   pointer-events: auto !important;
   user-select: text !important;
   -webkit-user-select: text !important;
   box-sizing: border-box;
+  padding: 4rem;
   min-height: 100%;
+  
+  /* Content starts at page 1 by adding empty space before */
+  display: grid;
+  grid-template-columns: 8.5in 8.5in;
+  column-gap: 0.75rem;
+  row-gap: 1rem;
+}
+
+/* Create spacer for page 1 positioning */
+.editor-overlay .ProseMirror::before {
+  content: '';
+  grid-column: 1;
+  grid-row: 1;
+  height: 0;
+  pointer-events: none;
+}
+
+/* Content flows starting from page 1 position */
+.editor-overlay .ProseMirror > * {
+  grid-column: 2;
+  grid-row: auto;
 }
 
 /* Ensure all editor content is clickable and editable */
