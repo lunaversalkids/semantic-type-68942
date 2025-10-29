@@ -331,23 +331,71 @@ button[data-active="true"] {
   font-size: 0.6em;
 }
 
-/* Editor zoom container */
-.editor-zoom-container {
-  will-change: transform;
+/* Document container */
+.document-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-/* Editor content wrapper - allows typing across all pages */
-.editor-overlay {
+.pages-grid-container {
   position: relative;
-  pointer-events: auto;
+  display: grid;
+  grid-template-columns: 8.5in 8.5in;
+  gap: 0.75rem;
+  column-gap: 0.75rem;
+  row-gap: 1rem;
+}
+
+/* Background page cards - non-interactive */
+.pages-background {
+  display: contents;
+  pointer-events: none;
+  user-select: none;
+}
+
+.page-card {
+  position: relative;
+  pointer-events: none !important;
+  user-select: none !important;
+}
+
+/* Editor overlay - fully interactive */
+.editor-overlay {
+  grid-column: 1 / -1;
+  grid-row: 1;
+  position: relative;
+  column-fill: auto;
+  column-gap: 0.75rem;
+  pointer-events: auto !important;
   z-index: 10;
+  min-height: 11in;
+}
+
+.editor-overlay .ProseMirror {
+  padding: 4rem;
+  padding-bottom: 6rem;
+  min-height: 11in;
+  cursor: text !important;
+  pointer-events: auto !important;
+  user-select: text !important;
+  -webkit-user-select: text !important;
+}
+
+/* Ensure all editor content is clickable and editable */
+.editor-overlay,
+.editor-overlay *,
+.editor-overlay .ProseMirror,
+.editor-overlay .ProseMirror * {
+  pointer-events: auto !important;
 }
 
 .ProseMirror {
   outline: none;
   width: 100%;
   min-height: 100%;
-  cursor: text;
+  cursor: text !important;
   font-family: 'Inter', sans-serif;
   font-size: 14px;
   line-height: 1.6;
