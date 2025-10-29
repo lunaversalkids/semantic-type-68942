@@ -365,12 +365,12 @@ button[data-active="true"] {
 .editor-overlay {
   grid-column: 1 / -1;
   grid-row: 1 / -1;
+  pointer-events: auto !important;
+  z-index: 10;
   display: grid;
   grid-template-columns: 8.5in 8.5in;
   column-gap: 0.75rem;
   row-gap: 1rem;
-  pointer-events: auto !important;
-  z-index: 10;
 }
 
 .editor-overlay .ProseMirror {
