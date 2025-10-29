@@ -12,8 +12,6 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Search, Replace } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
-import { Decoration, DecorationSet } from '@tiptap/pm/view';
-import { Plugin, PluginKey } from '@tiptap/pm/state';
 
 interface FindReplaceDialogProps {
   open: boolean;
@@ -44,12 +42,8 @@ export const FindReplaceDialog = ({ open, onOpenChange, editor }: FindReplaceDia
     
     // Clear highlights when dialog closes
     if (!open && editor) {
-      // Remove search highlight plugin
-      editor.view.updateState(
-        editor.state.reconfigure({
-          plugins: editor.state.plugins.filter(p => p.spec.key !== 'search-highlights')
-        })
-      );
+      editor.chain().selectAll().unsetHighlight().run();
+      editor.commands.blur();
       setTotalMatches(0);
       setCurrentMatch(0);
       setAllMatchPositions([]);
@@ -65,11 +59,7 @@ export const FindReplaceDialog = ({ open, onOpenChange, editor }: FindReplaceDia
     if (!findText) {
       // Clear all highlights when search is empty
       if (editor) {
-        editor.view.updateState(
-          editor.state.reconfigure({
-            plugins: editor.state.plugins.filter(p => p.spec.key !== 'search-highlights')
-          })
-        );
+        editor.chain().selectAll().unsetHighlight().run();
       }
       setTotalMatches(0);
       setCurrentMatch(0);
@@ -163,41 +153,29 @@ export const FindReplaceDialog = ({ open, onOpenChange, editor }: FindReplaceDia
   const highlightAllMatches = (matches: Array<{from: number, to: number}>, currentIndex: number) => {
     if (!editor || matches.length === 0) return;
     
+    // First, clear all existing highlights
+    editor.chain().selectAll().unsetHighlight().run();
+    
     const currentPos = matches[currentIndex];
     
-    // Create decorations for all matches
-    const decorations: any[] = [];
+    // Apply light purple highlight to all matches except current
     matches.forEach((pos, idx) => {
-      const isActive = idx === currentIndex;
-      const decoration = Decoration.inline(pos.from, pos.to, {
-        class: isActive ? 'search-result-active' : 'search-result',
-        style: `background-color: ${isActive ? '#e9d5ff' : '#f3e8ff'}; border-radius: 0.125rem; padding: 0.0625rem 0;`
-      });
-      decorations.push(decoration);
-    });
-    
-    // Apply decorations using a custom plugin
-    const searchPlugin = new Plugin({
-      key: new PluginKey('search-highlights'),
-      props: {
-        decorations: () => {
-          return DecorationSet.create(editor.state.doc, decorations);
-        }
+      if (idx !== currentIndex) {
+        editor.chain()
+          .setTextSelection({ from: pos.from, to: pos.to })
+          .setHighlight({ color: '#f3e8ff' }) // Lighter purple for non-current
+          .run();
       }
     });
     
-    // Update editor with decorations
-    editor.view.updateState(
-      editor.state.reconfigure({
-        plugins: [
-          ...editor.state.plugins.filter(p => p.spec.key !== 'search-highlights'),
-          searchPlugin
-        ]
-      })
-    );
-    
-    // Set selection to current match
+    // Apply darker purple highlight to current match
     if (currentPos) {
+      editor.chain()
+        .setTextSelection({ from: currentPos.from, to: currentPos.to })
+        .setHighlight({ color: '#e9d5ff' }) // Darker purple for current
+        .run();
+      
+      // Focus on current match
       editor.chain().focus().setTextSelection({ 
         from: currentPos.from, 
         to: currentPos.to 

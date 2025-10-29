@@ -392,29 +392,30 @@ button[data-active="true"] {
 }
 
 /* Light purple highlight styles for Find & Replace - Apple Notes inspired */
-.ProseMirror .search-result,
-.ProseMirror .search-result-active {
-  transition: background-color 0.3s ease, opacity 0.3s ease;
+.ProseMirror mark[data-color="#e9d5ff"],
+.ProseMirror mark[data-color="#f3e8ff"] {
   border-radius: 0.125rem;
+  padding: 0.0625rem 0;
+  transition: background-color 0.3s ease, opacity 0.3s ease;
 }
 
-.ProseMirror .search-result-active {
+.ProseMirror mark[data-color="#e9d5ff"] {
+  background-color: #e9d5ff !important;
   animation: highlightPulse 0.5s ease-in-out;
   box-shadow: 0 0 0 1px rgba(139, 92, 246, 0.2);
 }
 
-.ProseMirror .search-result {
+.ProseMirror mark[data-color="#f3e8ff"] {
+  background-color: #f3e8ff !important;
   opacity: 0.8;
 }
 
 @keyframes highlightPulse {
   0%, 100% {
     opacity: 1;
-    transform: scale(1);
   }
   50% {
     opacity: 0.85;
-    transform: scale(1.01);
   }
 }
 
