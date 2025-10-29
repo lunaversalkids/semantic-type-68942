@@ -363,29 +363,33 @@ button[data-active="true"] {
 
 /* Editor overlay - fully interactive */
 .editor-overlay {
+  grid-column: 1 / -1;
+  grid-row: 1 / -1;
   position: absolute;
   top: 0;
   left: 0;
-  right: 0;
-  bottom: 0;
+  width: 100%;
+  height: 100%;
   pointer-events: auto !important;
   z-index: 10;
   cursor: text;
-  display: contents;
 }
 
 .editor-overlay .ProseMirror {
-  grid-column: 1 / -1;
-  grid-row: 1 / -1;
+  /* Cover FULL width and height so ALL pages are clickable */
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  padding: 4rem;
+  /* Offset content to start at page 1 (right side) */
+  padding-left: calc(8.5in + 0.75rem + 4rem);
   cursor: text !important;
   pointer-events: auto !important;
   user-select: text !important;
   -webkit-user-select: text !important;
   box-sizing: border-box;
-  padding: 4rem;
-  padding-left: calc(8.5in + 0.75rem + 4rem);
-  width: 100%;
-  min-height: calc(100% + 44in);
 }
 
 /* Ensure all editor content is clickable and editable */
