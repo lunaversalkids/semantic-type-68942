@@ -339,13 +339,13 @@ button[data-active="true"] {
   align-items: center;
 }
 
-/* Vertical page layout for word processor style */
-.pages-vertical-container {
+.pages-grid-container {
   position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 8.5in;
+  display: grid;
+  grid-template-columns: 8.5in 8.5in;
+  gap: 0.75rem;
+  column-gap: 0.75rem;
+  row-gap: 1rem;
 }
 
 /* Background page cards - non-interactive */
@@ -366,24 +366,26 @@ button[data-active="true"] {
   position: absolute;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
+  right: 0;
+  bottom: 0;
   pointer-events: auto !important;
   z-index: 10;
   cursor: text;
+  display: contents;
 }
 
 .editor-overlay .ProseMirror {
+  grid-column: 1 / -1;
+  grid-row: 1 / -1;
   cursor: text !important;
   pointer-events: auto !important;
   user-select: text !important;
   -webkit-user-select: text !important;
   box-sizing: border-box;
-  
-  /* Flow naturally down through all pages */
-  width: 100%;
-  min-height: 100%;
   padding: 4rem;
+  padding-left: calc(8.5in + 0.75rem + 4rem);
+  width: 100%;
+  min-height: calc(100% + 44in);
 }
 
 /* Ensure all editor content is clickable and editable */

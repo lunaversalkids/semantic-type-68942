@@ -282,15 +282,19 @@ export const Editor = ({
             showPageNumber={pageNumbersVisibility[1] ?? true}
             pageNumber={1}
           >
-            <div className="pages-vertical-container">
-              {/* Background page cards - stacked vertically */}
+            <div className="pages-grid-container">
+              {/* Background page cards */}
               <div className="pages-background">
                 {pages.map((pageId, index) => {
                   const pageNum = index + 1;
                   return (
                     <Card 
                       key={pageId}
-                      className="page-card w-[8.5in] h-[11in] bg-[hsl(var(--page-bg))] shadow-2xl mb-6"
+                      className="page-card w-[8.5in] h-[11in] bg-[hsl(var(--page-bg))] shadow-2xl"
+                      style={{
+                        gridColumn: pageNum === 1 ? '2' : pageNum === 2 ? '1' : pageNum === 3 ? '2' : pageNum % 2 === 0 ? '1' : '2',
+                        gridRow: pageNum === 1 ? '1' : Math.ceil((pageNum - 1) / 2) + 1
+                      }}
                     >
                       {pageNumbersVisibility[pageNum] !== false && (
                         <div 
