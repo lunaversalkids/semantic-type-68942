@@ -93,6 +93,7 @@ export const Editor = ({
   };
 
   const [pages, setPages] = useState<string[]>([]);
+  const [zoom, setZoom] = useState(1);
 
   const editor = useEditor({
     extensions: [
@@ -149,15 +150,57 @@ export const Editor = ({
     },
   });
 
-  // Always show 2 pages for book layout
+  // Always show 3 pages for the layout
   useEffect(() => {
-    setPages(['page-1', 'page-2']);
+    setPages(['page-1', 'page-2', 'page-3']);
+  }, []);
+
+  // Handle zoom with mouse wheel
+  useEffect(() => {
+    const handleWheel = (e: WheelEvent) => {
+      if (e.ctrlKey || e.metaKey) {
+        e.preventDefault();
+        const delta = e.deltaY > 0 ? -0.1 : 0.1;
+        setZoom(prev => Math.max(0.25, Math.min(2, prev + delta)));
+      }
+    };
+
+    window.addEventListener('wheel', handleWheel, { passive: false });
+    return () => window.removeEventListener('wheel', handleWheel);
   }, []);
 
   return (
     <div className="h-full flex items-start justify-center bg-[hsl(var(--editor-bg))] p-8 overflow-auto">
-      <div className="relative">
-        <EditorContextMenu 
+      {/* Zoom controls */}
+      <div className="fixed top-20 right-8 z-30 flex flex-col gap-2 bg-background border border-border rounded-lg p-2 shadow-lg">
+        <button
+          onClick={() => setZoom(prev => Math.min(2, prev + 0.1))}
+          className="px-3 py-1 text-sm hover:bg-accent rounded"
+          title="Zoom in (Ctrl/Cmd + Scroll)"
+        >
+          +
+        </button>
+        <span className="px-3 py-1 text-xs text-center text-muted-foreground">
+          {Math.round(zoom * 100)}%
+        </span>
+        <button
+          onClick={() => setZoom(prev => Math.max(0.25, prev - 0.1))}
+          className="px-3 py-1 text-sm hover:bg-accent rounded"
+          title="Zoom out (Ctrl/Cmd + Scroll)"
+        >
+          −
+        </button>
+        <button
+          onClick={() => setZoom(1)}
+          className="px-3 py-1 text-xs hover:bg-accent rounded"
+          title="Reset zoom"
+        >
+          Reset
+        </button>
+      </div>
+
+      <div className="relative" style={{ transform: `scale(${zoom})`, transformOrigin: 'top center' }}>
+        <EditorContextMenu
           editor={editor}
           onApplyToAll={onApplyToAll}
           onAIAssist={onAIAssist}

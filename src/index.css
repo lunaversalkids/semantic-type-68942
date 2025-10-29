@@ -366,6 +366,16 @@ button[data-active="true"] {
   padding: 4rem;
   padding-bottom: 4rem;
   box-sizing: border-box;
+  cursor: text;
+}
+
+/* Ensure editor is interactive */
+.three-page-editor-wrapper {
+  pointer-events: auto !important;
+}
+
+.three-page-editor-wrapper * {
+  pointer-events: auto !important;
 }
 
 /* Print support for page breaks */
