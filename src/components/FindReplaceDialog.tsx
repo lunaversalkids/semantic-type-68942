@@ -27,6 +27,7 @@ export const FindReplaceDialog = ({ open, onOpenChange, editor }: FindReplaceDia
   const [matchCase, setMatchCase] = useState(false);
   const [currentMatch, setCurrentMatch] = useState(0);
   const [totalMatches, setTotalMatches] = useState(0);
+  const [allMatchPositions, setAllMatchPositions] = useState<Array<{from: number, to: number}>>([]);
   const { toast } = useToast();
 
   // Auto-populate find field with selected text when dialog opens
@@ -40,7 +41,54 @@ export const FindReplaceDialog = ({ open, onOpenChange, editor }: FindReplaceDia
     }
   }, [open, editor]);
 
-  const findMatches = () => {
+  // Real-time search: automatically search as user types
+  useEffect(() => {
+    if (!editor || !findText || !open) {
+      // Clear highlights when no search text
+      setTotalMatches(0);
+      setCurrentMatch(0);
+      setAllMatchPositions([]);
+      return;
+    }
+
+    const searchRealtime = () => {
+      const matches = findAllMatchPositions();
+      setAllMatchPositions(matches);
+      setTotalMatches(matches.length);
+      
+      if (matches.length > 0) {
+        setCurrentMatch(1);
+        highlightAllMatches(matches, 0);
+      } else {
+        setCurrentMatch(0);
+      }
+    };
+
+    // Debounce for better performance
+    const timeoutId = setTimeout(searchRealtime, 150);
+    return () => clearTimeout(timeoutId);
+  }, [findText, wholeWords, matchCase, editor, open]);
+
+  // Keyboard navigation
+  useEffect(() => {
+    if (!open) return;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Arrow navigation when find dialog is open
+      if (e.key === 'ArrowRight' || (e.key === 'Enter' && !e.shiftKey)) {
+        e.preventDefault();
+        handleFindNext();
+      } else if (e.key === 'ArrowLeft' || (e.key === 'Enter' && e.shiftKey)) {
+        e.preventDefault();
+        handleFindPrevious();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [open, currentMatch, totalMatches, allMatchPositions]);
+
+  const findAllMatchPositions = (): Array<{from: number, to: number}> => {
     if (!editor || !findText) return [];
     
     const content = editor.getText();
@@ -51,124 +99,108 @@ export const FindReplaceDialog = ({ open, onOpenChange, editor }: FindReplaceDia
     }
     
     const flags = matchCase ? 'g' : 'gi';
-    const matches = content.match(new RegExp(pattern, flags));
-    return matches || [];
-  };
-
-  const handleFind = () => {
-    const matches = findMatches();
-    setTotalMatches(matches.length);
-    
-    if (matches.length > 0) {
-      setCurrentMatch(1);
-      highlightMatch(0);
-      toast({
-        title: 'Search Results',
-        description: `Found ${matches.length} matches`,
-      });
-    } else {
-      setCurrentMatch(0);
-      toast({
-        title: 'Search Results',
-        description: 'No matches found',
-      });
-    }
-  };
-
-  const highlightMatch = (index: number) => {
-    if (!editor || !findText) return;
-    
-    const content = editor.getText();
-    let pattern = findText;
-    if (wholeWords) {
-      pattern = `\\b${pattern}\\b`;
-    }
-    
-    const flags = matchCase ? 'g' : 'gi';
     const regex = new RegExp(pattern, flags);
     const allMatches = [...content.matchAll(regex)];
+    const positions: Array<{from: number, to: number}> = [];
     
-    if (allMatches.length === 0 || index >= allMatches.length) return;
-    
-    const match = allMatches[index];
-    if (!match || match.index === undefined) return;
-    
-    // Calculate position by walking through the document
-    let docPosition = 0;
-    let found = false;
-    let targetFrom = 0;
-    let targetTo = 0;
-    
-    editor.state.doc.descendants((node, pos) => {
-      if (found) return false;
+    allMatches.forEach((match) => {
+      if (match.index === undefined) return;
       
-      if (node.isText && node.text) {
-        const nodeStart = docPosition;
-        const nodeEnd = docPosition + node.text.length;
+      let docPosition = 0;
+      let found = false;
+      
+      editor.state.doc.descendants((node, pos) => {
+        if (found) return false;
         
-        // Check if match is in this text node
-        if (match.index! >= nodeStart && match.index! < nodeEnd) {
-          const offset = match.index! - nodeStart;
-          targetFrom = pos + offset;
-          targetTo = targetFrom + match[0].length;
-          found = true;
-          return false;
+        if (node.isText && node.text) {
+          const nodeStart = docPosition;
+          const nodeEnd = docPosition + node.text.length;
+          
+          if (match.index! >= nodeStart && match.index! < nodeEnd) {
+            const offset = match.index! - nodeStart;
+            const from = pos + offset;
+            const to = from + match[0].length;
+            positions.push({ from, to });
+            found = true;
+            return false;
+          }
+          
+          docPosition += node.text.length;
         }
-        
-        docPosition += node.text.length;
-      }
-      return true;
+        return true;
+      });
     });
     
-    if (found) {
-      // Select the text
-      editor.chain().focus().setTextSelection({ from: targetFrom, to: targetTo }).run();
+    return positions;
+  };
+
+  const highlightAllMatches = (matches: Array<{from: number, to: number}>, currentIndex: number) => {
+    if (!editor || matches.length === 0) return;
+    
+    // Highlight current match with selection
+    const currentPos = matches[currentIndex];
+    if (currentPos) {
+      editor.chain().focus().setTextSelection({ 
+        from: currentPos.from, 
+        to: currentPos.to 
+      }).run();
       
-      // Scroll into view with delay to ensure selection is set
+      // Smooth scroll to current match
       setTimeout(() => {
         const { view } = editor;
-        const coords = view.coordsAtPos(targetFrom);
+        const coords = view.coordsAtPos(currentPos.from);
         const editorRect = view.dom.getBoundingClientRect();
-        const scrollTop = coords.top - editorRect.top - (window.innerHeight / 3);
+        const scrollContainer = view.dom.closest('.overflow-auto');
         
-        view.dom.scrollTo({
-          top: Math.max(0, scrollTop),
-          behavior: 'smooth'
-        });
-      }, 100);
+        if (scrollContainer) {
+          const scrollTop = coords.top - editorRect.top - (window.innerHeight / 3);
+          scrollContainer.scrollTo({
+            top: Math.max(0, scrollTop),
+            behavior: 'smooth'
+          });
+        }
+      }, 50);
+    }
+    
+    // Apply background highlight to all other matches
+    matches.forEach((pos, idx) => {
+      if (idx !== currentIndex) {
+        editor.chain()
+          .setTextSelection({ from: pos.from, to: pos.to })
+          .setHighlight({ color: '#fef08a' }) // Yellow highlight for non-current matches
+          .run();
+      }
+    });
+    
+    // Reselect current match to keep it visually distinct
+    if (currentPos) {
+      editor.chain().focus().setTextSelection({ 
+        from: currentPos.from, 
+        to: currentPos.to 
+      }).run();
     }
   };
 
   const handleFindNext = () => {
-    const matches = findMatches();
-    if (matches.length === 0) {
-      handleFind();
-      return;
-    }
+    if (allMatchPositions.length === 0) return;
     
-    const nextMatch = currentMatch >= matches.length ? 1 : currentMatch + 1;
+    const nextMatch = currentMatch >= allMatchPositions.length ? 1 : currentMatch + 1;
     setCurrentMatch(nextMatch);
-    highlightMatch(nextMatch - 1);
+    highlightAllMatches(allMatchPositions, nextMatch - 1);
   };
 
   const handleFindPrevious = () => {
-    const matches = findMatches();
-    if (matches.length === 0) {
-      handleFind();
-      return;
-    }
+    if (allMatchPositions.length === 0) return;
     
-    const prevMatch = currentMatch <= 1 ? matches.length : currentMatch - 1;
+    const prevMatch = currentMatch <= 1 ? allMatchPositions.length : currentMatch - 1;
     setCurrentMatch(prevMatch);
-    highlightMatch(prevMatch - 1);
+    highlightAllMatches(allMatchPositions, prevMatch - 1);
   };
 
   const handleReplace = () => {
     if (!editor || !findText) return;
 
-    const content = editor.getText();
-    const matches = findMatches();
-    const matchCount = matches.length;
+    const matchCount = allMatchPositions.length;
     
     if (matchCount === 0) {
       toast({
@@ -182,10 +214,9 @@ export const FindReplaceDialog = ({ open, onOpenChange, editor }: FindReplaceDia
     if (wholeWords) {
       pattern = `\\b${pattern}\\b`;
     }
-    
     const flags = matchCase ? 'g' : 'gi';
     const regex = new RegExp(pattern, flags);
-    
+
     if (mode === 'keep-style') {
       // Keep existing style: replace text in HTML preserving all formatting
       const html = editor.getHTML();
@@ -228,56 +259,29 @@ export const FindReplaceDialog = ({ open, onOpenChange, editor }: FindReplaceDia
       }
       
       // Replace all occurrences with captured style
-      const allMatches = [...content.matchAll(regex)];
       let processedMatches = 0;
       
-      allMatches.forEach((match) => {
-        if (match.index === undefined) return;
+      allMatchPositions.forEach((pos) => {
+        const targetFrom = pos.from + (processedMatches * (replaceText.length - findText.length));
+        const targetTo = targetFrom + (pos.to - pos.from);
         
-        let docPos = 0;
-        let targetFrom = 0;
-        let targetTo = 0;
-        let found = false;
+        // Delete old text and insert new with marks
+        const chain = editor.chain().focus();
+        chain.setTextSelection({ from: targetFrom, to: targetTo });
+        chain.deleteSelection();
+        chain.insertContent(replaceText);
         
-        editor.state.doc.descendants((node, pos) => {
-          if (found) return false;
-          
-          if (node.isText && node.text) {
-            const nodeStart = docPos;
-            const nodeEnd = docPos + node.text.length;
-            
-            if (match.index! >= nodeStart && match.index! < nodeEnd) {
-              const offset = match.index! - nodeStart;
-              targetFrom = pos + offset + (processedMatches * (replaceText.length - findText.length));
-              targetTo = targetFrom + match[0].length;
-              found = true;
-              return false;
-            }
-            
-            docPos += node.text.length;
-          }
-          return true;
-        });
-        
-        if (found) {
-          // Delete old text and insert new with marks
-          const chain = editor.chain().focus();
-          chain.setTextSelection({ from: targetFrom, to: targetTo });
-          chain.deleteSelection();
-          chain.insertContent(replaceText);
-          
-          // Apply captured style marks
-          if (styleMarks.length > 0) {
-            const newTo = targetFrom + replaceText.length;
-            chain.setTextSelection({ from: targetFrom, to: newTo });
-            styleMarks.forEach((mark) => {
-              chain.setMark(mark.type.name, mark.attrs);
-            });
-          }
-          
-          chain.run();
-          processedMatches++;
+        // Apply captured style marks
+        if (styleMarks.length > 0) {
+          const newTo = targetFrom + replaceText.length;
+          chain.setTextSelection({ from: targetFrom, to: newTo });
+          styleMarks.forEach((mark) => {
+            chain.setMark(mark.type.name, mark.attrs);
+          });
         }
+        
+        chain.run();
+        processedMatches++;
       });
     }
     
@@ -295,6 +299,8 @@ export const FindReplaceDialog = ({ open, onOpenChange, editor }: FindReplaceDia
     
     setTotalMatches(0);
     setCurrentMatch(0);
+    setAllMatchPositions([]);
+    setFindText('');
   };
 
   return (
@@ -331,15 +337,12 @@ export const FindReplaceDialog = ({ open, onOpenChange, editor }: FindReplaceDia
             </div>
             <div className="flex gap-2">
               <Button onClick={handleFindPrevious} variant="outline" size="sm" className="h-7 text-xs flex-1" disabled={totalMatches === 0}>
-                Previous
+                ← Prev
               </Button>
               <Button onClick={handleFindNext} variant="outline" size="sm" className="h-7 text-xs flex-1" disabled={totalMatches === 0}>
-                Next
+                Next →
               </Button>
-              <Button onClick={handleFind} variant="outline" size="sm" className="h-7 text-xs flex-1">
-                Find All
-              </Button>
-              <Button onClick={handleReplace} size="sm" className="h-7 text-xs flex-1">
+              <Button onClick={handleReplace} size="sm" className="h-7 text-xs flex-1" disabled={totalMatches === 0}>
                 Replace All
               </Button>
             </div>
