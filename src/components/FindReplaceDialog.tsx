@@ -12,6 +12,8 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Search, Replace } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { Decoration, DecorationSet } from '@tiptap/pm/view';
+import { Plugin, PluginKey } from '@tiptap/pm/state';
 
 interface FindReplaceDialogProps {
   open: boolean;
@@ -42,7 +44,12 @@ export const FindReplaceDialog = ({ open, onOpenChange, editor }: FindReplaceDia
     
     // Clear highlights when dialog closes
     if (!open && editor) {
-      editor.commands.unsetHighlight();
+      // Remove search highlight plugin
+      editor.view.updateState(
+        editor.state.reconfigure({
+          plugins: editor.state.plugins.filter(p => p.spec.key !== 'search-highlights')
+        })
+      );
       setTotalMatches(0);
       setCurrentMatch(0);
       setAllMatchPositions([]);
@@ -57,7 +64,13 @@ export const FindReplaceDialog = ({ open, onOpenChange, editor }: FindReplaceDia
 
     if (!findText) {
       // Clear all highlights when search is empty
-      editor.commands.unsetHighlight();
+      if (editor) {
+        editor.view.updateState(
+          editor.state.reconfigure({
+            plugins: editor.state.plugins.filter(p => p.spec.key !== 'search-highlights')
+          })
+        );
+      }
       setTotalMatches(0);
       setCurrentMatch(0);
       setAllMatchPositions([]);
@@ -150,20 +163,50 @@ export const FindReplaceDialog = ({ open, onOpenChange, editor }: FindReplaceDia
   const highlightAllMatches = (matches: Array<{from: number, to: number}>, currentIndex: number) => {
     if (!editor || matches.length === 0) return;
     
-    // Highlight current match with selection
     const currentPos = matches[currentIndex];
+    
+    // Create decorations for all matches
+    const decorations: any[] = [];
+    matches.forEach((pos, idx) => {
+      const isActive = idx === currentIndex;
+      const decoration = Decoration.inline(pos.from, pos.to, {
+        class: isActive ? 'search-result-active' : 'search-result',
+        style: `background-color: ${isActive ? '#e9d5ff' : '#f3e8ff'}; border-radius: 0.125rem; padding: 0.0625rem 0;`
+      });
+      decorations.push(decoration);
+    });
+    
+    // Apply decorations using a custom plugin
+    const searchPlugin = new Plugin({
+      key: new PluginKey('search-highlights'),
+      props: {
+        decorations: () => {
+          return DecorationSet.create(editor.state.doc, decorations);
+        }
+      }
+    });
+    
+    // Update editor with decorations
+    editor.view.updateState(
+      editor.state.reconfigure({
+        plugins: [
+          ...editor.state.plugins.filter(p => p.spec.key !== 'search-highlights'),
+          searchPlugin
+        ]
+      })
+    );
+    
+    // Set selection to current match
     if (currentPos) {
       editor.chain().focus().setTextSelection({ 
         from: currentPos.from, 
         to: currentPos.to 
       }).run();
       
-      // Smooth scroll to current match - Apple Notes style
+      // Smooth scroll to current match
       setTimeout(() => {
         const { view } = editor;
         const coords = view.coordsAtPos(currentPos.from);
-        
-        // Find scroll container
         const scrollContainer = document.querySelector('.overflow-auto');
         
         if (scrollContainer) {
@@ -176,22 +219,6 @@ export const FindReplaceDialog = ({ open, onOpenChange, editor }: FindReplaceDia
           });
         }
       }, 50);
-    }
-    
-    // Apply light purple highlight to all matches
-    matches.forEach((pos, idx) => {
-      editor.chain()
-        .setTextSelection({ from: pos.from, to: pos.to })
-        .setHighlight({ color: idx === currentIndex ? '#e9d5ff' : '#f3e8ff' }) // Light purple for current, lighter purple for others
-        .run();
-    });
-    
-    // Reselect current match to keep it visually distinct
-    if (currentPos) {
-      editor.chain().focus().setTextSelection({ 
-        from: currentPos.from, 
-        to: currentPos.to 
-      }).run();
     }
   };
 

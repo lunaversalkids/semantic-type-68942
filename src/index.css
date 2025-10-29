@@ -391,29 +391,30 @@ button[data-active="true"] {
   pointer-events: auto !important;
 }
 
-/* Light purple highlight styles - Apple Notes inspired */
-.ProseMirror mark {
-  border-radius: 0.125rem;
-  padding: 0.0625rem 0;
+/* Light purple highlight styles for Find & Replace - Apple Notes inspired */
+.ProseMirror .search-result,
+.ProseMirror .search-result-active {
   transition: background-color 0.3s ease, opacity 0.3s ease;
+  border-radius: 0.125rem;
 }
 
-.ProseMirror mark[data-color="#e9d5ff"] {
-  background-color: #e9d5ff;
+.ProseMirror .search-result-active {
   animation: highlightPulse 0.5s ease-in-out;
+  box-shadow: 0 0 0 1px rgba(139, 92, 246, 0.2);
 }
 
-.ProseMirror mark[data-color="#f3e8ff"] {
-  background-color: #f3e8ff;
+.ProseMirror .search-result {
   opacity: 0.8;
 }
 
 @keyframes highlightPulse {
   0%, 100% {
     opacity: 1;
+    transform: scale(1);
   }
   50% {
-    opacity: 0.7;
+    opacity: 0.85;
+    transform: scale(1.01);
   }
 }
 
