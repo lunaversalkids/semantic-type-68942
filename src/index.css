@@ -331,103 +331,69 @@ button[data-active="true"] {
   font-size: 0.6em;
 }
 
-/* Dynamic page layout */
-.editor-zoom-container {
+/* Document container */
+.document-container {
   position: relative;
-  will-change: transform;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-.pages-container {
+.pages-grid-container {
   position: relative;
-  z-index: 1;
   display: grid;
-  grid-template-columns: repeat(2, 8.5in);
-  gap: 0.75rem 0.75rem;
+  grid-template-columns: 8.5in 8.5in;
+  gap: 0.75rem;
+  column-gap: 0.75rem;
+  row-gap: 1rem;
+}
+
+/* Background page cards - non-interactive */
+.pages-background {
+  display: contents;
   pointer-events: none;
   user-select: none;
-  justify-content: center;
-}
-
-.page-wrapper {
-  pointer-events: none;
-}
-
-.page-wrapper.top-page-wrapper {
-  grid-column: 2;
-}
-
-.page-wrapper.bottom-page {
-  /* Normal grid flow */
-}
-
-.page-wrapper.left-page {
-  grid-column: 1;
-}
-
-.page-wrapper.right-page {
-  grid-column: 2;
 }
 
 .page-card {
+  position: relative;
   pointer-events: none !important;
   user-select: none !important;
 }
 
-.multi-page-editor-wrapper {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  min-height: calc(11in * 2);
-  z-index: 10;
+/* Editor overlay - fully interactive */
+.editor-overlay {
+  grid-column: 1 / -1;
+  grid-row: 1;
+  position: relative;
+  column-fill: auto;
+  column-gap: 0.75rem;
   pointer-events: auto;
-  cursor: text;
+  z-index: 10;
+  min-height: 11in;
 }
 
-.multi-page-editor-wrapper .ProseMirror {
-  column-count: 3;
-  column-gap: 1.5rem;
-  column-fill: auto;
-  min-height: 100%;
+.editor-overlay .ProseMirror {
   padding: 4rem;
-  padding-bottom: 4rem;
-  box-sizing: border-box;
+  padding-bottom: 6rem;
+  min-height: 11in;
+  cursor: text;
   pointer-events: auto;
   user-select: text;
   -webkit-user-select: text;
-  -moz-user-select: text;
-  -ms-user-select: text;
 }
 
-/* Ensure editor is fully interactive and clickable */
-.multi-page-editor-wrapper,
-.multi-page-editor-wrapper .ProseMirror,
-.multi-page-editor-wrapper .ProseMirror.editor-content,
-.multi-page-editor-wrapper .ProseMirror *,
-.multi-page-editor-wrapper .ProseMirror p,
-.multi-page-editor-wrapper .ProseMirror h1,
-.multi-page-editor-wrapper .ProseMirror h2,
-.multi-page-editor-wrapper .ProseMirror h3,
-.multi-page-editor-wrapper .ProseMirror ul,
-.multi-page-editor-wrapper .ProseMirror ol,
-.multi-page-editor-wrapper .ProseMirror li {
+/* Ensure all editor content is clickable and editable */
+.editor-overlay,
+.editor-overlay *,
+.editor-overlay .ProseMirror,
+.editor-overlay .ProseMirror * {
   pointer-events: auto !important;
   cursor: text !important;
 }
 
-.pages-container > .page-wrapper,
-.pages-container > .page-wrapper *,
-.page-card,
-.page-card * {
-  pointer-events: none !important;
-  user-select: none !important;
-}
-
 /* Page Adder Button */
 .page-adder-button {
-  grid-column: 1 / -1;
-  justify-self: center;
-  margin-top: 1rem;
   padding: 0.5rem 1.5rem;
   background: hsl(var(--primary));
   color: hsl(var(--primary-foreground));
@@ -438,7 +404,7 @@ button[data-active="true"] {
   cursor: pointer;
   transition: all 0.2s ease;
   pointer-events: auto;
-  z-index: 20;
+  align-self: center;
 }
 
 .page-adder-button:hover {
