@@ -67,14 +67,12 @@ export const FindReplaceDialog = ({ open, onOpenChange, editor }: FindReplaceDia
   const highlightMatch = (index: number) => {
     if (!editor || !findText) return;
     
-    const { state, view } = editor;
-    const { doc } = state;
-    const content = doc.textContent;
+    const content = editor.getText();
     const matches = findMatches();
     
     if (matches.length === 0 || index >= matches.length) return;
     
-    // Find the position of the match in the text
+    // Build search pattern
     let pattern = findText;
     if (wholeWords) {
       pattern = `\\b${pattern}\\b`;
@@ -86,37 +84,48 @@ export const FindReplaceDialog = ({ open, onOpenChange, editor }: FindReplaceDia
     const match = allMatches[index];
     
     if (match && match.index !== undefined) {
-      // Calculate proper position in the document (Tiptap positions start at 1)
-      const from = match.index + 1;
+      // Find the actual position in the document
+      let pos = 1; // Tiptap positions start at 1
+      let textPos = 0;
+      
+      editor.state.doc.descendants((node, nodePos) => {
+        if (node.isText && node.text) {
+          const nodeTextStart = textPos;
+          const nodeTextEnd = textPos + node.text.length;
+          
+          // Check if our match is in this text node
+          if (match.index! >= nodeTextStart && match.index! < nodeTextEnd) {
+            const offsetInNode = match.index! - nodeTextStart;
+            pos = nodePos + offsetInNode;
+            return false; // Stop iteration
+          }
+          
+          textPos += node.text.length;
+        } else if (node.isText === false && node.textContent) {
+          textPos += node.textContent.length;
+        }
+        return true;
+      });
+      
+      const from = pos;
       const to = from + match[0].length;
       
-      // Create a transaction that selects and scrolls to the match
-      const tr = view.state.tr.setSelection(
-        view.state.selection.constructor.create(view.state.doc, from, to)
-      );
-      
-      // Scroll into view with padding to ensure it's not covered by the dialog
-      view.dispatch(tr.scrollIntoView());
-      
-      // Focus the editor
+      // Set selection and scroll into view
+      editor.commands.setTextSelection({ from, to });
       editor.commands.focus();
       
-      // Additional scroll to center the match and ensure it's not covered by bottom dialog
+      // Ensure it scrolls to center view
       setTimeout(() => {
-        const domSelection = view.domAtPos(from);
-        if (domSelection.node) {
-          const element = domSelection.node.nodeType === 1 
-            ? domSelection.node as HTMLElement
-            : domSelection.node.parentElement;
-          
-          if (element) {
-            element.scrollIntoView({ 
-              behavior: 'smooth', 
-              block: 'center',
-              inline: 'nearest'
-            });
-          }
-        }
+        const { view } = editor;
+        const domAtPos = view.domAtPos(from);
+        const element = domAtPos.node.nodeType === 1 
+          ? domAtPos.node as HTMLElement
+          : domAtPos.node.parentElement;
+        
+        element?.scrollIntoView({ 
+          behavior: 'smooth', 
+          block: 'center'
+        });
       }, 50);
     }
   };
@@ -168,16 +177,29 @@ export const FindReplaceDialog = ({ open, onOpenChange, editor }: FindReplaceDia
     const flags = matchCase ? 'g' : 'gi';
     const regex = new RegExp(pattern, flags);
     
-    // Get current HTML content and replace within it to preserve formatting
-    const html = editor.getHTML();
-    const newHtml = html.replace(regex, replaceText);
+    if (mode === 'keep-style') {
+      // Replace in HTML to preserve all formatting
+      const html = editor.getHTML();
+      const newHtml = html.replace(regex, replaceText);
+      editor.commands.setContent(newHtml);
+    } else {
+      // Re-apply semantic rules: replace in plain text, editor will re-style
+      const text = editor.getText();
+      const newText = text.replace(regex, replaceText);
+      
+      // Set as plain text in paragraph, let semantic styling apply
+      editor.commands.setContent(`<p>${newText}</p>`);
+    }
     
-    // Update content and maintain formatting
-    editor.commands.setContent(newHtml);
-    
-    // Scroll to top to show the changes
+    // Focus editor and scroll to first replacement
     editor.commands.focus();
-    editor.commands.setTextSelection(0);
+    editor.commands.setTextSelection(1);
+    
+    // Scroll to top to show changes
+    setTimeout(() => {
+      const editorElement = document.querySelector('.ProseMirror');
+      editorElement?.scrollTo({ top: 0, behavior: 'smooth' });
+    }, 100);
     
     toast({
       title: 'Replace Complete',
@@ -187,8 +209,6 @@ export const FindReplaceDialog = ({ open, onOpenChange, editor }: FindReplaceDia
     // Reset the dialog state
     setTotalMatches(0);
     setCurrentMatch(0);
-    setFindText('');
-    setReplaceText('');
   };
 
   return (
