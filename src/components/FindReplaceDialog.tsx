@@ -68,11 +68,6 @@ export const FindReplaceDialog = ({ open, onOpenChange, editor }: FindReplaceDia
     if (!editor || !findText) return;
     
     const content = editor.getText();
-    const matches = findMatches();
-    
-    if (matches.length === 0 || index >= matches.length) return;
-    
-    // Build search pattern
     let pattern = findText;
     if (wholeWords) {
       pattern = `\\b${pattern}\\b`;
@@ -81,52 +76,55 @@ export const FindReplaceDialog = ({ open, onOpenChange, editor }: FindReplaceDia
     const flags = matchCase ? 'g' : 'gi';
     const regex = new RegExp(pattern, flags);
     const allMatches = [...content.matchAll(regex)];
-    const match = allMatches[index];
     
-    if (match && match.index !== undefined) {
-      // Find the actual position in the document
-      let pos = 1; // Tiptap positions start at 1
-      let textPos = 0;
+    if (allMatches.length === 0 || index >= allMatches.length) return;
+    
+    const match = allMatches[index];
+    if (!match || match.index === undefined) return;
+    
+    // Calculate position by walking through the document
+    let docPosition = 0;
+    let found = false;
+    let targetFrom = 0;
+    let targetTo = 0;
+    
+    editor.state.doc.descendants((node, pos) => {
+      if (found) return false;
       
-      editor.state.doc.descendants((node, nodePos) => {
-        if (node.isText && node.text) {
-          const nodeTextStart = textPos;
-          const nodeTextEnd = textPos + node.text.length;
-          
-          // Check if our match is in this text node
-          if (match.index! >= nodeTextStart && match.index! < nodeTextEnd) {
-            const offsetInNode = match.index! - nodeTextStart;
-            pos = nodePos + offsetInNode;
-            return false; // Stop iteration
-          }
-          
-          textPos += node.text.length;
-        } else if (node.isText === false && node.textContent) {
-          textPos += node.textContent.length;
+      if (node.isText && node.text) {
+        const nodeStart = docPosition;
+        const nodeEnd = docPosition + node.text.length;
+        
+        // Check if match is in this text node
+        if (match.index! >= nodeStart && match.index! < nodeEnd) {
+          const offset = match.index! - nodeStart;
+          targetFrom = pos + offset;
+          targetTo = targetFrom + match[0].length;
+          found = true;
+          return false;
         }
-        return true;
-      });
+        
+        docPosition += node.text.length;
+      }
+      return true;
+    });
+    
+    if (found) {
+      // Select the text
+      editor.chain().focus().setTextSelection({ from: targetFrom, to: targetTo }).run();
       
-      const from = pos;
-      const to = from + match[0].length;
-      
-      // Set selection and scroll into view
-      editor.commands.setTextSelection({ from, to });
-      editor.commands.focus();
-      
-      // Ensure it scrolls to center view
+      // Scroll into view with delay to ensure selection is set
       setTimeout(() => {
         const { view } = editor;
-        const domAtPos = view.domAtPos(from);
-        const element = domAtPos.node.nodeType === 1 
-          ? domAtPos.node as HTMLElement
-          : domAtPos.node.parentElement;
+        const coords = view.coordsAtPos(targetFrom);
+        const editorRect = view.dom.getBoundingClientRect();
+        const scrollTop = coords.top - editorRect.top - (window.innerHeight / 3);
         
-        element?.scrollIntoView({ 
-          behavior: 'smooth', 
-          block: 'center'
+        view.dom.scrollTo({
+          top: Math.max(0, scrollTop),
+          behavior: 'smooth'
         });
-      }, 50);
+      }, 100);
     }
   };
 
@@ -169,7 +167,6 @@ export const FindReplaceDialog = ({ open, onOpenChange, editor }: FindReplaceDia
       return;
     }
 
-    // Build pattern for replacement
     let pattern = findText;
     if (wholeWords) {
       pattern = `\\b${pattern}\\b`;
@@ -179,101 +176,112 @@ export const FindReplaceDialog = ({ open, onOpenChange, editor }: FindReplaceDia
     const regex = new RegExp(pattern, flags);
     
     if (mode === 'keep-style') {
-      // Replace in HTML to preserve all formatting
+      // Keep existing style: replace text in HTML preserving all formatting
       const html = editor.getHTML();
       const newHtml = html.replace(regex, replaceText);
       editor.commands.setContent(newHtml);
     } else {
-      // Re-apply semantic rules: capture style from first match and apply to all
-      const allMatches = [...content.matchAll(regex)];
+      // Re-apply semantic rules: capture style from selected/first styled word
+      const { from, to } = editor.state.selection;
+      const selectedText = editor.state.doc.textBetween(from, to, '');
       
-      // Find the first match in the document to capture its marks
-      let firstMatchMarks: any[] = [];
-      let firstMatchPos = -1;
+      // Check if current selection matches the search
+      let styleMarks: any[] = [];
+      const selectionMatches = selectedText.toLowerCase() === findText.toLowerCase() || 
+                              (matchCase && selectedText === findText);
       
-      editor.state.doc.descendants((node, pos) => {
-        if (node.isText && node.text && firstMatchPos === -1) {
-          const nodeText = node.text;
-          const match = nodeText.match(regex);
-          if (match && match.index !== undefined) {
-            firstMatchPos = pos + match.index;
-            firstMatchMarks = node.marks;
+      if (selectionMatches) {
+        // Capture marks from current selection
+        editor.state.doc.nodesBetween(from, to, (node) => {
+          if (node.isText && node.marks.length > 0) {
+            styleMarks = node.marks;
             return false;
           }
-        }
-        return true;
-      });
+        });
+      } else {
+        // Find first styled occurrence in document
+        let foundStyled = false;
+        editor.state.doc.descendants((node, pos) => {
+          if (foundStyled) return false;
+          
+          if (node.isText && node.text && node.marks.length > 0) {
+            const textMatch = node.text.match(regex);
+            if (textMatch) {
+              styleMarks = node.marks;
+              foundStyled = true;
+              return false;
+            }
+          }
+          return true;
+        });
+      }
       
-      // Replace all matches and apply the captured marks
-      let offset = 0;
+      // Replace all occurrences with captured style
+      const allMatches = [...content.matchAll(regex)];
+      let processedMatches = 0;
+      
       allMatches.forEach((match) => {
         if (match.index === undefined) return;
         
-        let actualPos = 1;
-        let textPos = 0;
+        let docPos = 0;
+        let targetFrom = 0;
+        let targetTo = 0;
+        let found = false;
         
-        editor.state.doc.descendants((node, nodePos) => {
+        editor.state.doc.descendants((node, pos) => {
+          if (found) return false;
+          
           if (node.isText && node.text) {
-            const nodeTextStart = textPos;
-            const nodeTextEnd = textPos + node.text.length;
+            const nodeStart = docPos;
+            const nodeEnd = docPos + node.text.length;
             
-            if (match.index! >= nodeTextStart && match.index! < nodeTextEnd) {
-              const offsetInNode = match.index! - nodeTextStart;
-              actualPos = nodePos + offsetInNode;
+            if (match.index! >= nodeStart && match.index! < nodeEnd) {
+              const offset = match.index! - nodeStart;
+              targetFrom = pos + offset + (processedMatches * (replaceText.length - findText.length));
+              targetTo = targetFrom + match[0].length;
+              found = true;
               return false;
             }
             
-            textPos += node.text.length;
-          } else if (node.isText === false && node.textContent) {
-            textPos += node.textContent.length;
+            docPos += node.text.length;
           }
           return true;
         });
         
-        const from = actualPos + offset;
-        const to = from + match[0].length;
-        
-        // Replace text and apply marks
-        editor.chain()
-          .focus()
-          .setTextSelection({ from, to })
-          .insertContent(replaceText)
-          .run();
-        
-        // Apply the captured marks to the replacement
-        if (firstMatchMarks.length > 0) {
-          const newFrom = from;
-          const newTo = from + replaceText.length;
+        if (found) {
+          // Delete old text and insert new with marks
+          const chain = editor.chain().focus();
+          chain.setTextSelection({ from: targetFrom, to: targetTo });
+          chain.deleteSelection();
+          chain.insertContent(replaceText);
           
-          firstMatchMarks.forEach((mark) => {
-            editor.chain()
-              .focus()
-              .setTextSelection({ from: newFrom, to: newTo })
-              .setMark(mark.type.name, mark.attrs)
-              .run();
-          });
+          // Apply captured style marks
+          if (styleMarks.length > 0) {
+            const newTo = targetFrom + replaceText.length;
+            chain.setTextSelection({ from: targetFrom, to: newTo });
+            styleMarks.forEach((mark) => {
+              chain.setMark(mark.type.name, mark.attrs);
+            });
+          }
+          
+          chain.run();
+          processedMatches++;
         }
-        
-        offset += replaceText.length - match[0].length;
       });
     }
     
-    // Focus editor and scroll to first replacement
     editor.commands.focus();
     editor.commands.setTextSelection(1);
     
-    // Scroll to top to show changes
     setTimeout(() => {
-      const editorElement = document.querySelector('.ProseMirror');
-      editorElement?.scrollTo({ top: 0, behavior: 'smooth' });
+      editor.view.dom.scrollTo({ top: 0, behavior: 'smooth' });
     }, 100);
     
     toast({
       title: 'Replace Complete',
-      description: `Replaced ${matchCount} instance${matchCount !== 1 ? 's' : ''} of "${findText}"`,
+      description: `Replaced ${matchCount} match${matchCount !== 1 ? 'es' : ''} of "${findText}"`,
     });
     
-    // Reset the dialog state
     setTotalMatches(0);
     setCurrentMatch(0);
   };
