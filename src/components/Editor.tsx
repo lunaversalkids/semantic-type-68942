@@ -316,7 +316,6 @@ export const Editor = ({
               <div 
                 className="editor-overlay"
                 style={{
-                  columnCount: 2,
                   gridRow: `1 / span ${Math.ceil(pages.length / 2)}`
                 }}
                 onClick={() => {

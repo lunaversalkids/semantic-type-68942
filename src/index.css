@@ -364,16 +364,18 @@ button[data-active="true"] {
 /* Editor overlay - fully interactive */
 .editor-overlay {
   grid-column: 1 / -1;
-  grid-row: 1;
   position: relative;
-  column-fill: auto;
-  column-gap: 0.75rem;
   pointer-events: auto !important;
   z-index: 10;
-  min-height: 11in;
+  display: grid;
+  grid-template-columns: 8.5in 8.5in;
+  gap: 0.75rem;
+  column-gap: 0.75rem;
+  row-gap: 1rem;
 }
 
 .editor-overlay .ProseMirror {
+  grid-column: 1 / -1;
   padding: 4rem;
   padding-bottom: 6rem;
   min-height: 11in;
@@ -381,6 +383,7 @@ button[data-active="true"] {
   pointer-events: auto !important;
   user-select: text !important;
   -webkit-user-select: text !important;
+  width: 100%;
 }
 
 /* Ensure all editor content is clickable and editable */
