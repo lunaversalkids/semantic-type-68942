@@ -98,7 +98,15 @@ export const Editor = ({
   const [isZooming, setIsZooming] = useState(false);
 
   const addNewPage = () => {
-    setPages(prev => [...prev, `page-${prev.length + 1}`]);
+    const newPageId = `page-${pages.length + 1}`;
+    setPages(prev => [...prev, newPageId]);
+    
+    // Ensure the editor remains focused and editable after adding a new page
+    setTimeout(() => {
+      if (editor) {
+        editor.commands.focus('end');
+      }
+    }, 100);
   };
 
   const editor = useEditor({
@@ -311,9 +319,9 @@ export const Editor = ({
                   columnCount: 2,
                   gridRow: `1 / span ${Math.ceil(pages.length / 2)}`
                 }}
-                onClick={(e) => {
-                  // Ensure clicking anywhere focuses the editor
-                  if (editor) {
+                onClick={() => {
+                  // Clicking anywhere on the document focuses the editor
+                  if (editor && !editor.isFocused) {
                     editor.commands.focus('end');
                   }
                 }}

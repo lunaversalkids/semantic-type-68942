@@ -85,16 +85,23 @@ export const FindReplaceDialog = ({ open, onOpenChange, editor }: FindReplaceDia
     return () => clearTimeout(timeoutId);
   }, [findText, wholeWords, matchCase, editor, open]);
 
-  // Keyboard navigation
+  // Keyboard navigation - only when input fields are focused
   useEffect(() => {
     if (!open) return;
 
     const handleKeyDown = (e: KeyboardEvent) => {
-      // Arrow navigation when find dialog is open
-      if (e.key === 'ArrowRight' || (e.key === 'Enter' && !e.shiftKey)) {
+      // Only handle keyboard navigation when the find/replace inputs are focused
+      const target = e.target as HTMLElement;
+      const isInputFocused = target.tagName === 'INPUT' && 
+        (target.id === 'find' || target.id === 'replace');
+      
+      if (!isInputFocused) return;
+      
+      // Enter key navigation in find/replace fields
+      if (e.key === 'Enter' && !e.shiftKey) {
         e.preventDefault();
         handleFindNext();
-      } else if (e.key === 'ArrowLeft' || (e.key === 'Enter' && e.shiftKey)) {
+      } else if (e.key === 'Enter' && e.shiftKey) {
         e.preventDefault();
         handleFindPrevious();
       }
@@ -354,20 +361,25 @@ export const FindReplaceDialog = ({ open, onOpenChange, editor }: FindReplaceDia
                 className="h-7 text-xs"
               />
             </div>
-            <div className="flex gap-2">
-              <Button onClick={handleFindPrevious} variant="outline" size="sm" className="h-7 text-xs flex-1" disabled={totalMatches === 0}>
+            <div className="flex gap-2 items-center">
+              {totalMatches > 0 && (
+                <div className="text-xs text-muted-foreground font-medium whitespace-nowrap mr-1">
+                  {currentMatch} of {totalMatches}
+                </div>
+              )}
+              <Button onClick={handleFindPrevious} variant="outline" size="sm" className="h-7 text-xs px-2" disabled={totalMatches === 0}>
                 ← Prev
               </Button>
-              <Button onClick={handleFindNext} variant="outline" size="sm" className="h-7 text-xs flex-1" disabled={totalMatches === 0}>
+              <Button onClick={handleFindNext} variant="outline" size="sm" className="h-7 text-xs px-2" disabled={totalMatches === 0}>
                 Next →
               </Button>
-              <Button onClick={handleReplace} size="sm" className="h-7 text-xs flex-1" disabled={totalMatches === 0}>
+              <Button onClick={handleReplace} size="sm" className="h-7 text-xs px-3" disabled={totalMatches === 0}>
                 Replace All
               </Button>
             </div>
           </div>
 
-          <div className="flex flex-wrap items-center justify-between gap-3 text-xs">
+          <div className="flex flex-wrap items-center gap-3 text-xs">
             <div className="flex gap-4 flex-wrap items-center">
               <div className="flex items-center space-x-1">
                 <Checkbox 
@@ -407,12 +419,6 @@ export const FindReplaceDialog = ({ open, onOpenChange, editor }: FindReplaceDia
                 </div>
               </RadioGroup>
             </div>
-            
-            {totalMatches > 0 && (
-              <div className="text-xs text-muted-foreground font-medium">
-                {currentMatch} of {totalMatches}
-              </div>
-            )}
           </div>
         </div>
       </DialogContent>
