@@ -155,12 +155,12 @@ export const Editor = ({
     setPages(['page-1', 'page-2', 'page-3']);
   }, []);
 
-  // Handle zoom with mouse wheel
+  // Handle zoom with mouse wheel - smoother with smaller increments
   useEffect(() => {
     const handleWheel = (e: WheelEvent) => {
       if (e.ctrlKey || e.metaKey) {
         e.preventDefault();
-        const delta = e.deltaY > 0 ? -0.1 : 0.1;
+        const delta = e.deltaY > 0 ? -0.05 : 0.05;
         setZoom(prev => Math.max(0.25, Math.min(2, prev + delta)));
       }
     };
@@ -199,7 +199,10 @@ export const Editor = ({
         </button>
       </div>
 
-      <div className="relative" style={{ transform: `scale(${zoom})`, transformOrigin: 'top center' }}>
+      <div 
+        className="relative transition-transform duration-200 ease-out" 
+        style={{ transform: `scale(${zoom})`, transformOrigin: 'top center' }}
+      >
         <EditorContextMenu
           editor={editor}
           onApplyToAll={onApplyToAll}

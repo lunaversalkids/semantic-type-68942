@@ -335,6 +335,12 @@ button[data-active="true"] {
 .three-page-layout {
   position: relative;
   z-index: 1;
+  pointer-events: none;
+}
+
+.three-page-layout .top-page-wrapper,
+.three-page-layout .bottom-pages-wrapper {
+  pointer-events: none;
 }
 
 .top-page-wrapper {
@@ -367,15 +373,18 @@ button[data-active="true"] {
   padding-bottom: 4rem;
   box-sizing: border-box;
   cursor: text;
+  pointer-events: auto;
 }
 
-/* Ensure editor is interactive */
-.three-page-editor-wrapper {
+/* Ensure editor is fully interactive */
+.three-page-editor-wrapper,
+.three-page-editor-wrapper .ProseMirror,
+.three-page-editor-wrapper .ProseMirror * {
   pointer-events: auto !important;
 }
 
-.three-page-editor-wrapper * {
-  pointer-events: auto !important;
+.three-page-layout > * {
+  pointer-events: none !important;
 }
 
 /* Print support for page breaks */
