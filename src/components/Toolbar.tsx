@@ -619,6 +619,8 @@ export const Toolbar = ({
         open={importOpen} 
         onOpenChange={setImportOpen}
         editor={editor}
+        onSavePrompt={handleSavePrompt}
+        isDocumentSaved={documentSaved}
       />
       <ExportDialog 
         open={exportOpen} 
