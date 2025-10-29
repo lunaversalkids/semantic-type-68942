@@ -374,16 +374,17 @@ button[data-active="true"] {
 }
 
 .editor-overlay .ProseMirror {
+  /* Position to start at page 1 (right column, row 1) */
   grid-column: 2;
-  grid-row: 1;
+  grid-row: 1 / -1;
   padding: 4rem;
-  padding-bottom: 6rem;
-  min-height: 11in;
-  width: 8.5in;
   cursor: text !important;
   pointer-events: auto !important;
   user-select: text !important;
   -webkit-user-select: text !important;
+  min-height: 11in;
+  width: 8.5in;
+  box-sizing: border-box;
 }
 
 /* Ensure all editor content is clickable and editable */
