@@ -365,24 +365,30 @@ button[data-active="true"] {
 .editor-overlay {
   grid-column: 1 / -1;
   grid-row: 1 / -1;
-  position: relative;
   pointer-events: auto !important;
   z-index: 10;
-  cursor: text;
+  display: grid;
+  grid-template-columns: 8.5in 8.5in;
+  column-gap: 0.75rem;
+  row-gap: 1rem;
 }
 
 .editor-overlay .ProseMirror {
-  position: absolute;
-  top: 0;
-  /* Start at page 1 position (right column) */
-  left: calc(8.5in + 0.75rem);
-  width: 8.5in;
-  padding: 4rem;
+  /* Span across all pages */
+  grid-column: 1 / -1;
+  grid-row: 1 / -1;
   cursor: text !important;
   pointer-events: auto !important;
   user-select: text !important;
   -webkit-user-select: text !important;
-  min-height: calc(11in + 11in + 1rem); /* Height for page 1 + page 2 */
+  
+  /* Use CSS columns to create two-column layout matching the page grid */
+  padding: 4rem;
+  column-count: 2;
+  column-width: 8.5in;
+  column-gap: 0.75rem;
+  column-fill: auto;
+  min-height: calc(11in * 3); /* Ensure it covers at least 3 pages vertically */
   box-sizing: border-box;
 }
 
