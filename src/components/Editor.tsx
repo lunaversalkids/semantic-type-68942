@@ -94,6 +94,8 @@ export const Editor = ({
 
   const [pages, setPages] = useState<string[]>([]);
   const [zoom, setZoom] = useState(1);
+  const [targetZoom, setTargetZoom] = useState(1);
+  const [isZooming, setIsZooming] = useState(false);
 
   const editor = useEditor({
     extensions: [
@@ -155,13 +157,33 @@ export const Editor = ({
     setPages(['page-1', 'page-2', 'page-3']);
   }, []);
 
-  // Handle zoom with mouse wheel - smoother with smaller increments
+  // Smooth zoom animation with RAF
+  useEffect(() => {
+    if (Math.abs(targetZoom - zoom) < 0.001) {
+      setIsZooming(false);
+      return;
+    }
+
+    setIsZooming(true);
+    const animate = () => {
+      setZoom(prev => {
+        const diff = targetZoom - prev;
+        if (Math.abs(diff) < 0.001) return targetZoom;
+        return prev + diff * 0.15; // Smooth easing
+      });
+    };
+
+    const rafId = requestAnimationFrame(animate);
+    return () => cancelAnimationFrame(rafId);
+  }, [zoom, targetZoom]);
+
+  // Handle mouse wheel zoom (Ctrl/Cmd + scroll)
   useEffect(() => {
     const handleWheel = (e: WheelEvent) => {
       if (e.ctrlKey || e.metaKey) {
         e.preventDefault();
-        const delta = e.deltaY > 0 ? -0.05 : 0.05;
-        setZoom(prev => Math.max(0.25, Math.min(2, prev + delta)));
+        const delta = e.deltaY > 0 ? -0.03 : 0.03; // Smaller increments for smoothness
+        setTargetZoom(prev => Math.max(0.5, Math.min(3, prev + delta)));
       }
     };
 
@@ -169,30 +191,94 @@ export const Editor = ({
     return () => window.removeEventListener('wheel', handleWheel);
   }, []);
 
+  // Handle pinch-to-zoom for touch devices
+  useEffect(() => {
+    let lastDistance = 0;
+
+    const handleTouchStart = (e: TouchEvent) => {
+      if (e.touches.length === 2) {
+        const touch1 = e.touches[0];
+        const touch2 = e.touches[1];
+        lastDistance = Math.hypot(
+          touch2.clientX - touch1.clientX,
+          touch2.clientY - touch1.clientY
+        );
+      }
+    };
+
+    const handleTouchMove = (e: TouchEvent) => {
+      if (e.touches.length === 2) {
+        e.preventDefault();
+        const touch1 = e.touches[0];
+        const touch2 = e.touches[1];
+        const distance = Math.hypot(
+          touch2.clientX - touch1.clientX,
+          touch2.clientY - touch1.clientY
+        );
+
+        if (lastDistance > 0) {
+          const delta = (distance - lastDistance) * 0.01;
+          setTargetZoom(prev => Math.max(0.5, Math.min(3, prev + delta)));
+        }
+
+        lastDistance = distance;
+      }
+    };
+
+    const handleTouchEnd = () => {
+      lastDistance = 0;
+    };
+
+    document.addEventListener('touchstart', handleTouchStart);
+    document.addEventListener('touchmove', handleTouchMove, { passive: false });
+    document.addEventListener('touchend', handleTouchEnd);
+
+    return () => {
+      document.removeEventListener('touchstart', handleTouchStart);
+      document.removeEventListener('touchmove', handleTouchMove);
+      document.removeEventListener('touchend', handleTouchEnd);
+    };
+  }, []);
+
   return (
     <div className="h-full flex items-start justify-center bg-[hsl(var(--editor-bg))] p-8 overflow-auto">
       {/* Zoom controls */}
-      <div className="fixed top-20 right-8 z-30 flex flex-col gap-2 bg-background border border-border rounded-lg p-2 shadow-lg">
+      <div className="fixed top-20 right-8 z-30 flex flex-col gap-3 bg-background border border-border rounded-lg p-3 shadow-lg">
         <button
-          onClick={() => setZoom(prev => Math.min(2, prev + 0.1))}
-          className="px-3 py-1 text-sm hover:bg-accent rounded"
+          onClick={() => setTargetZoom(prev => Math.min(3, prev + 0.1))}
+          className="px-3 py-1.5 text-sm hover:bg-accent rounded transition-colors"
           title="Zoom in (Ctrl/Cmd + Scroll)"
         >
           +
         </button>
-        <span className="px-3 py-1 text-xs text-center text-muted-foreground">
-          {Math.round(zoom * 100)}%
-        </span>
+        
+        {/* Zoom slider */}
+        <div className="flex flex-col items-center gap-2 py-2">
+          <input
+            type="range"
+            min="50"
+            max="300"
+            value={Math.round(targetZoom * 100)}
+            onChange={(e) => setTargetZoom(Number(e.target.value) / 100)}
+            className="zoom-slider"
+            style={{ writingMode: 'vertical-lr', direction: 'rtl', height: '120px' }}
+            title="Adjust zoom level"
+          />
+          <span className="text-xs text-center text-muted-foreground font-medium min-w-[3rem]">
+            {Math.round(zoom * 100)}%
+          </span>
+        </div>
+
         <button
-          onClick={() => setZoom(prev => Math.max(0.25, prev - 0.1))}
-          className="px-3 py-1 text-sm hover:bg-accent rounded"
+          onClick={() => setTargetZoom(prev => Math.max(0.5, prev - 0.1))}
+          className="px-3 py-1.5 text-sm hover:bg-accent rounded transition-colors"
           title="Zoom out (Ctrl/Cmd + Scroll)"
         >
           −
         </button>
         <button
-          onClick={() => setZoom(1)}
-          className="px-3 py-1 text-xs hover:bg-accent rounded"
+          onClick={() => setTargetZoom(1)}
+          className="px-3 py-1 text-xs hover:bg-accent rounded transition-colors"
           title="Reset zoom"
         >
           Reset
@@ -200,8 +286,12 @@ export const Editor = ({
       </div>
 
       <div 
-        className="relative transition-transform duration-200 ease-out" 
-        style={{ transform: `scale(${zoom})`, transformOrigin: 'top center' }}
+        className="editor-zoom-container" 
+        style={{ 
+          transform: `scale(${zoom})`, 
+          transformOrigin: 'top center',
+          transition: isZooming ? 'none' : 'transform 0.1s ease-out'
+        }}
       >
         <EditorContextMenu
           editor={editor}

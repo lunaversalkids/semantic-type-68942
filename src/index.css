@@ -332,10 +332,16 @@ button[data-active="true"] {
 }
 
 /* Three-page layout: one page top right, two pages bottom */
+.editor-zoom-container {
+  position: relative;
+  will-change: transform;
+}
+
 .three-page-layout {
   position: relative;
   z-index: 1;
   pointer-events: none;
+  user-select: none;
 }
 
 .three-page-layout .top-page-wrapper,
@@ -359,9 +365,10 @@ button[data-active="true"] {
   top: 0;
   left: 0;
   width: 100%;
-  height: calc(11in * 2 + 2rem); /* Two rows of pages plus gap */
+  height: calc(11in * 2 + 2rem);
   z-index: 10;
   pointer-events: auto;
+  cursor: text;
 }
 
 .three-page-editor-wrapper .ProseMirror {
@@ -372,19 +379,74 @@ button[data-active="true"] {
   padding: 4rem;
   padding-bottom: 4rem;
   box-sizing: border-box;
-  cursor: text;
   pointer-events: auto;
+  user-select: text;
+  -webkit-user-select: text;
+  -moz-user-select: text;
+  -ms-user-select: text;
 }
 
-/* Ensure editor is fully interactive */
+/* Ensure editor is fully interactive and clickable */
 .three-page-editor-wrapper,
 .three-page-editor-wrapper .ProseMirror,
-.three-page-editor-wrapper .ProseMirror * {
+.three-page-editor-wrapper .ProseMirror *,
+.three-page-editor-wrapper .ProseMirror p,
+.three-page-editor-wrapper .ProseMirror h1,
+.three-page-editor-wrapper .ProseMirror h2,
+.three-page-editor-wrapper .ProseMirror h3,
+.three-page-editor-wrapper .ProseMirror ul,
+.three-page-editor-wrapper .ProseMirror ol,
+.three-page-editor-wrapper .ProseMirror li {
   pointer-events: auto !important;
+  cursor: text !important;
 }
 
-.three-page-layout > * {
+.three-page-layout > *,
+.three-page-layout .top-page-wrapper *,
+.three-page-layout .bottom-pages-wrapper * {
   pointer-events: none !important;
+  user-select: none !important;
+}
+
+/* Zoom slider styling */
+.zoom-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  background: hsl(var(--muted));
+  outline: none;
+  border-radius: 8px;
+  width: 6px;
+}
+
+.zoom-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  background: hsl(var(--primary));
+  cursor: pointer;
+  border-radius: 50%;
+  transition: all 0.15s ease;
+}
+
+.zoom-slider::-webkit-slider-thumb:hover {
+  background: hsl(var(--primary) / 0.8);
+  transform: scale(1.1);
+}
+
+.zoom-slider::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  background: hsl(var(--primary));
+  cursor: pointer;
+  border-radius: 50%;
+  border: none;
+  transition: all 0.15s ease;
+}
+
+.zoom-slider::-moz-range-thumb:hover {
+  background: hsl(var(--primary) / 0.8);
+  transform: scale(1.1);
 }
 
 /* Print support for page breaks */
