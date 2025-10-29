@@ -39,12 +39,25 @@ export const FindReplaceDialog = ({ open, onOpenChange, editor }: FindReplaceDia
         setFindText(selectedText.trim());
       }
     }
+    
+    // Clear highlights when dialog closes
+    if (!open && editor) {
+      editor.commands.unsetHighlight();
+      setTotalMatches(0);
+      setCurrentMatch(0);
+      setAllMatchPositions([]);
+    }
   }, [open, editor]);
 
   // Real-time search: automatically search as user types
   useEffect(() => {
-    if (!editor || !findText || !open) {
-      // Clear highlights when no search text
+    if (!editor || !open) {
+      return;
+    }
+
+    if (!findText) {
+      // Clear all highlights when search is empty
+      editor.commands.unsetHighlight();
       setTotalMatches(0);
       setCurrentMatch(0);
       setAllMatchPositions([]);
@@ -65,7 +78,7 @@ export const FindReplaceDialog = ({ open, onOpenChange, editor }: FindReplaceDia
     };
 
     // Debounce for better performance
-    const timeoutId = setTimeout(searchRealtime, 150);
+    const timeoutId = setTimeout(searchRealtime, 100);
     return () => clearTimeout(timeoutId);
   }, [findText, wholeWords, matchCase, editor, open]);
 
@@ -145,31 +158,32 @@ export const FindReplaceDialog = ({ open, onOpenChange, editor }: FindReplaceDia
         to: currentPos.to 
       }).run();
       
-      // Smooth scroll to current match
+      // Smooth scroll to current match - Apple Notes style
       setTimeout(() => {
         const { view } = editor;
         const coords = view.coordsAtPos(currentPos.from);
-        const editorRect = view.dom.getBoundingClientRect();
-        const scrollContainer = view.dom.closest('.overflow-auto');
+        
+        // Find scroll container
+        const scrollContainer = document.querySelector('.overflow-auto');
         
         if (scrollContainer) {
-          const scrollTop = coords.top - editorRect.top - (window.innerHeight / 3);
+          const containerRect = scrollContainer.getBoundingClientRect();
+          const targetY = coords.top - containerRect.top - (containerRect.height / 3);
+          
           scrollContainer.scrollTo({
-            top: Math.max(0, scrollTop),
+            top: scrollContainer.scrollTop + targetY,
             behavior: 'smooth'
           });
         }
       }, 50);
     }
     
-    // Apply background highlight to all other matches
+    // Apply light purple highlight to all matches
     matches.forEach((pos, idx) => {
-      if (idx !== currentIndex) {
-        editor.chain()
-          .setTextSelection({ from: pos.from, to: pos.to })
-          .setHighlight({ color: '#fef08a' }) // Yellow highlight for non-current matches
-          .run();
-      }
+      editor.chain()
+        .setTextSelection({ from: pos.from, to: pos.to })
+        .setHighlight({ color: idx === currentIndex ? '#e9d5ff' : '#f3e8ff' }) // Light purple for current, lighter purple for others
+        .run();
     });
     
     // Reselect current match to keep it visually distinct

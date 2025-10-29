@@ -391,6 +391,32 @@ button[data-active="true"] {
   pointer-events: auto !important;
 }
 
+/* Light purple highlight styles - Apple Notes inspired */
+.ProseMirror mark {
+  border-radius: 0.125rem;
+  padding: 0.0625rem 0;
+  transition: background-color 0.3s ease, opacity 0.3s ease;
+}
+
+.ProseMirror mark[data-color="#e9d5ff"] {
+  background-color: #e9d5ff;
+  animation: highlightPulse 0.5s ease-in-out;
+}
+
+.ProseMirror mark[data-color="#f3e8ff"] {
+  background-color: #f3e8ff;
+  opacity: 0.8;
+}
+
+@keyframes highlightPulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
 .ProseMirror {
   outline: none;
   width: 100%;
