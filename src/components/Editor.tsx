@@ -315,6 +315,9 @@ export const Editor = ({
               {/* Editable content overlay */}
               <div 
                 className="editor-overlay"
+                style={{
+                  gridRow: `1 / span ${Math.ceil(pages.length / 2) + 1}`
+                }}
                 onClick={() => {
                   // Clicking anywhere on the document focuses the editor
                   if (editor && !editor.isFocused) {
