@@ -40,6 +40,7 @@ const Index = () => {
   const [documentManagerOpen, setDocumentManagerOpen] = useState(false);
   const [findReplaceOpen, setFindReplaceOpen] = useState(false);
   const [stylesDrawerOpen, setStylesDrawerOpen] = useState(false);
+  const [styles, setStyles] = useState(defaultStyles);
   const { toast } = useToast();
 
   // Auto-renumber footnotes when content changes
@@ -418,6 +419,7 @@ const Index = () => {
         <LeftSidebar 
           collapsed={leftSidebarCollapsed}
           onToggleCollapse={() => setLeftSidebarCollapsed(!leftSidebarCollapsed)}
+          onStylesClick={() => setStylesDrawerOpen(true)}
         />
         <main className="overflow-hidden">
           <Editor 
@@ -460,7 +462,12 @@ const Index = () => {
         onClose={() => setFindReplaceOpen(false)}
       />
       
-      <StylesDrawer open={stylesDrawerOpen} onClose={() => setStylesDrawerOpen(false)} />
+      <StylesDrawer 
+        open={stylesDrawerOpen} 
+        onClose={() => setStylesDrawerOpen(false)} 
+        styles={styles}
+        onStylesChange={setStyles}
+      />
       
       <ApplyToAllDialog
         open={applyToAllOpen}
