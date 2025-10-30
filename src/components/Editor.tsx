@@ -137,17 +137,18 @@ export const Editor = ({
       }),
     ],
     content: `
-      <h1>The Semantic Editor</h1>
-      <p>This is a professional document editor with semantic styling capabilities. Select text and apply named styles like <strong>Definition</strong>, <em>Term</em>, or <em>Verse</em>.</p>
-      <h2>Key Features</h2>
-      <ul>
-        <li>Apply semantic styles that carry meaning beyond appearance</li>
-        <li>Find and replace while preserving or re-applying styles</li>
-        <li>Define rules to automatically style matching text</li>
-        <li>Create beautiful, consistent documents</li>
-      </ul>
-      <h2>Example Terms</h2>
-      <p>Words like <strong>Elohim</strong> or <strong>H1234</strong> can be automatically styled based on semantic rules you define.</p>
+      <h1 style="color: #6366f1; font-size: 3rem; margin-bottom: 1.5rem;">Insects</h1>
+      
+      <h2 style="font-size: 1.5rem; margin-bottom: 1rem;">Arthropods</h2>
+      <p>Insects are an ind-isub sclass units of the class <span style="color: #6366f1; font-weight: 500;">Hexapoda</span> - In from novellisms them from other arthropods by their three-part body, compound eyes, and external skeleton, in an abusant serza.</p>
+      
+      <h2 style="color: #6366f1; font-size: 1.5rem; margin: 1.5rem 0 1rem 0;">Hexapoda</h2>
+      <p><span style="color: #6366f1;">Arthroprod</span> <em>soptrtrice</em> <span style="color: #6366f1;">Hexapoda</span></p>
+      <p>Insects comprise the most diverse group of animals an Earth.</p>
+      
+      <h2 style="font-size: 1.5rem; margin: 1.5rem 0 1rem 0;">Classification and Evolution</h2>
+      <p><span style="color: #6366f1;">Insects</span> comprise the most diverse group of animals on Earth.</p>
+      <p>Insects are the largest group of arthropods. The evolution, their evolution, Murninary endurseries, during the De-vonian period after thorough</p>
     `,
     editorProps: {
       attributes: {

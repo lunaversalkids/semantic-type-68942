@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { Header } from '@/components/Header';
 import { Toolbar } from '@/components/Toolbar';
 import { StylePanel } from '@/components/StylePanel';
+import { LeftSidebar } from '@/components/LeftSidebar';
+import { FindReplaceBar } from '@/components/FindReplaceBar';
 import { Editor } from '@/components/Editor';
 import { ApplyToAllDialog } from '@/components/ApplyToAllDialog';
 import { PageNumberDialog } from '@/components/PageNumberDialog';
@@ -21,6 +23,7 @@ const Index = () => {
   const [currentPageForNumber, setCurrentPageForNumber] = useState(1);
   const [helpModeActive, setHelpModeActive] = useState(false);
   const [stylePanelCollapsed, setStylePanelCollapsed] = useState(false);
+  const [leftSidebarCollapsed, setLeftSidebarCollapsed] = useState(false);
   const [pageNumbersVisibility, setPageNumbersVisibility] = useState<Record<number, boolean>>({
     1: true,
     2: true,
@@ -413,18 +416,10 @@ const Index = () => {
         onCloudClick={() => setDocumentManagerOpen(true)}
         documentSaved={documentSaved}
       />
-      <Toolbar 
-        editor={editor}
-        documentSaved={documentSaved}
-        onDocumentSavedChange={setDocumentSaved}
-        saveDialogOpen={saveDialogOpen}
-        onSaveDialogChange={setSaveDialogOpen}
-      />
       <div className="flex-1 flex overflow-hidden">
-        <StylePanel 
-          editor={editor} 
-          collapsed={stylePanelCollapsed}
-          onToggleCollapse={() => setStylePanelCollapsed(!stylePanelCollapsed)}
+        <LeftSidebar 
+          collapsed={leftSidebarCollapsed}
+          onToggleCollapse={() => setLeftSidebarCollapsed(!leftSidebarCollapsed)}
         />
         <main className="flex-1 overflow-hidden">
           <Editor 
@@ -457,7 +452,13 @@ const Index = () => {
             }}
           />
         </main>
+        <StylePanel 
+          editor={editor} 
+          collapsed={stylePanelCollapsed}
+          onToggleCollapse={() => setStylePanelCollapsed(!stylePanelCollapsed)}
+        />
       </div>
+      <FindReplaceBar />
       
       <ApplyToAllDialog
         open={applyToAllOpen}

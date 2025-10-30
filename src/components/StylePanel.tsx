@@ -68,24 +68,16 @@ export const StylePanel = ({
     setSelectedStyle(updatedStyle);
     setStyles(styles.map(s => s.id === selectedStyle.id ? updatedStyle : s));
   };
-  return <div className={`h-full bg-sidebar border-r border-sidebar-border flex flex-col style-panel transition-all duration-300 ${collapsed ? 'w-12' : 'w-80'}`}>
-      <div className={`p-4 border-b border-sidebar-border ${collapsed ? 'p-2' : ''}`}>
+  return <div className={`h-full bg-sidebar border-l border-sidebar-border flex flex-col style-panel transition-all duration-300 ${collapsed ? 'w-0 overflow-hidden' : 'w-80'}`}>
+      <div className={`p-4 border-b border-sidebar-border`}>
         <div className="flex items-center justify-between mb-4">
-          {!collapsed && <h2 className="text-lg font-semibold flex items-center gap-2">
-              <Palette className="w-5 h-5 text-primary" />
-              Styles
-            </h2>}
-          {collapsed && <Palette className="w-5 h-5 text-primary mx-auto" />}
-          {!collapsed && <Button size="sm" variant="ghost" className="h-8 w-8 p-0">
-              <Plus className="w-4 h-4" />
-            </Button>}
+          <h2 className="text-lg font-semibold text-sidebar-foreground">
+            Text Style
+          </h2>
+          <Button size="sm" variant="ghost" className="h-8 w-8 p-0" onClick={onToggleCollapse}>
+            <ChevronRight className="w-4 h-4" />
+          </Button>
         </div>
-        <Button size="sm" variant="ghost" className="h-8 w-full p-0 hover:bg-sidebar-accent" onClick={onToggleCollapse}>
-          {collapsed ? <ChevronRight className="w-4 h-4" /> : <ChevronLeft className="w-4 h-4" />}
-        </Button>
-        {!collapsed && <p className="text-xs text-muted-foreground">
-            Define semantic styles for your document
-          </p>}
       </div>
 
       {!collapsed && <>

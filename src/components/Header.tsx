@@ -15,37 +15,38 @@ export const Header = ({
   onCloudClick,
   documentSaved = true
 }: HeaderProps) => {
-  return <header className="h-16 border-b border-border bg-background px-6 flex items-center justify-between">
+  return (
+    <header className="h-16 border-b border-sidebar-border bg-primary px-6 flex items-center justify-between">
       <div className="flex items-center gap-3">
-        <img src={logo} alt="Logo" className="w-12 h-12 rounded-lg" />
-        <div>
-          <h1 className="text-xl font-bold">Doc One</h1>
-          <p className="text-xs text-muted-foreground">A Professional Semantic Word Processor Editor</p>
-        </div>
+        <img src={logo} alt="Logo" className="w-10 h-10 rounded-lg" />
+        <span className="text-lg font-semibold text-primary-foreground">Doc One</span>
       </div>
 
-      <div className="flex items-center gap-3">
-        <Button variant="outline" size="sm" onClick={onHelpClick}>
-          <HelpCircle className="w-4 h-4 mr-2" />
-          Help
+      <div className="flex items-center gap-2 bg-primary/30 px-4 py-2 rounded-lg">
+        <Sparkles className="w-5 h-5 text-primary-foreground/80" />
+        <span className="text-sm font-medium text-primary-foreground">Insects</span>
+      </div>
+
+      <div className="flex items-center gap-2">
+        <Button variant="ghost" size="icon" className="text-primary-foreground hover:bg-primary/80" title="Comments">
+          <HelpCircle className="w-5 h-5" />
         </Button>
-        <Button variant="outline" size="sm" onClick={onCloudClick}>
-          <Cloud className="w-4 h-4 mr-2" />
-          My Documents
+        <Button variant="ghost" size="icon" className="text-primary-foreground hover:bg-primary/80" title="Edit">
+          <Save className="w-5 h-5" />
         </Button>
-        <Button variant="outline" size="sm">
-          <Sparkles className="w-4 h-4 mr-2" />
-          AI Assist
+        <Button variant="ghost" size="icon" className="text-primary-foreground hover:bg-primary/80" title="Add">
+          <Sparkles className="w-5 h-5" />
         </Button>
-        <Button 
-          size="sm" 
-          onClick={onSaveClick}
-          variant={documentSaved ? "default" : "default"}
-          className={!documentSaved ? "animate-pulse" : ""}
-        >
-          <Save className="w-4 h-4 mr-2" />
-          {documentSaved ? 'Save Document' : 'Save Changes'}
+        <Button variant="ghost" size="icon" className="text-primary-foreground hover:bg-primary/80" title="Search" onClick={onHelpClick}>
+          <HelpCircle className="w-5 h-5" />
+        </Button>
+        <Button variant="ghost" size="icon" className="text-primary-foreground hover:bg-primary/80" title="Cloud" onClick={onCloudClick}>
+          <Cloud className="w-5 h-5" />
+        </Button>
+        <Button variant="ghost" size="icon" className="text-primary-foreground hover:bg-primary/80" title="Fullscreen">
+          <Save className="w-5 h-5" />
         </Button>
       </div>
-    </header>;
+    </header>
+  );
 };

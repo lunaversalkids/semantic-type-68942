@@ -8,48 +8,48 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 0 0% 13%;
+    --background: 250 100% 97%;
+    --foreground: 253 49% 25%;
 
     --card: 0 0% 100%;
-    --card-foreground: 0 0% 13%;
+    --card-foreground: 253 49% 25%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 13%;
+    --popover-foreground: 253 49% 25%;
 
-    --primary: 253 49% 47%;
+    --primary: 253 72% 60%;
     --primary-foreground: 0 0% 100%;
 
     --secondary: 253 100% 95%;
     --secondary-foreground: 253 49% 25%;
 
-    --muted: 240 5% 96%;
-    --muted-foreground: 240 4% 46%;
+    --muted: 250 60% 90%;
+    --muted-foreground: 253 20% 50%;
 
     --accent: 253 72% 69%;
-    --accent-foreground: 253 49% 15%;
+    --accent-foreground: 0 0% 100%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 240 6% 90%;
-    --input: 240 6% 90%;
-    --ring: 253 49% 47%;
+    --border: 253 30% 85%;
+    --input: 253 30% 85%;
+    --ring: 253 72% 60%;
 
     --radius: 0.5rem;
 
-    --editor-bg: 0 0% 98%;
+    --editor-bg: 250 100% 97%;
     --page-bg: 0 0% 100%;
     --page-shadow: 240 5% 84%;
     
-    --sidebar-background: 0 0% 100%;
-    --sidebar-foreground: 0 0% 13%;
-    --sidebar-primary: 253 49% 47%;
+    --sidebar-background: 250 60% 92%;
+    --sidebar-foreground: 253 49% 25%;
+    --sidebar-primary: 253 72% 60%;
     --sidebar-primary-foreground: 0 0% 100%;
     --sidebar-accent: 253 100% 95%;
     --sidebar-accent-foreground: 253 49% 25%;
-    --sidebar-border: 240 6% 90%;
-    --sidebar-ring: 253 49% 47%;
+    --sidebar-border: 253 30% 85%;
+    --sidebar-ring: 253 72% 60%;
   }
 
   .dark {
