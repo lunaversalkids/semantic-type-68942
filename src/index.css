@@ -357,6 +357,7 @@ button[data-active="true"] {
   position: relative;
   display: grid;
   grid-template-columns: 8.5in;
+  grid-auto-rows: 11in;
   gap: 0.25rem;
   min-height: 33in;
 }
@@ -376,11 +377,12 @@ button[data-active="true"] {
 
 /* Editor overlay - fully interactive */
 .editor-overlay {
-  grid-column: 1 / -1;
-  grid-row: 1 / -1;
+  grid-column: 1;
+  grid-row: 1 / span 3;
   pointer-events: auto !important;
   z-index: 10;
   cursor: text;
+  min-height: 33in;
 }
 
 .editor-overlay .ProseMirror {
