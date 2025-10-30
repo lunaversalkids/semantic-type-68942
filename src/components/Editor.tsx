@@ -291,10 +291,6 @@ export const Editor = ({
                     <Card 
                       key={pageId}
                       className="page-card w-[8.5in] h-[11in] bg-[hsl(var(--page-bg))] shadow-2xl"
-                      style={{
-                        gridColumn: pageNum === 1 ? '2' : pageNum === 2 ? '1' : '2',
-                        gridRow: pageNum === 1 ? '1' : '2'
-                      }}
                     >
                       {pageNumbersVisibility[pageNum] !== false && (
                         <div 
