@@ -343,7 +343,8 @@ button[data-active="true"] {
   position: relative;
   display: grid;
   grid-template-columns: 8.5in 8.5in;
-  gap: 0;
+  column-gap: 0;
+  row-gap: 0;
   min-height: 24in;
 }
 
@@ -362,25 +363,23 @@ button[data-active="true"] {
 
 /* Editor overlay - fully interactive */
 .editor-overlay {
-  grid-column: 1 / -1;
-  grid-row: 1 / -1;
+  grid-column: 2;
+  grid-row: 1;
   pointer-events: auto !important;
   z-index: 10;
   cursor: text;
-  display: contents;
 }
 
 .editor-overlay .ProseMirror {
-  grid-column: 1 / -1;
-  grid-row: 1 / -1;
-  width: 100%;
-  min-height: 100%;
+  width: 8.5in;
+  min-height: 11in;
   padding: 4rem;
   cursor: text !important;
   pointer-events: auto !important;
   user-select: text !important;
   -webkit-user-select: text !important;
   box-sizing: border-box;
+  overflow: hidden;
 }
 
 /* Ensure all editor content is clickable and editable */
