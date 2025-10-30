@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 import { Header } from '@/components/Header';
-import { Toolbar } from '@/components/Toolbar';
 import { TextStylePanel } from '@/components/TextStylePanel';
 import { LeftSidebar } from '@/components/LeftSidebar';
-import { FindReplaceBar } from '@/components/FindReplaceBar';
+import { FindReplaceBottomBar } from '@/components/FindReplaceBottomBar';
+import { StylesDrawer } from '@/components/StylesDrawer';
 import { Editor } from '@/components/Editor';
 import { ApplyToAllDialog } from '@/components/ApplyToAllDialog';
 import { PageNumberDialog } from '@/components/PageNumberDialog';
@@ -40,6 +40,7 @@ const Index = () => {
   const [saveDialogOpen, setSaveDialogOpen] = useState(false);
   const [documentManagerOpen, setDocumentManagerOpen] = useState(false);
   const [findReplaceOpen, setFindReplaceOpen] = useState(false);
+  const [stylesDrawerOpen, setStylesDrawerOpen] = useState(false);
   const { toast } = useToast();
 
   // Auto-renumber footnotes when content changes
@@ -408,20 +409,18 @@ const Index = () => {
   };
 
   return (
-    <div className="h-screen flex flex-col overflow-hidden">
+    <div className="h-screen grid grid-rows-[58px_1fr_86px] gap-3 p-3 overflow-hidden">
       <Header 
-        onHelpClick={() => setHelpModeActive(true)} 
-        onSaveClick={() => setSaveDialogOpen(true)}
-        onCloudClick={() => setDocumentManagerOpen(true)}
-        documentSaved={documentSaved}
+        onStylesClick={() => setStylesDrawerOpen(true)}
+        onFindClick={handleFind}
       />
 
-      <div className="flex-1 flex overflow-hidden">
+      <div className="grid grid-cols-[56px_1fr_340px] gap-3 overflow-hidden">
         <LeftSidebar 
           collapsed={leftSidebarCollapsed}
           onToggleCollapse={() => setLeftSidebarCollapsed(!leftSidebarCollapsed)}
         />
-        <main className="flex-1 overflow-hidden">
+        <main className="overflow-hidden">
           <Editor 
             onSelectionChange={setSelectedText} 
             onEditorReady={setEditor}
@@ -455,7 +454,10 @@ const Index = () => {
 
         <TextStylePanel editor={editor} />
       </div>
-      <FindReplaceBar />
+      
+      <FindReplaceBottomBar editor={editor} />
+      
+      <StylesDrawer open={stylesDrawerOpen} onClose={() => setStylesDrawerOpen(false)} />
       
       <ApplyToAllDialog
         open={applyToAllOpen}

@@ -1,51 +1,57 @@
-import { Button } from '@/components/ui/button';
-import { Sparkles, HelpCircle, Save, Cloud } from 'lucide-react';
-import logo from '@/assets/logo.png';
+import { Pen, Navigation, Search, Cloud, Share2, Palette } from 'lucide-react';
 
 interface HeaderProps {
-  onHelpClick?: () => void;
-  onSaveClick?: () => void;
-  onCloudClick?: () => void;
-  documentSaved?: boolean;
+  onStylesClick?: () => void;
+  onFindClick?: () => void;
 }
 
-export const Header = ({
-  onHelpClick,
-  onSaveClick,
-  onCloudClick,
-  documentSaved = true
-}: HeaderProps) => {
+export const Header = ({ onStylesClick, onFindClick }: HeaderProps) => {
   return (
-    <header className="h-16 border-b border-sidebar-border bg-primary px-6 flex items-center justify-between">
-      <div className="flex items-center gap-3">
-        <img src={logo} alt="Logo" className="w-10 h-10 rounded-lg" />
-        <span className="text-lg font-semibold text-primary-foreground">Doc One</span>
+    <header className="bg-[hsl(var(--panel))] border border-[hsl(var(--stroke))] rounded-[var(--radius)] shadow-[0_10px_28px_rgba(96,48,200,.16)] p-2 grid grid-cols-[220px_1fr_360px] items-center gap-2">
+      {/* Brand */}
+      <div className="flex items-center gap-2.5 font-extrabold">
+        <div className="w-7 h-7 rounded-lg bg-gradient-to-b from-[#8D60FF] to-[#6A3CFF] text-white grid place-items-center text-xs">
+          ONE
+        </div>
+        <div className="text-[hsl(var(--ink))]">Doc One</div>
       </div>
 
-      <div className="flex items-center gap-2 bg-primary/30 px-4 py-2 rounded-lg">
-        <Sparkles className="w-5 h-5 text-primary-foreground/80" />
-        <span className="text-sm font-medium text-primary-foreground">Insects</span>
+      {/* Title */}
+      <div className="flex items-center justify-center">
+        <button className="flex items-center gap-2.5 px-3.5 py-2 border border-[hsl(var(--stroke))] rounded-full bg-[hsla(253,100%,64%,0.12)] text-[#4E3DC9] font-bold hover:bg-[hsla(253,100%,64%,0.18)] transition-colors">
+          <span className="text-lg">∞</span>
+          <span>Insects</span>
+        </button>
       </div>
 
-      <div className="flex items-center gap-2">
-        <Button variant="ghost" size="icon" className="text-primary-foreground hover:bg-primary/80" title="Comments">
-          <HelpCircle className="w-5 h-5" />
-        </Button>
-        <Button variant="ghost" size="icon" className="text-primary-foreground hover:bg-primary/80" title="Edit">
-          <Save className="w-5 h-5" />
-        </Button>
-        <Button variant="ghost" size="icon" className="text-primary-foreground hover:bg-primary/80" title="Add">
-          <Sparkles className="w-5 h-5" />
-        </Button>
-        <Button variant="ghost" size="icon" className="text-primary-foreground hover:bg-primary/80" title="Search" onClick={onHelpClick}>
-          <HelpCircle className="w-5 h-5" />
-        </Button>
-        <Button variant="ghost" size="icon" className="text-primary-foreground hover:bg-primary/80" title="Cloud" onClick={onCloudClick}>
-          <Cloud className="w-5 h-5" />
-        </Button>
-        <Button variant="ghost" size="icon" className="text-primary-foreground hover:bg-primary/80" title="Fullscreen">
-          <Save className="w-5 h-5" />
-        </Button>
+      {/* Toolbar */}
+      <div className="flex justify-end gap-2">
+        <button className="h-9 min-w-[36px] px-2.5 border border-[hsl(var(--stroke))] rounded-[var(--r-sm)] bg-white grid place-items-center hover:bg-[hsl(var(--panel-2))] transition-colors" title="Pen / Insert">
+          <Pen className="w-4 h-4 text-[hsl(var(--ink))]" />
+        </button>
+        <button className="h-9 min-w-[36px] px-2.5 border border-[hsl(var(--stroke))] rounded-[var(--r-sm)] bg-white grid place-items-center hover:bg-[hsl(var(--panel-2))] transition-colors" title="Stylus Mode">
+          <Navigation className="w-4 h-4 text-[hsl(var(--ink))]" />
+        </button>
+        <button 
+          onClick={onFindClick}
+          className="h-9 min-w-[36px] px-2.5 border border-[hsl(var(--stroke))] rounded-[var(--r-sm)] bg-white grid place-items-center hover:bg-[hsl(var(--panel-2))] transition-colors" 
+          title="Find & Replace"
+        >
+          <Search className="w-4 h-4 text-[hsl(var(--ink))]" />
+        </button>
+        <button className="h-9 min-w-[36px] px-2.5 border border-[hsl(var(--stroke))] rounded-[var(--r-sm)] bg-white grid place-items-center hover:bg-[hsl(var(--panel-2))] transition-colors" title="Cloud">
+          <Cloud className="w-4 h-4 text-[hsl(var(--ink))]" />
+        </button>
+        <button className="h-9 min-w-[36px] px-2.5 border border-[hsl(var(--stroke))] rounded-[var(--r-sm)] bg-white grid place-items-center hover:bg-[hsl(var(--panel-2))] transition-colors" title="Share/Export">
+          <Share2 className="w-4 h-4 text-[hsl(var(--ink))]" />
+        </button>
+        <button 
+          onClick={onStylesClick}
+          className="h-9 min-w-[36px] px-2.5 border-0 rounded-[var(--r-sm)] bg-gradient-to-b from-[#A77CFF] to-[#7A49FF] text-white grid place-items-center hover:opacity-90 transition-opacity" 
+          title="Styles Drawer"
+        >
+          <Palette className="w-4 h-4" />
+        </button>
       </div>
     </header>
   );
