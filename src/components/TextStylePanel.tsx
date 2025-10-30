@@ -133,7 +133,7 @@ export const TextStylePanel = ({ editor }: TextStylePanelProps) => {
       </div>
 
       {/* Text Alignment Section */}
-      <div className="bg-gradient-to-b from-[#EDE3FF] to-[#E6DBFF] border border-[hsl(var(--stroke))] rounded-xl p-2.5 mb-2.5">
+      <div className="bg-gradient-to-b from-[#EDE3FF] to-[#E6DBFF] border border-[hsl(var(--stroke))] rounded-xl p-2.5 mb-1.5">
         <div className="text-sm font-extrabold mb-1.5 text-[hsl(var(--ink))]">Text</div>
         <div className="bg-gradient-to-b from-[#C9B5FF] to-[#A382FF] rounded-xl p-2">
           {/* First row */}

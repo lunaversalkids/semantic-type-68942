@@ -423,7 +423,7 @@ const Index = () => {
     <div className="h-screen grid grid-rows-[58px_1fr_86px] gap-3 p-3 overflow-hidden">
       <Header 
         onFindClick={handleFind}
-        onDocumentClick={() => setDocumentManagerOpen(true)}
+        onCloudClick={() => setDocumentManagerOpen(true)}
         onPenModeClick={handlePenMode}
         onStylusModeClick={handleStylusMode}
         onExportClick={() => setExportOpen(true)}
