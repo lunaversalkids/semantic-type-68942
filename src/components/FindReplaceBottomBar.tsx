@@ -98,7 +98,7 @@ export const FindReplaceBottomBar = ({ editor, isVisible = true, onClose }: Find
 
   return (
     <div 
-      className={`bg-[hsl(var(--panel))] border border-[hsl(var(--stroke))] rounded-[var(--radius)] shadow-[0_10px_28px_rgba(96,48,200,.16)] p-2.5 px-3 grid grid-cols-[160px_auto_1fr_auto_1fr_auto_220px_auto_auto] items-center gap-2 transition-all duration-300 ${
+      className={`bg-[hsl(var(--panel))] border border-[hsl(var(--stroke))] rounded-[var(--radius)] shadow-[0_10px_28px_rgba(96,48,200,.16)] p-2.5 px-3 grid grid-cols-[160px_auto_1fr_auto_1fr_220px_auto_auto_auto] items-center gap-2 transition-all duration-300 ${
         isVisible ? 'translate-y-0 opacity-100' : 'translate-y-full opacity-0 pointer-events-none'
       }`}
     >
@@ -138,7 +138,7 @@ export const FindReplaceBottomBar = ({ editor, isVisible = true, onClose }: Find
       />
 
       {/* Segmented Control */}
-      <div className="flex gap-1.5 bg-[#EFE7FF] border border-[hsl(var(--stroke))] rounded-[var(--r-sm)] p-1" role="tablist">
+      <div className="flex gap-1.5 bg-[#EFE7FF] border border-[hsl(var(--stroke))] rounded-[var(--r-sm)] p-1 justify-self-end" role="tablist">
         <button
           onClick={() => setMode('keep')}
           className={`px-2.5 py-2 rounded-lg text-xs font-semibold transition-all ${
@@ -166,7 +166,7 @@ export const FindReplaceBottomBar = ({ editor, isVisible = true, onClose }: Find
       </div>
 
       {/* Navigation Arrows */}
-      <div className="flex gap-1">
+      <div className="flex gap-1 justify-self-center">
         <button
           onClick={handlePrevious}
           disabled={totalMatches === 0}
