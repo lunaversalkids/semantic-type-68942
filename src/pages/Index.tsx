@@ -9,6 +9,9 @@ import { PageNumberDialog } from '@/components/PageNumberDialog';
 import { OnboardingTour } from '@/components/OnboardingTour';
 import { HelpMode } from '@/components/HelpMode';
 import { DocumentManager } from '@/components/DocumentManager';
+import { ExportDialog } from '@/components/ExportDialog';
+import { ImportDialog } from '@/components/ImportDialog';
+import { PDFImportDialog } from '@/components/PDFImportDialog';
 import { defaultStyles } from '@/types/styles';
 import { useToast } from '@/hooks/use-toast';
 import { toast as sonnerToast } from 'sonner';
@@ -37,6 +40,9 @@ const Index = () => {
   const [saveDialogOpen, setSaveDialogOpen] = useState(false);
   const [documentManagerOpen, setDocumentManagerOpen] = useState(false);
   const [findReplaceOpen, setFindReplaceOpen] = useState(false);
+  const [exportOpen, setExportOpen] = useState(false);
+  const [importOpen, setImportOpen] = useState(false);
+  const [pdfImportOpen, setPdfImportOpen] = useState(false);
   const [styles, setStyles] = useState(defaultStyles);
   const { toast } = useToast();
 
@@ -405,10 +411,24 @@ const Index = () => {
     setFindReplaceOpen(prev => !prev);
   };
 
+  const handlePenMode = () => {
+    toast({ title: 'Pen Mode', description: 'Pen/Insert mode activated' });
+  };
+
+  const handleStylusMode = () => {
+    toast({ title: 'Stylus Mode', description: 'Stylus mode activated' });
+  };
+
   return (
     <div className="h-screen grid grid-rows-[58px_1fr_86px] gap-3 p-3 overflow-hidden">
       <Header 
         onFindClick={handleFind}
+        onDocumentClick={() => setDocumentManagerOpen(true)}
+        onPenModeClick={handlePenMode}
+        onStylusModeClick={handleStylusMode}
+        onExportClick={() => setExportOpen(true)}
+        onImportClick={() => setImportOpen(true)}
+        onPdfImportClick={() => setPdfImportOpen(true)}
       />
 
       <div className="grid grid-cols-[auto_1fr_340px] gap-3 overflow-hidden">
@@ -488,6 +508,26 @@ const Index = () => {
         open={documentManagerOpen}
         onOpenChange={setDocumentManagerOpen}
         onLoadDocument={handleLoadDocument}
+      />
+
+      <ExportDialog 
+        open={exportOpen}
+        onOpenChange={setExportOpen}
+        editor={editor}
+      />
+
+      <ImportDialog 
+        open={importOpen}
+        onOpenChange={setImportOpen}
+        editor={editor}
+        isDocumentSaved={documentSaved}
+      />
+
+      <PDFImportDialog 
+        open={pdfImportOpen}
+        onOpenChange={setPdfImportOpen}
+        editor={editor}
+        isDocumentSaved={documentSaved}
       />
       
       <OnboardingTour />
