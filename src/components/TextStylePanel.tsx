@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Bold, Italic, Underline, Strikethrough, Type, AlignLeft, AlignCenter, AlignRight, AlignJustify, ChevronDown, Info } from 'lucide-react';
+import { Bold, Italic, Underline, Strikethrough, Type, AlignLeft, AlignCenter, AlignRight, AlignJustify, ChevronDown, Info, Indent, Outdent } from 'lucide-react';
 
 interface TextStylePanelProps {
   editor?: any;
@@ -31,6 +31,24 @@ export const TextStylePanel = ({ editor }: TextStylePanelProps) => {
   const handleAlign = (alignment: 'left' | 'center' | 'right' | 'justify') => {
     if (!editor) return;
     editor.chain().focus().setTextAlign(alignment).run();
+  };
+
+  const handleIndent = () => {
+    if (!editor) return;
+    // Increase indentation
+    const currentIndent = editor.getAttributes('paragraph').textIndent || '0px';
+    const currentValue = parseInt(currentIndent) || 0;
+    editor.chain().focus().updateAttributes('paragraph', { textIndent: `${currentValue + 30}px` }).run();
+  };
+
+  const handleOutdent = () => {
+    if (!editor) return;
+    // Decrease indentation
+    const currentIndent = editor.getAttributes('paragraph').textIndent || '0px';
+    const currentValue = parseInt(currentIndent) || 0;
+    if (currentValue > 0) {
+      editor.chain().focus().updateAttributes('paragraph', { textIndent: `${Math.max(0, currentValue - 30)}px` }).run();
+    }
   };
 
   const handleFontSizeChange = (size: string) => {
@@ -147,7 +165,7 @@ export const TextStylePanel = ({ editor }: TextStylePanelProps) => {
           </div>
 
           {/* Second row */}
-          <div className="grid grid-cols-2 gap-1.5">
+          <div className="grid grid-cols-2 gap-1.5 mb-1.5">
             <button
               className="h-7 p-0 text-white hover:bg-white/20 border-0 rounded-[var(--r-sm)] text-xs transition-colors"
             >
@@ -158,6 +176,24 @@ export const TextStylePanel = ({ editor }: TextStylePanelProps) => {
               className="h-7 p-0 text-white hover:bg-white/20 border-0 rounded-[var(--r-sm)] transition-colors grid place-items-center"
             >
               <AlignJustify className="w-3 h-3" />
+            </button>
+          </div>
+
+          {/* Third row - Indent Controls */}
+          <div className="grid grid-cols-2 gap-1.5">
+            <button
+              onClick={handleOutdent}
+              className="h-7 p-0 text-white hover:bg-white/20 border-0 rounded-[var(--r-sm)] transition-colors grid place-items-center"
+              title="Decrease indent"
+            >
+              <Outdent className="w-3 h-3" />
+            </button>
+            <button
+              onClick={handleIndent}
+              className="h-7 p-0 text-white hover:bg-white/20 border-0 rounded-[var(--r-sm)] transition-colors grid place-items-center"
+              title="Increase indent"
+            >
+              <Indent className="w-3 h-3" />
             </button>
           </div>
         </div>
