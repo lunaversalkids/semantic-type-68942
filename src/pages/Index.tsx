@@ -3,7 +3,6 @@ import { Header } from '@/components/Header';
 import { TextStylePanel } from '@/components/TextStylePanel';
 import { LeftSidebar } from '@/components/LeftSidebar';
 import { FindReplaceBottomBar } from '@/components/FindReplaceBottomBar';
-import { StylesDrawer } from '@/components/StylesDrawer';
 import { Editor } from '@/components/Editor';
 import { ApplyToAllDialog } from '@/components/ApplyToAllDialog';
 import { PageNumberDialog } from '@/components/PageNumberDialog';
@@ -39,7 +38,6 @@ const Index = () => {
   const [saveDialogOpen, setSaveDialogOpen] = useState(false);
   const [documentManagerOpen, setDocumentManagerOpen] = useState(false);
   const [findReplaceOpen, setFindReplaceOpen] = useState(false);
-  const [stylesDrawerOpen, setStylesDrawerOpen] = useState(false);
   const [styles, setStyles] = useState(defaultStyles);
   const { toast } = useToast();
 
@@ -411,15 +409,15 @@ const Index = () => {
   return (
     <div className="h-screen grid grid-rows-[58px_1fr_86px] gap-3 p-3 overflow-hidden">
       <Header 
-        onStylesClick={() => setStylesDrawerOpen(true)}
         onFindClick={handleFind}
       />
 
-      <div className="grid grid-cols-[56px_1fr_340px] gap-3 overflow-hidden">
+      <div className="grid grid-cols-[auto_1fr_340px] gap-3 overflow-hidden">
         <LeftSidebar 
           collapsed={leftSidebarCollapsed}
           onToggleCollapse={() => setLeftSidebarCollapsed(!leftSidebarCollapsed)}
-          onStylesClick={() => setStylesDrawerOpen(true)}
+          styles={styles}
+          onStylesChange={setStyles}
         />
         <main className="overflow-hidden">
           <Editor 
@@ -462,12 +460,6 @@ const Index = () => {
         onClose={() => setFindReplaceOpen(false)}
       />
       
-      <StylesDrawer 
-        open={stylesDrawerOpen} 
-        onClose={() => setStylesDrawerOpen(false)} 
-        styles={styles}
-        onStylesChange={setStyles}
-      />
       
       <ApplyToAllDialog
         open={applyToAllOpen}

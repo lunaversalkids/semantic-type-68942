@@ -1,11 +1,10 @@
-import { Pen, Navigation, Search, Cloud, Share2, Palette } from 'lucide-react';
+import { Pen, Navigation, Search, Cloud, Share2 } from 'lucide-react';
 
 interface HeaderProps {
-  onStylesClick?: () => void;
   onFindClick?: () => void;
 }
 
-export const Header = ({ onStylesClick, onFindClick }: HeaderProps) => {
+export const Header = ({ onFindClick }: HeaderProps) => {
   return (
     <header className="bg-[hsl(var(--panel))] border border-[hsl(var(--stroke))] rounded-[var(--radius)] shadow-[0_10px_28px_rgba(96,48,200,.16)] p-2 grid grid-cols-[220px_1fr_360px] items-center gap-2">
       {/* Brand */}
@@ -44,13 +43,6 @@ export const Header = ({ onStylesClick, onFindClick }: HeaderProps) => {
         </button>
         <button className="h-9 min-w-[36px] px-2.5 border border-[hsl(var(--stroke))] rounded-[var(--r-sm)] bg-white grid place-items-center hover:bg-[hsl(var(--panel-2))] transition-colors" title="Share/Export">
           <Share2 className="w-4 h-4 text-[hsl(var(--ink))]" />
-        </button>
-        <button 
-          onClick={onStylesClick}
-          className="h-9 min-w-[36px] px-2.5 border-0 rounded-[var(--r-sm)] bg-gradient-to-b from-[#A77CFF] to-[#7A49FF] text-white grid place-items-center hover:opacity-90 transition-opacity" 
-          title="Styles Drawer"
-        >
-          <Palette className="w-4 h-4" />
         </button>
       </div>
     </header>
