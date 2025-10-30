@@ -343,8 +343,8 @@ button[data-active="true"] {
   position: relative;
   display: grid;
   grid-template-columns: 8.5in 8.5in;
-  column-gap: 0;
-  row-gap: 0;
+  column-gap: 0.5rem;
+  row-gap: 0.5rem;
   min-height: 24in;
 }
 
