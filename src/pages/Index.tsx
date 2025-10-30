@@ -23,6 +23,7 @@ const Index = () => {
   const [currentPageForNumber, setCurrentPageForNumber] = useState(1);
   const [helpModeActive, setHelpModeActive] = useState(false);
   const [stylePanelCollapsed, setStylePanelCollapsed] = useState(false);
+  const [leftSidebarCollapsed, setLeftSidebarCollapsed] = useState(false);
   const [pageNumbersVisibility, setPageNumbersVisibility] = useState<Record<number, boolean>>({
     1: true,
     2: true,
@@ -415,10 +416,12 @@ const Index = () => {
         onCloudClick={() => setDocumentManagerOpen(true)}
         documentSaved={documentSaved}
       />
-      <div className="flex flex-1 overflow-hidden">
-        <LeftSidebar />
-        
-        <div className="flex-1 flex flex-col overflow-hidden">
+      <div className="flex-1 flex overflow-hidden">
+        <LeftSidebar 
+          collapsed={leftSidebarCollapsed}
+          onToggleCollapse={() => setLeftSidebarCollapsed(!leftSidebarCollapsed)}
+        />
+        <main className="flex-1 overflow-hidden">
           <Editor 
             onSelectionChange={setSelectedText} 
             onEditorReady={setEditor}
@@ -448,15 +451,14 @@ const Index = () => {
               }));
             }}
           />
-          <FindReplaceBar />
-        </div>
-
+        </main>
         <StylePanel 
           editor={editor} 
           collapsed={stylePanelCollapsed}
           onToggleCollapse={() => setStylePanelCollapsed(!stylePanelCollapsed)}
         />
       </div>
+      <FindReplaceBar />
       
       <ApplyToAllDialog
         open={applyToAllOpen}

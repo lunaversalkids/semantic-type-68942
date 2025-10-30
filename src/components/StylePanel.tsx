@@ -1,229 +1,185 @@
 import { useState } from 'react';
+import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { Bold, Italic, Underline, Strikethrough, Type, AlignLeft, AlignCenter, AlignRight, AlignJustify, ChevronDown, Info } from 'lucide-react';
+import { Separator } from '@/components/ui/separator';
+import { Badge } from '@/components/ui/badge';
+import { Plus, Palette, Type, ChevronLeft, ChevronRight, X } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { TextStyle, defaultStyles } from '@/types/styles';
 const AVAILABLE_FONTS = ['Inter', 'Georgia', 'Monaco', 'Times New Roman', 'Arial', 'Helvetica', 'Courier New', 'Palatino', 'Garamond', 'Bookman'];
-
 interface StylePanelProps {
   editor?: any;
   collapsed?: boolean;
   onToggleCollapse?: () => void;
 }
-
 export const StylePanel = ({
   editor,
   collapsed = false,
   onToggleCollapse
 }: StylePanelProps) => {
-  const [fontSize, setFontSize] = useState('12');
-  const [fontFamily, setFontFamily] = useState('Inter');
-  return (
-    <div className={`h-full bg-sidebar/30 border-l border-sidebar-border flex flex-col transition-all duration-300 ${collapsed ? 'w-0 overflow-hidden' : 'w-72'}`}>
-      {!collapsed && (
-        <>
-          <div className="p-4 border-b border-sidebar-border">
-            <h2 className="text-base font-semibold text-foreground">
-              Text Style
-            </h2>
-          </div>
+  const [styles, setStyles] = useState<TextStyle[]>(defaultStyles);
+  const [selectedStyle, setSelectedStyle] = useState<TextStyle | null>(null);
+  const applyStyleToSelection = (style: TextStyle) => {
+    if (!editor) return;
+    const chain = editor.chain().focus();
 
+    // Apply font family
+    if (style.font) {
+      chain.setFontFamily(style.font);
+    }
+
+    // Apply font size
+    if (style.size) {
+      chain.setFontSize(`${style.size}px`);
+    }
+
+    // Apply color
+    if (style.color) {
+      chain.setColor(style.color);
+    }
+
+    // Apply weight
+    if (style.weight) {
+      chain.setFontWeight(style.weight.toString());
+      if (style.weight >= 600) {
+        chain.setBold();
+      } else {
+        chain.unsetBold();
+      }
+    }
+
+    // Apply italic
+    if (style.italic) {
+      chain.setItalic();
+    } else {
+      chain.unsetItalic();
+    }
+    chain.run();
+  };
+  const updateSelectedStyle = (updates: Partial<TextStyle>) => {
+    if (!selectedStyle) return;
+    const updatedStyle = {
+      ...selectedStyle,
+      ...updates
+    };
+    setSelectedStyle(updatedStyle);
+    setStyles(styles.map(s => s.id === selectedStyle.id ? updatedStyle : s));
+  };
+  return <div className={`h-full bg-sidebar border-l border-sidebar-border flex flex-col style-panel transition-all duration-300 ${collapsed ? 'w-0 overflow-hidden' : 'w-80'}`}>
+      <div className={`p-4 border-b border-sidebar-border`}>
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-lg font-semibold text-sidebar-foreground">
+            Text Style
+          </h2>
+          <Button size="sm" variant="ghost" className="h-8 w-8 p-0" onClick={onToggleCollapse}>
+            <ChevronRight className="w-4 h-4" />
+          </Button>
+        </div>
+      </div>
+
+      {!collapsed && <>
           <ScrollArea className="flex-1">
-            <div className="p-4 space-y-4">
-              {/* Font Section */}
-              <div>
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-sm font-medium text-foreground">Font</span>
-                  <ChevronDown className="w-4 h-4 text-muted-foreground" />
-                </div>
-                
-                <div className="flex gap-2 items-center">
-                  <Select value={fontFamily} onValueChange={setFontFamily}>
-                    <SelectTrigger className="flex-1 h-9 bg-background">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {AVAILABLE_FONTS.map(font => (
-                        <SelectItem key={font} value={font}>
-                          {font}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  
-                  <Input 
-                    type="number" 
-                    value={fontSize}
-                    onChange={(e) => setFontSize(e.target.value)}
-                    className="w-16 h-9 bg-background text-center"
-                  />
-                </div>
-
-                {/* Text Formatting Buttons */}
-                <div className="flex gap-1 mt-3">
-                  <Button 
-                    variant="ghost" 
-                    size="icon"
-                    className="h-8 w-8 text-primary hover:bg-primary/10"
-                    onClick={() => editor?.chain().focus().toggleBold().run()}
-                  >
-                    <Bold className="w-4 h-4" />
-                  </Button>
-                  <Button 
-                    variant="ghost" 
-                    size="icon"
-                    className="h-8 w-8 text-primary hover:bg-primary/10"
-                    onClick={() => editor?.chain().focus().toggleItalic().run()}
-                  >
-                    <Italic className="w-4 h-4" />
-                  </Button>
-                  <Button 
-                    variant="ghost" 
-                    size="icon"
-                    className="h-8 w-8 text-primary hover:bg-primary/10"
-                    onClick={() => editor?.chain().focus().toggleUnderline().run()}
-                  >
-                    <Underline className="w-4 h-4" />
-                  </Button>
-                  <Button 
-                    variant="ghost" 
-                    size="icon"
-                    className="h-8 w-8 text-primary hover:bg-primary/10"
-                    onClick={() => editor?.chain().focus().toggleStrike().run()}
-                  >
-                    <Strikethrough className="w-4 h-4" />
-                  </Button>
-                  <Button 
-                    variant="ghost" 
-                    size="icon"
-                    className="h-8 w-8 text-primary hover:bg-primary/10"
-                  >
-                    <Type className="w-4 h-4" />
-                  </Button>
-                </div>
+        <div className="p-4 space-y-2">
+          <div className="text-xs font-medium text-muted-foreground mb-2 flex items-center gap-1">
+            <Type className="w-3 h-3" />
+            Character Styles
+          </div>
+          {styles.map(style => <Card key={style.id} className={`p-3 cursor-pointer transition-all hover:border-primary/50 ${selectedStyle?.id === style.id ? 'border-primary' : ''}`} onClick={() => {
+            setSelectedStyle(style);
+            applyStyleToSelection(style);
+          }}>
+              <div className="flex items-center justify-between mb-1">
+                <span className="font-medium text-sm">{style.name}</span>
+                <Badge variant="secondary" className="text-xs">
+                  {style.tag || 'Style'}
+                </Badge>
               </div>
-
-              {/* Text Alignment Section */}
-              <div className="bg-primary/90 rounded-lg p-3">
-                <div className="flex items-center justify-between mb-3">
-                  <span className="text-sm font-medium text-primary-foreground">Text</span>
-                  <div className="w-8 h-4 bg-background/20 rounded"></div>
-                </div>
-                
-                <div className="grid grid-cols-4 gap-2">
-                  <Button 
-                    variant="ghost" 
-                    size="icon"
-                    className="h-9 w-full bg-primary-foreground/10 hover:bg-primary-foreground/20 text-primary-foreground"
-                  >
-                    <span className="text-xs font-semibold">N</span>
-                  </Button>
-                  <Button 
-                    variant="ghost" 
-                    size="icon"
-                    className="h-9 w-full bg-primary-foreground/10 hover:bg-primary-foreground/20 text-primary-foreground"
-                    onClick={() => editor?.chain().focus().setTextAlign('left').run()}
-                  >
-                    <AlignLeft className="w-4 h-4" />
-                  </Button>
-                  <Button 
-                    variant="ghost" 
-                    size="icon"
-                    className="h-9 w-full bg-primary-foreground/10 hover:bg-primary-foreground/20 text-primary-foreground"
-                    onClick={() => editor?.chain().focus().setTextAlign('center').run()}
-                  >
-                    <AlignCenter className="w-4 h-4" />
-                  </Button>
-                  <Button 
-                    variant="ghost" 
-                    size="icon"
-                    className="h-9 w-full bg-primary-foreground/10 hover:bg-primary-foreground/20 text-primary-foreground"
-                    onClick={() => editor?.chain().focus().setTextAlign('right').run()}
-                  >
-                    <AlignRight className="w-4 h-4" />
-                  </Button>
-                </div>
-
-                <div className="grid grid-cols-2 gap-2 mt-2">
-                  <Button 
-                    variant="ghost" 
-                    size="icon"
-                    className="h-9 w-full bg-primary-foreground/10 hover:bg-primary-foreground/20 text-primary-foreground text-xs"
-                  >
-                    ≡
-                  </Button>
-                  <Button 
-                    variant="ghost" 
-                    size="icon"
-                    className="h-9 w-full bg-primary-foreground/10 hover:bg-primary-foreground/20 text-primary-foreground"
-                    onClick={() => editor?.chain().focus().setTextAlign('justify').run()}
-                  >
-                    <AlignJustify className="w-4 h-4" />
-                  </Button>
-                </div>
+              <div className="text-sm" style={{
+              fontFamily: style.font,
+              fontSize: `${(style.size || 16) - 2}px`,
+              fontWeight: style.weight,
+              fontStyle: style.italic ? 'italic' : 'normal',
+              color: style.color
+            }}>
+                The quick brown fox
               </div>
+            </Card>)}
+        </div>
+      </ScrollArea>
 
-              {/* List Types Section */}
+      {selectedStyle && <div className="border-t border-sidebar-border p-4 bg-sidebar-accent/30">
+          <div className="space-y-3">
+            <div className="flex items-center justify-between mb-2">
+              <Label className="text-sm font-semibold">Edit Style</Label>
+              <Button size="sm" variant="ghost" className="h-6 w-6 p-0" onClick={() => setSelectedStyle(null)}>
+                <X className="w-4 h-4" />
+              </Button>
+            </div>
+            
+            <div>
+              <Label className="text-xs">Font Family</Label>
+              <Select value={selectedStyle.font} onValueChange={value => updateSelectedStyle({
+              font: value
+            })}>
+                <SelectTrigger className="mt-1 h-8 text-sm">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {AVAILABLE_FONTS.map(font => <SelectItem key={font} value={font}>
+                      {font}
+                    </SelectItem>)}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="grid grid-cols-2 gap-2">
               <div>
-                <Button 
-                  variant="ghost"
-                  className="w-full justify-between h-10 bg-primary text-primary-foreground hover:bg-primary/90 mb-2"
-                >
-                  <ChevronDown className="w-4 h-4" />
-                  <span className="flex-1 text-left ml-2">None</span>
-                </Button>
-
-                <div className="space-y-1">
-                  <Button 
-                    variant="ghost"
-                    className="w-full justify-between h-10 hover:bg-primary/10"
-                  >
-                    <div className="flex items-center gap-2">
-                      <span className="text-lg">•</span>
-                      <span className="text-sm">Bullet</span>
-                    </div>
-                    <Info className="w-4 h-4 text-muted-foreground" />
-                  </Button>
-
-                  <Button 
-                    variant="ghost"
-                    className="w-full justify-between h-10 hover:bg-primary/10"
-                  >
-                    <div className="flex items-center gap-2">
-                      <span className="text-sm">▪</span>
-                      <span className="text-sm">Image</span>
-                    </div>
-                    <Info className="w-4 h-4 text-muted-foreground" />
-                  </Button>
-
-                  <Button 
-                    variant="ghost"
-                    className="w-full justify-between h-10 hover:bg-primary/10"
-                  >
-                    <div className="flex items-center gap-2">
-                      <span className="text-sm font-semibold">A.</span>
-                      <span className="text-sm">Lettered</span>
-                    </div>
-                    <Info className="w-4 h-4 text-muted-foreground" />
-                  </Button>
-
-                  <Button 
-                    variant="ghost"
-                    className="w-full justify-between h-10 hover:bg-primary/10"
-                  >
-                    <div className="flex items-center gap-2">
-                      <span className="text-sm font-semibold">1.</span>
-                      <span className="text-sm">Numbered</span>
-                    </div>
-                    <Info className="w-4 h-4 text-muted-foreground" />
-                  </Button>
-                </div>
+                <Label className="text-xs">Size</Label>
+                <Input type="number" value={selectedStyle.size} onChange={e => updateSelectedStyle({
+                size: parseInt(e.target.value)
+              })} className="mt-1 h-8 text-sm" />
+              </div>
+              <div>
+                <Label className="text-xs">Weight</Label>
+                <Select value={selectedStyle.weight?.toString()} onValueChange={value => updateSelectedStyle({
+                weight: parseInt(value)
+              })}>
+                  <SelectTrigger className="mt-1 h-8 text-sm">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="300">Light</SelectItem>
+                    <SelectItem value="400">Normal</SelectItem>
+                    <SelectItem value="500">Medium</SelectItem>
+                    <SelectItem value="600">Semibold</SelectItem>
+                    <SelectItem value="700">Bold</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
             </div>
-          </ScrollArea>
-        </>
-      )}
-    </div>
-  );
+            <div>
+              <Label className="text-xs">Color</Label>
+              <div className="flex gap-2 mt-1">
+                <Input type="color" value={selectedStyle.color} onChange={e => {
+                const newColor = e.target.value;
+                updateSelectedStyle({ color: newColor });
+                if (editor) {
+                  editor.chain().focus().setColor(newColor).run();
+                }
+              }} className="h-8 w-16 p-1 cursor-pointer" />
+                <Input type="text" value={selectedStyle.color} onChange={e => {
+                const newColor = e.target.value;
+                updateSelectedStyle({ color: newColor });
+                if (editor) {
+                  editor.chain().focus().setColor(newColor).run();
+                }
+              }} className="h-8 text-sm flex-1" placeholder="#000000" />
+              </div>
+            </div>
+          </div>
+        </div>}
+        </>}
+    </div>;
 };
