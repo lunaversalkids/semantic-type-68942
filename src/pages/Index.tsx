@@ -12,20 +12,9 @@ import { DocumentManager } from '@/components/DocumentManager';
 import { ExportDialog } from '@/components/ExportDialog';
 import { ImportDialog } from '@/components/ImportDialog';
 import { PDFImportDialog } from '@/components/PDFImportDialog';
-import { FilePickerDialog } from '@/components/FilePickerDialog';
 import { defaultStyles } from '@/types/styles';
 import { useToast } from '@/hooks/use-toast';
 import { toast as sonnerToast } from 'sonner';
-import { 
-  setupDocOneFolder, 
-  hasDocOneFolderAccess, 
-  saveToDocOne, 
-  listDocOneFiles,
-  loadDocOneFile,
-  isFileSystemAccessSupported,
-  downloadFile,
-  uploadFile
-} from '@/lib/folderManager';
 
 const Index = () => {
   const [selectedText, setSelectedText] = useState('');
@@ -54,24 +43,8 @@ const Index = () => {
   const [exportOpen, setExportOpen] = useState(false);
   const [importOpen, setImportOpen] = useState(false);
   const [pdfImportOpen, setPdfImportOpen] = useState(false);
-  const [currentDocumentName, setCurrentDocumentName] = useState("Untitled");
-  const [hasDocOneAccess, setHasDocOneAccess] = useState(false);
-  const [filePickerOpen, setFilePickerOpen] = useState(false);
-  const [availableFiles, setAvailableFiles] = useState<Array<{ name: string; savedAt: string }>>([]);
   const [styles, setStyles] = useState(defaultStyles);
   const { toast } = useToast();
-
-  // Check Doc One folder access on mount
-  useEffect(() => {
-    if (isFileSystemAccessSupported()) {
-      hasDocOneFolderAccess().then(hasAccess => {
-        setHasDocOneAccess(hasAccess);
-        if (hasAccess) {
-          sonnerToast.success("Doc One folder connected");
-        }
-      });
-    }
-  }, []);
 
   // Auto-renumber footnotes when content changes
   useEffect(() => {
@@ -427,105 +400,6 @@ const Index = () => {
     }
   };
 
-  const handleSaveDocument = async () => {
-    if (!editor) return;
-    
-    const content = editor.getHTML();
-    
-    try {
-      // Check if File System Access API is supported
-      if (!isFileSystemAccessSupported()) {
-        // Fallback: Download file
-        downloadFile(currentDocumentName, content);
-        sonnerToast.success(`Downloaded "${currentDocumentName}.doc1"`);
-        return;
-      }
-
-      // Check if folder is configured
-      if (!hasDocOneAccess) {
-        sonnerToast.info("Please select your Doc One folder");
-        const success = await setupDocOneFolder();
-        if (!success) {
-          sonnerToast.error("Folder setup cancelled");
-          return;
-        }
-        setHasDocOneAccess(true);
-        sonnerToast.success("Doc One folder connected!");
-      }
-      
-      // Save directly to Doc One folder
-      const savedName = await saveToDocOne(currentDocumentName, content);
-      if (savedName) {
-        setCurrentDocumentName(savedName);
-        setDocumentSaved(true);
-        sonnerToast.success(`Saved "${savedName}" to Doc One folder`);
-      } else {
-        sonnerToast.error("Failed to save document");
-      }
-    } catch (error) {
-      console.error("Save error:", error);
-      sonnerToast.error("Error saving document");
-    }
-  };
-
-  const handleLoadDocumentClick = async () => {
-    if (!editor) return;
-    
-    try {
-      // Check if File System Access API is supported
-      if (!isFileSystemAccessSupported()) {
-        // Fallback: File input picker
-        const result = await uploadFile();
-        if (result) {
-          editor.commands.setContent(result.content);
-          setCurrentDocumentName(result.name);
-          setDocumentSaved(true);
-          sonnerToast.success(`Loaded "${result.name}"`);
-        }
-        return;
-      }
-
-      // Check if folder is configured
-      if (!hasDocOneAccess) {
-        sonnerToast.info("Please select your Doc One folder");
-        const success = await setupDocOneFolder();
-        if (!success) {
-          sonnerToast.error("Folder setup cancelled");
-          return;
-        }
-        setHasDocOneAccess(true);
-        sonnerToast.success("Doc One folder connected!");
-      }
-      
-      // Load list of files and show picker
-      const files = await listDocOneFiles();
-      setAvailableFiles(files);
-      setFilePickerOpen(true);
-    } catch (error) {
-      console.error("Load error:", error);
-      sonnerToast.error("Error loading document");
-    }
-  };
-
-  const handleSelectFile = async (filename: string) => {
-    if (!editor) return;
-    
-    try {
-      const result = await loadDocOneFile(filename);
-      if (result) {
-        editor.commands.setContent(result.content);
-        setCurrentDocumentName(result.name);
-        setDocumentSaved(true);
-        sonnerToast.success(`Loaded "${result.name}"`);
-      } else {
-        sonnerToast.error("Failed to load document");
-      }
-    } catch (error) {
-      console.error("Error loading file:", error);
-      sonnerToast.error("Error loading file");
-    }
-  };
-
   const handleLoadDocument = (content: string, name: string) => {
     if (editor) {
       editor.commands.setContent(content);
@@ -548,11 +422,9 @@ const Index = () => {
   return (
     <div className="h-screen grid grid-rows-[58px_1fr_86px] gap-3 p-3 overflow-hidden">
       <Header 
-        documentName={currentDocumentName}
         onFindClick={handleFind}
-        onSaveDocument={handleSaveDocument}
-        onLoadDocument={handleLoadDocumentClick}
-        onCloudClick={handleLoadDocumentClick}
+        onDocumentClick={() => setDocumentManagerOpen(true)}
+        onCloudClick={() => setDocumentManagerOpen(true)}
         onPenModeClick={handlePenMode}
         onStylusModeClick={handleStylusMode}
         onExportClick={() => setExportOpen(true)}
@@ -657,13 +529,6 @@ const Index = () => {
         onOpenChange={setPdfImportOpen}
         editor={editor}
         isDocumentSaved={documentSaved}
-      />
-
-      <FilePickerDialog
-        open={filePickerOpen}
-        onOpenChange={setFilePickerOpen}
-        files={availableFiles}
-        onSelectFile={handleSelectFile}
       />
       
       <OnboardingTour />

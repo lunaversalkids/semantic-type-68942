@@ -7,10 +7,8 @@ import {
 } from '@/components/ui/dropdown-menu';
 
 interface HeaderProps {
-  documentName?: string;
   onFindClick?: () => void;
-  onSaveDocument?: () => void;
-  onLoadDocument?: () => void;
+  onDocumentClick?: () => void;
   onCloudClick?: () => void;
   onPenModeClick?: () => void;
   onStylusModeClick?: () => void;
@@ -20,10 +18,8 @@ interface HeaderProps {
 }
 
 export const Header = ({ 
-  documentName,
   onFindClick, 
-  onSaveDocument,
-  onLoadDocument,
+  onDocumentClick,
   onCloudClick,
   onPenModeClick,
   onStylusModeClick,
@@ -41,29 +37,16 @@ export const Header = ({
         <div className="text-[hsl(var(--ink))]">Doc One</div>
       </div>
 
-      {/* Title - Document Name with Dropdown */}
+      {/* Title */}
       <div className="flex items-center justify-center">
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <button 
-              className="flex items-center gap-2.5 px-3.5 py-2 border border-[hsl(var(--stroke))] rounded-full bg-[hsla(253,100%,64%,0.12)] text-[#4E3DC9] font-bold hover:bg-[hsla(253,100%,64%,0.18)] transition-colors"
-              title="Document Actions"
-            >
-              <span className="text-lg">∞</span>
-              <span>{documentName || "Untitled"}</span>
-            </button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="center" className="bg-background z-50">
-            <DropdownMenuItem onClick={onSaveDocument}>
-              <FileDown className="w-4 h-4 mr-2" />
-              Save Document
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={onLoadDocument}>
-              <FileUp className="w-4 h-4 mr-2" />
-              Load Document
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <button 
+          onClick={onDocumentClick}
+          className="flex items-center gap-2.5 px-3.5 py-2 border border-[hsl(var(--stroke))] rounded-full bg-[hsla(253,100%,64%,0.12)] text-[#4E3DC9] font-bold hover:bg-[hsla(253,100%,64%,0.18)] transition-colors"
+          title="Save/Load Documents"
+        >
+          <span className="text-lg">∞</span>
+          <span>Insects</span>
+        </button>
       </div>
 
       {/* Toolbar */}
