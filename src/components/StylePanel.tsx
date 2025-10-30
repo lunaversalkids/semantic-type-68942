@@ -1,185 +1,124 @@
 import { useState } from 'react';
-import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { Separator } from '@/components/ui/separator';
-import { Badge } from '@/components/ui/badge';
-import { Plus, Palette, Type, ChevronLeft, ChevronRight, X } from 'lucide-react';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { X, Plus } from 'lucide-react';
 import { TextStyle, defaultStyles } from '@/types/styles';
-const AVAILABLE_FONTS = ['Inter', 'Georgia', 'Monaco', 'Times New Roman', 'Arial', 'Helvetica', 'Courier New', 'Palatino', 'Garamond', 'Bookman'];
+import { StyleDesigner } from './StyleDesigner';
+
 interface StylePanelProps {
   editor?: any;
-  collapsed?: boolean;
-  onToggleCollapse?: () => void;
+  isOpen?: boolean;
+  onClose?: () => void;
 }
+
 export const StylePanel = ({
   editor,
-  collapsed = false,
-  onToggleCollapse
+  isOpen = false,
+  onClose
 }: StylePanelProps) => {
   const [styles, setStyles] = useState<TextStyle[]>(defaultStyles);
   const [selectedStyle, setSelectedStyle] = useState<TextStyle | null>(null);
-  const applyStyleToSelection = (style: TextStyle) => {
+  const handleStyleClick = (style: TextStyle) => {
+    setSelectedStyle(style);
+    if (editor) {
+      applyStyleToEditor(style);
+    }
+  };
+
+  const applyStyleToEditor = (style: TextStyle) => {
     if (!editor) return;
     const chain = editor.chain().focus();
-
-    // Apply font family
-    if (style.font) {
-      chain.setFontFamily(style.font);
-    }
-
-    // Apply font size
-    if (style.size) {
-      chain.setFontSize(`${style.size}px`);
-    }
-
-    // Apply color
-    if (style.color) {
-      chain.setColor(style.color);
-    }
-
-    // Apply weight
+    if (style.font) chain.setFontFamily(style.font);
+    if (style.size) chain.setFontSize(`${style.size}pt`);
+    if (style.color) chain.setColor(style.color);
     if (style.weight) {
       chain.setFontWeight(style.weight.toString());
-      if (style.weight >= 600) {
-        chain.setBold();
-      } else {
-        chain.unsetBold();
-      }
+      if (style.weight >= 600) chain.setBold();
+      else chain.unsetBold();
     }
-
-    // Apply italic
-    if (style.italic) {
-      chain.setItalic();
-    } else {
-      chain.unsetItalic();
-    }
+    if (style.italic) chain.setItalic();
+    else chain.unsetItalic();
     chain.run();
   };
-  const updateSelectedStyle = (updates: Partial<TextStyle>) => {
+
+  const handleSaveStyle = (updates: Partial<TextStyle>) => {
     if (!selectedStyle) return;
-    const updatedStyle = {
-      ...selectedStyle,
-      ...updates
-    };
-    setSelectedStyle(updatedStyle);
+    const updatedStyle = { ...selectedStyle, ...updates };
     setStyles(styles.map(s => s.id === selectedStyle.id ? updatedStyle : s));
+    setSelectedStyle(updatedStyle);
+    applyStyleToEditor(updatedStyle);
   };
-  return <div className={`h-full bg-sidebar border-l border-sidebar-border flex flex-col style-panel transition-all duration-300 ${collapsed ? 'w-0 overflow-hidden' : 'w-80'}`}>
-      <div className={`p-4 border-b border-sidebar-border`}>
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg font-semibold text-sidebar-foreground">
-            Text Style
-          </h2>
-          <Button size="sm" variant="ghost" className="h-8 w-8 p-0" onClick={onToggleCollapse}>
-            <ChevronRight className="w-4 h-4" />
-          </Button>
+
+  if (!isOpen) return null;
+
+  return (
+    <>
+      {/* Styles Drawer */}
+      <div className="fixed top-3 right-3 bottom-24 w-[360px] bg-[#F7F1FF] border border-[#E6D8FF] rounded-[14px] shadow-[0_12px_28px_rgba(96,48,200,0.14)] p-3 flex flex-col z-50">
+        {/* Header */}
+        <div className="flex items-center justify-between gap-2 mb-3">
+          <div className="flex items-center gap-2.5 font-extrabold text-[#22163F]">
+            <span>🎨</span>
+            <span>Styles</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <Button 
+              className="h-8 px-3 rounded-lg bg-gradient-to-b from-[#A77CFF] to-[#7A49FF] hover:opacity-90 text-white border-0 text-sm font-semibold"
+              size="sm"
+            >
+              + Add Style
+            </Button>
+            <Button 
+              variant="outline"
+              size="icon"
+              className="h-8 w-8 rounded-lg border-[#E6D8FF]"
+              onClick={onClose}
+            >
+              <X className="h-4 w-4" />
+            </Button>
+          </div>
         </div>
+
+        {/* Styles List */}
+        <ScrollArea className="flex-1 pr-1">
+          <div className="flex flex-col gap-2.5">
+            {styles.map(style => (
+              <button
+                key={style.id}
+                onClick={() => handleStyleClick(style)}
+                className="grid grid-cols-[1fr_auto] gap-2 items-center p-3 bg-white border border-[#E6D8FF] rounded-xl cursor-pointer hover:border-[#A77CFF] transition-colors text-left"
+              >
+                <div className="flex flex-col gap-1">
+                  <div className="font-bold text-[#22163F]">{style.name}</div>
+                  <div 
+                    className="text-[13px] text-[#5A4A86]"
+                    style={{
+                      fontFamily: style.font,
+                      fontWeight: style.weight,
+                      fontStyle: style.italic ? 'italic' : 'normal',
+                      color: style.color
+                    }}
+                  >
+                    The quick brown fox
+                  </div>
+                </div>
+                <span className="px-2.5 py-1 bg-[#EEE6FF] text-[#5C37E6] rounded-full font-semibold text-xs">
+                  {style.tag || 'style'}
+                </span>
+              </button>
+            ))}
+          </div>
+        </ScrollArea>
       </div>
 
-      {!collapsed && <>
-          <ScrollArea className="flex-1">
-        <div className="p-4 space-y-2">
-          <div className="text-xs font-medium text-muted-foreground mb-2 flex items-center gap-1">
-            <Type className="w-3 h-3" />
-            Character Styles
-          </div>
-          {styles.map(style => <Card key={style.id} className={`p-3 cursor-pointer transition-all hover:border-primary/50 ${selectedStyle?.id === style.id ? 'border-primary' : ''}`} onClick={() => {
-            setSelectedStyle(style);
-            applyStyleToSelection(style);
-          }}>
-              <div className="flex items-center justify-between mb-1">
-                <span className="font-medium text-sm">{style.name}</span>
-                <Badge variant="secondary" className="text-xs">
-                  {style.tag || 'Style'}
-                </Badge>
-              </div>
-              <div className="text-sm" style={{
-              fontFamily: style.font,
-              fontSize: `${(style.size || 16) - 2}px`,
-              fontWeight: style.weight,
-              fontStyle: style.italic ? 'italic' : 'normal',
-              color: style.color
-            }}>
-                The quick brown fox
-              </div>
-            </Card>)}
-        </div>
-      </ScrollArea>
-
-      {selectedStyle && <div className="border-t border-sidebar-border p-4 bg-sidebar-accent/30">
-          <div className="space-y-3">
-            <div className="flex items-center justify-between mb-2">
-              <Label className="text-sm font-semibold">Edit Style</Label>
-              <Button size="sm" variant="ghost" className="h-6 w-6 p-0" onClick={() => setSelectedStyle(null)}>
-                <X className="w-4 h-4" />
-              </Button>
-            </div>
-            
-            <div>
-              <Label className="text-xs">Font Family</Label>
-              <Select value={selectedStyle.font} onValueChange={value => updateSelectedStyle({
-              font: value
-            })}>
-                <SelectTrigger className="mt-1 h-8 text-sm">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  {AVAILABLE_FONTS.map(font => <SelectItem key={font} value={font}>
-                      {font}
-                    </SelectItem>)}
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="grid grid-cols-2 gap-2">
-              <div>
-                <Label className="text-xs">Size</Label>
-                <Input type="number" value={selectedStyle.size} onChange={e => updateSelectedStyle({
-                size: parseInt(e.target.value)
-              })} className="mt-1 h-8 text-sm" />
-              </div>
-              <div>
-                <Label className="text-xs">Weight</Label>
-                <Select value={selectedStyle.weight?.toString()} onValueChange={value => updateSelectedStyle({
-                weight: parseInt(value)
-              })}>
-                  <SelectTrigger className="mt-1 h-8 text-sm">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="300">Light</SelectItem>
-                    <SelectItem value="400">Normal</SelectItem>
-                    <SelectItem value="500">Medium</SelectItem>
-                    <SelectItem value="600">Semibold</SelectItem>
-                    <SelectItem value="700">Bold</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
-            <div>
-              <Label className="text-xs">Color</Label>
-              <div className="flex gap-2 mt-1">
-                <Input type="color" value={selectedStyle.color} onChange={e => {
-                const newColor = e.target.value;
-                updateSelectedStyle({ color: newColor });
-                if (editor) {
-                  editor.chain().focus().setColor(newColor).run();
-                }
-              }} className="h-8 w-16 p-1 cursor-pointer" />
-                <Input type="text" value={selectedStyle.color} onChange={e => {
-                const newColor = e.target.value;
-                updateSelectedStyle({ color: newColor });
-                if (editor) {
-                  editor.chain().focus().setColor(newColor).run();
-                }
-              }} className="h-8 text-sm flex-1" placeholder="#000000" />
-              </div>
-            </div>
-          </div>
-        </div>}
-        </>}
-    </div>;
+      {/* Style Designer Panel */}
+      {selectedStyle && (
+        <StyleDesigner
+          style={selectedStyle}
+          onClose={() => setSelectedStyle(null)}
+          onSave={handleSaveStyle}
+        />
+      )}
+    </>
+  );
 };

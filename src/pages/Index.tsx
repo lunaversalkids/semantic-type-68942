@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { Header } from '@/components/Header';
 import { Toolbar } from '@/components/Toolbar';
 import { StylePanel } from '@/components/StylePanel';
+import { Palette } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 import { LeftSidebar } from '@/components/LeftSidebar';
 import { FindReplaceBar } from '@/components/FindReplaceBar';
 import { Editor } from '@/components/Editor';
@@ -22,7 +24,7 @@ const Index = () => {
   const [pageNumberDialogOpen, setPageNumberDialogOpen] = useState(false);
   const [currentPageForNumber, setCurrentPageForNumber] = useState(1);
   const [helpModeActive, setHelpModeActive] = useState(false);
-  const [stylePanelCollapsed, setStylePanelCollapsed] = useState(false);
+  const [stylesPanelOpen, setStylesPanelOpen] = useState(false);
   const [leftSidebarCollapsed, setLeftSidebarCollapsed] = useState(false);
   const [pageNumbersVisibility, setPageNumbersVisibility] = useState<Record<number, boolean>>({
     1: true,
@@ -416,7 +418,18 @@ const Index = () => {
         onCloudClick={() => setDocumentManagerOpen(true)}
         documentSaved={documentSaved}
       />
-      <div className="flex-1 flex overflow-hidden">
+
+      {/* Styles Toggle Button */}
+      <Button
+        onClick={() => setStylesPanelOpen(!stylesPanelOpen)}
+        className="fixed top-3 right-3 z-40 h-10 w-10 p-0 rounded-lg border border-[#E6D8FF] bg-white hover:bg-gray-50"
+        variant="outline"
+        title="Styles"
+      >
+        🎨
+      </Button>
+
+      <div className="flex-1 flex overflow-hidden relative">
         <LeftSidebar 
           collapsed={leftSidebarCollapsed}
           onToggleCollapse={() => setLeftSidebarCollapsed(!leftSidebarCollapsed)}
@@ -452,10 +465,11 @@ const Index = () => {
             }}
           />
         </main>
+
         <StylePanel 
           editor={editor} 
-          collapsed={stylePanelCollapsed}
-          onToggleCollapse={() => setStylePanelCollapsed(!stylePanelCollapsed)}
+          isOpen={stylesPanelOpen}
+          onClose={() => setStylesPanelOpen(false)}
         />
       </div>
       <FindReplaceBar />
