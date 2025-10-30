@@ -8,6 +8,7 @@ import {
 
 interface HeaderProps {
   onFindClick?: () => void;
+  onDocumentClick?: () => void;
   onCloudClick?: () => void;
   onPenModeClick?: () => void;
   onStylusModeClick?: () => void;
@@ -18,6 +19,7 @@ interface HeaderProps {
 
 export const Header = ({ 
   onFindClick, 
+  onDocumentClick,
   onCloudClick,
   onPenModeClick,
   onStylusModeClick,
@@ -26,13 +28,25 @@ export const Header = ({
   onPdfImportClick
 }: HeaderProps) => {
   return (
-    <header className="bg-[hsl(var(--panel))] border border-[hsl(var(--stroke))] rounded-[var(--radius)] shadow-[0_10px_28px_rgba(96,48,200,.16)] p-2 grid grid-cols-[220px_1fr] items-center gap-2">
+    <header className="bg-[hsl(var(--panel))] border border-[hsl(var(--stroke))] rounded-[var(--radius)] shadow-[0_10px_28px_rgba(96,48,200,.16)] p-2 grid grid-cols-[220px_1fr_360px] items-center gap-2">
       {/* Brand */}
       <div className="flex items-center gap-2.5 font-extrabold">
         <div className="w-7 h-7 rounded-lg bg-gradient-to-b from-[#8D60FF] to-[#6A3CFF] text-white grid place-items-center text-xs">
           ONE
         </div>
         <div className="text-[hsl(var(--ink))]">Doc One</div>
+      </div>
+
+      {/* Title */}
+      <div className="flex items-center justify-center">
+        <button 
+          onClick={onDocumentClick}
+          className="flex items-center gap-2.5 px-3.5 py-2 border border-[hsl(var(--stroke))] rounded-full bg-[hsla(253,100%,64%,0.12)] text-[#4E3DC9] font-bold hover:bg-[hsla(253,100%,64%,0.18)] transition-colors"
+          title="Save/Load Documents"
+        >
+          <span className="text-lg">∞</span>
+          <span>Insects</span>
+        </button>
       </div>
 
       {/* Toolbar */}
