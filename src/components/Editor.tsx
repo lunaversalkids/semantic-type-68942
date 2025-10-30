@@ -292,8 +292,8 @@ export const Editor = ({
                       key={pageId}
                       className="page-card w-[8.5in] h-[11in] bg-[hsl(var(--page-bg))] shadow-2xl"
                       style={{
-                        gridColumn: pageNum === 1 ? '2' : pageNum === 2 ? '1' : pageNum === 3 ? '2' : pageNum % 2 === 0 ? '1' : '2',
-                        gridRow: pageNum === 1 ? '1' : Math.ceil((pageNum - 1) / 2) + 1
+                        gridColumn: pageNum % 2 === 1 ? '1' : '2',
+                        gridRow: Math.ceil(pageNum / 2)
                       }}
                     >
                       {pageNumbersVisibility[pageNum] !== false && (
