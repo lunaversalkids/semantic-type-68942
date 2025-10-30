@@ -7,13 +7,11 @@ import { TextStyle } from '@/types/styles';
 import { useState } from 'react';
 
 interface LeftSidebarProps {
-  collapsed?: boolean;
-  onToggleCollapse?: () => void;
   styles: TextStyle[];
   onStylesChange: (styles: TextStyle[]) => void;
 }
 
-export const LeftSidebar = ({ collapsed = false, onToggleCollapse, styles, onStylesChange }: LeftSidebarProps) => {
+export const LeftSidebar = ({ styles, onStylesChange }: LeftSidebarProps) => {
   const [stylesExpanded, setStylesExpanded] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
 
@@ -47,7 +45,7 @@ export const LeftSidebar = ({ collapsed = false, onToggleCollapse, styles, onSty
     setEditingId(null);
   };
 
-  const width = collapsed ? 'w-0' : stylesExpanded ? 'w-[400px]' : 'w-16';
+  const width = stylesExpanded ? 'w-[400px]' : 'w-16';
 
   return (
     <div className={`h-full bg-sidebar border-r border-sidebar-border flex transition-all duration-300 ${width} overflow-hidden`}>
@@ -76,9 +74,9 @@ export const LeftSidebar = ({ collapsed = false, onToggleCollapse, styles, onSty
           size="icon" 
           variant="ghost" 
           className="h-8 w-8 text-muted-foreground hover:bg-sidebar-accent"
-          onClick={onToggleCollapse}
+          onClick={toggleStyles}
         >
-          {collapsed ? <ChevronRight className="w-4 h-4" /> : <ChevronLeft className="w-4 h-4" />}
+          {stylesExpanded ? <ChevronLeft className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}
         </Button>
       </div>
 

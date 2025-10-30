@@ -20,7 +20,6 @@ const Index = () => {
   const [pageNumberDialogOpen, setPageNumberDialogOpen] = useState(false);
   const [currentPageForNumber, setCurrentPageForNumber] = useState(1);
   const [helpModeActive, setHelpModeActive] = useState(false);
-  const [leftSidebarCollapsed, setLeftSidebarCollapsed] = useState(false);
   const [pageNumbersVisibility, setPageNumbersVisibility] = useState<Record<number, boolean>>({
     1: true,
     2: true,
@@ -414,8 +413,6 @@ const Index = () => {
 
       <div className="grid grid-cols-[auto_1fr_340px] gap-3 overflow-hidden">
         <LeftSidebar 
-          collapsed={leftSidebarCollapsed}
-          onToggleCollapse={() => setLeftSidebarCollapsed(!leftSidebarCollapsed)}
           styles={styles}
           onStylesChange={setStyles}
         />
