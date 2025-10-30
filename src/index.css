@@ -364,17 +364,17 @@ button[data-active="true"] {
 
 /* Editor overlay - fully interactive */
 .editor-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  grid-column: 1 / -1;
+  grid-row: 1 / -1;
   pointer-events: auto !important;
   z-index: 10;
   cursor: text;
+  display: contents;
 }
 
 .editor-overlay .ProseMirror {
+  grid-column: 1 / -1;
+  grid-row: 1 / -1;
   width: 100%;
   min-height: 100%;
   padding: 4rem;
@@ -383,9 +383,6 @@ button[data-active="true"] {
   user-select: text !important;
   -webkit-user-select: text !important;
   box-sizing: border-box;
-  max-width: 100%;
-  word-wrap: break-word;
-  overflow-wrap: break-word;
 }
 
 /* Ensure all editor content is clickable and editable */
