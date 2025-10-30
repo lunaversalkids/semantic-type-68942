@@ -362,16 +362,19 @@ button[data-active="true"] {
 
 /* Editor overlay - fully interactive */
 .editor-overlay {
-  grid-column: 2;
-  grid-row: 1;
+  grid-column: 1 / -1;
+  grid-row: 1 / -1;
   pointer-events: auto !important;
   z-index: 10;
   cursor: text;
+  display: contents;
 }
 
 .editor-overlay .ProseMirror {
-  width: 8.5in;
-  min-height: 11in;
+  grid-column: 1 / -1;
+  grid-row: 1 / -1;
+  width: 100%;
+  min-height: 100%;
   padding: 4rem;
   cursor: text !important;
   pointer-events: auto !important;
