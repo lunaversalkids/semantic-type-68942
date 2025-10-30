@@ -402,7 +402,7 @@ const Index = () => {
   };
 
   const handleFind = () => {
-    setFindReplaceOpen(true);
+    setFindReplaceOpen(prev => !prev);
   };
 
   return (
