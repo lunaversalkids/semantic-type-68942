@@ -7,7 +7,6 @@ import { StylesDrawer } from '@/components/StylesDrawer';
 import { Editor } from '@/components/Editor';
 import { ApplyToAllDialog } from '@/components/ApplyToAllDialog';
 import { PageNumberDialog } from '@/components/PageNumberDialog';
-import { FindReplaceDialog } from '@/components/FindReplaceDialog';
 import { OnboardingTour } from '@/components/OnboardingTour';
 import { HelpMode } from '@/components/HelpMode';
 import { DocumentManager } from '@/components/DocumentManager';
@@ -455,7 +454,11 @@ const Index = () => {
         <TextStylePanel editor={editor} />
       </div>
       
-      <FindReplaceBottomBar editor={editor} />
+      <FindReplaceBottomBar 
+        editor={editor} 
+        isVisible={findReplaceOpen}
+        onClose={() => setFindReplaceOpen(false)}
+      />
       
       <StylesDrawer open={stylesDrawerOpen} onClose={() => setStylesDrawerOpen(false)} />
       
@@ -489,12 +492,6 @@ const Index = () => {
         open={documentManagerOpen}
         onOpenChange={setDocumentManagerOpen}
         onLoadDocument={handleLoadDocument}
-      />
-
-      <FindReplaceDialog
-        open={findReplaceOpen}
-        onOpenChange={setFindReplaceOpen}
-        editor={editor}
       />
       
       <OnboardingTour />
