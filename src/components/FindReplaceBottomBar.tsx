@@ -98,7 +98,7 @@ export const FindReplaceBottomBar = ({ editor, isVisible = true, onClose }: Find
 
   return (
     <div 
-      className={`bg-[hsl(var(--panel))] border border-[hsl(var(--stroke))] rounded-[var(--radius)] shadow-[0_10px_28px_rgba(96,48,200,.16)] p-2.5 px-3 grid grid-cols-[160px_auto_1fr_auto_1fr_auto_220px_auto_auto_auto] items-center gap-2 transition-all duration-300 ${
+      className={`bg-[hsl(var(--panel))] border border-[hsl(var(--stroke))] rounded-[var(--radius)] shadow-[0_10px_28px_rgba(96,48,200,.16)] p-2.5 px-3 grid grid-cols-[160px_auto_1fr_auto_1fr_auto_220px_auto_auto] items-center gap-2 transition-all duration-300 ${
         isVisible ? 'translate-y-0 opacity-100' : 'translate-y-full opacity-0 pointer-events-none'
       }`}
     >
@@ -166,23 +166,25 @@ export const FindReplaceBottomBar = ({ editor, isVisible = true, onClose }: Find
       </div>
 
       {/* Navigation Arrows */}
-      <button
-        onClick={handlePrevious}
-        disabled={totalMatches === 0}
-        className="w-9 h-9 rounded-[var(--r-sm)] bg-white border border-[hsl(var(--stroke))] grid place-items-center hover:bg-[hsl(var(--panel-2))] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-        title="Previous match"
-      >
-        <ChevronLeft className="w-4 h-4 text-[hsl(var(--ink))]" />
-      </button>
+      <div className="flex gap-1">
+        <button
+          onClick={handlePrevious}
+          disabled={totalMatches === 0}
+          className="w-9 h-9 rounded-[var(--r-sm)] bg-white border border-[hsl(var(--stroke))] grid place-items-center hover:bg-[hsl(var(--panel-2))] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          title="Previous match"
+        >
+          <ChevronLeft className="w-4 h-4 text-[hsl(var(--ink))]" />
+        </button>
 
-      <button
-        onClick={handleNext}
-        disabled={totalMatches === 0}
-        className="w-9 h-9 rounded-[var(--r-sm)] bg-white border border-[hsl(var(--stroke))] grid place-items-center hover:bg-[hsl(var(--panel-2))] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-        title="Next match"
-      >
-        <ChevronRight className="w-4 h-4 text-[hsl(var(--ink))]" />
-      </button>
+        <button
+          onClick={handleNext}
+          disabled={totalMatches === 0}
+          className="w-9 h-9 rounded-[var(--r-sm)] bg-white border border-[hsl(var(--stroke))] grid place-items-center hover:bg-[hsl(var(--panel-2))] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          title="Next match"
+        >
+          <ChevronRight className="w-4 h-4 text-[hsl(var(--ink))]" />
+        </button>
+      </div>
 
       {/* Replace Button with Menu */}
       <div className="relative" ref={replaceButtonRef}>
