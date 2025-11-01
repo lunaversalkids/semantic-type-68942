@@ -1,3 +1,5 @@
+
+-- Migration: 20251028234826
 -- Create documents table to store document metadata
 CREATE TABLE public.documents (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
