@@ -1,5 +1,8 @@
 import { useState } from 'react';
 import { ChevronDown, ChevronLeft, AlignLeft, AlignCenter, AlignRight, AlignJustify, ChevronRight, Indent, Outdent, Check, Info } from 'lucide-react';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import capitalizeIcon from '@/assets/capitalize-icon.jpg';
+import baselineIcon from '@/assets/baseline-icon.jpg';
 
 interface TextStylePanelProps {
   editor?: any;
@@ -51,7 +54,9 @@ export const TextStylePanel = ({ editor }: TextStylePanelProps) => {
   };
 
   return (
-    <aside className="w-[340px] bg-gradient-to-b from-[#E8DDFF] via-[#DDD0FF] to-[#D5C6FF] border border-[hsl(var(--stroke))] rounded-2xl p-4 flex flex-col gap-3">
+    <aside className="w-[340px] h-screen bg-gradient-to-b from-[#E8DDFF] via-[#DDD0FF] to-[#D5C6FF] border border-[hsl(var(--stroke))] rounded-2xl flex flex-col overflow-hidden">
+      <ScrollArea className="flex-1 p-4">
+        <div className="flex flex-col gap-3">
       {/* Header */}
       <div className="flex items-center justify-between mb-1">
         <h2 className="text-sm font-bold text-[#8B7AB8] uppercase tracking-wide">Paragraph Mode</h2>
@@ -69,8 +74,12 @@ export const TextStylePanel = ({ editor }: TextStylePanelProps) => {
       {/* Font Section */}
       <div className="space-y-2">
         <div className="flex items-center justify-between">
-          <span className="text-sm font-semibold text-[#8B7AB8]">Font</span>
-          <span className="text-sm font-medium text-gray-600">{fontFamily}</span>
+          <div className="flex items-center gap-2">
+            <span className="text-sm font-semibold text-[#8B7AB8]">Font</span>
+            <span className="text-sm font-medium text-gray-600">{fontFamily}</span>
+          </div>
+          {/* Color Section */}
+          <div className="w-20 h-10 bg-black rounded-lg border-2 border-gray-300"></div>
         </div>
         
         {/* Format Buttons */}
@@ -99,21 +108,13 @@ export const TextStylePanel = ({ editor }: TextStylePanelProps) => {
           >
             S
           </button>
-          <button className="flex-1 h-12 bg-white hover:bg-gray-50 text-gray-600 font-semibold rounded-lg border border-gray-200 transition-colors flex flex-col items-center justify-center text-xs leading-none">
-            <span className="text-sm">A</span>
-            <span className="text-xs">↑</span>
+          <button className="flex-1 h-12 bg-white hover:bg-gray-50 rounded-lg border border-gray-200 transition-colors flex items-center justify-center p-1">
+            <img src={capitalizeIcon} alt="Capitalize" className="w-full h-full object-contain" />
           </button>
-          <button className="flex-1 h-12 bg-white hover:bg-gray-50 text-gray-600 font-semibold rounded-lg border border-gray-200 transition-colors flex flex-col items-center justify-center text-xs leading-none">
-            <span className="text-xs">A</span>
-            <span className="text-sm">↓</span>
+          <button className="flex-1 h-12 bg-white hover:bg-gray-50 rounded-lg border border-gray-200 transition-colors flex items-center justify-center p-1">
+            <img src={baselineIcon} alt="Baseline" className="w-full h-full object-contain" />
           </button>
         </div>
-      </div>
-
-      {/* Color Section */}
-      <div className="space-y-2">
-        <span className="text-sm font-semibold text-[#8B7AB8]">Color</span>
-        <div className="w-20 h-10 bg-black rounded-lg border-2 border-gray-300"></div>
       </div>
 
       {/* Alignment Grid */}
@@ -265,6 +266,8 @@ export const TextStylePanel = ({ editor }: TextStylePanelProps) => {
           </div>
         </button>
       </div>
+        </div>
+      </ScrollArea>
     </aside>
   );
 };
