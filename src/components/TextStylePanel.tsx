@@ -12,6 +12,7 @@ export const TextStylePanel = ({ editor }: TextStylePanelProps) => {
   const [fontSize, setFontSize] = useState('12');
   const [fontFamily, setFontFamily] = useState('Graphik');
   const [selectedAlignment, setSelectedAlignment] = useState('harvard');
+  const [isCollapsed, setIsCollapsed] = useState(false);
 
   const handleFormat = (command: string) => {
     if (!editor) return;
@@ -53,6 +54,22 @@ export const TextStylePanel = ({ editor }: TextStylePanelProps) => {
     }
   };
 
+  if (isCollapsed) {
+    return (
+      <aside className="w-14 h-screen bg-gradient-to-b from-[#E8DDFF] via-[#DDD0FF] to-[#D5C6FF] border border-[hsl(var(--stroke))] rounded-2xl flex flex-col items-center py-4">
+        <button 
+          onClick={() => setIsCollapsed(false)}
+          className="w-10 h-10 rounded-xl border-2 border-[#8B7AB8] bg-transparent hover:bg-white/20 transition-colors flex items-center justify-center mb-4"
+        >
+          <ChevronRight className="w-5 h-5 text-[#8B7AB8]" />
+        </button>
+        <div className="writing-mode-vertical text-sm font-bold text-[#8B7AB8] uppercase tracking-wide" style={{ writingMode: 'vertical-rl' }}>
+          Paragraph Mode
+        </div>
+      </aside>
+    );
+  }
+
   return (
     <aside className="w-[340px] h-screen bg-gradient-to-b from-[#E8DDFF] via-[#DDD0FF] to-[#D5C6FF] border border-[hsl(var(--stroke))] rounded-2xl flex flex-col overflow-hidden">
       <ScrollArea className="flex-1 p-4">
@@ -60,7 +77,10 @@ export const TextStylePanel = ({ editor }: TextStylePanelProps) => {
       {/* Header */}
       <div className="flex items-center justify-between mb-1">
         <h2 className="text-sm font-bold text-[#8B7AB8] uppercase tracking-wide">Paragraph Mode</h2>
-        <button className="w-10 h-10 rounded-xl border-2 border-[#8B7AB8] bg-transparent hover:bg-white/20 transition-colors flex items-center justify-center">
+        <button 
+          onClick={() => setIsCollapsed(true)}
+          className="w-10 h-10 rounded-xl border-2 border-[#8B7AB8] bg-transparent hover:bg-white/20 transition-colors flex items-center justify-center"
+        >
           <ChevronLeft className="w-5 h-5 text-[#8B7AB8]" />
         </button>
       </div>
@@ -74,12 +94,14 @@ export const TextStylePanel = ({ editor }: TextStylePanelProps) => {
       {/* Font Section */}
       <div className="space-y-2">
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
+          <div className="flex flex-col gap-1">
             <span className="text-sm font-semibold text-[#8B7AB8]">Font</span>
-            <span className="text-sm font-medium text-gray-600">{fontFamily}</span>
+            <span className="text-sm font-semibold text-[#8B7AB8]">Color</span>
           </div>
-          {/* Color Section */}
-          <div className="w-20 h-10 bg-black rounded-lg border-2 border-gray-300"></div>
+          <div className="flex flex-col gap-2 items-end">
+            <span className="text-sm font-medium text-gray-600">{fontFamily}</span>
+            <div className="w-20 h-10 bg-black rounded-lg border-2 border-gray-300"></div>
+          </div>
         </div>
         
         {/* Format Buttons */}
@@ -108,11 +130,11 @@ export const TextStylePanel = ({ editor }: TextStylePanelProps) => {
           >
             S
           </button>
-          <button className="flex-1 h-12 bg-white hover:bg-gray-50 rounded-lg border border-gray-200 transition-colors flex items-center justify-center p-1">
-            <img src={capitalizeIcon} alt="Capitalize" className="w-full h-full object-contain" />
+          <button className="flex-1 h-12 bg-white hover:bg-gray-50 rounded-lg border border-gray-200 transition-colors flex items-center justify-center p-2">
+            <img src={capitalizeIcon} alt="Capitalize" className="w-6 h-6 object-contain" />
           </button>
-          <button className="flex-1 h-12 bg-white hover:bg-gray-50 rounded-lg border border-gray-200 transition-colors flex items-center justify-center p-1">
-            <img src={baselineIcon} alt="Baseline" className="w-full h-full object-contain" />
+          <button className="flex-1 h-12 bg-white hover:bg-gray-50 rounded-lg border border-gray-200 transition-colors flex items-center justify-center p-2">
+            <img src={baselineIcon} alt="Baseline" className="w-6 h-6 object-contain" />
           </button>
         </div>
       </div>
