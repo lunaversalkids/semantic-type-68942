@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { ChevronDown, ChevronLeft, AlignLeft, AlignCenter, AlignRight, AlignJustify, ChevronRight, Indent, Outdent, Check, Info } from 'lucide-react';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { Button } from '@/components/ui/button';
 import capitalizeIcon from '@/assets/capitalize-icon.jpg';
 import baselineIcon from '@/assets/baseline-icon.jpg';
 
@@ -57,12 +58,14 @@ export const TextStylePanel = ({ editor }: TextStylePanelProps) => {
   if (isCollapsed) {
     return (
       <aside className="w-14 h-screen bg-gradient-to-b from-[#E8DDFF] via-[#DDD0FF] to-[#D5C6FF] border border-[hsl(var(--stroke))] rounded-2xl flex flex-col items-center py-4">
-        <button 
+        <Button 
+          size="icon" 
+          variant="ghost" 
+          className="h-8 w-8 text-muted-foreground hover:bg-sidebar-accent mb-4"
           onClick={() => setIsCollapsed(false)}
-          className="w-10 h-10 rounded-xl border-2 border-[#8B7AB8] bg-transparent hover:bg-white/20 transition-colors flex items-center justify-center mb-4"
         >
-          <ChevronRight className="w-5 h-5 text-[#8B7AB8]" />
-        </button>
+          <ChevronRight className="w-4 h-4" />
+        </Button>
         <div className="writing-mode-vertical text-sm font-bold text-[#8B7AB8] uppercase tracking-wide" style={{ writingMode: 'vertical-rl' }}>
           Paragraph Mode
         </div>
@@ -76,12 +79,14 @@ export const TextStylePanel = ({ editor }: TextStylePanelProps) => {
         <div className="flex flex-col gap-3">
       {/* Header */}
       <div className="flex items-center justify-between mb-1">
-        <button 
+        <Button 
+          size="icon" 
+          variant="ghost" 
+          className="h-8 w-8 text-muted-foreground hover:bg-sidebar-accent"
           onClick={() => setIsCollapsed(true)}
-          className="w-8 h-8 rounded-lg border border-[#8B7AB8] bg-transparent hover:bg-white/20 transition-colors flex items-center justify-center"
         >
-          <ChevronLeft className="w-4 h-4 text-[#8B7AB8]" />
-        </button>
+          <ChevronLeft className="w-4 h-4" />
+        </Button>
         <h2 className="text-sm font-bold text-[#8B7AB8] uppercase tracking-wide">Paragraph Mode</h2>
       </div>
 
