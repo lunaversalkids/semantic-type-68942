@@ -76,13 +76,13 @@ export const TextStylePanel = ({ editor }: TextStylePanelProps) => {
         <div className="flex flex-col gap-3">
       {/* Header */}
       <div className="flex items-center justify-between mb-1">
-        <h2 className="text-sm font-bold text-[#8B7AB8] uppercase tracking-wide">Paragraph Mode</h2>
         <button 
           onClick={() => setIsCollapsed(true)}
-          className="w-10 h-10 rounded-xl border-2 border-[#8B7AB8] bg-transparent hover:bg-white/20 transition-colors flex items-center justify-center"
+          className="w-8 h-8 rounded-lg border border-[#8B7AB8] bg-transparent hover:bg-white/20 transition-colors flex items-center justify-center"
         >
-          <ChevronLeft className="w-5 h-5 text-[#8B7AB8]" />
+          <ChevronLeft className="w-4 h-4 text-[#8B7AB8]" />
         </button>
+        <h2 className="text-sm font-bold text-[#8B7AB8] uppercase tracking-wide">Paragraph Mode</h2>
       </div>
 
       {/* Normal Dropdown */}
@@ -131,10 +131,10 @@ export const TextStylePanel = ({ editor }: TextStylePanelProps) => {
             S
           </button>
           <button className="flex-1 h-12 bg-white hover:bg-gray-50 rounded-lg border border-gray-200 transition-colors flex items-center justify-center p-2">
-            <img src={capitalizeIcon} alt="Capitalize" className="w-6 h-6 object-contain" />
+            <img src={capitalizeIcon} alt="Capitalize" className="w-5 h-5 object-contain" />
           </button>
           <button className="flex-1 h-12 bg-white hover:bg-gray-50 rounded-lg border border-gray-200 transition-colors flex items-center justify-center p-2">
-            <img src={baselineIcon} alt="Baseline" className="w-6 h-6 object-contain" />
+            <img src={baselineIcon} alt="Baseline" className="w-5 h-5 object-contain" />
           </button>
         </div>
       </div>
