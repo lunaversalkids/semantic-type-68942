@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Bold, Italic, Underline, Strikethrough, Type, AlignLeft, AlignCenter, AlignRight, AlignJustify, ChevronDown, Info, Indent, Outdent } from 'lucide-react';
+import { ChevronDown, ChevronLeft, AlignLeft, AlignCenter, AlignRight, AlignJustify, ChevronRight, Indent, Outdent, Check, Info } from 'lucide-react';
 
 interface TextStylePanelProps {
   editor?: any;
@@ -7,7 +7,8 @@ interface TextStylePanelProps {
 
 export const TextStylePanel = ({ editor }: TextStylePanelProps) => {
   const [fontSize, setFontSize] = useState('12');
-  const [fontFamily, setFontFamily] = useState('Inter');
+  const [fontFamily, setFontFamily] = useState('Graphik');
+  const [selectedAlignment, setSelectedAlignment] = useState('harvard');
 
   const handleFormat = (command: string) => {
     if (!editor) return;
@@ -35,7 +36,6 @@ export const TextStylePanel = ({ editor }: TextStylePanelProps) => {
 
   const handleIndent = () => {
     if (!editor) return;
-    // Increase indentation
     const currentIndent = editor.getAttributes('paragraph').textIndent || '0px';
     const currentValue = parseInt(currentIndent) || 0;
     editor.chain().focus().updateAttributes('paragraph', { textIndent: `${currentValue + 30}px` }).run();
@@ -43,7 +43,6 @@ export const TextStylePanel = ({ editor }: TextStylePanelProps) => {
 
   const handleOutdent = () => {
     if (!editor) return;
-    // Decrease indentation
     const currentIndent = editor.getAttributes('paragraph').textIndent || '0px';
     const currentValue = parseInt(currentIndent) || 0;
     if (currentValue > 0) {
@@ -51,207 +50,220 @@ export const TextStylePanel = ({ editor }: TextStylePanelProps) => {
     }
   };
 
-  const handleFontSizeChange = (size: string) => {
-    setFontSize(size);
-    if (editor) {
-      editor.chain().focus().setFontSize(`${size}pt`).run();
-    }
-  };
-
-  const handleFontFamilyChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const font = e.target.value;
-    setFontFamily(font);
-    if (editor) {
-      editor.chain().focus().setFontFamily(font).run();
-    }
-  };
-
   return (
-    <aside className="w-[340px] bg-[hsl(var(--panel))] border border-[hsl(var(--stroke))] rounded-[var(--radius)] p-3 grid grid-rows-[auto_auto_1fr] gap-0">
-      {/* Title */}
-      <div className="text-base font-extrabold text-[hsl(var(--ink))] mb-2">Text Style</div>
+    <aside className="w-[340px] bg-gradient-to-b from-[#E8DDFF] via-[#DDD0FF] to-[#D5C6FF] border border-[hsl(var(--stroke))] rounded-2xl p-4 flex flex-col gap-3">
+      {/* Header */}
+      <div className="flex items-center justify-between mb-1">
+        <h2 className="text-sm font-bold text-[#8B7AB8] uppercase tracking-wide">Paragraph Mode</h2>
+        <button className="w-10 h-10 rounded-xl border-2 border-[#8B7AB8] bg-transparent hover:bg-white/20 transition-colors flex items-center justify-center">
+          <ChevronLeft className="w-5 h-5 text-[#8B7AB8]" />
+        </button>
+      </div>
 
-      {/* Font Box */}
-      <div className="bg-gradient-to-b from-[#EDE3FF] to-[#E6DBFF] border border-[hsl(var(--stroke))] rounded-xl p-2.5 mb-2.5">
-        <div className="flex items-center justify-between mb-2">
-          <span className="text-sm font-medium text-[hsl(var(--ink))]">Font</span>
-          <button className="w-9 h-9 p-0 border border-[hsl(var(--stroke))] rounded-[var(--r-sm)] bg-white grid place-items-center hover:bg-[hsl(var(--panel-2))] transition-colors">
-            <ChevronDown className="w-4 h-4 text-[hsl(var(--ink-weak))]" />
-          </button>
+      {/* Normal Dropdown */}
+      <button className="w-full bg-white rounded-xl px-4 py-3 flex items-center justify-between border border-[hsl(var(--stroke))] hover:bg-gray-50 transition-colors">
+        <span className="text-lg font-semibold text-[hsl(var(--ink))]">Normal</span>
+        <ChevronRight className="w-5 h-5 text-gray-400" />
+      </button>
+
+      {/* Font Section */}
+      <div className="space-y-2">
+        <div className="flex items-center justify-between">
+          <span className="text-sm font-semibold text-[#8B7AB8]">Font</span>
+          <span className="text-sm font-medium text-gray-600">{fontFamily}</span>
         </div>
-
-        {/* Font Family and Size */}
-        <div className="flex gap-2 mb-2">
-          <select 
-            value={fontFamily}
-            onChange={handleFontFamilyChange}
-            className="flex-1 h-9 px-2.5 py-2 border border-[hsl(var(--stroke))] rounded-[var(--r-sm)] bg-white text-sm"
-          >
-            <option value="Inter">Inter</option>
-            <option value="Georgia">Georgia</option>
-            <option value="Monaco">Monaco</option>
-            <option value="Times New Roman">Times New Roman</option>
-          </select>
-          <div className="w-16 h-9 px-2.5 py-2 border border-[hsl(var(--stroke))] rounded-[var(--r-sm)] bg-white text-center text-sm flex items-center justify-center">
-            {fontSize}
-          </div>
-        </div>
-
+        
         {/* Format Buttons */}
         <div className="flex gap-2">
           <button
             onClick={() => handleFormat('bold')}
-            className="w-9 h-9 p-0 border border-[hsl(var(--stroke))] rounded-[var(--r-sm)] bg-white hover:bg-[hsl(var(--panel-2))] transition-colors text-sm font-bold"
+            className="flex-1 h-12 bg-[#8B5CF6] hover:bg-[#7C3AED] text-white font-bold rounded-lg transition-colors text-lg"
           >
             B
           </button>
           <button
             onClick={() => handleFormat('italic')}
-            className="w-9 h-9 p-0 border border-[hsl(var(--stroke))] rounded-[var(--r-sm)] bg-white hover:bg-[hsl(var(--panel-2))] transition-colors text-sm italic"
+            className="flex-1 h-12 bg-white hover:bg-gray-50 text-[#8B5CF6] font-semibold italic rounded-lg border border-gray-200 transition-colors text-lg"
           >
             I
           </button>
           <button
             onClick={() => handleFormat('underline')}
-            className="w-9 h-9 p-0 border border-[hsl(var(--stroke))] rounded-[var(--r-sm)] bg-white hover:bg-[hsl(var(--panel-2))] transition-colors text-sm underline"
+            className="flex-1 h-12 bg-white hover:bg-gray-50 text-[#8B5CF6] font-semibold underline rounded-lg border border-gray-200 transition-colors text-lg"
           >
             U
           </button>
           <button
             onClick={() => handleFormat('strike')}
-            className="w-9 h-9 p-0 border border-[hsl(var(--stroke))] rounded-[var(--r-sm)] bg-white hover:bg-[hsl(var(--panel-2))] transition-colors text-sm line-through"
+            className="flex-1 h-12 bg-white hover:bg-gray-50 text-[#8B5CF6] font-semibold line-through rounded-lg border border-gray-200 transition-colors text-lg"
           >
             S
           </button>
-          <button
-            className="w-9 h-9 p-0 border border-[hsl(var(--stroke))] rounded-[var(--r-sm)] bg-white hover:bg-[hsl(var(--panel-2))] transition-colors text-xs font-semibold"
-            title="Capitalization"
-          >
-            A↑
+          <button className="flex-1 h-12 bg-white hover:bg-gray-50 text-gray-600 font-semibold rounded-lg border border-gray-200 transition-colors flex flex-col items-center justify-center text-xs leading-none">
+            <span className="text-sm">A</span>
+            <span className="text-xs">↑</span>
+          </button>
+          <button className="flex-1 h-12 bg-white hover:bg-gray-50 text-gray-600 font-semibold rounded-lg border border-gray-200 transition-colors flex flex-col items-center justify-center text-xs leading-none">
+            <span className="text-xs">A</span>
+            <span className="text-sm">↓</span>
           </button>
         </div>
       </div>
 
-      {/* Text Alignment Section */}
-      <div className="bg-gradient-to-b from-[#EDE3FF] to-[#E6DBFF] border border-[hsl(var(--stroke))] rounded-xl p-2.5 mb-2.5">
-        <div className="text-sm font-extrabold mb-1.5 text-[hsl(var(--ink))]">Text</div>
-        <div className="bg-gradient-to-b from-[#C9B5FF] to-[#A382FF] rounded-xl p-2">
-          {/* First row */}
-          <div className="grid grid-cols-4 gap-1.5 mb-1.5">
-            <button
-              onClick={() => handleAlign('left')}
-              className="h-9 p-0 text-white hover:bg-white/20 border-0 rounded-[var(--r-sm)] text-xs font-semibold transition-colors"
-            >
-              N
-            </button>
-            <button
-              onClick={() => handleAlign('left')}
-              className="h-9 p-0 text-white hover:bg-white/20 border-0 rounded-[var(--r-sm)] transition-colors grid place-items-center"
-            >
-              <AlignLeft className="w-4 h-4" />
-            </button>
-            <button
-              onClick={() => handleAlign('center')}
-              className="h-9 p-0 text-white hover:bg-white/20 border-0 rounded-[var(--r-sm)] transition-colors grid place-items-center"
-            >
-              <AlignCenter className="w-4 h-4" />
-            </button>
-            <button
-              onClick={() => handleAlign('right')}
-              className="h-9 p-0 text-white hover:bg-white/20 border-0 rounded-[var(--r-sm)] transition-colors grid place-items-center"
-            >
-              <AlignRight className="w-4 h-4" />
-            </button>
-          </div>
+      {/* Color Section */}
+      <div className="space-y-2">
+        <span className="text-sm font-semibold text-[#8B7AB8]">Color</span>
+        <div className="w-20 h-10 bg-black rounded-lg border-2 border-gray-300"></div>
+      </div>
 
-          {/* Second row */}
-          <div className="grid grid-cols-2 gap-1.5 mb-1.5">
-            <button
-              className="h-7 p-0 text-white hover:bg-white/20 border-0 rounded-[var(--r-sm)] text-xs transition-colors"
-            >
-              ≡
-            </button>
-            <button
-              onClick={() => handleAlign('justify')}
-              className="h-7 p-0 text-white hover:bg-white/20 border-0 rounded-[var(--r-sm)] transition-colors grid place-items-center"
-            >
-              <AlignJustify className="w-3 h-3" />
-            </button>
-          </div>
+      {/* Alignment Grid */}
+      <div className="bg-gradient-to-b from-[#C9B5FF] to-[#A890FF] rounded-2xl p-3 space-y-2">
+        {/* Top row - 4 buttons */}
+        <div className="grid grid-cols-4 gap-2">
+          <button 
+            onClick={() => handleAlign('left')}
+            className="h-10 bg-white/20 hover:bg-white/30 text-white rounded-lg transition-colors flex items-center justify-center"
+          >
+            <AlignLeft className="w-5 h-5" />
+          </button>
+          <button 
+            onClick={() => handleAlign('center')}
+            className="h-10 bg-white/20 hover:bg-white/30 text-white rounded-lg transition-colors flex items-center justify-center"
+          >
+            <AlignCenter className="w-5 h-5" />
+          </button>
+          <button 
+            onClick={() => handleAlign('right')}
+            className="h-10 bg-white/20 hover:bg-white/30 text-white rounded-lg transition-colors flex items-center justify-center"
+          >
+            <AlignRight className="w-5 h-5" />
+          </button>
+          <button 
+            onClick={() => handleAlign('justify')}
+            className="h-10 bg-white/20 hover:bg-white/30 text-white rounded-lg transition-colors flex items-center justify-center"
+          >
+            <AlignJustify className="w-5 h-5" />
+          </button>
+        </div>
 
-          {/* Third row - Indent Controls */}
-          <div className="grid grid-cols-2 gap-1.5">
-            <button
-              onClick={handleOutdent}
-              className="h-7 p-0 text-white hover:bg-white/20 border-0 rounded-[var(--r-sm)] transition-colors grid place-items-center"
-              title="Decrease indent"
-            >
-              <Outdent className="w-3 h-3" />
-            </button>
-            <button
-              onClick={handleIndent}
-              className="h-7 p-0 text-white hover:bg-white/20 border-0 rounded-[var(--r-sm)] transition-colors grid place-items-center"
-              title="Increase indent"
-            >
-              <Indent className="w-3 h-3" />
-            </button>
-          </div>
+        {/* Middle row - 2 buttons */}
+        <div className="grid grid-cols-2 gap-2">
+          <button className="h-10 bg-white/20 hover:bg-white/30 text-white rounded-lg transition-colors flex items-center justify-center text-2xl">
+            ≡
+          </button>
+          <button 
+            onClick={() => handleAlign('justify')}
+            className="h-10 bg-white/20 hover:bg-white/30 text-white rounded-lg transition-colors flex items-center justify-center"
+          >
+            <AlignJustify className="w-5 h-5" />
+          </button>
+        </div>
+
+        {/* Bottom row - Tab and indent buttons */}
+        <div className="grid grid-cols-4 gap-2">
+          <button className="h-10 bg-white/20 hover:bg-white/30 text-white rounded-lg transition-colors flex items-center justify-center text-sm font-medium">
+            Tab
+          </button>
+          <button 
+            onClick={handleOutdent}
+            className="h-10 bg-white/20 hover:bg-white/30 text-white rounded-lg transition-colors flex items-center justify-center"
+          >
+            <ChevronLeft className="w-5 h-5" />
+          </button>
+          <button 
+            onClick={handleIndent}
+            className="h-10 bg-white/20 hover:bg-white/30 text-white rounded-lg transition-colors flex items-center justify-center"
+          >
+            <ChevronRight className="w-5 h-5" />
+          </button>
+          <button className="h-10 bg-white/20 hover:bg-white/30 text-white rounded-lg transition-colors flex items-center justify-center">
+            <Indent className="w-4 h-4" />
+          </button>
         </div>
       </div>
 
-      {/* Lists Panel */}
-      <div className="bg-gradient-to-b from-[#CDBAFF] to-[#AC8CFF] rounded-xl p-2">
-        {/* None option */}
-        <div className="grid grid-cols-[1fr_auto] items-center bg-white border border-[hsl(var(--stroke))] px-3 py-2.5 rounded-[var(--r-sm)] mb-2">
-          <div className="text-sm font-medium text-[hsl(var(--ink))]">None</div>
-          <div className="w-[22px] h-[22px] grid place-items-center bg-[#EFE8FF] rounded-full">
-            <Info className="w-3.5 h-3.5 text-[#6C3AFF]" />
-          </div>
-        </div>
+      {/* Alignment Section */}
+      <div className="space-y-2">
+        <h3 className="text-sm font-semibold text-[#8B7AB8]">Alignment Section</h3>
+        
+        {/* None */}
+        <button 
+          onClick={() => setSelectedAlignment('none')}
+          className="w-full bg-white rounded-xl px-4 py-3 flex items-center justify-between border border-gray-200 hover:bg-gray-50 transition-colors"
+        >
+          <span className="text-sm font-medium text-[hsl(var(--ink))]">None</span>
+          {selectedAlignment === 'none' && <Check className="w-5 h-5 text-[#8B5CF6]" />}
+        </button>
 
         {/* Bullet */}
-        <div className="grid grid-cols-[1fr_auto] items-center bg-white border border-[hsl(var(--stroke))] px-3 py-2.5 rounded-[var(--r-sm)] mb-2">
-          <div className="flex items-center gap-2 text-sm font-medium text-[hsl(var(--ink))]">
+        <button 
+          onClick={() => setSelectedAlignment('bullet')}
+          className="w-full bg-white rounded-xl px-4 py-3 flex items-center justify-between border border-gray-200 hover:bg-gray-50 transition-colors"
+        >
+          <div className="flex items-center gap-2">
             <span className="text-lg">•</span>
-            <span>Bullet</span>
+            <span className="text-sm font-medium text-[hsl(var(--ink))]">Bullet</span>
           </div>
-          <div className="w-[22px] h-[22px] grid place-items-center bg-[#EFE8FF] rounded-full">
-            <Info className="w-3.5 h-3.5 text-[#6C3AFF]" />
+          <div className="w-6 h-6 rounded-full bg-[#E8DDFF] flex items-center justify-center">
+            <Info className="w-4 h-4 text-[#8B5CF6]" />
           </div>
-        </div>
+        </button>
 
         {/* Image */}
-        <div className="grid grid-cols-[1fr_auto] items-center bg-white border border-[hsl(var(--stroke))] px-3 py-2.5 rounded-[var(--r-sm)] mb-2">
-          <div className="flex items-center gap-2 text-sm font-medium text-[hsl(var(--ink))]">
-            <span className="text-sm font-bold">▣</span>
-            <span>Image</span>
+        <button 
+          onClick={() => setSelectedAlignment('image')}
+          className="w-full bg-white rounded-xl px-4 py-3 flex items-center justify-between border border-gray-200 hover:bg-gray-50 transition-colors"
+        >
+          <div className="flex items-center gap-2">
+            <span className="text-lg">▣</span>
+            <span className="text-sm font-medium text-[hsl(var(--ink))]">Image</span>
           </div>
-          <div className="w-[22px] h-[22px] grid place-items-center bg-[#EFE8FF] rounded-full">
-            <Info className="w-3.5 h-3.5 text-[#6C3AFF]" />
+          <div className="w-6 h-6 rounded-full bg-[#E8DDFF] flex items-center justify-center">
+            <Info className="w-4 h-4 text-[#8B5CF6]" />
           </div>
-        </div>
+        </button>
 
-        {/* Lettered */}
-        <div className="grid grid-cols-[1fr_auto] items-center bg-gradient-to-b from-[#B9A1FF] to-[#8F6BFF] text-white px-3 py-2.5 rounded-[var(--r-sm)] mb-2 border-0">
-          <div className="flex items-center gap-2 text-sm font-medium">
-            <span className="text-sm font-bold">A.</span>
-            <span>Lettered</span>
+        {/* Harvard - Selected */}
+        <button 
+          onClick={() => setSelectedAlignment('harvard')}
+          className="w-full bg-gradient-to-b from-[#B9A1FF] to-[#9B7FFF] rounded-xl px-4 py-3 flex items-center justify-between border-0 transition-colors"
+        >
+          <div className="flex items-center gap-2">
+            <span className="text-lg text-white">✓</span>
+            <span className="text-sm font-medium text-white">Harvard</span>
           </div>
-          <div className="w-[22px] h-[22px] grid place-items-center bg-[#EFE8FF] rounded-full">
-            <Info className="w-3.5 h-3.5 text-[#6C3AFF]" />
+          <div className="w-6 h-6 rounded-full bg-[#E8DDFF] flex items-center justify-center">
+            <Info className="w-4 h-4 text-[#8B5CF6]" />
           </div>
-        </div>
+        </button>
 
-        {/* Numbered */}
-        <div className="grid grid-cols-[1fr_auto] items-center bg-gradient-to-b from-[#B9A1FF] to-[#8F6BFF] text-white px-3 py-2.5 rounded-[var(--r-sm)] border-0">
-          <div className="flex items-center gap-2 text-sm font-medium">
-            <span className="text-sm font-bold">1.</span>
-            <span>Numbered</span>
+        {/* Dash */}
+        <button 
+          onClick={() => setSelectedAlignment('dash')}
+          className="w-full bg-white rounded-xl px-4 py-3 flex items-center justify-between border border-gray-200 hover:bg-gray-50 transition-colors"
+        >
+          <div className="flex items-center gap-2">
+            <span className="text-lg">−</span>
+            <span className="text-sm font-medium text-[hsl(var(--ink))]">Dash</span>
           </div>
-          <div className="w-[22px] h-[22px] grid place-items-center bg-[#EFE8FF] rounded-full">
-            <Info className="w-3.5 h-3.5 text-[#6C3AFF]" />
+          <div className="w-6 h-6 rounded-full bg-[#E8DDFF] flex items-center justify-center">
+            <Info className="w-4 h-4 text-[#8B5CF6]" />
           </div>
-        </div>
+        </button>
+
+        {/* Note Taking */}
+        <button 
+          onClick={() => setSelectedAlignment('note-taking')}
+          className="w-full bg-white rounded-xl px-4 py-3 flex items-center justify-between border border-gray-200 hover:bg-gray-50 transition-colors"
+        >
+          <div className="flex items-center gap-2">
+            <span className="text-lg">−</span>
+            <span className="text-sm font-medium text-[hsl(var(--ink))]">Note Taking</span>
+          </div>
+          <div className="w-6 h-6 rounded-full bg-[#E8DDFF] flex items-center justify-center">
+            <Info className="w-4 h-4 text-[#8B5CF6]" />
+          </div>
+        </button>
       </div>
     </aside>
   );
