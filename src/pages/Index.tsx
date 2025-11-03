@@ -481,7 +481,7 @@ const Index = () => {
         onClose={() => setFindReplaceOpen(false)}
       />
       
-      <DecorativeBottomBar />
+      <DecorativeBottomBar onClick={() => console.log('Avatar clicked')} />
       
       <ApplyToAllDialog
         open={applyToAllOpen}

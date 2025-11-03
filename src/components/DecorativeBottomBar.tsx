@@ -1,23 +1,24 @@
-import avatarButton from '@/assets/avatar-button.png';
+import { Button } from '@/components/ui/button';
+import avatarImage from '@/assets/avatar-button.png';
 
-export const DecorativeBottomBar = () => {
-  const handleAvatarClick = () => {
-    console.log('Avatar button clicked');
-    // Add your custom functionality here
-  };
+interface DecorativeBottomBarProps {
+  onClick?: () => void;
+}
 
+export const DecorativeBottomBar = ({ onClick }: DecorativeBottomBarProps) => {
   return (
-    <div className="h-16 border-t border-sidebar-border bg-background px-6 flex items-center justify-center">
-      <button 
-        onClick={handleAvatarClick}
-        className="w-12 h-12 rounded-full overflow-hidden hover:opacity-80 transition-opacity focus:outline-none focus:ring-2 focus:ring-primary"
+    <div className="h-[86px] border-t border-sidebar-border bg-background flex items-center justify-center">
+      <Button
+        variant="ghost"
+        className="h-[70px] w-[70px] rounded-full p-0 hover:opacity-80 transition-opacity"
+        onClick={onClick}
       >
         <img 
-          src={avatarButton} 
+          src={avatarImage} 
           alt="Avatar" 
-          className="w-full h-full object-cover"
+          className="h-full w-full rounded-full object-cover"
         />
-      </button>
+      </Button>
     </div>
   );
 };
