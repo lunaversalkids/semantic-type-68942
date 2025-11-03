@@ -3,6 +3,7 @@ import { Header } from '@/components/Header';
 import { TextStylePanel } from '@/components/TextStylePanel';
 import { LeftSidebar } from '@/components/LeftSidebar';
 import { FindReplaceBottomBar } from '@/components/FindReplaceBottomBar';
+import { AvatarBottomBar } from '@/components/AvatarBottomBar';
 import { Editor } from '@/components/Editor';
 import { ApplyToAllDialog } from '@/components/ApplyToAllDialog';
 import { PageNumberDialog } from '@/components/PageNumberDialog';
@@ -474,11 +475,18 @@ const Index = () => {
         <TextStylePanel editor={editor} />
       </div>
       
-      <FindReplaceBottomBar 
-        editor={editor} 
-        isVisible={findReplaceOpen}
-        onClose={() => setFindReplaceOpen(false)}
-      />
+      <div className="relative">
+        <AvatarBottomBar />
+        {findReplaceOpen && (
+          <div className="absolute inset-0">
+            <FindReplaceBottomBar 
+              editor={editor} 
+              isVisible={findReplaceOpen}
+              onClose={() => setFindReplaceOpen(false)}
+            />
+          </div>
+        )}
+      </div>
       
       
       <ApplyToAllDialog
