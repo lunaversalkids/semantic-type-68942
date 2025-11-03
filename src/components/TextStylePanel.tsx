@@ -64,7 +64,7 @@ export const TextStylePanel = ({ editor }: TextStylePanelProps) => {
           className="h-8 w-8 text-muted-foreground hover:bg-sidebar-accent mb-4"
           onClick={() => setIsCollapsed(false)}
         >
-          <ChevronRight className="w-4 h-4" />
+          <ChevronLeft className="w-4 h-4" />
         </Button>
         <div className="writing-mode-vertical text-sm font-bold text-[#8B7AB8] uppercase tracking-wide" style={{ writingMode: 'vertical-rl' }}>
           Paragraph Mode
@@ -78,16 +78,16 @@ export const TextStylePanel = ({ editor }: TextStylePanelProps) => {
       <ScrollArea className="flex-1 p-4">
         <div className="flex flex-col gap-3">
       {/* Header */}
-      <div className="flex items-center gap-2 mb-1">
+      <div className="flex items-center justify-between mb-1">
+        <h2 className="text-sm font-bold text-[#8B7AB8] uppercase tracking-wide">Paragraph Mode</h2>
         <Button 
           size="icon" 
           variant="ghost" 
           className="h-8 w-8 text-muted-foreground hover:bg-sidebar-accent"
           onClick={() => setIsCollapsed(true)}
         >
-          <ChevronLeft className="w-4 h-4" />
+          <ChevronRight className="w-4 h-4" />
         </Button>
-        <h2 className="text-sm font-bold text-[#8B7AB8] uppercase tracking-wide">Paragraph Mode</h2>
       </div>
 
       {/* Normal Dropdown */}
