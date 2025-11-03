@@ -48,7 +48,9 @@ export const LeftSidebar = ({
   return <div className={`h-full bg-sidebar border-r border-sidebar-border flex transition-all duration-300 ${width} overflow-hidden`}>
       {/* Icon Column */}
       <div className="w-16 flex-shrink-0 flex flex-col items-center gap-4 py-4">
-        
+        <Button size="icon" variant="ghost" className="h-10 w-10 text-primary hover:bg-sidebar-accent" title="History">
+          <History className="w-5 h-5" />
+        </Button>
         
         
         
