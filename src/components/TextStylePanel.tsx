@@ -78,7 +78,7 @@ export const TextStylePanel = ({ editor }: TextStylePanelProps) => {
       <ScrollArea className="flex-1 p-4">
         <div className="flex flex-col gap-3">
       {/* Header */}
-      <div className="flex items-center justify-between mb-1">
+      <div className="flex items-center gap-2 mb-1">
         <Button 
           size="icon" 
           variant="ghost" 
