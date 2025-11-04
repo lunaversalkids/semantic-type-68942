@@ -2,12 +2,12 @@ import avatarImage from '@/assets/avatar-center.png';
 
 export const AvatarBottomBar = () => {
   return (
-    <div className="h-16 border-t border-sidebar-border bg-background px-6 flex items-center justify-center">
-      <button className="flex items-center justify-center">
+    <div className="h-16 border-t border-sidebar-border bg-background px-6 flex items-center justify-center gap-4">
+      <button className="flex items-center justify-center hover:opacity-80 transition-opacity">
         <img 
           src={avatarImage} 
           alt="Avatar" 
-          className="h-14 w-14 rounded-full object-cover"
+          className="h-12 w-12 object-contain"
         />
       </button>
     </div>
