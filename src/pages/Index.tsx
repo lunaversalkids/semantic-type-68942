@@ -3,7 +3,7 @@ import { Header } from '@/components/Header';
 import { TextStylePanel } from '@/components/TextStylePanel';
 import { LeftSidebar } from '@/components/LeftSidebar';
 import { FindReplaceBottomBar } from '@/components/FindReplaceBottomBar';
-import { AvatarBottomBar } from '@/components/AvatarBottomBar';
+import { DecorativeBottomBar } from '@/components/DecorativeBottomBar';
 import { Editor } from '@/components/Editor';
 import { ApplyToAllDialog } from '@/components/ApplyToAllDialog';
 import { PageNumberDialog } from '@/components/PageNumberDialog';
@@ -421,7 +421,7 @@ const Index = () => {
   };
 
   return (
-    <div className="h-screen grid grid-rows-[58px_1fr_86px] gap-3 pl-3 pb-3 pt-3 overflow-hidden">
+    <div className="h-screen grid grid-rows-[58px_1fr_86px_86px] gap-3 pl-3 pb-3 pt-3 overflow-hidden">
       <div className="pr-3">
         <Header 
           onFindClick={handleFind}
@@ -475,19 +475,13 @@ const Index = () => {
         <TextStylePanel editor={editor} />
       </div>
       
-      <div className="relative">
-        <AvatarBottomBar />
-        {findReplaceOpen && (
-          <div className="absolute inset-0">
-            <FindReplaceBottomBar 
-              editor={editor} 
-              isVisible={findReplaceOpen}
-              onClose={() => setFindReplaceOpen(false)}
-            />
-          </div>
-        )}
-      </div>
+      <FindReplaceBottomBar 
+        editor={editor} 
+        isVisible={findReplaceOpen}
+        onClose={() => setFindReplaceOpen(false)}
+      />
       
+      <DecorativeBottomBar onClick={() => console.log('Avatar clicked')} />
       
       <ApplyToAllDialog
         open={applyToAllOpen}
