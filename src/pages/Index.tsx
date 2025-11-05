@@ -421,9 +421,9 @@ const Index = () => {
   };
 
   return (
-    <div className="h-screen grid grid-rows-[58px_1fr_86px] gap-3 pl-3 pb-3 pt-3 overflow-hidden">
-      <div className="pr-3">
-        <Header 
+    <div className="h-screen grid grid-rows-[58px_1fr_86px] gap-3 p-3 overflow-hidden">
+      <div>
+        <Header
           onFindClick={handleFind}
           onDocumentClick={() => setDocumentManagerOpen(true)}
           onCloudClick={() => setDocumentManagerOpen(true)}
