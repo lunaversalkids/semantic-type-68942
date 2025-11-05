@@ -57,7 +57,7 @@ export const TextStylePanel = ({ editor }: TextStylePanelProps) => {
 
   if (isCollapsed) {
     return (
-      <aside className="w-14 h-screen bg-gradient-to-b from-[#E8DDFF] via-[#DDD0FF] to-[#D5C6FF] border border-[hsl(var(--stroke))] rounded-2xl flex flex-col items-center py-4">
+      <aside className="w-16 h-full bg-sidebar border-l border-sidebar-border flex flex-col items-center py-4">
         <Button 
           size="icon" 
           variant="ghost" 
@@ -66,7 +66,7 @@ export const TextStylePanel = ({ editor }: TextStylePanelProps) => {
         >
           <ChevronLeft className="w-4 h-4" />
         </Button>
-        <div className="writing-mode-vertical text-sm font-bold text-[#8B7AB8] uppercase tracking-wide" style={{ writingMode: 'vertical-rl' }}>
+        <div className="writing-mode-vertical text-sm font-medium text-muted-foreground uppercase tracking-wide" style={{ writingMode: 'vertical-rl' }}>
           Paragraph Mode
         </div>
       </aside>
@@ -74,7 +74,7 @@ export const TextStylePanel = ({ editor }: TextStylePanelProps) => {
   }
 
   return (
-    <aside className="w-[340px] h-screen bg-gradient-to-b from-[#E8DDFF] via-[#DDD0FF] to-[#D5C6FF] border border-[hsl(var(--stroke))] rounded-2xl flex flex-col overflow-hidden">
+    <aside className="w-[340px] h-full bg-sidebar border-l border-sidebar-border flex flex-col overflow-hidden">
       <ScrollArea className="flex-1 p-4">
         <div className="flex flex-col gap-3">
       {/* Header */}
