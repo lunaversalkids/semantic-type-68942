@@ -6,7 +6,7 @@ export const PermanentFindReplaceBar = () => {
       <img 
         src={avatarIcon} 
         alt="Avatar" 
-        className="h-16 w-auto object-contain"
+        className="h-16 w-auto object-contain mx-auto"
       />
     </div>
   );
