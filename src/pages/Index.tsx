@@ -13,6 +13,7 @@ import { DocumentManager } from '@/components/DocumentManager';
 import { ExportDialog } from '@/components/ExportDialog';
 import { ImportDialog } from '@/components/ImportDialog';
 import { PDFImportDialog } from '@/components/PDFImportDialog';
+import { PageViewer } from '@/components/PageViewer';
 import { defaultStyles } from '@/types/styles';
 import { useToast } from '@/hooks/use-toast';
 import { toast as sonnerToast } from 'sonner';
@@ -44,6 +45,7 @@ const Index = () => {
   const [exportOpen, setExportOpen] = useState(false);
   const [importOpen, setImportOpen] = useState(false);
   const [pdfImportOpen, setPdfImportOpen] = useState(false);
+  const [pageViewerOpen, setPageViewerOpen] = useState(false);
   const [styles, setStyles] = useState(defaultStyles);
   const { toast } = useToast();
 
@@ -432,6 +434,7 @@ const Index = () => {
           onExportClick={() => setExportOpen(true)}
           onImportClick={() => setImportOpen(true)}
           onPdfImportClick={() => setPdfImportOpen(true)}
+          onPageViewerClick={() => setPageViewerOpen(true)}
         />
       </div>
 
@@ -539,6 +542,16 @@ const Index = () => {
         onOpenChange={setPdfImportOpen}
         editor={editor}
         isDocumentSaved={documentSaved}
+      />
+
+      <PageViewer 
+        isOpen={pageViewerOpen}
+        onClose={() => setPageViewerOpen(false)}
+        totalPages={totalPages}
+        onPageClick={(pageNum) => {
+          console.log('Navigate to page:', pageNum);
+          // Future: Add page navigation logic
+        }}
       />
       
       <OnboardingTour />

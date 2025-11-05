@@ -1,4 +1,5 @@
 import { Pen, Navigation, Search, Cloud, FileDown, FileUp } from 'lucide-react';
+import infinityIcon from '@/assets/infinity-icon.png';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -15,6 +16,7 @@ interface HeaderProps {
   onExportClick?: () => void;
   onImportClick?: () => void;
   onPdfImportClick?: () => void;
+  onPageViewerClick?: () => void;
 }
 
 export const Header = ({ 
@@ -25,7 +27,8 @@ export const Header = ({
   onStylusModeClick,
   onExportClick,
   onImportClick,
-  onPdfImportClick
+  onPdfImportClick,
+  onPageViewerClick
 }: HeaderProps) => {
   return (
     <header className="bg-[hsl(var(--panel))] border border-[hsl(var(--stroke))] rounded-[var(--radius)] shadow-[0_10px_28px_rgba(96,48,200,.16)] p-2 grid grid-cols-[220px_1fr_360px] items-center gap-2">
@@ -86,6 +89,14 @@ export const Header = ({
           title="My Documents"
         >
           <Cloud className="w-4 h-4 text-[hsl(var(--ink))]" />
+        </button>
+
+        <button 
+          onClick={onPageViewerClick}
+          className="h-9 w-9 border border-[hsl(var(--stroke))] rounded-[var(--r-sm)] bg-gradient-to-b from-[#8D60FF] to-[#6A3CFF] grid place-items-center hover:from-[#9D70FF] hover:to-[#7A4CFF] transition-all shadow-lg" 
+          title="Page Viewer"
+        >
+          <img src={infinityIcon} alt="" className="w-5 h-5" />
         </button>
 
         <DropdownMenu>
