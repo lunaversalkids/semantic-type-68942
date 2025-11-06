@@ -14,15 +14,20 @@ interface PageViewerProps {
 export const PageViewer = ({ isOpen, onClose, totalPages, onPageClick }: PageViewerProps) => {
   const [searchQuery, setSearchQuery] = useState('');
 
-  if (!isOpen) return null;
-
   // Generate array of page numbers
   const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
 
   return (
-    <div className="fixed inset-0 z-50 bg-[#E8E4F3] flex flex-col">
+    <div 
+      className={`fixed top-[70px] left-3 right-3 z-50 bg-[#E8E4F3] rounded-[var(--radius)] shadow-[0_20px_60px_rgba(96,48,200,.24)] flex flex-col transition-all duration-300 ease-out origin-top ${
+        isOpen 
+          ? 'max-h-[calc(100vh-90px)] opacity-100 scale-y-100' 
+          : 'max-h-0 opacity-0 scale-y-0 pointer-events-none'
+      }`}
+      style={{ transformOrigin: 'top' }}
+    >
       {/* Header Section */}
-      <div className="p-6 space-y-4">
+      <div className="p-6 space-y-4 shrink-0">
         {/* Search Bar */}
         <div className="relative">
           <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#8D60FF]" />
@@ -53,7 +58,7 @@ export const PageViewer = ({ isOpen, onClose, totalPages, onPageClick }: PageVie
       </div>
 
       {/* Page Grid - Scrollable */}
-      <div className="flex-1 overflow-y-auto px-6 pb-32">
+      <div className="flex-1 overflow-y-auto px-6 pb-6">
         <div className="grid grid-cols-2 gap-6 max-w-4xl mx-auto">
           {pages.map((pageNum) => (
             <button
@@ -91,7 +96,7 @@ export const PageViewer = ({ isOpen, onClose, totalPages, onPageClick }: PageVie
       </div>
 
       {/* Bottom Toolbar */}
-      <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-10">
+      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-10">
         <div className="bg-white/80 backdrop-blur-md border-2 border-[#C4B5FD]/40 rounded-[20px] shadow-[0_12px_40px_rgba(139,92,246,0.24)] px-6 py-4 flex items-center gap-6">
           <button
             onClick={onClose}

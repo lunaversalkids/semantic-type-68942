@@ -424,7 +424,7 @@ const Index = () => {
 
   return (
     <div className="h-screen grid grid-rows-[58px_1fr_86px] gap-3 p-3 overflow-hidden">
-      <div>
+      <div className="relative">
         <Header
           onFindClick={handleFind}
           onDocumentClick={() => setDocumentManagerOpen(true)}
@@ -434,7 +434,13 @@ const Index = () => {
           onExportClick={() => setExportOpen(true)}
           onImportClick={() => setImportOpen(true)}
           onPdfImportClick={() => setPdfImportOpen(true)}
-          onPageViewerClick={() => setPageViewerOpen(true)}
+          onPageViewerClick={() => setPageViewerOpen(prev => !prev)}
+          pageViewerOpen={pageViewerOpen}
+        />
+        <PageViewer 
+          isOpen={pageViewerOpen} 
+          onClose={() => setPageViewerOpen(false)} 
+          totalPages={totalPages}
         />
       </div>
 
