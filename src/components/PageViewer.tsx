@@ -19,12 +19,11 @@ export const PageViewer = ({ isOpen, onClose, totalPages, onPageClick }: PageVie
 
   return (
     <div 
-      className={`fixed top-[70px] left-3 right-3 z-50 bg-[#E8E4F3] rounded-[var(--radius)] shadow-[0_20px_60px_rgba(96,48,200,.24)] flex flex-col transition-all duration-300 ease-out origin-top ${
+      className={`fixed top-[70px] left-3 bottom-[98px] w-[340px] z-50 bg-[#E8E4F3] rounded-[var(--radius)] shadow-[0_20px_60px_rgba(96,48,200,.24)] flex flex-col transition-all duration-300 ease-out ${
         isOpen 
-          ? 'max-h-[calc(100vh-90px)] opacity-100 scale-y-100' 
-          : 'max-h-0 opacity-0 scale-y-0 pointer-events-none'
+          ? 'translate-x-0 opacity-100' 
+          : '-translate-x-[calc(100%+12px)] opacity-0 pointer-events-none'
       }`}
-      style={{ transformOrigin: 'top' }}
     >
       {/* Header Section */}
       <div className="p-6 space-y-4 shrink-0">
@@ -58,8 +57,8 @@ export const PageViewer = ({ isOpen, onClose, totalPages, onPageClick }: PageVie
       </div>
 
       {/* Page Grid - Scrollable */}
-      <div className="flex-1 overflow-y-auto px-6 pb-6">
-        <div className="grid grid-cols-2 gap-6 max-w-4xl mx-auto">
+      <div className="flex-1 overflow-y-auto px-6 pb-20">
+        <div className="grid grid-cols-2 gap-4">
           {pages.map((pageNum) => (
             <button
               key={pageNum}
