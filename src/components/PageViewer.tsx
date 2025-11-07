@@ -26,6 +26,7 @@ export const PageViewer = ({ isOpen, onClose, totalPages, onPageClick, onAddPage
   const [pageRotations, setPageRotations] = useState<Map<number, number>>(new Map());
   const [copiedPages, setCopiedPages] = useState<number[]>([]);
   const [copiedContent, setCopiedContent] = useState<string>('');
+  const [openPageMenu, setOpenPageMenu] = useState<number | null>(null);
 
   // Generate array of page numbers
   const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
@@ -210,10 +211,122 @@ export const PageViewer = ({ isOpen, onClose, totalPages, onPageClick, onAddPage
                   </div>
                 </div>
 
-                {/* Infinity Icon */}
-                <div className="absolute bottom-1 left-1">
-                  <img src={infinityIcon} alt="" className="w-6 h-6" />
-                </div>
+                {/* Infinity Icon with Menu */}
+                <Popover open={openPageMenu === pageNum} onOpenChange={(open) => setOpenPageMenu(open ? pageNum : null)}>
+                  <PopoverTrigger asChild>
+                    <button 
+                      className="absolute bottom-1 left-1 z-10 hover:scale-110 transition-transform"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                      }}
+                    >
+                      <img src={infinityIcon} alt="" className="w-6 h-6" />
+                    </button>
+                  </PopoverTrigger>
+                  <PopoverContent 
+                    className="w-56 p-0 bg-gradient-to-br from-white/95 to-[#F5F0FF]/95 backdrop-blur-md border-2 border-[#C4B5FD]/40 shadow-[0_8px_32px_rgba(139,92,246,0.3)] rounded-xl" 
+                    sideOffset={8}
+                    align="start"
+                  >
+                    <div className="py-1">
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          onAddPage?.();
+                          setOpenPageMenu(null);
+                          toast.success('Page added');
+                        }}
+                        className="w-full px-4 py-2.5 text-left text-[#8D60FF] font-semibold text-sm hover:bg-[#8D60FF]/10 transition-colors flex items-center gap-2"
+                      >
+                        <Plus className="w-4 h-4" />
+                        Add Page
+                      </button>
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setSelectedPages(new Set([pageNum]));
+                          handleCopyPages();
+                          setOpenPageMenu(null);
+                        }}
+                        className="w-full px-4 py-2.5 text-left text-[#8D60FF] font-semibold text-sm hover:bg-[#8D60FF]/10 transition-colors flex items-center gap-2"
+                      >
+                        <Copy className="w-4 h-4" />
+                        Copy
+                      </button>
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          toast.info('Copy Background feature coming soon');
+                          setOpenPageMenu(null);
+                        }}
+                        className="w-full px-4 py-2.5 text-left text-[#8D60FF] font-semibold text-sm hover:bg-[#8D60FF]/10 transition-colors"
+                      >
+                        Copy Background
+                      </button>
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setPageRotations(prev => {
+                            const newRotations = new Map(prev);
+                            const currentRotation = newRotations.get(pageNum) || 0;
+                            newRotations.set(pageNum, (currentRotation + 90) % 360);
+                            return newRotations;
+                          });
+                          toast.success('Page rotated');
+                          setOpenPageMenu(null);
+                        }}
+                        className="w-full px-4 py-2.5 text-left text-[#8D60FF] font-semibold text-sm hover:bg-[#8D60FF]/10 transition-colors"
+                      >
+                        Rotate
+                      </button>
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setSelectedPages(new Set([pageNum]));
+                          if (editor) {
+                            const content = editor.getHTML();
+                            onCopyPages?.([pageNum], content, pageNum + 1);
+                          }
+                          toast.success('Page duplicated');
+                          setOpenPageMenu(null);
+                        }}
+                        className="w-full px-4 py-2.5 text-left text-[#8D60FF] font-semibold text-sm hover:bg-[#8D60FF]/10 transition-colors"
+                      >
+                        Duplicate
+                      </button>
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          toast.info('Create Template feature coming soon');
+                          setOpenPageMenu(null);
+                        }}
+                        className="w-full px-4 py-2.5 text-left text-[#8D60FF] font-semibold text-sm hover:bg-[#8D60FF]/10 transition-colors"
+                      >
+                        Create Template
+                      </button>
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          toast.info('Clear Page feature coming soon');
+                          setOpenPageMenu(null);
+                        }}
+                        className="w-full px-4 py-2.5 text-left text-[#8D60FF] font-semibold text-sm hover:bg-[#8D60FF]/10 transition-colors"
+                      >
+                        Clear Page
+                      </button>
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          toast.info('Delete feature coming soon');
+                          setOpenPageMenu(null);
+                        }}
+                        className="w-full px-4 py-2.5 text-left text-[#8D60FF] font-semibold text-sm hover:bg-[#8D60FF]/10 transition-colors border-t border-[#C4B5FD]/30 text-red-500 hover:bg-red-50"
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  </PopoverContent>
+                </Popover>
 
                 {/* Page Number Overlay on Hover */}
                 <div className="absolute inset-0 bg-[#8D60FF]/0 group-hover:bg-[#8D60FF]/5 flex items-center justify-center transition-all duration-300">
