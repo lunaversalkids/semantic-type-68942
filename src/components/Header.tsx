@@ -29,14 +29,14 @@ export const Header = ({
       {/* Brand */}
       <div className="flex items-center gap-2.5 font-extrabold">
         <button onClick={onPageViewerClick} className={`transition-all hover:opacity-80 ${pageViewerOpen ? 'shadow-lg ring-2 ring-[#8D60FF]/50 rounded-full' : ''}`}>
-          <img src={newInfinityButton} alt="" className="w-7 h-7" />
+          <img src={newInfinityButton} alt="" className="w-9 h-9" />
         </button>
         <div className="text-[hsl(var(--ink))]">Doc One</div>
       </div>
 
       {/* Title - Centered */}
-      <div className="flex items-center justify-center">
-        <button onClick={onDocumentClick} className="flex items-center gap-2.5 px-3.5 py-2 border border-[hsl(var(--stroke))] rounded-full bg-[hsla(253,100%,64%,0.12)] text-[#4E3DC9] font-bold hover:bg-[hsla(253,100%,64%,0.18)] transition-colors" title="Save/Load Documents">
+      <div className="flex items-center justify-center w-full">
+        <button onClick={onDocumentClick} className="flex items-center gap-2.5 px-3.5 py-2 border border-[hsl(var(--stroke))] rounded-full bg-[hsla(253,100%,64%,0.12)] text-[#4E3DC9] font-bold hover:bg-[hsla(253,100%,64%,0.18)] transition-colors mx-auto" title="Save/Load Documents">
           <span className="text-lg">∞</span>
           <span>Insects</span>
         </button>
