@@ -244,8 +244,16 @@ export const PageViewer = ({ isOpen, onClose, totalPages, onPageClick, onAddPage
                       <button
                         onClick={(e) => {
                           e.stopPropagation();
-                          setSelectedPages(new Set([pageNum]));
-                          handleCopyPages();
+                          // Directly copy the page without relying on selectedPages state
+                          setCopiedPages([pageNum]);
+                          if (editor) {
+                            const content = editor.getHTML();
+                            setCopiedContent(content);
+                          }
+                          toast.success('Page copied', {
+                            description: `Page ${pageNum} ready to paste`,
+                            duration: 2000,
+                          });
                           setOpenPageMenu(null);
                         }}
                         className="w-full px-4 py-2.5 text-left text-[#8D60FF] font-semibold text-sm hover:bg-[#8D60FF]/10 transition-colors flex items-center gap-2"
@@ -257,9 +265,12 @@ export const PageViewer = ({ isOpen, onClose, totalPages, onPageClick, onAddPage
                         <button
                           onClick={(e) => {
                             e.stopPropagation();
-                            if (copiedContent) {
-                              onCopyPages?.(copiedPages, copiedContent, pageNum);
-                              toast.success(`Page${copiedPages.length > 1 ? 's' : ''} pasted before page ${pageNum}`);
+                            if (copiedContent && onCopyPages) {
+                              onCopyPages(copiedPages, copiedContent, pageNum);
+                              toast.success(`Page${copiedPages.length > 1 ? 's' : ''} pasted`, {
+                                description: `Inserted before page ${pageNum}`,
+                                duration: 2000,
+                              });
                             }
                             setOpenPageMenu(null);
                           }}
