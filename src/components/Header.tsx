@@ -34,7 +34,7 @@ export const Header = ({
         <div className="text-[hsl(var(--ink))]">Doc One</div>
       </div>
 
-      {/* Title */}
+      {/* Title - Centered */}
       <div className="flex items-center justify-center">
         <button onClick={onDocumentClick} className="flex items-center gap-2.5 px-3.5 py-2 border border-[hsl(var(--stroke))] rounded-full bg-[hsla(253,100%,64%,0.12)] text-[#4E3DC9] font-bold hover:bg-[hsla(253,100%,64%,0.18)] transition-colors" title="Save/Load Documents">
           <span className="text-lg">∞</span>

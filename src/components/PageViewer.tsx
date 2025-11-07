@@ -41,7 +41,7 @@ export const PageViewer = ({ isOpen, onClose, totalPages, onPageClick }: PageVie
 
         {/* Controls Row */}
         <div className="grid grid-cols-3 items-center">
-          <button className="flex items-center gap-1.5 px-2 py-1 text-[#8D60FF] font-semibold text-sm hover:bg-white/40 rounded-lg transition-colors justify-self-start">
+          <button className="flex items-center gap-1.5 px-2 py-1 text-[#8D60FF] font-semibold text-xs hover:bg-white/40 rounded-lg transition-colors justify-self-start">
             All Pages
             <ChevronDown className="w-3.5 h-3.5" />
           </button>
@@ -50,7 +50,7 @@ export const PageViewer = ({ isOpen, onClose, totalPages, onPageClick }: PageVie
             <BookOpen className="w-4.5 h-4.5 text-[#8D60FF]" />
           </div>
 
-          <button className="px-2 py-1 text-[#8D60FF] font-semibold text-sm hover:bg-white/40 rounded-lg transition-colors justify-self-end">
+          <button className="px-2 py-1 text-[#8D60FF] font-semibold text-xs hover:bg-white/40 rounded-lg transition-colors justify-self-end">
             Select
           </button>
         </div>
