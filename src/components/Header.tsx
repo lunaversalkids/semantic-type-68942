@@ -28,8 +28,8 @@ export const Header = ({
   return <header className="bg-[hsl(var(--panel))] border border-[hsl(var(--stroke))] rounded-[var(--radius)] shadow-[0_10px_28px_rgba(96,48,200,.16)] p-2 grid grid-cols-[220px_1fr_360px] items-center gap-2">
       {/* Brand */}
       <div className="flex items-center gap-2.5 font-extrabold">
-        <button onClick={onPageViewerClick} className={`w-7 h-7 rounded-lg bg-gradient-to-b from-[#8D60FF] to-[#6A3CFF] text-white grid place-items-center text-xs transition-all hover:from-[#9D70FF] hover:to-[#7A4CFF] ${pageViewerOpen ? 'shadow-lg ring-2 ring-[#8D60FF]/50' : ''}`}>
-          ONE
+        <button onClick={onPageViewerClick} className={`w-7 h-7 rounded-full bg-[#8D60FF] grid place-items-center transition-all hover:bg-[#7C4DFF] ${pageViewerOpen ? 'shadow-lg ring-2 ring-[#8D60FF]/50' : ''}`}>
+          <img src={infinityIcon} alt="" className="w-4 h-4" />
         </button>
         <div className="text-[hsl(var(--ink))]">Doc One</div>
       </div>
