@@ -253,6 +253,22 @@ export const PageViewer = ({ isOpen, onClose, totalPages, onPageClick, onAddPage
                         <Copy className="w-4 h-4" />
                         Copy
                       </button>
+                      {copiedPages.length > 0 && (
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            if (copiedContent) {
+                              onCopyPages?.(copiedPages, copiedContent, pageNum);
+                              toast.success(`Page${copiedPages.length > 1 ? 's' : ''} pasted before page ${pageNum}`);
+                            }
+                            setOpenPageMenu(null);
+                          }}
+                          className="w-full px-4 py-2.5 text-left text-[#8D60FF] font-semibold text-sm hover:bg-[#8D60FF]/10 transition-colors flex items-center gap-2 animate-fade-in"
+                        >
+                          <span className="text-[#8D60FF] font-bold">P</span>
+                          Paste
+                        </button>
+                      )}
                       <button
                         onClick={(e) => {
                           e.stopPropagation();
