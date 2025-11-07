@@ -60,43 +60,44 @@ export const PageViewer = ({ isOpen, onClose, totalPages, onPageClick }: PageVie
       <div className="flex-1 overflow-y-auto px-6 pb-16">
         <div className="grid grid-cols-2 gap-4">
           {pages.map((pageNum) => (
-            <button
-              key={pageNum}
-              onClick={() => {
-                onPageClick?.(pageNum);
-                onClose();
-              }}
-              className="relative aspect-[8.5/11] bg-white rounded shadow-[0_4px_12px_rgba(139,92,246,0.1)] hover:shadow-[0_6px_16px_rgba(139,92,246,0.15)] transition-all duration-300 hover:scale-[1.02] group"
-            >
-              {/* Page Content Preview - This would show actual page content */}
-              <div className="w-full h-full overflow-hidden p-3">
-                <div className="text-left text-xs text-gray-400 space-y-1.5">
-                  <div className="w-full h-1.5 bg-gray-100 rounded"></div>
-                  <div className="w-4/5 h-1.5 bg-gray-100 rounded"></div>
-                  <div className="w-full h-1.5 bg-gray-100 rounded"></div>
-                  <div className="w-3/4 h-1.5 bg-gray-100 rounded"></div>
+            <div key={pageNum} className="flex flex-col items-center gap-2">
+              <button
+                onClick={() => {
+                  onPageClick?.(pageNum);
+                  onClose();
+                }}
+                className="relative aspect-[8.5/11] bg-white shadow-[0_4px_12px_rgba(139,92,246,0.1)] hover:shadow-[0_6px_16px_rgba(139,92,246,0.15)] transition-all duration-300 hover:scale-[1.02] group w-full"
+              >
+                {/* Page Content Preview - This would show actual page content */}
+                <div className="w-full h-full overflow-hidden p-3">
+                  <div className="text-left text-xs text-gray-400 space-y-1.5">
+                    <div className="w-full h-1.5 bg-gray-100 rounded"></div>
+                    <div className="w-4/5 h-1.5 bg-gray-100 rounded"></div>
+                    <div className="w-full h-1.5 bg-gray-100 rounded"></div>
+                    <div className="w-3/4 h-1.5 bg-gray-100 rounded"></div>
+                  </div>
                 </div>
-              </div>
 
-              {/* Infinity Icon */}
-              <div className="absolute bottom-2 left-2">
-                <img src={infinityIcon} alt="" className="w-6 h-6" />
-              </div>
+                {/* Infinity Icon */}
+                <div className="absolute bottom-2 left-2">
+                  <img src={infinityIcon} alt="" className="w-6 h-6" />
+                </div>
 
-              {/* Page Number at Bottom */}
-              <div className="absolute bottom-2 right-2">
+                {/* Page Number Overlay on Hover */}
+                <div className="absolute inset-0 bg-[#8D60FF]/0 group-hover:bg-[#8D60FF]/5 flex items-center justify-center transition-all duration-300">
+                  <span className="text-[#8D60FF] font-bold text-base opacity-0 group-hover:opacity-100 transition-opacity">
+                    Page {pageNum}
+                  </span>
+                </div>
+              </button>
+              
+              {/* Page Number Below Thumbnail */}
+              <div className="text-center">
                 <span className="text-[#8D60FF] font-semibold text-xs">
                   {pageNum}
                 </span>
               </div>
-
-              {/* Page Number Overlay on Hover */}
-              <div className="absolute inset-0 bg-[#8D60FF]/0 group-hover:bg-[#8D60FF]/5 flex items-center justify-center transition-all duration-300">
-                <span className="text-[#8D60FF] font-bold text-base opacity-0 group-hover:opacity-100 transition-opacity">
-                  Page {pageNum}
-                </span>
-              </div>
-            </button>
+            </div>
           ))}
         </div>
       </div>

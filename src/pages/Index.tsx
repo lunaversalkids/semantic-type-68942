@@ -37,7 +37,7 @@ const Index = () => {
     format: 'page-x',
   });
   const [footnoteCounter, setFootnoteCounter] = useState(1);
-  const [totalPages, setTotalPages] = useState(2);
+  const [totalPages, setTotalPages] = useState(3);
   const [documentSaved, setDocumentSaved] = useState(false);
   const [saveDialogOpen, setSaveDialogOpen] = useState(false);
   const [documentManagerOpen, setDocumentManagerOpen] = useState(false);
@@ -449,7 +449,7 @@ const Index = () => {
           onStylesChange={setStyles}
         />
         <main className="overflow-hidden">
-          <Editor 
+        <Editor 
             onSelectionChange={setSelectedText} 
             onEditorReady={setEditor}
             onApplyToAll={handleApplyToAll}
@@ -470,7 +470,8 @@ const Index = () => {
             onFind={handleFind}
             pageNumbersVisibility={pageNumbersVisibility}
             pageNumberSettings={pageNumberSettings}
-            totalPages={2}
+            totalPages={totalPages}
+            onPageCountChange={setTotalPages}
             onTogglePageNumber={(pageNum) => {
               setPageNumbersVisibility(prev => ({
                 ...prev,

@@ -49,6 +49,7 @@ interface EditorProps {
   };
   totalPages?: number;
   onTogglePageNumber?: (pageNum: number) => void;
+  onPageCountChange?: (count: number) => void;
 }
 
 export const Editor = ({ 
@@ -73,7 +74,8 @@ export const Editor = ({
   pageNumbersVisibility = { 1: true, 2: true },
   pageNumberSettings = { position: 'right', format: 'page-x' },
   totalPages = 2,
-  onTogglePageNumber 
+  onTogglePageNumber,
+  onPageCountChange
 }: EditorProps) => {
   const getPageNumberText = (pageNum: number) => {
     const { format } = pageNumberSettings;
@@ -99,7 +101,11 @@ export const Editor = ({
 
   const addNewPage = () => {
     const newPageId = `page-${pages.length + 1}`;
-    setPages(prev => [...prev, newPageId]);
+    setPages(prev => {
+      const newPages = [...prev, newPageId];
+      onPageCountChange?.(newPages.length);
+      return newPages;
+    });
     
     // Ensure the editor remains focused and editable after adding a new page
     setTimeout(() => {
@@ -108,6 +114,11 @@ export const Editor = ({
       }
     }, 100);
   };
+
+  // Notify parent of initial page count
+  useEffect(() => {
+    onPageCountChange?.(pages.length);
+  }, []);
 
   const editor = useEditor({
     extensions: [
@@ -291,7 +302,7 @@ export const Editor = ({
                   return (
                     <Card 
                       key={pageId}
-                      className="page-card w-[8.5in] h-[11in] bg-[hsl(var(--page-bg))] shadow-2xl"
+                      className="page-card w-[8.5in] h-[11in] bg-[hsl(var(--page-bg))] shadow-2xl rounded-none"
                     >
                       {pageNumbersVisibility[pageNum] !== false && (
                         <div 
