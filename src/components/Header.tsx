@@ -1,5 +1,5 @@
 import { Pen, Navigation, Search, Cloud, FileDown, FileUp } from 'lucide-react';
-import infinityIcon from '@/assets/infinity-icon.png';
+import newInfinityButton from '@/assets/new-infinity-button.png';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 interface HeaderProps {
   onFindClick?: () => void;
@@ -28,8 +28,8 @@ export const Header = ({
   return <header className="bg-[hsl(var(--panel))] border border-[hsl(var(--stroke))] rounded-[var(--radius)] shadow-[0_10px_28px_rgba(96,48,200,.16)] p-2 grid grid-cols-[220px_1fr_360px] items-center gap-2">
       {/* Brand */}
       <div className="flex items-center gap-2.5 font-extrabold">
-        <button onClick={onPageViewerClick} className={`w-7 h-7 rounded-full bg-[#8D60FF] grid place-items-center transition-all hover:bg-[#7C4DFF] ${pageViewerOpen ? 'shadow-lg ring-2 ring-[#8D60FF]/50' : ''}`}>
-          <img src={infinityIcon} alt="" className="w-4 h-4" />
+        <button onClick={onPageViewerClick} className={`transition-all hover:opacity-80 ${pageViewerOpen ? 'shadow-lg ring-2 ring-[#8D60FF]/50 rounded-full' : ''}`}>
+          <img src={newInfinityButton} alt="" className="w-7 h-7" />
         </button>
         <div className="text-[hsl(var(--ink))]">Doc One</div>
       </div>
