@@ -18,7 +18,9 @@ export const PageViewer = ({ isOpen, onClose, totalPages, onPageClick }: PageVie
   const [searchQuery, setSearchQuery] = useState('');
   const [searchFilter, setSearchFilter] = useState('all');
   const [selectMode, setSelectMode] = useState(false);
+  const [rotateMode, setRotateMode] = useState(false);
   const [selectedPages, setSelectedPages] = useState<Set<number>>(new Set());
+  const [pageRotations, setPageRotations] = useState<Map<number, number>>(new Map());
 
   // Generate array of page numbers
   const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
@@ -48,7 +50,19 @@ export const PageViewer = ({ isOpen, onClose, totalPages, onPageClick }: PageVie
 
   const handleCancelSelect = () => {
     setSelectMode(false);
+    setRotateMode(false);
     setSelectedPages(new Set());
+  };
+
+  const handleRotatePages = () => {
+    setPageRotations(prev => {
+      const newRotations = new Map(prev);
+      selectedPages.forEach(pageNum => {
+        const currentRotation = newRotations.get(pageNum) || 0;
+        newRotations.set(pageNum, (currentRotation + 90) % 360);
+      });
+      return newRotations;
+    });
   };
 
   return (
@@ -121,6 +135,7 @@ export const PageViewer = ({ isOpen, onClose, totalPages, onPageClick }: PageVie
                       onClose();
                     }
                   }}
+                  style={{ transform: `rotate(${pageRotations.get(pageNum) || 0}deg)` }}
                   className={`relative aspect-[8.5/11] bg-white group w-full transition-all duration-500 ease-out ${
                     isSelected 
                       ? 'shadow-[0_0_20px_8px_rgba(139,92,246,0.4)] ring-2 ring-[#8D60FF]/60 scale-[1.02]' 
@@ -241,7 +256,7 @@ export const PageViewer = ({ isOpen, onClose, totalPages, onPageClick }: PageVie
                     </button>
                     <button
                       onClick={() => {
-                        toast.info('Rotate feature coming soon');
+                        setRotateMode(true);
                         setTimeout(() => document.body.click(), 300);
                       }}
                       className="w-full px-4 py-2.5 text-left text-[#8D60FF] font-semibold text-sm hover:bg-[#8D60FF]/10 transition-colors"
@@ -270,6 +285,19 @@ export const PageViewer = ({ isOpen, onClose, totalPages, onPageClick }: PageVie
                 )}
               </PopoverContent>
             </Popover>
+
+            {rotateMode && (
+              <button
+                onClick={handleRotatePages}
+                className="w-8 h-8 bg-white/80 rounded-full flex items-center justify-center hover:bg-white transition-all duration-300 shadow-md border-2 border-[#C4B5FD]/40 hover:rotate-90"
+                title="Rotate Selected Pages"
+              >
+                <svg className="w-4 h-4 text-[#8D60FF]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M21 12a9 9 0 11-9-9c2.52 0 4.93 1 6.74 2.74L21 8" />
+                  <path d="M21 3v5h-5" />
+                </svg>
+              </button>
+            )}
 
             <Button
               size="icon"
