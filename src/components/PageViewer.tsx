@@ -265,18 +265,28 @@ export const PageViewer = ({ isOpen, onClose, totalPages, onPageClick, onAddPage
                         <button
                           onClick={(e) => {
                             e.stopPropagation();
-                            if (copiedContent && onCopyPages) {
-                              onCopyPages(copiedPages, copiedContent, pageNum);
-                              toast.success(`Page${copiedPages.length > 1 ? 's' : ''} pasted`, {
+                            if (copiedContent && onCopyPages && editor) {
+                              // Insert the copied content before the selected page
+                              const currentContent = editor.getHTML();
+                              const pageBreak = '<div class="page-break" data-type="page-break"></div>';
+                              const pages = currentContent.split(pageBreak);
+                              
+                              // Insert copied content before the target page
+                              const insertIndex = pageNum - 1;
+                              pages.splice(insertIndex, 0, copiedContent);
+                              
+                              // Set the new content
+                              editor.commands.setContent(pages.join(pageBreak));
+                              
+                              toast.success('Page pasted', {
                                 description: `Inserted before page ${pageNum}`,
                                 duration: 2000,
                               });
                             }
                             setOpenPageMenu(null);
                           }}
-                          className="w-full px-4 py-2.5 text-left text-[#8D60FF] font-semibold text-sm hover:bg-[#8D60FF]/10 transition-colors flex items-center gap-2 animate-fade-in"
+                          className="w-full px-4 py-2.5 text-left text-[#8D60FF] font-semibold text-sm hover:bg-[#8D60FF]/10 transition-colors animate-fade-in"
                         >
-                          <span className="text-[#8D60FF] font-bold">P</span>
                           Paste
                         </button>
                       )}
