@@ -55,6 +55,7 @@ export const PageViewer = ({ isOpen, onClose, totalPages, onPageClick, onAddPage
     setSelectMode(false);
     setRotateMode(false);
     setSelectedPages(new Set());
+    setCopiedPages([]);
   };
 
   const handleRotatePages = () => {
@@ -241,7 +242,7 @@ export const PageViewer = ({ isOpen, onClose, totalPages, onPageClick, onAddPage
               <Copy className="w-3.5 h-3.5" strokeWidth={1.5} style={{ strokeDasharray: '2,2' }} />
             </Button>
 
-            {copiedPages.length > 0 && (
+            {selectMode && copiedPages.length > 0 && (
               <button
                 onClick={handlePastePages}
                 className="w-8 h-8 bg-white/80 rounded-full flex items-center justify-center hover:bg-white transition-all duration-300 shadow-md border-2 border-[#C4B5FD]/40 animate-fade-in"
