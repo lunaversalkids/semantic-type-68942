@@ -211,7 +211,7 @@ export const PageViewer = ({ isOpen, onClose, totalPages, onPageClick, onAddPage
                 </div>
 
                 {/* Infinity Icon */}
-                <div className="absolute bottom-2 left-2">
+                <div className="absolute bottom-1 left-1">
                   <img src={infinityIcon} alt="" className="w-6 h-6" />
                 </div>
 
