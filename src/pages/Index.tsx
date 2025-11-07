@@ -21,6 +21,7 @@ import { toast as sonnerToast } from 'sonner';
 const Index = () => {
   const [selectedText, setSelectedText] = useState('');
   const [editor, setEditor] = useState<any>(null);
+  const [addPageFn, setAddPageFn] = useState<(() => void) | null>(null);
   const [applyToAllOpen, setApplyToAllOpen] = useState(false);
   const [pageNumberDialogOpen, setPageNumberDialogOpen] = useState(false);
   const [currentPageForNumber, setCurrentPageForNumber] = useState(1);
@@ -443,13 +444,9 @@ const Index = () => {
           onClose={() => setPageViewerOpen(false)} 
           totalPages={totalPages}
           onAddPage={() => {
-            if (editor) {
-              // Trigger the editor's add page functionality
-              const addPageButton = document.querySelector('[title="Add new page"]') as HTMLButtonElement;
-              if (addPageButton) {
-                addPageButton.click();
-                sonnerToast.success('New page added');
-              }
+            if (addPageFn) {
+              addPageFn();
+              sonnerToast.success('New page added');
             }
           }}
         />
@@ -482,6 +479,7 @@ const Index = () => {
             pageNumberSettings={pageNumberSettings}
             totalPages={totalPages}
             onPageCountChange={setTotalPages}
+            onAddPageReady={(fn) => setAddPageFn(() => fn)}
             onTogglePageNumber={(pageNum) => {
               setPageNumbersVisibility(prev => ({
                 ...prev,

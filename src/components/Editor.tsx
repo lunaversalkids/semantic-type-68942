@@ -50,6 +50,7 @@ interface EditorProps {
   totalPages?: number;
   onTogglePageNumber?: (pageNum: number) => void;
   onPageCountChange?: (count: number) => void;
+  onAddPageReady?: (addPageFn: () => void) => void;
 }
 
 export const Editor = ({ 
@@ -75,7 +76,8 @@ export const Editor = ({
   pageNumberSettings = { position: 'right', format: 'page-x' },
   totalPages = 2,
   onTogglePageNumber,
-  onPageCountChange
+  onPageCountChange,
+  onAddPageReady
 }: EditorProps) => {
   const getPageNumberText = (pageNum: number) => {
     const { format } = pageNumberSettings;
@@ -115,9 +117,10 @@ export const Editor = ({
     }, 100);
   };
 
-  // Notify parent of initial page count
+  // Notify parent of initial page count and provide add page function
   useEffect(() => {
     onPageCountChange?.(pages.length);
+    onAddPageReady?.(addNewPage);
   }, []);
 
   const editor = useEditor({
