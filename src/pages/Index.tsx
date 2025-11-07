@@ -442,6 +442,16 @@ const Index = () => {
           isOpen={pageViewerOpen} 
           onClose={() => setPageViewerOpen(false)} 
           totalPages={totalPages}
+          onAddPage={() => {
+            if (editor) {
+              // Trigger the editor's add page functionality
+              const addPageButton = document.querySelector('[title="Add a new page to your document"]') as HTMLButtonElement;
+              if (addPageButton) {
+                addPageButton.click();
+              }
+              sonnerToast.success('New page added');
+            }
+          }}
         />
         
         <LeftSidebar 

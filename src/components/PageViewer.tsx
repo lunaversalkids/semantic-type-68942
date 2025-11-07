@@ -12,9 +12,10 @@ interface PageViewerProps {
   onClose: () => void;
   totalPages: number;
   onPageClick?: (pageNumber: number) => void;
+  onAddPage?: () => void;
 }
 
-export const PageViewer = ({ isOpen, onClose, totalPages, onPageClick }: PageViewerProps) => {
+export const PageViewer = ({ isOpen, onClose, totalPages, onPageClick, onAddPage }: PageViewerProps) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [searchFilter, setSearchFilter] = useState('all');
   const [selectMode, setSelectMode] = useState(false);
@@ -212,6 +213,7 @@ export const PageViewer = ({ isOpen, onClose, totalPages, onPageClick }: PageVie
             <Button
               size="icon"
               variant="ghost"
+              onClick={() => onAddPage?.()}
               className="w-7 h-7 text-[#8D60FF] hover:bg-[#8D60FF]/10 hover:text-[#7C4DFF]"
               title="Add Page"
             >
