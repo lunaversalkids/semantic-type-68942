@@ -196,78 +196,21 @@ export const PageViewer = ({ isOpen, onClose, totalPages, onPageClick }: PageVie
               <Plus className="w-3.5 h-3.5" strokeWidth={2.5} />
             </Button>
 
-            <Popover open={undefined} onOpenChange={undefined}>
+            <Popover>
               <PopoverTrigger asChild>
                 <button className="w-8 h-8 bg-white/80 rounded-full flex items-center justify-center hover:bg-white transition-colors cursor-pointer shadow-md border-2 border-[#C4B5FD]/40">
                   <img src={infinityIcon} alt="" className="w-4.5 h-4.5" />
                 </button>
               </PopoverTrigger>
               <PopoverContent className="w-48 p-0 bg-white border-2 border-[#C4B5FD]/40 shadow-[0_8px_24px_rgba(139,92,246,0.2)]" sideOffset={8}>
-                {selectedPages.size === 0 ? (
-                  <button
-                    onClick={(e) => {
-                      handleSelectAll();
-                      // Close popover smoothly
-                      const popoverTrigger = e.currentTarget.closest('[data-radix-popper-content-wrapper]');
-                      if (popoverTrigger) {
-                        setTimeout(() => {
-                          document.body.click();
-                        }, 300);
-                      }
-                    }}
-                    className="w-full px-4 py-3 text-left text-[#8D60FF] font-semibold text-sm hover:bg-[#8D60FF]/10 transition-colors"
-                  >
-                    Select All Pages
-                  </button>
-                ) : (
-                  <div className="py-1">
-                    <button
-                      onClick={(e) => {
-                        handleCancelSelect();
-                        setTimeout(() => document.body.click(), 300);
-                      }}
-                      className="w-full px-4 py-2.5 text-left text-[#8D60FF] font-semibold text-sm hover:bg-[#8D60FF]/10 transition-colors"
-                    >
-                      Deselect All
-                    </button>
-                    <button
-                      onClick={() => {
-                        toast.info('Move feature coming soon');
-                        setTimeout(() => document.body.click(), 300);
-                      }}
-                      className="w-full px-4 py-2.5 text-left text-[#8D60FF] font-semibold text-sm hover:bg-[#8D60FF]/10 transition-colors"
-                    >
-                      Move
-                    </button>
-                    <button
-                      onClick={() => {
-                        toast.info('Rotate feature coming soon');
-                        setTimeout(() => document.body.click(), 300);
-                      }}
-                      className="w-full px-4 py-2.5 text-left text-[#8D60FF] font-semibold text-sm hover:bg-[#8D60FF]/10 transition-colors"
-                    >
-                      Rotate
-                    </button>
-                    <button
-                      onClick={() => {
-                        toast.info('Bookmark feature coming soon');
-                        setTimeout(() => document.body.click(), 300);
-                      }}
-                      className="w-full px-4 py-2.5 text-left text-[#8D60FF] font-semibold text-sm hover:bg-[#8D60FF]/10 transition-colors"
-                    >
-                      Bookmark
-                    </button>
-                    <button
-                      onClick={() => {
-                        toast.info('Delete feature coming soon');
-                        setTimeout(() => document.body.click(), 300);
-                      }}
-                      className="w-full px-4 py-2.5 text-left text-[#8D60FF] font-semibold text-sm hover:bg-[#8D60FF]/10 transition-colors border-t border-[#C4B5FD]/30 text-red-500 hover:bg-red-50"
-                    >
-                      Delete
-                    </button>
-                  </div>
-                )}
+                <button
+                  onClick={() => {
+                    handleSelectAll();
+                  }}
+                  className="w-full px-4 py-3 text-left text-[#8D60FF] font-semibold text-sm hover:bg-[#8D60FF]/10 transition-colors"
+                >
+                  Select All Pages
+                </button>
               </PopoverContent>
             </Popover>
 
