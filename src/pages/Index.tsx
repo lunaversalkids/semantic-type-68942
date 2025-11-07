@@ -450,21 +450,50 @@ const Index = () => {
               sonnerToast.success('New page added');
             }
           }}
-          onCopyPages={(pageNumbers, editorContent) => {
+          onCopyPages={(pageNumbers, editorContent, insertBeforePage) => {
             if (addPageFn && editor && editorContent) {
               // Add visual pages for each copied page
               pageNumbers.forEach(() => {
                 addPageFn();
               });
               
-              // Append the copied content to the editor
-              editor.chain()
-                .focus('end')
-                .insertContent('<div class="page-break">Page Break</div>')
-                .insertContent(editorContent)
-                .run();
+              // If insertBeforePage is specified, insert before that page
+              // Otherwise append to end (for backward compatibility)
+              if (insertBeforePage && insertBeforePage > 1) {
+                // Find the page break for the target page
+                const html = editor.getHTML();
+                const pageBreaks = html.split('<div class="page-break">');
+                
+                if (pageBreaks.length >= insertBeforePage) {
+                  // Insert before the specified page
+                  const beforeContent = pageBreaks.slice(0, insertBeforePage - 1).join('<div class="page-break">');
+                  const afterContent = pageBreaks.slice(insertBeforePage - 1).join('<div class="page-break">');
+                  
+                  const newContent = beforeContent + 
+                    '<div class="page-break">Page Break</div>' + 
+                    editorContent + 
+                    '<div class="page-break">Page Break</div>' + 
+                    afterContent;
+                  
+                  editor.commands.setContent(newContent);
+                } else {
+                  // Fallback to append at end
+                  editor.chain()
+                    .focus('end')
+                    .insertContent('<div class="page-break">Page Break</div>')
+                    .insertContent(editorContent)
+                    .run();
+                }
+              } else {
+                // Append to end
+                editor.chain()
+                  .focus('end')
+                  .insertContent('<div class="page-break">Page Break</div>')
+                  .insertContent(editorContent)
+                  .run();
+              }
               
-              sonnerToast.success(`Pasted ${pageNumbers.length} page${pageNumbers.length > 1 ? 's' : ''} with content`);
+              sonnerToast.success(`Pasted ${pageNumbers.length} page${pageNumbers.length > 1 ? 's' : ''} ${insertBeforePage ? `before page ${insertBeforePage}` : 'at end'}`);
             }
           }}
         />
