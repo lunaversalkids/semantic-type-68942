@@ -161,7 +161,7 @@ export const PageViewer = ({ isOpen, onClose, totalPages, onPageClick, onAddPage
       </div>
 
       {/* Page Grid - Scrollable */}
-      <div className={`flex-1 overflow-y-auto px-6 ${selectMode ? 'pb-24' : 'pb-6'}`}>
+      <div className={`flex-1 overflow-y-auto px-6 pt-6 ${selectMode ? 'pb-24' : 'pb-6'}`}>
         <div className="grid grid-cols-2 gap-4">
           {pages.map((pageNum) => {
             const isSelected = selectedPages.has(pageNum);
