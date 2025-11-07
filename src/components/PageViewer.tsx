@@ -3,6 +3,7 @@ import { Search, ChevronDown, BookOpen, Maximize2, Plus, Copy } from 'lucide-rea
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { toast } from 'sonner';
 import infinityIcon from '@/assets/new-infinity-icon.png';
 
 interface PageViewerProps {
@@ -16,9 +17,38 @@ export const PageViewer = ({ isOpen, onClose, totalPages, onPageClick }: PageVie
   const [searchQuery, setSearchQuery] = useState('');
   const [searchFilter, setSearchFilter] = useState('all');
   const [selectMode, setSelectMode] = useState(false);
+  const [selectedPages, setSelectedPages] = useState<Set<number>>(new Set());
 
   // Generate array of page numbers
   const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
+
+  const handlePageSelect = (pageNum: number) => {
+    if (!selectMode) return;
+    
+    setSelectedPages(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(pageNum)) {
+        newSet.delete(pageNum);
+      } else {
+        newSet.add(pageNum);
+      }
+      return newSet;
+    });
+  };
+
+  const handleSelectAll = () => {
+    const allPages = new Set(pages);
+    setSelectedPages(allPages);
+    toast.success(`All ${totalPages} pages selected`, {
+      description: 'Every page in the viewer has been selected',
+      duration: 2000,
+    });
+  };
+
+  const handleCancelSelect = () => {
+    setSelectMode(false);
+    setSelectedPages(new Set());
+  };
 
   return (
     <div 
@@ -60,7 +90,13 @@ export const PageViewer = ({ isOpen, onClose, totalPages, onPageClick }: PageVie
           </div>
 
           <button 
-            onClick={() => setSelectMode(!selectMode)}
+            onClick={() => {
+              if (selectMode) {
+                handleCancelSelect();
+              } else {
+                setSelectMode(true);
+              }
+            }}
             className={`px-2 py-1 text-[#8D60FF] font-semibold text-xs hover:bg-white/40 rounded-lg transition-colors justify-self-end ${selectMode ? 'bg-white/40' : ''}`}
           >
             {selectMode ? 'Cancel' : 'Select'}
@@ -71,15 +107,25 @@ export const PageViewer = ({ isOpen, onClose, totalPages, onPageClick }: PageVie
       {/* Page Grid - Scrollable */}
       <div className="flex-1 overflow-y-auto px-6 pb-16">
         <div className="grid grid-cols-2 gap-4">
-          {pages.map((pageNum) => (
-            <div key={pageNum} className="flex flex-col items-center gap-2">
-              <button
-                onClick={() => {
-                  onPageClick?.(pageNum);
-                  onClose();
-                }}
-                className="relative aspect-[8.5/11] bg-white shadow-[0_4px_12px_rgba(139,92,246,0.1)] hover:shadow-[0_6px_16px_rgba(139,92,246,0.15)] transition-all duration-300 hover:scale-[1.02] group w-full"
-              >
+          {pages.map((pageNum) => {
+            const isSelected = selectedPages.has(pageNum);
+            return (
+              <div key={pageNum} className="flex flex-col items-center gap-2">
+                <button
+                  onClick={() => {
+                    if (selectMode) {
+                      handlePageSelect(pageNum);
+                    } else {
+                      onPageClick?.(pageNum);
+                      onClose();
+                    }
+                  }}
+                  className={`relative aspect-[8.5/11] bg-white transition-all duration-300 group w-full ${
+                    isSelected 
+                      ? 'shadow-[0_0_20px_8px_rgba(139,92,246,0.4)] ring-2 ring-[#8D60FF]/60 scale-[1.02]' 
+                      : 'shadow-[0_4px_12px_rgba(139,92,246,0.1)] hover:shadow-[0_6px_16px_rgba(139,92,246,0.15)] hover:scale-[1.02]'
+                  }`}
+                >
                 {/* Page Content Preview - This would show actual page content */}
                 <div className="w-full h-full overflow-hidden p-3">
                   <div className="text-left text-xs text-gray-400 space-y-1.5">
@@ -105,12 +151,15 @@ export const PageViewer = ({ isOpen, onClose, totalPages, onPageClick }: PageVie
               
               {/* Page Number Below Thumbnail */}
               <div className="text-center">
-                <span className="text-[#8D60FF] font-semibold text-xs">
+                <span className={`font-semibold text-xs transition-colors ${
+                  isSelected ? 'text-[#7C4DFF]' : 'text-[#8D60FF]'
+                }`}>
                   {pageNum}
                 </span>
               </div>
             </div>
-          ))}
+          )}
+          )}
         </div>
       </div>
 
@@ -119,7 +168,7 @@ export const PageViewer = ({ isOpen, onClose, totalPages, onPageClick }: PageVie
         <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-10">
           <div className="bg-white/80 backdrop-blur-md border-2 border-[#C4B5FD]/40 rounded-2xl shadow-[0_8px_24px_rgba(139,92,246,0.2)] px-3 py-1.5 flex items-center gap-3">
             <button
-              onClick={() => setSelectMode(false)}
+              onClick={handleCancelSelect}
               className="text-[#8D60FF] font-bold text-sm hover:text-[#7C4DFF] transition-colors"
             >
               Done
@@ -130,8 +179,9 @@ export const PageViewer = ({ isOpen, onClose, totalPages, onPageClick }: PageVie
             <Button
               size="icon"
               variant="ghost"
+              onClick={handleSelectAll}
               className="w-7 h-7 text-[#8D60FF] hover:bg-[#8D60FF]/10 hover:text-[#7C4DFF]"
-              title="Select Multiple"
+              title="Select All Pages"
             >
               <Copy className="w-3.5 h-3.5" strokeWidth={1.5} style={{ strokeDasharray: '2,2' }} />
             </Button>
