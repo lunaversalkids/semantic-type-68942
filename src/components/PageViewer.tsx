@@ -184,7 +184,13 @@ export const PageViewer = ({ isOpen, onClose, totalPages, onPageClick }: PageVie
         <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-10">
           <div className="bg-white/80 backdrop-blur-md border-2 border-[#C4B5FD]/40 rounded-2xl shadow-[0_8px_24px_rgba(139,92,246,0.2)] px-3 py-1.5 flex items-center gap-3">
             <button
-              onClick={handleCancelSelect}
+              onClick={() => {
+                if (rotateMode) {
+                  setRotateMode(false);
+                } else {
+                  handleCancelSelect();
+                }
+              }}
               className="text-[#8D60FF] font-bold text-sm hover:text-[#7C4DFF] transition-colors"
             >
               Done
