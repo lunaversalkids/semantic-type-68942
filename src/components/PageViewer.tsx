@@ -78,9 +78,16 @@ export const PageViewer = ({ isOpen, onClose, totalPages, onPageClick }: PageVie
                 </div>
               </div>
 
-              {/* Infinity Icon - No background circle */}
+              {/* Infinity Icon */}
               <div className="absolute bottom-2 left-2">
                 <img src={infinityIcon} alt="" className="w-6 h-6" />
+              </div>
+
+              {/* Page Number at Bottom */}
+              <div className="absolute bottom-2 right-2">
+                <span className="text-[#8D60FF] font-semibold text-xs">
+                  {pageNum}
+                </span>
               </div>
 
               {/* Page Number Overlay on Hover */}
