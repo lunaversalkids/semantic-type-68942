@@ -27,9 +27,9 @@ export const Header = ({
 }: HeaderProps) => {
   return <header className="bg-[hsl(var(--panel))] border border-[hsl(var(--stroke))] rounded-[var(--radius)] shadow-[0_10px_28px_rgba(96,48,200,.16)] p-2 grid grid-cols-[220px_1fr_360px] items-center gap-2">
       {/* Brand */}
-      <div className="flex items-center gap-2.5 font-extrabold">
+      <div className="flex items-center gap-1.5 font-extrabold">
         <button onClick={onPageViewerClick} className={`transition-all hover:opacity-80 ${pageViewerOpen ? 'shadow-lg ring-2 ring-[#8D60FF]/50 rounded-full' : ''}`}>
-          <img src={newInfinityButton} alt="" className="w-9 h-9" />
+          <img src={newInfinityButton} alt="" className="w-10 h-10" />
         </button>
         <div className="text-[hsl(var(--ink))]">Doc One</div>
       </div>
