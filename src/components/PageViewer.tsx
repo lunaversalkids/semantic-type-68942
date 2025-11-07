@@ -194,8 +194,8 @@ export const PageViewer = ({ isOpen, onClose, totalPages, onPageClick, onAddPage
                 </div>
 
                 {/* Infinity Icon */}
-                <div className="absolute bottom-2 left-2 bg-white rounded px-2 py-1 shadow-sm border border-[#C4B5FD]/20">
-                  <img src={infinityIcon} alt="" className="w-5 h-5" style={{ filter: 'hue-rotate(270deg) saturate(1.5)' }} />
+                <div className="absolute bottom-2 left-2">
+                  <img src={infinityIcon} alt="" className="w-6 h-6" />
                 </div>
 
                 {/* Page Number Overlay on Hover */}
@@ -327,7 +327,7 @@ export const PageViewer = ({ isOpen, onClose, totalPages, onPageClick, onAddPage
                         toast.info('Bookmark feature coming soon');
                         setTimeout(() => document.body.click(), 300);
                       }}
-                      className="w-full px-4 py-2.5 text-left text-[#8D60FF] font-semibold text-sm hover:bg-white/90 hover:text-[#7C4DFF] transition-colors"
+                      className="w-full px-4 py-2.5 text-left text-[#8D60FF] font-semibold text-sm hover:bg-[#8D60FF]/10 transition-colors"
                     >
                       Bookmark
                     </button>
