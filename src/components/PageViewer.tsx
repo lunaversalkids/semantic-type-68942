@@ -13,7 +13,7 @@ interface PageViewerProps {
   totalPages: number;
   onPageClick?: (pageNumber: number) => void;
   onAddPage?: () => void;
-  onCopyPages?: (pageNumbers: number[], editorContent: string) => void;
+  onCopyPages?: (pageNumbers: number[], editorContent: string, insertBeforePage?: number) => void;
   editor?: any;
 }
 
@@ -96,12 +96,29 @@ export const PageViewer = ({ isOpen, onClose, totalPages, onPageClick, onAddPage
   };
 
   const handlePastePages = () => {
-    if (copiedPages.length === 0 || !copiedContent) return;
+    if (copiedPages.length === 0 || !copiedContent) {
+      toast.info('No pages copied', {
+        description: 'Please copy pages first before pasting',
+        duration: 2000,
+      });
+      return;
+    }
     
-    onCopyPages?.(copiedPages, copiedContent);
+    if (selectedPages.size === 0) {
+      toast.info('No insertion point selected', {
+        description: 'Please select a page to paste before',
+        duration: 2000,
+      });
+      return;
+    }
+    
+    // Find the first selected page to insert before
+    const insertBeforePage = Math.min(...Array.from(selectedPages));
+    
+    onCopyPages?.(copiedPages, copiedContent, insertBeforePage);
     
     toast.success(`${copiedPages.length} page${copiedPages.length > 1 ? 's' : ''} pasted`, {
-      description: `Page${copiedPages.length > 1 ? 's' : ''} ${copiedPages.join(', ')} duplicated`,
+      description: `Inserted before page ${insertBeforePage}`,
       duration: 2000,
     });
   };
@@ -240,20 +257,18 @@ export const PageViewer = ({ isOpen, onClose, totalPages, onPageClick, onAddPage
 
             <div className="w-px h-5 bg-[#C4B5FD]/30"></div>
 
-            <Button
-              size="icon"
-              variant="ghost"
+            <button
               onClick={handleCopyPages}
-              className="w-7 h-7 text-[#8D60FF] hover:bg-[#8D60FF]/10 hover:text-[#7C4DFF]"
+              className="w-8 h-8 bg-white/80 rounded-full flex items-center justify-center hover:bg-white transition-all duration-300 shadow-md border-2 border-[#C4B5FD]/40 hover:scale-105"
               title="Copy Selected Pages"
             >
-              <Copy className="w-3.5 h-3.5" strokeWidth={1.5} style={{ strokeDasharray: '2,2' }} />
-            </Button>
+              <Copy className="w-4 h-4 text-[#8D60FF]" strokeWidth={2} />
+            </button>
 
             {selectMode && copiedPages.length > 0 && (
               <button
                 onClick={handlePastePages}
-                className="w-8 h-8 bg-white/80 rounded-full flex items-center justify-center hover:bg-white transition-all duration-300 shadow-md border-2 border-[#C4B5FD]/40 animate-fade-in"
+                className="w-8 h-8 bg-white/80 rounded-full flex items-center justify-center hover:bg-white transition-all duration-300 shadow-md border-2 border-[#C4B5FD]/40 animate-fade-in hover:scale-105"
                 title="Paste Copied Pages"
               >
                 <span className="text-[#8D60FF] font-bold text-sm">P</span>
