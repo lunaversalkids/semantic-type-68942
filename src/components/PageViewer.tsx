@@ -3,6 +3,7 @@ import { Search, ChevronDown, BookOpen, Maximize2, Plus, Copy } from 'lucide-rea
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { toast } from 'sonner';
 import infinityIcon from '@/assets/new-infinity-icon.png';
 
@@ -120,7 +121,7 @@ export const PageViewer = ({ isOpen, onClose, totalPages, onPageClick }: PageVie
                       onClose();
                     }
                   }}
-                  className={`relative aspect-[8.5/11] bg-white transition-all duration-300 group w-full ${
+                  className={`relative aspect-[8.5/11] bg-white group w-full transition-all duration-500 ease-out ${
                     isSelected 
                       ? 'shadow-[0_0_20px_8px_rgba(139,92,246,0.4)] ring-2 ring-[#8D60FF]/60 scale-[1.02]' 
                       : 'shadow-[0_4px_12px_rgba(139,92,246,0.1)] hover:shadow-[0_6px_16px_rgba(139,92,246,0.15)] hover:scale-[1.02]'
@@ -195,9 +196,23 @@ export const PageViewer = ({ isOpen, onClose, totalPages, onPageClick }: PageVie
               <Plus className="w-3.5 h-3.5" strokeWidth={2.5} />
             </Button>
 
-            <div className="w-8 h-8 bg-[#8D60FF] rounded-full flex items-center justify-center hover:bg-[#7C4DFF] transition-colors cursor-pointer shadow-md">
-              <img src={infinityIcon} alt="" className="w-4.5 h-4.5" />
-            </div>
+            <Popover>
+              <PopoverTrigger asChild>
+                <button className="w-8 h-8 bg-white/80 rounded-full flex items-center justify-center hover:bg-white transition-colors cursor-pointer shadow-md border-2 border-[#C4B5FD]/40">
+                  <img src={infinityIcon} alt="" className="w-4.5 h-4.5" />
+                </button>
+              </PopoverTrigger>
+              <PopoverContent className="w-48 p-0 bg-white border-2 border-[#C4B5FD]/40 shadow-[0_8px_24px_rgba(139,92,246,0.2)]" sideOffset={8}>
+                <button
+                  onClick={() => {
+                    handleSelectAll();
+                  }}
+                  className="w-full px-4 py-3 text-left text-[#8D60FF] font-semibold text-sm hover:bg-[#8D60FF]/10 transition-colors"
+                >
+                  Select All Pages
+                </button>
+              </PopoverContent>
+            </Popover>
 
             <Button
               size="icon"
