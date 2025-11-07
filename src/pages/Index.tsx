@@ -443,18 +443,28 @@ const Index = () => {
           isOpen={pageViewerOpen} 
           onClose={() => setPageViewerOpen(false)} 
           totalPages={totalPages}
+          editor={editor}
           onAddPage={() => {
             if (addPageFn) {
               addPageFn();
               sonnerToast.success('New page added');
             }
           }}
-          onCopyPages={(pageNumbers) => {
-            if (addPageFn) {
-              // Add a page for each selected page to copy
+          onCopyPages={(pageNumbers, editorContent) => {
+            if (addPageFn && editor && editorContent) {
+              // Add visual pages for each copied page
               pageNumbers.forEach(() => {
                 addPageFn();
               });
+              
+              // Append the copied content to the editor
+              editor.chain()
+                .focus('end')
+                .insertContent('<div class="page-break">Page Break</div>')
+                .insertContent(editorContent)
+                .run();
+              
+              sonnerToast.success(`Pasted ${pageNumbers.length} page${pageNumbers.length > 1 ? 's' : ''} with content`);
             }
           }}
         />

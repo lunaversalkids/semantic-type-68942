@@ -13,10 +13,11 @@ interface PageViewerProps {
   totalPages: number;
   onPageClick?: (pageNumber: number) => void;
   onAddPage?: () => void;
-  onCopyPages?: (pageNumbers: number[]) => void;
+  onCopyPages?: (pageNumbers: number[], editorContent: string) => void;
+  editor?: any;
 }
 
-export const PageViewer = ({ isOpen, onClose, totalPages, onPageClick, onAddPage, onCopyPages }: PageViewerProps) => {
+export const PageViewer = ({ isOpen, onClose, totalPages, onPageClick, onAddPage, onCopyPages, editor }: PageViewerProps) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [searchFilter, setSearchFilter] = useState('all');
   const [selectMode, setSelectMode] = useState(false);
@@ -24,6 +25,7 @@ export const PageViewer = ({ isOpen, onClose, totalPages, onPageClick, onAddPage
   const [selectedPages, setSelectedPages] = useState<Set<number>>(new Set());
   const [pageRotations, setPageRotations] = useState<Map<number, number>>(new Map());
   const [copiedPages, setCopiedPages] = useState<number[]>([]);
+  const [copiedContent, setCopiedContent] = useState<string>('');
 
   // Generate array of page numbers
   const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
@@ -81,6 +83,12 @@ export const PageViewer = ({ isOpen, onClose, totalPages, onPageClick, onAddPage
     const pageNumbersArray = Array.from(selectedPages).sort((a, b) => a - b);
     setCopiedPages(pageNumbersArray);
     
+    // Capture the current editor content
+    if (editor) {
+      const content = editor.getHTML();
+      setCopiedContent(content);
+    }
+    
     toast.success(`${selectedPages.size} page${selectedPages.size > 1 ? 's' : ''} copied`, {
       description: `Page${selectedPages.size > 1 ? 's' : ''} ${pageNumbersArray.join(', ')} ready to paste`,
       duration: 2000,
@@ -88,9 +96,9 @@ export const PageViewer = ({ isOpen, onClose, totalPages, onPageClick, onAddPage
   };
 
   const handlePastePages = () => {
-    if (copiedPages.length === 0) return;
+    if (copiedPages.length === 0 || !copiedContent) return;
     
-    onCopyPages?.(copiedPages);
+    onCopyPages?.(copiedPages, copiedContent);
     
     toast.success(`${copiedPages.length} page${copiedPages.length > 1 ? 's' : ''} pasted`, {
       description: `Page${copiedPages.length > 1 ? 's' : ''} ${copiedPages.join(', ')} duplicated`,
