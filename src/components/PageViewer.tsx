@@ -244,11 +244,18 @@ export const PageViewer = ({ isOpen, onClose, totalPages, onPageClick, onAddPage
                       <button
                         onClick={(e) => {
                           e.stopPropagation();
-                          // Directly copy the page without relying on selectedPages state
+                          // Extract the specific page content
                           setCopiedPages([pageNum]);
                           if (editor) {
-                            const content = editor.getHTML();
-                            setCopiedContent(content);
+                            const fullContent = editor.getHTML();
+                            const pageBreak = '<div class="page-break" data-type="page-break"></div>';
+                            const pages = fullContent.split(pageBreak);
+                            
+                            // Get the content of the specific page (accounting for 0-based index)
+                            const pageContent = pages[pageNum - 1] || pages[0];
+                            setCopiedContent(pageContent);
+                            
+                            console.log('Copied page:', pageNum, 'Content length:', pageContent.length);
                           }
                           toast.success('Page copied', {
                             description: `Page ${pageNum} ready to paste`,
@@ -265,23 +272,33 @@ export const PageViewer = ({ isOpen, onClose, totalPages, onPageClick, onAddPage
                         <button
                           onClick={(e) => {
                             e.stopPropagation();
-                            if (copiedContent && onCopyPages && editor) {
-                              // Insert the copied content before the selected page
+                            if (copiedContent && editor) {
+                              console.log('Pasting content at page:', pageNum, 'Content:', copiedContent.substring(0, 100));
+                              
+                              // Get current content and split by page breaks
                               const currentContent = editor.getHTML();
                               const pageBreak = '<div class="page-break" data-type="page-break"></div>';
                               const pages = currentContent.split(pageBreak);
                               
-                              // Insert copied content before the target page
+                              // Insert copied content before the target page (pageNum - 1 for 0-based index)
                               const insertIndex = pageNum - 1;
                               pages.splice(insertIndex, 0, copiedContent);
                               
-                              // Set the new content
-                              editor.commands.setContent(pages.join(pageBreak));
+                              // Rejoin and set the new content
+                              const newContent = pages.join(pageBreak);
+                              editor.commands.setContent(newContent);
+                              
+                              console.log('Content pasted successfully');
                               
                               toast.success('Page pasted', {
                                 description: `Inserted before page ${pageNum}`,
                                 duration: 2000,
                               });
+                              
+                              // Also trigger the parent callback if provided
+                              if (onCopyPages) {
+                                onCopyPages(copiedPages, copiedContent, pageNum);
+                              }
                             }
                             setOpenPageMenu(null);
                           }}
