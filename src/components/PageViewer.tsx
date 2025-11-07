@@ -134,10 +134,10 @@ export const PageViewer = ({ isOpen, onClose, totalPages, onPageClick, onAddPage
             <SelectTrigger className="flex items-center gap-1.5 px-2 py-1 text-[#8D60FF] font-semibold text-xs hover:bg-white/40 rounded-lg transition-colors justify-self-start w-auto border-0 bg-transparent">
               <SelectValue placeholder="All Pages" />
             </SelectTrigger>
-            <SelectContent className="bg-white z-50">
-              <SelectItem value="all">All Pages</SelectItem>
-              <SelectItem value="bookmarks">Bookmarks</SelectItem>
-              <SelectItem value="footnotes">Footnotes</SelectItem>
+            <SelectContent className="w-48 p-0 bg-white border-2 border-[#C4B5FD]/40 shadow-[0_8px_24px_rgba(139,92,246,0.2)] z-50">
+              <SelectItem value="all" className="px-4 py-2.5 text-[#8D60FF] font-semibold text-sm hover:bg-[#8D60FF]/10 cursor-pointer">All Pages</SelectItem>
+              <SelectItem value="bookmarks" className="px-4 py-2.5 text-[#8D60FF] font-semibold text-sm hover:bg-[#8D60FF]/10 cursor-pointer">Bookmarks</SelectItem>
+              <SelectItem value="footnotes" className="px-4 py-2.5 text-[#8D60FF] font-semibold text-sm hover:bg-[#8D60FF]/10 cursor-pointer">Footnotes</SelectItem>
             </SelectContent>
           </Select>
 
