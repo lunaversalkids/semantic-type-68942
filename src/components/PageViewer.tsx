@@ -120,7 +120,7 @@ export const PageViewer = ({ isOpen, onClose, totalPages, onPageClick }: PageVie
       </div>
 
       {/* Page Grid - Scrollable */}
-      <div className="flex-1 overflow-y-auto px-6 pb-16">
+      <div className={`flex-1 overflow-y-auto px-6 ${selectMode ? 'pb-24' : 'pb-6'}`}>
         <div className="grid grid-cols-2 gap-4">
           {pages.map((pageNum) => {
             const isSelected = selectedPages.has(pageNum);
@@ -187,6 +187,7 @@ export const PageViewer = ({ isOpen, onClose, totalPages, onPageClick }: PageVie
               onClick={() => {
                 if (rotateMode) {
                   setRotateMode(false);
+                  setSelectedPages(new Set());
                 } else {
                   handleCancelSelect();
                 }
