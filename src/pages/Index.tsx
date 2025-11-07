@@ -445,11 +445,11 @@ const Index = () => {
           onAddPage={() => {
             if (editor) {
               // Trigger the editor's add page functionality
-              const addPageButton = document.querySelector('[title="Add a new page to your document"]') as HTMLButtonElement;
+              const addPageButton = document.querySelector('[title="Add new page"]') as HTMLButtonElement;
               if (addPageButton) {
                 addPageButton.click();
+                sonnerToast.success('New page added');
               }
-              sonnerToast.success('New page added');
             }
           }}
         />
