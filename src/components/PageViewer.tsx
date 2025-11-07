@@ -13,9 +13,10 @@ interface PageViewerProps {
   totalPages: number;
   onPageClick?: (pageNumber: number) => void;
   onAddPage?: () => void;
+  onCopyPages?: (pageNumbers: number[]) => void;
 }
 
-export const PageViewer = ({ isOpen, onClose, totalPages, onPageClick, onAddPage }: PageViewerProps) => {
+export const PageViewer = ({ isOpen, onClose, totalPages, onPageClick, onAddPage, onCopyPages }: PageViewerProps) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [searchFilter, setSearchFilter] = useState('all');
   const [selectMode, setSelectMode] = useState(false);
@@ -63,6 +64,24 @@ export const PageViewer = ({ isOpen, onClose, totalPages, onPageClick, onAddPage
         newRotations.set(pageNum, (currentRotation + 90) % 360);
       });
       return newRotations;
+    });
+  };
+
+  const handleCopyPages = () => {
+    if (selectedPages.size === 0) {
+      toast.info('No pages selected', {
+        description: 'Please select pages to copy',
+        duration: 2000,
+      });
+      return;
+    }
+
+    const pageNumbersArray = Array.from(selectedPages).sort((a, b) => a - b);
+    onCopyPages?.(pageNumbersArray);
+    
+    toast.success(`${selectedPages.size} page${selectedPages.size > 1 ? 's' : ''} copied`, {
+      description: `Page${selectedPages.size > 1 ? 's' : ''} ${pageNumbersArray.join(', ')} duplicated`,
+      duration: 2000,
     });
   };
 
@@ -203,9 +222,9 @@ export const PageViewer = ({ isOpen, onClose, totalPages, onPageClick, onAddPage
             <Button
               size="icon"
               variant="ghost"
-              onClick={handleSelectAll}
+              onClick={handleCopyPages}
               className="w-7 h-7 text-[#8D60FF] hover:bg-[#8D60FF]/10 hover:text-[#7C4DFF]"
-              title="Select All Pages"
+              title="Copy Selected Pages"
             >
               <Copy className="w-3.5 h-3.5" strokeWidth={1.5} style={{ strokeDasharray: '2,2' }} />
             </Button>

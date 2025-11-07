@@ -449,6 +449,14 @@ const Index = () => {
               sonnerToast.success('New page added');
             }
           }}
+          onCopyPages={(pageNumbers) => {
+            if (addPageFn) {
+              // Add a page for each selected page to copy
+              pageNumbers.forEach(() => {
+                addPageFn();
+              });
+            }
+          }}
         />
         
         <LeftSidebar 
