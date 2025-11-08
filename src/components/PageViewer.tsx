@@ -6,6 +6,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { toast } from 'sonner';
 import infinityIcon from '@/assets/new-infinity-icon.png';
+import bookmarkIcon from '@/assets/bookmark-icon.png';
 
 interface PageViewerProps {
   isOpen: boolean;
@@ -27,7 +28,7 @@ export const PageViewer = ({ isOpen, onClose, totalPages, onPageClick, onAddPage
   const [copiedPages, setCopiedPages] = useState<number[]>([]);
   const [copiedContent, setCopiedContent] = useState<string>('');
   const [openPageMenu, setOpenPageMenu] = useState<number | null>(null);
-  const [isSinglePage, setIsSinglePage] = useState(false);
+  const [isSinglePage, setIsSinglePage] = useState(true);
 
   // Generate array of page numbers
   const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
@@ -210,6 +211,11 @@ export const PageViewer = ({ isOpen, onClose, totalPages, onPageClick, onAddPage
                       : 'shadow-[0_4px_12px_rgba(139,92,246,0.1)] hover:shadow-[0_6px_16px_rgba(139,92,246,0.15)] hover:scale-[1.02]'
                   }`}
                 >
+                {/* Bookmark Icon */}
+                <div className="absolute -top-2 -right-2 z-20">
+                  <img src={bookmarkIcon} alt="" className="w-10 h-14 drop-shadow-lg" />
+                </div>
+
                 {/* Page Content Preview - This would show actual page content */}
                 <div className="w-full h-full overflow-hidden p-3">
                   <div className="text-left text-xs text-gray-400 space-y-1.5">
