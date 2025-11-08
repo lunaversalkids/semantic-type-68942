@@ -110,13 +110,13 @@ export const TextStylePanel = ({
       {/* Font Section */}
       <div className="space-y-2">
         <div className="flex items-center justify-between">
-          <div className="flex flex-col gap-1">
+          <div className="flex flex-col gap-2">
             <span className="text-sm font-semibold text-[#8B7AB8]">Font</span>
             <span className="text-sm font-semibold text-[#8B7AB8]">Color</span>
           </div>
           <div className="flex flex-col gap-2 items-end">
-            <span className="text-sm font-medium text-gray-600">{fontFamily}</span>
-            <div className="w-20 h-10 bg-black rounded-lg border-2 border-gray-300"></div>
+            <span className="text-sm font-medium text-[hsl(var(--ink))]" style={{ fontFamily: 'Graphik, sans-serif' }}>{fontFamily}</span>
+            <div className="w-16 h-8 bg-black rounded-lg border-2 border-gray-300"></div>
           </div>
         </div>
         
