@@ -210,7 +210,7 @@ export const TextStylePanel = ({
         <button onClick={() => setSelectedAlignment('image')} className="w-full bg-white rounded-xl px-4 py-3 flex items-center justify-between border border-gray-200 hover:bg-gray-50 transition-colors">
           <div className="flex items-center gap-2">
             <span className="text-lg">▣</span>
-            <span className="text-sm font-medium text-[hsl(var(--ink))]">Image</span>
+            <span className="text-sm font-medium text-[hsl(var(--ink))]">Square</span>
           </div>
           <div className="w-6 h-6 rounded-full bg-[#E8DDFF] flex items-center justify-center">
             <Info className="w-4 h-4 text-[#8B5CF6]" />
