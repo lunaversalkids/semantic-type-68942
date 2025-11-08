@@ -313,10 +313,12 @@ export const Editor = ({
               <div className={`pages-background ${isDoublePageLayout ? 'double-page-layout' : ''}`}>
                 {pages.map((pageId, index) => {
                   const pageNum = index + 1;
+                  const isFirstPage = index === 0 && isDoublePageLayout;
                   return (
                     <Card 
                       key={pageId}
                       className="page-card w-[8.5in] h-[11in] bg-[hsl(var(--page-bg))] shadow-2xl rounded-none"
+                      style={isFirstPage ? { gridColumnStart: 2 } : undefined}
                     >
                       {pageNumbersVisibility[pageNum] !== false && (
                         <div 

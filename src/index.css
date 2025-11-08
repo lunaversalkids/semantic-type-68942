@@ -421,6 +421,10 @@ button[data-active="true"] {
   overflow: visible;
 }
 
+.editor-overlay.double-page-layout .ProseMirror {
+  grid-column-start: 2;
+}
+
 /* Ensure all editor content is clickable and editable */
 .editor-overlay,
 .editor-overlay *,
