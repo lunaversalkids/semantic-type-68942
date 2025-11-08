@@ -263,8 +263,8 @@ export const TextStylePanel = ({
                   aria-label="Choose color"
                 />
               </PopoverTrigger>
-              <PopoverContent className="w-[280px] p-0 bg-white border border-gray-200 shadow-[0_0_40px_rgba(200,180,255,0.4)] z-50" align="end">
-                <div className="max-h-[280px] overflow-y-auto overflow-x-hidden">
+              <PopoverContent className="w-auto p-3 bg-white border-2 border-white shadow-[0_0_40px_rgba(200,180,255,0.4)] z-50" align="end">
+                <div className="max-h-[280px] overflow-y-auto overflow-x-hidden border border-gray-300">
                   <div className="grid grid-cols-16 gap-0">
                     {/* Grayscale row */}
                     {['#EFEFEF', '#DEDEDE', '#CECECE', '#BEBEBE', '#AEAEAE', '#9E9E9E', '#8E8E8E', '#7E7E7E', 
