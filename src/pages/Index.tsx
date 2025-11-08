@@ -319,7 +319,7 @@ const Index = () => {
     const estimatedPage = Math.floor(contentBefore.length / 3000) + 1;
     const actualPage = Math.min(estimatedPage, totalPages);
     
-    editor.chain().focus().insertContent(`<span id="${bookmarkId}" data-page="${actualPage}" style="display: inline-flex; align-items: center; vertical-align: middle; margin: 0 2px;"><img src="${purpleBookmark}" alt="Bookmark" style="width: 16px; height: 21px; display: inline-block; vertical-align: middle; filter: drop-shadow(0 1px 2px rgba(122, 73, 255, 0.3));" /></span>`).run();
+    editor.chain().focus().insertContent(`<span id="${bookmarkId}" data-page="${actualPage}" style="display: inline-flex; align-items: center; vertical-align: middle; margin: 0 2px;"><img src="${purpleBookmark}" alt="Bookmark" style="width: 16px; height: 16px; display: inline-block; vertical-align: middle; filter: drop-shadow(0 1px 2px rgba(122, 73, 255, 0.3));" /></span>`).run();
     
     // Add page to bookmarked pages
     setBookmarkedPages(prev => new Set([...prev, actualPage]));
