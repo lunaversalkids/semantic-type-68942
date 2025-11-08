@@ -53,6 +53,31 @@ export const TextStylePanel = ({
       }).run();
     }
   };
+
+  const handleListType = (type: 'none' | 'bullet' | 'numbered' | 'lettered' | 'harvard' | 'dash' | 'note-taking' | 'image') => {
+    if (!editor) return;
+    
+    setSelectedAlignment(type);
+    
+    switch (type) {
+      case 'none':
+        editor.chain().focus().liftListItem('listItem').run();
+        break;
+      case 'bullet':
+        editor.chain().focus().toggleBulletList().run();
+        break;
+      case 'numbered':
+        editor.chain().focus().toggleOrderedList().run();
+        break;
+      case 'lettered':
+        // For now, use ordered list - can be customized with CSS
+        editor.chain().focus().toggleOrderedList().run();
+        break;
+      default:
+        // Other types can be implemented as needed
+        break;
+    }
+  };
   if (isCollapsed) {
     return <aside className="w-16 h-full bg-sidebar border-l border-sidebar-border flex flex-col items-center py-4">
         <Button size="icon" variant="ghost" className="h-8 w-8 text-muted-foreground hover:bg-sidebar-accent mb-4" onClick={() => setIsCollapsed(false)}>
@@ -168,27 +193,20 @@ export const TextStylePanel = ({
         <h3 className="text-sm font-semibold text-[#8B7AB8]">Alignment Section</h3>
         
         {/* None */}
-        <button onClick={() => setSelectedAlignment('none')} className="w-full bg-white rounded-xl px-4 py-3 flex items-center justify-between border border-gray-200 hover:bg-gray-50 transition-colors">
+        <button onClick={() => handleListType('none')} className="w-full bg-white rounded-xl px-4 py-3 flex items-center justify-between border border-gray-200 hover:bg-gray-50 transition-colors">
           <span className="text-sm font-medium text-[hsl(var(--ink))]">None</span>
           {selectedAlignment === 'none' && <Check className="w-5 h-5 text-[#8B5CF6]" />}
         </button>
 
-        {/* Bullet */}
-        <button onClick={() => setSelectedAlignment('bullet')} className="w-full bg-white rounded-xl px-4 py-3 flex items-center justify-between border border-gray-200 hover:bg-gray-50 transition-colors">
-          <div className="flex items-center gap-2">
-            <span className="text-lg">•</span>
-            <span className="text-sm font-medium text-[hsl(var(--ink))]">Bullet</span>
-          </div>
-          <div className="w-6 h-6 rounded-full bg-[#E8DDFF] flex items-center justify-center">
-            <Info className="w-4 h-4 text-[#8B5CF6]" />
-          </div>
-        </button>
-
         {/* Numbered List */}
-        <button onClick={() => setSelectedAlignment('numbered')} className="w-full bg-white rounded-xl px-4 py-3 flex items-center justify-between border border-gray-200 hover:bg-gray-50 transition-colors">
+        <button onClick={() => handleListType('numbered')} className={`w-full rounded-xl px-4 py-3 flex items-center justify-between border-0 transition-colors ${
+          selectedAlignment === 'numbered' 
+            ? 'bg-gradient-to-b from-[#B9A1FF] to-[#9B7FFF]' 
+            : 'bg-white border border-gray-200 hover:bg-gray-50'
+        }`}>
           <div className="flex items-center gap-2">
-            <span className="text-lg font-medium">1.</span>
-            <span className="text-sm font-medium text-[hsl(var(--ink))]">Numbers</span>
+            <span className={`text-lg font-medium ${selectedAlignment === 'numbered' ? 'text-white' : ''}`}>1.</span>
+            <span className={`text-sm font-medium ${selectedAlignment === 'numbered' ? 'text-white' : 'text-[hsl(var(--ink))]'}`}>Numbers</span>
           </div>
           <div className="w-6 h-6 rounded-full bg-[#E8DDFF] flex items-center justify-center">
             <Info className="w-4 h-4 text-[#8B5CF6]" />
@@ -196,10 +214,29 @@ export const TextStylePanel = ({
         </button>
 
         {/* Lettered List */}
-        <button onClick={() => setSelectedAlignment('lettered')} className="w-full bg-white rounded-xl px-4 py-3 flex items-center justify-between border border-gray-200 hover:bg-gray-50 transition-colors">
+        <button onClick={() => handleListType('lettered')} className={`w-full rounded-xl px-4 py-3 flex items-center justify-between border-0 transition-colors ${
+          selectedAlignment === 'lettered' 
+            ? 'bg-gradient-to-b from-[#B9A1FF] to-[#9B7FFF]' 
+            : 'bg-white border border-gray-200 hover:bg-gray-50'
+        }`}>
           <div className="flex items-center gap-2">
-            <span className="text-lg font-medium">a.</span>
-            <span className="text-sm font-medium text-[hsl(var(--ink))]">Letters</span>
+            <span className={`text-lg font-medium ${selectedAlignment === 'lettered' ? 'text-white' : ''}`}>a.</span>
+            <span className={`text-sm font-medium ${selectedAlignment === 'lettered' ? 'text-white' : 'text-[hsl(var(--ink))]'}`}>Letters</span>
+          </div>
+          <div className="w-6 h-6 rounded-full bg-[#E8DDFF] flex items-center justify-center">
+            <Info className="w-4 h-4 text-[#8B5CF6]" />
+          </div>
+        </button>
+
+        {/* Bullet */}
+        <button onClick={() => handleListType('bullet')} className={`w-full rounded-xl px-4 py-3 flex items-center justify-between border-0 transition-colors ${
+          selectedAlignment === 'bullet' 
+            ? 'bg-gradient-to-b from-[#B9A1FF] to-[#9B7FFF]' 
+            : 'bg-white border border-gray-200 hover:bg-gray-50'
+        }`}>
+          <div className="flex items-center gap-2">
+            <span className={`text-lg ${selectedAlignment === 'bullet' ? 'text-white' : ''}`}>•</span>
+            <span className={`text-sm font-medium ${selectedAlignment === 'bullet' ? 'text-white' : 'text-[hsl(var(--ink))]'}`}>Bullet</span>
           </div>
           <div className="w-6 h-6 rounded-full bg-[#E8DDFF] flex items-center justify-center">
             <Info className="w-4 h-4 text-[#8B5CF6]" />
@@ -207,21 +244,29 @@ export const TextStylePanel = ({
         </button>
 
         {/* Image */}
-        <button onClick={() => setSelectedAlignment('image')} className="w-full bg-white rounded-xl px-4 py-3 flex items-center justify-between border border-gray-200 hover:bg-gray-50 transition-colors">
+        <button onClick={() => handleListType('image')} className={`w-full rounded-xl px-4 py-3 flex items-center justify-between border-0 transition-colors ${
+          selectedAlignment === 'image' 
+            ? 'bg-gradient-to-b from-[#B9A1FF] to-[#9B7FFF]' 
+            : 'bg-white border border-gray-200 hover:bg-gray-50'
+        }`}>
           <div className="flex items-center gap-2">
-            <span className="text-lg">▣</span>
-            <span className="text-sm font-medium text-[hsl(var(--ink))]">Square</span>
+            <span className={`text-lg ${selectedAlignment === 'image' ? 'text-white' : ''}`}>▣</span>
+            <span className={`text-sm font-medium ${selectedAlignment === 'image' ? 'text-white' : 'text-[hsl(var(--ink))]'}`}>Square</span>
           </div>
           <div className="w-6 h-6 rounded-full bg-[#E8DDFF] flex items-center justify-center">
             <Info className="w-4 h-4 text-[#8B5CF6]" />
           </div>
         </button>
 
-        {/* Harvard - Selected */}
-        <button onClick={() => setSelectedAlignment('harvard')} className="w-full bg-gradient-to-b from-[#B9A1FF] to-[#9B7FFF] rounded-xl px-4 py-3 flex items-center justify-between border-0 transition-colors">
+        {/* Harvard */}
+        <button onClick={() => handleListType('harvard')} className={`w-full rounded-xl px-4 py-3 flex items-center justify-between border-0 transition-colors ${
+          selectedAlignment === 'harvard' 
+            ? 'bg-gradient-to-b from-[#B9A1FF] to-[#9B7FFF]' 
+            : 'bg-white border border-gray-200 hover:bg-gray-50'
+        }`}>
           <div className="flex items-center gap-2">
-            <span className="text-lg text-white">✓</span>
-            <span className="text-sm font-medium text-white">Harvard</span>
+            <span className={`text-lg ${selectedAlignment === 'harvard' ? 'text-white' : ''}`}>✓</span>
+            <span className={`text-sm font-medium ${selectedAlignment === 'harvard' ? 'text-white' : 'text-[hsl(var(--ink))]'}`}>Harvard</span>
           </div>
           <div className="w-6 h-6 rounded-full bg-[#E8DDFF] flex items-center justify-center">
             <Info className="w-4 h-4 text-[#8B5CF6]" />
@@ -229,10 +274,14 @@ export const TextStylePanel = ({
         </button>
 
         {/* Dash */}
-        <button onClick={() => setSelectedAlignment('dash')} className="w-full bg-white rounded-xl px-4 py-3 flex items-center justify-between border border-gray-200 hover:bg-gray-50 transition-colors">
+        <button onClick={() => handleListType('dash')} className={`w-full rounded-xl px-4 py-3 flex items-center justify-between border-0 transition-colors ${
+          selectedAlignment === 'dash' 
+            ? 'bg-gradient-to-b from-[#B9A1FF] to-[#9B7FFF]' 
+            : 'bg-white border border-gray-200 hover:bg-gray-50'
+        }`}>
           <div className="flex items-center gap-2">
-            <span className="text-lg">—</span>
-            <span className="text-sm font-medium text-[hsl(var(--ink))]">Dash</span>
+            <span className={`text-lg ${selectedAlignment === 'dash' ? 'text-white' : ''}`}>—</span>
+            <span className={`text-sm font-medium ${selectedAlignment === 'dash' ? 'text-white' : 'text-[hsl(var(--ink))]'}`}>Dash</span>
           </div>
           <div className="w-6 h-6 rounded-full bg-[#E8DDFF] flex items-center justify-center">
             <Info className="w-4 h-4 text-[#8B5CF6]" />
@@ -240,10 +289,14 @@ export const TextStylePanel = ({
         </button>
 
         {/* Note Taking */}
-        <button onClick={() => setSelectedAlignment('note-taking')} className="w-full bg-white rounded-xl px-4 py-3 flex items-center justify-between border border-gray-200 hover:bg-gray-50 transition-colors">
+        <button onClick={() => handleListType('note-taking')} className={`w-full rounded-xl px-4 py-3 flex items-center justify-between border-0 transition-colors ${
+          selectedAlignment === 'note-taking' 
+            ? 'bg-gradient-to-b from-[#B9A1FF] to-[#9B7FFF]' 
+            : 'bg-white border border-gray-200 hover:bg-gray-50'
+        }`}>
           <div className="flex items-center gap-2">
-            <span className="text-lg">–</span>
-            <span className="text-sm font-medium text-[hsl(var(--ink))]">Note Taking</span>
+            <span className={`text-lg ${selectedAlignment === 'note-taking' ? 'text-white' : ''}`}>–</span>
+            <span className={`text-sm font-medium ${selectedAlignment === 'note-taking' ? 'text-white' : 'text-[hsl(var(--ink))]'}`}>Note Taking</span>
           </div>
           <div className="w-6 h-6 rounded-full bg-[#E8DDFF] flex items-center justify-center">
             <Info className="w-4 h-4 text-[#8B5CF6]" />
