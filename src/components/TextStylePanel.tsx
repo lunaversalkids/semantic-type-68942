@@ -263,7 +263,12 @@ export const TextStylePanel = ({
                   aria-label="Choose color"
                 />
               </PopoverTrigger>
-              <PopoverContent className="w-64 p-4 bg-white border border-gray-200 shadow-lg z-50" align="end">
+              <PopoverContent 
+                className="w-64 p-4 bg-white border border-gray-200 shadow-lg z-50" 
+                align="end"
+                onInteractOutside={(e) => e.preventDefault()}
+                onPointerDownOutside={(e) => e.preventDefault()}
+              >
                 <div className="space-y-3">
                   <div className="flex items-center gap-2">
                     <input 
@@ -271,6 +276,7 @@ export const TextStylePanel = ({
                       value={textColor} 
                       onChange={(e) => handleColorChange(e.target.value)}
                       className="h-10 w-16 rounded-lg cursor-pointer border-2 border-gray-300"
+                      onClick={(e) => e.stopPropagation()}
                     />
                     <input 
                       type="text" 
@@ -278,6 +284,7 @@ export const TextStylePanel = ({
                       onChange={(e) => handleColorChange(e.target.value)}
                       className="flex-1 h-10 px-3 rounded-lg border-2 border-gray-300 text-sm font-mono"
                       placeholder="#000000"
+                      onClick={(e) => e.stopPropagation()}
                     />
                   </div>
                   <button 
