@@ -54,7 +54,7 @@ export const TextStylePanel = ({
     }
   };
 
-  const handleListType = (type: 'none' | 'bullet' | 'numbered' | 'lettered' | 'harvard' | 'dash' | 'note-taking' | 'image') => {
+  const handleListType = (type: 'none' | 'bullet' | 'numbered' | 'lettered' | 'harvard' | 'dash' | 'note-taking' | 'image' | 'custom') => {
     if (!editor) return;
     
     setSelectedAlignment(type);
@@ -297,6 +297,21 @@ export const TextStylePanel = ({
           <div className="flex items-center gap-2">
             <span className={`text-lg ${selectedAlignment === 'note-taking' ? 'text-white' : ''}`}>–</span>
             <span className={`text-sm font-medium ${selectedAlignment === 'note-taking' ? 'text-white' : 'text-[hsl(var(--ink))]'}`}>Note Taking</span>
+          </div>
+          <div className="w-6 h-6 rounded-full bg-[#E8DDFF] flex items-center justify-center">
+            <Info className="w-4 h-4 text-[#8B5CF6]" />
+          </div>
+        </button>
+
+        {/* Add Custom Icon */}
+        <button onClick={() => handleListType('custom')} className={`w-full rounded-xl px-4 py-3 flex items-center justify-between border-0 transition-colors ${
+          selectedAlignment === 'custom' 
+            ? 'bg-gradient-to-b from-[#B9A1FF] to-[#9B7FFF]' 
+            : 'bg-white border border-gray-200 hover:bg-gray-50'
+        }`}>
+          <div className="flex items-center gap-2">
+            <span className={`text-lg font-medium ${selectedAlignment === 'custom' ? 'text-white' : ''}`}>+</span>
+            <span className={`text-sm font-medium ${selectedAlignment === 'custom' ? 'text-white' : 'text-[hsl(var(--ink))]'}`}>Add custom icon</span>
           </div>
           <div className="w-6 h-6 rounded-full bg-[#E8DDFF] flex items-center justify-center">
             <Info className="w-4 h-4 text-[#8B5CF6]" />
