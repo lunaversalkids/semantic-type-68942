@@ -255,19 +255,46 @@ export const TextStylePanel = ({
                 </div>
               </PopoverContent>
             </Popover>
-            <label className="relative cursor-pointer">
-              <div 
-                className="w-16 h-8 rounded-lg border-2 border-gray-300 hover:border-[#8B7AB8] transition-colors"
-                style={{ backgroundColor: textColor }}
-              />
-              <input 
-                type="color" 
-                value={textColor} 
-                onChange={(e) => handleColorChange(e.target.value)}
-                className="absolute inset-0 opacity-0 cursor-pointer"
-                aria-label="Choose color"
-              />
-            </label>
+            <Popover open={isColorPickerOpen} onOpenChange={setIsColorPickerOpen}>
+              <PopoverTrigger asChild>
+                <button 
+                  className="w-16 h-8 rounded-lg border-2 border-gray-300 hover:border-[#8B7AB8] transition-colors cursor-pointer"
+                  style={{ backgroundColor: textColor }}
+                  aria-label="Choose color"
+                />
+              </PopoverTrigger>
+              <PopoverContent className="w-64 p-4 bg-white border border-gray-200 shadow-lg" align="end">
+                <div className="space-y-3">
+                  <h4 className="text-sm font-semibold text-[#8B7AB8]">Quick Colors</h4>
+                  <div className="grid grid-cols-6 gap-2">
+                    {['#000000', '#FF0000', '#FF6B00', '#FFD700', '#00FF00', '#0000FF', 
+                      '#8B5CF6', '#FF69B4', '#A52A2A', '#808080', '#FFFFFF', '#333333'].map((color) => (
+                      <button
+                        key={color}
+                        onClick={() => handleColorChange(color)}
+                        className="w-8 h-8 rounded-lg border-2 border-gray-300 hover:border-[#8B7AB8] transition-colors cursor-pointer hover:scale-110"
+                        style={{ backgroundColor: color }}
+                        aria-label={`Select ${color}`}
+                      />
+                    ))}
+                  </div>
+                  <div className="pt-2 border-t border-gray-200">
+                    <label className="relative cursor-pointer">
+                      <button className="w-full h-10 bg-gradient-to-b from-[#C9B5FF] to-[#A890FF] hover:from-[#B9A1FF] hover:to-[#9B7FFF] text-white rounded-lg transition-colors flex items-center justify-center gap-2 font-medium text-sm">
+                        <span>Advanced Picker</span>
+                      </button>
+                      <input 
+                        type="color" 
+                        value={textColor} 
+                        onChange={(e) => handleColorChange(e.target.value)}
+                        className="absolute inset-0 opacity-0 cursor-pointer"
+                        aria-label="Open advanced color picker"
+                      />
+                    </label>
+                  </div>
+                </div>
+              </PopoverContent>
+            </Popover>
           </div>
         </div>
         
