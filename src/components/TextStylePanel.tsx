@@ -264,14 +264,14 @@ export const TextStylePanel = ({
                 />
               </PopoverTrigger>
               <PopoverContent 
-                className="w-auto p-2 bg-white border border-gray-200 shadow-lg z-50" 
+                className="w-auto p-1 bg-white border border-gray-200 shadow-lg z-50" 
                 align="end"
               >
                 <input 
                   type="color" 
                   value={textColor} 
                   onChange={(e) => handleColorChange(e.target.value)}
-                  className="w-32 h-32 rounded-lg cursor-pointer border-0"
+                  className="w-12 h-8 rounded cursor-pointer border-0"
                 />
               </PopoverContent>
             </Popover>
