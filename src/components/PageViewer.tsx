@@ -29,6 +29,7 @@ export const PageViewer = ({ isOpen, onClose, totalPages, onPageClick, onAddPage
   const [copiedContent, setCopiedContent] = useState<string>('');
   const [openPageMenu, setOpenPageMenu] = useState<number | null>(null);
   const [isSinglePage, setIsSinglePage] = useState(true);
+  const [bookmarkedPages, setBookmarkedPages] = useState<Set<number>>(new Set());
 
   // Generate array of page numbers
   const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
@@ -211,10 +212,23 @@ export const PageViewer = ({ isOpen, onClose, totalPages, onPageClick, onAddPage
                       : 'shadow-[0_4px_12px_rgba(139,92,246,0.1)] hover:shadow-[0_6px_16px_rgba(139,92,246,0.15)] hover:scale-[1.02]'
                   }`}
                 >
-                {/* Bookmark Icon */}
-                <div className="absolute -top-2 -right-4 z-20">
-                  <img src={bookmarkIcon} alt="" className="w-14 h-16 drop-shadow-lg" />
-                </div>
+                {/* Bookmark Icon - Only show if bookmarked */}
+                {bookmarkedPages.has(pageNum) && (
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setBookmarkedPages(prev => {
+                        const newSet = new Set(prev);
+                        newSet.delete(pageNum);
+                        return newSet;
+                      });
+                      toast.success('Bookmark removed');
+                    }}
+                    className="absolute -top-2 -right-6 z-20 hover:scale-110 transition-transform"
+                  >
+                    <img src={bookmarkIcon} alt="" className="w-14 h-16 drop-shadow-lg" />
+                  </button>
+                )}
 
                 {/* Page Content Preview - This would show actual page content */}
                 <div className="w-full h-full overflow-hidden p-3">
@@ -322,6 +336,26 @@ export const PageViewer = ({ isOpen, onClose, totalPages, onPageClick, onAddPage
                           Paste
                         </button>
                       )}
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setBookmarkedPages(prev => {
+                            const newSet = new Set(prev);
+                            if (newSet.has(pageNum)) {
+                              newSet.delete(pageNum);
+                              toast.success('Bookmark removed');
+                            } else {
+                              newSet.add(pageNum);
+                              toast.success('Bookmark added');
+                            }
+                            return newSet;
+                          });
+                          setOpenPageMenu(null);
+                        }}
+                        className="w-full px-4 py-2.5 text-left text-[#8D60FF] font-semibold text-sm hover:bg-[#8D60FF]/10 transition-colors"
+                      >
+                        {bookmarkedPages.has(pageNum) ? 'Remove Bookmark' : 'Add Bookmark'}
+                      </button>
                       <button
                         onClick={(e) => {
                           e.stopPropagation();
