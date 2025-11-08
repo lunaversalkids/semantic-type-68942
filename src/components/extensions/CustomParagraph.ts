@@ -11,50 +11,18 @@ export const CustomParagraph = Node.create({
       textIndent: {
         default: '0px',
         parseHTML: element => element.style.textIndent || '0px',
-        renderHTML: attributes => {
-          if (!attributes.textIndent || attributes.textIndent === '0px') {
-            return {};
-          }
-          return {
-            style: `text-indent: ${attributes.textIndent}`,
-          };
-        },
       },
       marginBottom: {
         default: '0px',
         parseHTML: element => element.style.marginBottom || '0px',
-        renderHTML: attributes => {
-          if (!attributes.marginBottom || attributes.marginBottom === '0px') {
-            return {};
-          }
-          return {
-            style: `margin-bottom: ${attributes.marginBottom}`,
-          };
-        },
       },
       lineHeight: {
         default: 'normal',
         parseHTML: element => element.style.lineHeight || 'normal',
-        renderHTML: attributes => {
-          if (!attributes.lineHeight || attributes.lineHeight === 'normal') {
-            return {};
-          }
-          return {
-            style: `line-height: ${attributes.lineHeight}`,
-          };
-        },
       },
       paddingLeft: {
         default: '0px',
         parseHTML: element => element.style.paddingLeft || '0px',
-        renderHTML: attributes => {
-          if (!attributes.paddingLeft || attributes.paddingLeft === '0px') {
-            return {};
-          }
-          return {
-            style: `padding-left: ${attributes.paddingLeft}`,
-          };
-        },
       },
     };
   },
@@ -64,40 +32,36 @@ export const CustomParagraph = Node.create({
   },
 
   renderHTML({ HTMLAttributes }) {
-    const attrs = this.options.HTMLAttributes;
-    const mergedAttrs = mergeAttributes(attrs, HTMLAttributes);
-    
-    // Combine all style attributes
+    // Build style string from custom attributes
     const styles: string[] = [];
-    if (mergedAttrs.style) {
-      styles.push(mergedAttrs.style);
-    }
     
-    // Add individual style attributes
-    const customAttrs = HTMLAttributes as any;
-    if (customAttrs.textIndent && customAttrs.textIndent !== '0px') {
-      styles.push(`text-indent: ${customAttrs.textIndent}`);
+    if (HTMLAttributes.textIndent && HTMLAttributes.textIndent !== '0px') {
+      styles.push(`text-indent: ${HTMLAttributes.textIndent}`);
     }
-    if (customAttrs.marginBottom && customAttrs.marginBottom !== '0px') {
-      styles.push(`margin-bottom: ${customAttrs.marginBottom}`);
+    if (HTMLAttributes.marginBottom && HTMLAttributes.marginBottom !== '0px') {
+      styles.push(`margin-bottom: ${HTMLAttributes.marginBottom}`);
     }
-    if (customAttrs.lineHeight && customAttrs.lineHeight !== 'normal') {
-      styles.push(`line-height: ${customAttrs.lineHeight}`);
+    if (HTMLAttributes.lineHeight && HTMLAttributes.lineHeight !== 'normal') {
+      styles.push(`line-height: ${HTMLAttributes.lineHeight}`);
     }
-    if (customAttrs.paddingLeft && customAttrs.paddingLeft !== '0px') {
-      styles.push(`padding-left: ${customAttrs.paddingLeft}`);
+    if (HTMLAttributes.paddingLeft && HTMLAttributes.paddingLeft !== '0px') {
+      styles.push(`padding-left: ${HTMLAttributes.paddingLeft}`);
     }
 
-    const finalAttrs: any = {
-      ...mergedAttrs,
-      style: styles.length > 0 ? styles.join('; ') : undefined,
-    };
-
-    // Remove individual attributes from final output
+    // Merge with any existing styles
+    const attrs = mergeAttributes(this.options.HTMLAttributes || {}, HTMLAttributes);
+    
+    // Clean up - remove custom attributes so they don't appear as HTML attributes
+    const finalAttrs: any = { ...attrs };
     delete finalAttrs.textIndent;
     delete finalAttrs.marginBottom;
     delete finalAttrs.lineHeight;
     delete finalAttrs.paddingLeft;
+    
+    // Apply combined styles
+    if (styles.length > 0) {
+      finalAttrs.style = styles.join('; ');
+    }
 
     return ['p', finalAttrs, 0];
   },
