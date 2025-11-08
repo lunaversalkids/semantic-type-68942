@@ -25,6 +25,7 @@ import { Chapter } from './extensions/ChapterNode';
 import { PageBreak } from './extensions/PageBreak';
 import { CustomBulletList } from './extensions/CustomBulletList';
 import { CustomOrderedList } from './extensions/CustomOrderedList';
+import { CustomParagraph } from './extensions/CustomParagraph';
 import ListItem from '@tiptap/extension-list-item';
 
 interface EditorProps {
@@ -213,7 +214,9 @@ export const Editor = ({
       StarterKit.configure({
         bulletList: false,
         orderedList: false,
+        paragraph: false,
       }),
+      CustomParagraph,
       CustomBulletList,
       CustomOrderedList,
       ListItem,
