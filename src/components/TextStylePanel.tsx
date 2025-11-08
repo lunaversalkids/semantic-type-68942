@@ -263,34 +263,42 @@ export const TextStylePanel = ({
                   aria-label="Choose color"
                 />
               </PopoverTrigger>
-              <PopoverContent className="w-64 p-4 bg-white border border-gray-200 shadow-lg" align="end">
-                <div className="space-y-3">
-                  <h4 className="text-sm font-semibold text-[#8B7AB8]">Quick Colors</h4>
-                  <div className="grid grid-cols-6 gap-2">
-                    {['#000000', '#FF0000', '#FF6B00', '#FFD700', '#00FF00', '#0000FF', 
-                      '#8B5CF6', '#FF69B4', '#A52A2A', '#808080', '#FFFFFF', '#333333'].map((color) => (
+              <PopoverContent className="w-auto p-4 bg-white border border-gray-200 shadow-[0_0_40px_rgba(200,180,255,0.4)]" align="end">
+                <div className="space-y-0">
+                  <div className="grid grid-cols-16 gap-0">
+                    {/* Grayscale row */}
+                    {['#FFFFFF', '#F0F0F0', '#E0E0E0', '#D0D0D0', '#C0C0C0', '#B0B0B0', '#A0A0A0', '#909090', 
+                      '#808080', '#707070', '#606060', '#505050', '#404040', '#303030', '#202020', '#000000'].map((color) => (
                       <button
                         key={color}
-                        onClick={() => handleColorChange(color)}
-                        className="w-8 h-8 rounded-lg border-2 border-gray-300 hover:border-[#8B7AB8] transition-colors cursor-pointer hover:scale-110"
+                        onClick={() => { handleColorChange(color); setIsColorPickerOpen(false); }}
+                        className="w-8 h-8 hover:scale-110 transition-transform border border-gray-200"
                         style={{ backgroundColor: color }}
                         aria-label={`Select ${color}`}
                       />
                     ))}
-                  </div>
-                  <div className="pt-2 border-t border-gray-200">
-                    <label className="relative cursor-pointer">
-                      <button className="w-full h-10 bg-gradient-to-b from-[#C9B5FF] to-[#A890FF] hover:from-[#B9A1FF] hover:to-[#9B7FFF] text-white rounded-lg transition-colors flex items-center justify-center gap-2 font-medium text-sm">
-                        <span>Advanced Picker</span>
-                      </button>
-                      <input 
-                        type="color" 
-                        value={textColor} 
-                        onChange={(e) => handleColorChange(e.target.value)}
-                        className="absolute inset-0 opacity-0 cursor-pointer"
-                        aria-label="Open advanced color picker"
-                      />
-                    </label>
+                    
+                    {/* Color spectrum rows */}
+                    {[
+                      ['#003366', '#000080', '#000066', '#4B0082', '#660066', '#800080', '#990066', '#8B0000', '#B22222', '#CC0000', '#D2691E', '#CC6600', '#8B4513', '#808000', '#556B2F', '#006400'],
+                      ['#004C99', '#0000CD', '#0000B3', '#4169E1', '#8B008B', '#990099', '#CC0099', '#B22222', '#DC143C', '#FF0000', '#FF6347', '#FF6600', '#D2691E', '#B8860B', '#6B8E23', '#228B22'],
+                      ['#0066CC', '#4169E1', '#0066FF', '#6A5ACD', '#9370DB', '#CC00CC', '#FF0099', '#CD5C5C', '#FF0000', '#FF3300', '#FF4500', '#FF7F00', '#FF8C00', '#FFD700', '#9ACD32', '#32CD32'],
+                      ['#0080FF', '#1E90FF', '#0099FF', '#7B68EE', '#BA55D3', '#FF00FF', '#FF33CC', '#F08080', '#FF6347', '#FF6600', '#FF7F50', '#FFA500', '#FFB900', '#FFFF00', '#ADFF2F', '#7FFF00'],
+                      ['#00BFFF', '#87CEEB', '#00CCFF', '#9370DB', '#DA70D6', '#FF66FF', '#FF99CC', '#FA8072', '#FF7F50', '#FF9966', '#FFA07A', '#FFB347', '#FFCC00', '#FFFFE0', '#D3FF00', '#90EE90'],
+                      ['#87CEFA', '#87CEEB', '#66CCFF', '#B0C4DE', '#DDA0DD', '#FF99FF', '#FFB3D9', '#FFB6C1', '#FFA07A', '#FFCC99', '#FFDAB9', '#FFE4B5', '#FFEB99', '#FFFACD', '#F0E68C', '#BFFF00'],
+                      ['#B0E0E6', '#ADD8E6', '#99DDFF', '#D8BFD8', '#EE82EE', '#FFCCFF', '#FFD9EC', '#FFC0CB', '#FFCCCB', '#FFDDAA', '#FFE4C4', '#FFEFD5', '#FFF4CC', '#FFFAF0', '#F5F5DC', '#E0FFE0'],
+                      ['#E0F7FA', '#E0FFFF', '#CCFFFF', '#F0E6FF', '#F5E6FF', '#FFE6FF', '#FFF0F5', '#FFF5EE', '#FFEBCD', '#FFF0DC', '#FFF8DC', '#FFFAF0', '#FFFAEB', '#FFFFF0', '#FAFAF0', '#F0FFF0']
+                    ].map((row, rowIndex) => (
+                      row.map((color) => (
+                        <button
+                          key={`${rowIndex}-${color}`}
+                          onClick={() => { handleColorChange(color); setIsColorPickerOpen(false); }}
+                          className="w-8 h-8 hover:scale-110 transition-transform border border-gray-200"
+                          style={{ backgroundColor: color }}
+                          aria-label={`Select ${color}`}
+                        />
+                      ))
+                    ))}
                   </div>
                 </div>
               </PopoverContent>
