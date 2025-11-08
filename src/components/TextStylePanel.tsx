@@ -255,19 +255,31 @@ export const TextStylePanel = ({
                 </div>
               </PopoverContent>
             </Popover>
-            <label className="relative cursor-pointer">
-              <div 
-                className="w-16 h-8 rounded-lg border-2 border-gray-300 hover:border-[#8B7AB8] transition-colors"
-                style={{ backgroundColor: textColor }}
-              />
-              <input 
-                type="color" 
-                value={textColor} 
-                onChange={(e) => handleColorChange(e.target.value)}
-                className="absolute inset-0 opacity-0 cursor-pointer"
-                aria-label="Choose color"
-              />
-            </label>
+            <Popover open={isColorPickerOpen} onOpenChange={setIsColorPickerOpen}>
+              <PopoverTrigger asChild>
+                <button 
+                  className="w-16 h-8 rounded-lg border-2 border-gray-300 hover:border-[#8B7AB8] transition-colors cursor-pointer"
+                  style={{ backgroundColor: textColor }}
+                  aria-label="Choose color"
+                />
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-3" align="end">
+                <div className="flex flex-col gap-2">
+                  <input 
+                    type="color" 
+                    value={textColor} 
+                    onChange={(e) => handleColorChange(e.target.value)}
+                    className="w-32 h-32 cursor-pointer rounded-lg"
+                  />
+                  <Button 
+                    onClick={() => setIsColorPickerOpen(false)}
+                    className="w-full bg-[#8B5CF6] hover:bg-[#7C3AED] text-white"
+                  >
+                    Done
+                  </Button>
+                </div>
+              </PopoverContent>
+            </Popover>
           </div>
         </div>
         
