@@ -263,20 +263,32 @@ export const TextStylePanel = ({
                   aria-label="Choose color"
                 />
               </PopoverTrigger>
-              <PopoverContent className="w-auto p-3" align="end">
-                <div className="flex flex-col gap-2">
-                  <input 
-                    type="color" 
-                    value={textColor} 
-                    onChange={(e) => handleColorChange(e.target.value)}
-                    className="w-32 h-32 cursor-pointer rounded-lg"
-                  />
-                  <Button 
+              <PopoverContent 
+                className="w-64 p-4 bg-white border border-gray-200 shadow-lg z-50" 
+                align="end"
+              >
+                <div className="space-y-3">
+                  <div className="flex items-center gap-2">
+                    <input 
+                      type="color" 
+                      value={textColor} 
+                      onChange={(e) => handleColorChange(e.target.value)}
+                      className="h-10 w-16 rounded-lg cursor-pointer border-2 border-gray-300"
+                    />
+                    <input 
+                      type="text" 
+                      value={textColor} 
+                      onChange={(e) => handleColorChange(e.target.value)}
+                      className="flex-1 h-10 px-3 rounded-lg border-2 border-gray-300 text-sm font-mono"
+                      placeholder="#000000"
+                    />
+                  </div>
+                  <button 
                     onClick={() => setIsColorPickerOpen(false)}
-                    className="w-full bg-[#8B5CF6] hover:bg-[#7C3AED] text-white"
+                    className="w-full py-2 bg-[#8B5CF6] hover:bg-[#7C3AED] text-white rounded-lg transition-colors font-medium"
                   >
                     Done
-                  </Button>
+                  </button>
                 </div>
               </PopoverContent>
             </Popover>
