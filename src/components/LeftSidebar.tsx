@@ -51,11 +51,11 @@ export const LeftSidebar = ({
         <Button size="icon" variant="ghost" className="h-8 w-8 text-muted-foreground hover:bg-sidebar-accent mb-4" onClick={toggleStyles}>
           {stylesExpanded ? <ChevronLeft className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}
         </Button>
-        {!stylesExpanded && (
-          <div className="writing-mode-vertical text-sm font-medium text-muted-foreground uppercase tracking-wide" style={{ writingMode: 'vertical-rl' }}>
+        {!stylesExpanded && <div className="writing-mode-vertical text-sm font-medium text-muted-foreground uppercase tracking-wide" style={{
+        writingMode: 'vertical-rl'
+      }}>
             Smart Styling
-          </div>
-        )}
+          </div>}
       </div>
 
       {/* Styles Panel */}
@@ -63,7 +63,7 @@ export const LeftSidebar = ({
           {/* Header */}
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2.5">
-              <span className="text-lg">🎨</span>
+              
               <h2 className="text-sm font-bold text-[#8B7AB8] uppercase tracking-wide">Smart Styling</h2>
             </div>
             <div className="flex gap-2">
