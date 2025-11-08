@@ -17,6 +17,7 @@ import { PageViewer } from '@/components/PageViewer';
 import { defaultStyles } from '@/types/styles';
 import { useToast } from '@/hooks/use-toast';
 import { toast as sonnerToast } from 'sonner';
+import purpleBookmark from '@/assets/purple-bookmark.png';
 
 const Index = () => {
   const [selectedText, setSelectedText] = useState('');
@@ -311,7 +312,7 @@ const Index = () => {
   const handleInsertBookmark = () => {
     if (!editor) return;
     const bookmarkId = `bookmark-${Date.now()}`;
-    editor.chain().focus().insertContent(`<span id="${bookmarkId}" style="background: #fef3c7; padding: 0 4px;">📌 Bookmark</span>`).run();
+    editor.chain().focus().insertContent(`<span id="${bookmarkId}" style="display: inline-flex; align-items: center; vertical-align: middle; margin: 0 2px;"><img src="${purpleBookmark}" alt="Bookmark" style="width: 24px; height: 32px; display: inline-block; vertical-align: middle; margin-right: 4px; filter: drop-shadow(0 2px 4px rgba(122, 73, 255, 0.3));" /></span>`).run();
     toast({ title: 'Bookmark Inserted', description: `ID: ${bookmarkId}` });
   };
 
