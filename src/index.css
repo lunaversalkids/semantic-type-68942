@@ -421,9 +421,11 @@ button[data-active="true"] {
   overflow: visible;
 }
 
-.editor-overlay.double-page-layout .ProseMirror {
-  grid-column: 2;
-  grid-row: 1;
+.editor-overlay.double-page-layout .ProseMirror,
+.editor-overlay.double-page-layout > div,
+.editor-overlay.double-page-layout .ProseMirror-parent {
+  grid-column: 2 !important;
+  grid-row: 1 !important;
 }
 
 /* Ensure all editor content is clickable and editable */

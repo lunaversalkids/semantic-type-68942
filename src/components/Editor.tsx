@@ -346,7 +346,12 @@ export const Editor = ({
                   }
                 }}
               >
-                <EditorContent editor={editor} />
+                <div 
+                  className={isDoublePageLayout ? 'editor-content-wrapper-double' : 'editor-content-wrapper'}
+                  style={isDoublePageLayout ? { gridColumn: 2, gridRow: 1 } : undefined}
+                >
+                  <EditorContent editor={editor} />
+                </div>
               </div>
             </div>
             
