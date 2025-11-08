@@ -408,13 +408,6 @@ export const Editor = ({
                         } : undefined)
                       }}
                     >
-                      <PageAddButton
-                        pageNumber={pageNum}
-                        onAddPage={addNewPage}
-                        onAddPageWithBackground={() => addPageWithBackground(pageNum)}
-                        onChangeBackground={() => changeBackground(pageNum)}
-                        onCopyPage={() => copyPage(pageNum)}
-                      />
                       <div className="page-add-text-button-wrapper">
                         <button
                           onClick={addNewPage}
@@ -424,6 +417,13 @@ export const Editor = ({
                           + Add Page
                         </button>
                       </div>
+                      <PageAddButton
+                        pageNumber={pageNum}
+                        onAddPage={addNewPage}
+                        onAddPageWithBackground={() => addPageWithBackground(pageNum)}
+                        onChangeBackground={() => changeBackground(pageNum)}
+                        onCopyPage={() => copyPage(pageNum)}
+                      />
                       {pageNumbersVisibility[pageNum] !== false && (
                         <div 
                           className={`absolute bottom-8 text-sm text-muted-foreground ${

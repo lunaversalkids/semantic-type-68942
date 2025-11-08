@@ -447,25 +447,33 @@ button[data-active="true"] {
   left: 0.75rem;
   opacity: 0;
   transition: opacity 0.2s ease-in-out;
-  z-index: 20;
+  z-index: 21;
   pointer-events: auto !important;
 }
 
-.page-card:hover .page-add-button-wrapper {
+.page-add-button-wrapper:hover {
+  opacity: 1;
+}
+
+.page-add-text-button-wrapper:hover ~ .page-add-button-wrapper {
   opacity: 1;
 }
 
 .page-add-text-button-wrapper {
   position: absolute;
-  top: 3.5rem;
-  left: 0.75rem;
+  top: 0;
+  left: 0;
+  width: 200px;
+  height: 100px;
   opacity: 0;
   transition: opacity 0.2s ease-in-out;
   z-index: 20;
   pointer-events: auto !important;
+  padding-top: 3.5rem;
+  padding-left: 0.75rem;
 }
 
-.page-card:hover .page-add-text-button-wrapper {
+.page-add-text-button-wrapper:hover {
   opacity: 1;
 }
 
