@@ -172,6 +172,36 @@ export const Editor = ({
     input.click();
   };
 
+  const copyPage = (pageNum: number) => {
+    const newPageId = `page-${pages.length + 1}`;
+    const pageBackground = pageBackgrounds[pageNum];
+    
+    // Get current editor content HTML
+    const currentContent = editor?.getHTML() || '';
+    
+    setPages(prev => {
+      const newPages = [...prev, newPageId];
+      onPageCountChange?.(newPages.length);
+      return newPages;
+    });
+    
+    // Copy the background if it exists
+    if (pageBackground) {
+      setPageBackgrounds(prev => ({
+        ...prev,
+        [pages.length + 1]: pageBackground
+      }));
+    }
+    
+    // Append the copied content to the editor
+    setTimeout(() => {
+      if (editor) {
+        editor.commands.focus('end');
+        editor.commands.insertContent('<div class="page-break"></div>' + currentContent);
+      }
+    }, 100);
+  };
+
   // Notify parent of initial page count and provide add page function
   useEffect(() => {
     onPageCountChange?.(pages.length);
@@ -383,6 +413,7 @@ export const Editor = ({
                         onAddPage={addNewPage}
                         onAddPageWithBackground={() => addPageWithBackground(pageNum)}
                         onChangeBackground={() => changeBackground(pageNum)}
+                        onCopyPage={() => copyPage(pageNum)}
                       />
                       {pageNumbersVisibility[pageNum] !== false && (
                         <div 

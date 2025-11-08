@@ -8,6 +8,7 @@ interface PageAddButtonProps {
   onAddPage: () => void;
   onAddPageWithBackground: () => void;
   onChangeBackground: () => void;
+  onCopyPage: () => void;
 }
 
 export const PageAddButton = ({
@@ -15,6 +16,7 @@ export const PageAddButton = ({
   onAddPage,
   onAddPageWithBackground,
   onChangeBackground,
+  onCopyPage,
 }: PageAddButtonProps) => {
   const [open, setOpen] = useState(false);
 
@@ -60,6 +62,14 @@ export const PageAddButton = ({
             >
               <Plus className="h-4 w-4 mr-2" />
               Change Background to Page
+            </Button>
+            <Button
+              variant="ghost"
+              className="justify-start hover:bg-accent/10 transition-colors"
+              onClick={() => handleAction(onCopyPage)}
+            >
+              <Plus className="h-4 w-4 mr-2" />
+              Copy Page
             </Button>
           </div>
         </PopoverContent>
