@@ -455,22 +455,14 @@ button[data-active="true"] {
   opacity: 1;
 }
 
-.page-add-text-button-wrapper:hover ~ .page-add-button-wrapper {
-  opacity: 1;
-}
-
 .page-add-text-button-wrapper {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 200px;
-  height: 100px;
+  top: 0.75rem;
+  left: 3.5rem;
   opacity: 0;
   transition: opacity 0.2s ease-in-out;
   z-index: 20;
   pointer-events: auto !important;
-  padding-top: 3.5rem;
-  padding-left: 0.75rem;
 }
 
 .page-add-text-button-wrapper:hover {
