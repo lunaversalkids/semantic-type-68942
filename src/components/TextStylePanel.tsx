@@ -263,8 +263,8 @@ export const TextStylePanel = ({
                   aria-label="Choose color"
                 />
               </PopoverTrigger>
-              <PopoverContent className="w-[280px] p-2 bg-white border border-gray-200 shadow-[0_0_40px_rgba(200,180,255,0.4)] z-50" align="end">
-                <div className="h-[280px] overflow-y-auto overflow-x-hidden">
+              <PopoverContent className="w-[280px] p-0 bg-white border border-gray-200 shadow-[0_0_40px_rgba(200,180,255,0.4)] z-50" align="end">
+                <div className="max-h-[280px] overflow-y-auto overflow-x-hidden">
                   <div className="grid grid-cols-16 gap-0">
                     {/* Grayscale row */}
                     {['#EFEFEF', '#DEDEDE', '#CECECE', '#BEBEBE', '#AEAEAE', '#9E9E9E', '#8E8E8E', '#7E7E7E', 
@@ -272,7 +272,7 @@ export const TextStylePanel = ({
                       <button
                         key={color}
                         onClick={() => { handleColorChange(color); setIsColorPickerOpen(false); }}
-                        className="w-[17px] h-[17px] hover:scale-105 transition-transform border-0"
+                        className="w-[17.5px] h-[17.5px] hover:scale-105 transition-transform border-0"
                         style={{ backgroundColor: color }}
                         aria-label={`Select ${color}`}
                       />
@@ -293,7 +293,7 @@ export const TextStylePanel = ({
                         <button
                           key={`${rowIndex}-${color}`}
                           onClick={() => { handleColorChange(color); setIsColorPickerOpen(false); }}
-                          className="w-[17px] h-[17px] hover:scale-105 transition-transform border-0"
+                          className="w-[17.5px] h-[17.5px] hover:scale-105 transition-transform border-0"
                           style={{ backgroundColor: color }}
                           aria-label={`Select ${color}`}
                         />
