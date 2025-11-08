@@ -221,7 +221,7 @@ export const PageViewer = ({ isOpen, onClose, totalPages, onPageClick, onAddPage
                       onBookmarkToggle?.(pageNum);
                       toast.success('Bookmark removed');
                     }}
-                    className="absolute -top-2 -right-6 z-20 hover:scale-110 transition-transform"
+                    className="absolute -top-2 -right-4 z-20 hover:scale-110 transition-transform"
                   >
                     <img src={bookmarkIcon} alt="" className="w-14 h-16 drop-shadow-lg" />
                   </button>
