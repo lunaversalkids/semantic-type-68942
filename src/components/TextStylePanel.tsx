@@ -123,47 +123,81 @@ export const TextStylePanel = ({
 
     switch (mode) {
       case 'Normal':
+        // Standard single spacing with regular paragraph settings
         editor.chain().focus().updateAttributes('paragraph', {
           textIndent: '0px',
           marginBottom: '0px',
-          lineHeight: 'normal'
+          lineHeight: 'normal',
+          paddingLeft: '0px'
         }).run();
+        editor.chain().focus().setTextAlign('left').run();
         break;
       case 'Double Sentence':
+        // Extra spacing between paragraphs for sentence separation
         editor.chain().focus().updateAttributes('paragraph', {
-          marginBottom: '1.5em'
+          textIndent: '0px',
+          marginBottom: '1.5em',
+          lineHeight: 'normal',
+          paddingLeft: '0px'
         }).run();
         break;
       case 'Indented':
+        // First line indent for each paragraph
         editor.chain().focus().updateAttributes('paragraph', {
           textIndent: '2em',
-          marginBottom: '0px'
+          marginBottom: '0px',
+          lineHeight: 'normal',
+          paddingLeft: '0px'
         }).run();
         break;
       case 'No Indent (Block)':
+        // No indentation, spacing between paragraphs
         editor.chain().focus().updateAttributes('paragraph', {
           textIndent: '0px',
-          marginBottom: '1em'
+          marginBottom: '1em',
+          lineHeight: 'normal',
+          paddingLeft: '0px'
         }).run();
         break;
       case 'Left-Aligned Header':
-        editor.chain().focus().setTextAlign('left').run();
+        // Only affects headers - keeps them left-aligned
+        ['heading', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'].forEach(nodeType => {
+          if (editor.isActive(nodeType)) {
+            editor.chain().focus().setTextAlign('left').run();
+          }
+        });
         break;
       case 'Centered Header':
-        editor.chain().focus().setTextAlign('center').run();
+        // Only affects headers - centers them
+        ['heading', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'].forEach(nodeType => {
+          if (editor.isActive(nodeType)) {
+            editor.chain().focus().setTextAlign('center').run();
+          }
+        });
         break;
       case 'Expanded Line':
+        // Increased line spacing for readability
         editor.chain().focus().updateAttributes('paragraph', {
-          lineHeight: '1.8'
+          lineHeight: '1.8',
+          textIndent: '0px',
+          paddingLeft: '0px'
         }).run();
         break;
       case 'Justified':
+        // Even alignment on both margins
         editor.chain().focus().setTextAlign('justify').run();
+        editor.chain().focus().updateAttributes('paragraph', {
+          textIndent: '0px',
+          paddingLeft: '0px'
+        }).run();
         break;
       case 'Hanging Indent':
+        // First line starts left, subsequent lines indented (for citations)
         editor.chain().focus().updateAttributes('paragraph', {
           textIndent: '-2em',
-          paddingLeft: '2em'
+          paddingLeft: '2em',
+          marginBottom: '0.5em',
+          lineHeight: 'normal'
         }).run();
         break;
       default:
