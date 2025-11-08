@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { ChevronDown, ChevronLeft, AlignLeft, AlignCenter, AlignRight, AlignJustify, ChevronRight, Indent, Outdent, Check, Info } from 'lucide-react';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Button } from '@/components/ui/button';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import capitalizeIcon from '@/assets/capitalize-icon.jpg';
 import baselineIcon from '@/assets/baseline-icon.jpg';
 interface TextStylePanelProps {
@@ -14,6 +15,45 @@ export const TextStylePanel = ({
   const [fontFamily, setFontFamily] = useState('Graphik');
   const [selectedAlignment, setSelectedAlignment] = useState('harvard');
   const [isCollapsed, setIsCollapsed] = useState(false);
+  const [isFontOpen, setIsFontOpen] = useState(false);
+
+  const availableFonts = [
+    'Graphik',
+    'Arial',
+    'Times New Roman',
+    'Georgia',
+    'Helvetica',
+    'Courier New',
+    'Verdana',
+    'Garamond',
+    'Palatino',
+    'Bookman',
+    'Comic Sans MS',
+    'Trebuchet MS',
+    'Impact',
+    'Lucida Console',
+    'Tahoma',
+    'Lucida Sans',
+    'Monaco',
+    'Gill Sans',
+    'Century Gothic',
+    'Franklin Gothic Medium',
+    'Cambria',
+    'Calibri',
+    'Consolas',
+    'Didot',
+    'Futura',
+    'Optima',
+    'Baskerville'
+  ];
+
+  const handleFontChange = (font: string) => {
+    setFontFamily(font);
+    setIsFontOpen(false);
+    if (editor) {
+      editor.chain().focus().setFontFamily(font).run();
+    }
+  };
   const handleFormat = (command: string) => {
     if (!editor) return;
     switch (command) {
@@ -115,7 +155,30 @@ export const TextStylePanel = ({
             <span className="text-sm font-semibold text-[#8B7AB8]">Color</span>
           </div>
           <div className="flex flex-col gap-2 items-end">
-            <span className="text-sm font-medium text-[hsl(var(--ink))]" style={{ fontFamily: 'Graphik, sans-serif' }}>{fontFamily}</span>
+            <Popover open={isFontOpen} onOpenChange={setIsFontOpen}>
+              <PopoverTrigger asChild>
+                <button className="text-sm font-medium text-[hsl(var(--ink))] hover:text-[#8B7AB8] transition-colors flex items-center gap-1" style={{ fontFamily: `${fontFamily}, sans-serif` }}>
+                  {fontFamily}
+                  <ChevronDown className="w-3 h-3" />
+                </button>
+              </PopoverTrigger>
+              <PopoverContent className="w-48 p-2 bg-white border border-gray-200 shadow-lg max-h-60 overflow-y-auto z-50" align="end">
+                <div className="flex flex-col gap-1">
+                  {availableFonts.map((font) => (
+                    <button
+                      key={font}
+                      onClick={() => handleFontChange(font)}
+                      className={`text-left px-3 py-2 rounded-lg hover:bg-[#F5F0FF] transition-colors text-sm ${
+                        fontFamily === font ? 'bg-[#E8DDFF] text-[#8B5CF6] font-medium' : 'text-[hsl(var(--ink))]'
+                      }`}
+                      style={{ fontFamily: `${font}, sans-serif` }}
+                    >
+                      {font}
+                    </button>
+                  ))}
+                </div>
+              </PopoverContent>
+            </Popover>
             <div className="w-16 h-8 bg-black rounded-lg border-2 border-gray-300"></div>
           </div>
         </div>
