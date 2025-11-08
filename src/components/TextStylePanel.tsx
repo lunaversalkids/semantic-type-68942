@@ -66,14 +66,8 @@ export const TextStylePanel = ({ editor }: TextStylePanelProps) => {
         >
           <ChevronLeft className="w-4 h-4" />
         </Button>
-        <div className="flex flex-col items-center text-sm font-medium text-muted-foreground uppercase tracking-wide leading-tight">
-          {'PARAGRAPH'.split('').map((letter, i) => (
-            <span key={`p-${i}`}>{letter}</span>
-          ))}
-          <span className="mt-2"></span>
-          {'MODE'.split('').map((letter, i) => (
-            <span key={`m-${i}`}>{letter}</span>
-          ))}
+        <div className="text-sm font-medium text-muted-foreground uppercase tracking-wide" style={{ writingMode: 'vertical-rl', transform: 'rotate(180deg)' }}>
+          Paragraph Mode
         </div>
       </aside>
     );
