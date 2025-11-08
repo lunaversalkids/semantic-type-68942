@@ -6,7 +6,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { toast } from 'sonner';
 import infinityIcon from '@/assets/new-infinity-icon.png';
-import bookmarkIcon from '@/assets/bookmark-icon.png';
+import bookmarkIcon from '@/assets/purple-bookmark.png';
 
 interface PageViewerProps {
   isOpen: boolean;
