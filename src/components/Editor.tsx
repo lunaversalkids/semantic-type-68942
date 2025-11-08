@@ -415,6 +415,15 @@ export const Editor = ({
                         onChangeBackground={() => changeBackground(pageNum)}
                         onCopyPage={() => copyPage(pageNum)}
                       />
+                      <div className="page-add-text-button-wrapper">
+                        <button
+                          onClick={addNewPage}
+                          className="page-add-text-button"
+                          title="Add new page"
+                        >
+                          + Add Page
+                        </button>
+                      </div>
                       {pageNumbersVisibility[pageNum] !== false && (
                         <div 
                           className={`absolute bottom-8 text-sm text-muted-foreground ${
@@ -449,14 +458,6 @@ export const Editor = ({
                 </div>
               </div>
             </div>
-            
-            <button
-              onClick={addNewPage}
-              className="page-adder-button mt-6"
-              title="Add new page"
-            >
-              + Add Page
-            </button>
           </EditorContextMenu>
         </div>
       </div>
