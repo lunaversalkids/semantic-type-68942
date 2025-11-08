@@ -124,7 +124,7 @@ export const TextStylePanel = ({
     switch (mode) {
       case 'Normal':
         // Standard single spacing with regular paragraph settings
-        editor.chain().focus().updateAttributes('paragraph', {
+        editor.chain().focus().setParagraphAttributes({
           textIndent: '0px',
           marginBottom: '0px',
           lineHeight: 'normal',
@@ -134,7 +134,7 @@ export const TextStylePanel = ({
         break;
       case 'Double Sentence':
         // Extra spacing between paragraphs for sentence separation
-        editor.chain().focus().updateAttributes('paragraph', {
+        editor.chain().focus().setParagraphAttributes({
           textIndent: '0px',
           marginBottom: '1.5em',
           lineHeight: 'normal',
@@ -143,7 +143,7 @@ export const TextStylePanel = ({
         break;
       case 'Indented':
         // First line indent for each paragraph
-        editor.chain().focus().updateAttributes('paragraph', {
+        editor.chain().focus().setParagraphAttributes({
           textIndent: '2em',
           marginBottom: '0px',
           lineHeight: 'normal',
@@ -152,7 +152,7 @@ export const TextStylePanel = ({
         break;
       case 'No Indent (Block)':
         // No indentation, spacing between paragraphs
-        editor.chain().focus().updateAttributes('paragraph', {
+        editor.chain().focus().setParagraphAttributes({
           textIndent: '0px',
           marginBottom: '1em',
           lineHeight: 'normal',
@@ -177,7 +177,7 @@ export const TextStylePanel = ({
         break;
       case 'Expanded Line':
         // Increased line spacing for readability
-        editor.chain().focus().updateAttributes('paragraph', {
+        editor.chain().focus().setParagraphAttributes({
           lineHeight: '1.8',
           textIndent: '0px',
           paddingLeft: '0px'
@@ -186,14 +186,14 @@ export const TextStylePanel = ({
       case 'Justified':
         // Even alignment on both margins
         editor.chain().focus().setTextAlign('justify').run();
-        editor.chain().focus().updateAttributes('paragraph', {
+        editor.chain().focus().setParagraphAttributes({
           textIndent: '0px',
           paddingLeft: '0px'
         }).run();
         break;
       case 'Hanging Indent':
         // First line starts left, subsequent lines indented (for citations)
-        editor.chain().focus().updateAttributes('paragraph', {
+        editor.chain().focus().setParagraphAttributes({
           textIndent: '-2em',
           paddingLeft: '2em',
           marginBottom: '0.5em',

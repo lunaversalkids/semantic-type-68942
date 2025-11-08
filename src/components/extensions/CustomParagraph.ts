@@ -71,6 +71,24 @@ export const CustomParagraph = Node.create({
       setParagraph: () => ({ commands }) => {
         return commands.setNode(this.name);
       },
+      setParagraphAttributes: (attributes: Record<string, any>) => ({ commands, state, dispatch }) => {
+        const { from, to } = state.selection;
+        const nodeType = this.type;
+        
+        if (dispatch) {
+          state.doc.nodesBetween(from, to, (node, pos) => {
+            if (node.type === nodeType) {
+              const tr = state.tr.setNodeMarkup(pos, undefined, {
+                ...node.attrs,
+                ...attributes,
+              });
+              dispatch(tr);
+            }
+          });
+        }
+        
+        return true;
+      },
     };
   },
 
