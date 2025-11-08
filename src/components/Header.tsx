@@ -25,9 +25,9 @@ export const Header = ({
   onPageViewerClick,
   pageViewerOpen
 }: HeaderProps) => {
-  return <header className="bg-[hsl(var(--panel))] border border-[hsl(var(--stroke))] rounded-[var(--radius)] shadow-[0_10px_28px_rgba(96,48,200,.16)] p-2 grid grid-cols-[340px_1fr_340px] items-center gap-3">
+  return <header className="bg-[hsl(var(--panel))] border border-[hsl(var(--stroke))] rounded-[var(--radius)] shadow-[0_10px_28px_rgba(96,48,200,.16)] p-2 grid grid-cols-[auto_1fr_auto] items-center gap-3">
       {/* Brand */}
-      <div className="flex items-center gap-0.5 font-extrabold justify-start">
+      <div className="flex items-center gap-0.5 font-extrabold justify-start w-[340px]">
         <button onClick={onPageViewerClick} className={`transition-all hover:opacity-80 ${pageViewerOpen ? 'shadow-lg ring-2 ring-[#8D60FF]/50 rounded-full' : ''}`}>
           <img src={newInfinityButton} alt="" className="w-10 h-10" />
         </button>
@@ -43,7 +43,7 @@ export const Header = ({
       </div>
 
       {/* Toolbar */}
-      <div className="flex justify-end gap-2 w-full">
+      <div className="flex justify-end gap-2 w-[340px]">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <button className="h-9 min-w-[36px] px-2.5 border border-[hsl(var(--stroke))] rounded-[var(--r-sm)] bg-white grid place-items-center hover:bg-[hsl(var(--panel-2))] transition-colors" title="Pen & Stylus">

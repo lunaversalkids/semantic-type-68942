@@ -450,7 +450,7 @@ const Index = () => {
         pageViewerOpen={pageViewerOpen}
       />
 
-      <div className="grid grid-cols-[340px_1fr_340px] gap-3 overflow-hidden relative">
+      <div className="grid grid-cols-[auto_1fr_auto] gap-3 overflow-hidden relative">
         <PageViewer 
           isOpen={pageViewerOpen} 
           onClose={() => setPageViewerOpen(false)} 
