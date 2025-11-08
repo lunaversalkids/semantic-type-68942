@@ -237,6 +237,34 @@ export const TextStylePanel = ({ editor }: TextStylePanelProps) => {
           </div>
         </button>
 
+        {/* Numbered List */}
+        <button 
+          onClick={() => setSelectedAlignment('numbered')}
+          className="w-full bg-white rounded-xl px-4 py-3 flex items-center justify-between border border-gray-200 hover:bg-gray-50 transition-colors"
+        >
+          <div className="flex items-center gap-2">
+            <span className="text-lg font-medium">1.</span>
+            <span className="text-sm font-medium text-[hsl(var(--ink))]">Numbered List</span>
+          </div>
+          <div className="w-6 h-6 rounded-full bg-[#E8DDFF] flex items-center justify-center">
+            <Info className="w-4 h-4 text-[#8B5CF6]" />
+          </div>
+        </button>
+
+        {/* Lettered List */}
+        <button 
+          onClick={() => setSelectedAlignment('lettered')}
+          className="w-full bg-white rounded-xl px-4 py-3 flex items-center justify-between border border-gray-200 hover:bg-gray-50 transition-colors"
+        >
+          <div className="flex items-center gap-2">
+            <span className="text-lg font-medium">a.</span>
+            <span className="text-sm font-medium text-[hsl(var(--ink))]">Lettered List</span>
+          </div>
+          <div className="w-6 h-6 rounded-full bg-[#E8DDFF] flex items-center justify-center">
+            <Info className="w-4 h-4 text-[#8B5CF6]" />
+          </div>
+        </button>
+
         {/* Image */}
         <button 
           onClick={() => setSelectedAlignment('image')}
@@ -271,7 +299,7 @@ export const TextStylePanel = ({ editor }: TextStylePanelProps) => {
           className="w-full bg-white rounded-xl px-4 py-3 flex items-center justify-between border border-gray-200 hover:bg-gray-50 transition-colors"
         >
           <div className="flex items-center gap-2">
-            <span className="text-lg">−</span>
+            <span className="text-lg">—</span>
             <span className="text-sm font-medium text-[hsl(var(--ink))]">Dash</span>
           </div>
           <div className="w-6 h-6 rounded-full bg-[#E8DDFF] flex items-center justify-center">
@@ -285,7 +313,7 @@ export const TextStylePanel = ({ editor }: TextStylePanelProps) => {
           className="w-full bg-white rounded-xl px-4 py-3 flex items-center justify-between border border-gray-200 hover:bg-gray-50 transition-colors"
         >
           <div className="flex items-center gap-2">
-            <span className="text-lg">−</span>
+            <span className="text-lg">–</span>
             <span className="text-sm font-medium text-[hsl(var(--ink))]">Note Taking</span>
           </div>
           <div className="w-6 h-6 rounded-full bg-[#E8DDFF] flex items-center justify-center">
