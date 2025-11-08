@@ -396,45 +396,37 @@ export const Editor = ({
                   const isFirstPage = index === 0 && isDoublePageLayout;
                   const pageBackground = pageBackgrounds[pageNum];
                   return (
-                    <div key={pageId} className="flex flex-col">
-                      <Card 
-                        className="page-card w-[8.5in] h-[11in] bg-[hsl(var(--page-bg))] shadow-2xl rounded-none"
-                        style={{
-                          ...(isFirstPage ? { gridColumnStart: 2 } : undefined),
-                          ...(pageBackground ? { 
-                            backgroundImage: `url(${pageBackground})`,
-                            backgroundSize: 'cover',
-                            backgroundPosition: 'center'
-                          } : undefined)
-                        }}
-                      >
-                        <PageAddButton
-                          pageNumber={pageNum}
-                          onAddPage={addNewPage}
-                          onAddPageWithBackground={() => addPageWithBackground(pageNum)}
-                          onChangeBackground={() => changeBackground(pageNum)}
-                          onCopyPage={() => copyPage(pageNum)}
-                        />
-                        {pageNumbersVisibility[pageNum] !== false && (
-                          <div 
-                            className={`absolute bottom-8 text-sm text-muted-foreground ${
-                              getPageNumberAlignment() === 'left' ? 'left-12' : 
-                              getPageNumberAlignment() === 'center' ? 'left-1/2 -translate-x-1/2' : 
-                              'right-12'
-                            }`}
-                          >
-                            {getPageNumberText(pageNum)}
-                          </div>
-                        )}
-                      </Card>
-                      <button
-                        onClick={addNewPage}
-                        className="page-adder-button mt-6 mb-6"
-                        title="Add new page"
-                      >
-                        + Add Page
-                      </button>
-                    </div>
+                    <Card 
+                      key={pageId}
+                      className="page-card w-[8.5in] h-[11in] bg-[hsl(var(--page-bg))] shadow-2xl rounded-none"
+                      style={{
+                        ...(isFirstPage ? { gridColumnStart: 2 } : undefined),
+                        ...(pageBackground ? { 
+                          backgroundImage: `url(${pageBackground})`,
+                          backgroundSize: 'cover',
+                          backgroundPosition: 'center'
+                        } : undefined)
+                      }}
+                    >
+                      <PageAddButton
+                        pageNumber={pageNum}
+                        onAddPage={addNewPage}
+                        onAddPageWithBackground={() => addPageWithBackground(pageNum)}
+                        onChangeBackground={() => changeBackground(pageNum)}
+                        onCopyPage={() => copyPage(pageNum)}
+                      />
+                      {pageNumbersVisibility[pageNum] !== false && (
+                        <div 
+                          className={`absolute bottom-8 text-sm text-muted-foreground ${
+                            getPageNumberAlignment() === 'left' ? 'left-12' : 
+                            getPageNumberAlignment() === 'center' ? 'left-1/2 -translate-x-1/2' : 
+                            'right-12'
+                          }`}
+                        >
+                          {getPageNumberText(pageNum)}
+                        </div>
+                      )}
+                    </Card>
                   );
                 })}
               </div>
@@ -457,6 +449,14 @@ export const Editor = ({
                 </div>
               </div>
             </div>
+            
+            <button
+              onClick={addNewPage}
+              className="page-adder-button mt-6"
+              title="Add new page"
+            >
+              + Add Page
+            </button>
           </EditorContextMenu>
         </div>
       </div>
