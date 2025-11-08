@@ -10,6 +10,7 @@ import TextAlign from '@tiptap/extension-text-align';
 import Superscript from '@tiptap/extension-superscript';
 import { Card } from '@/components/ui/card';
 import { EditorContextMenu } from './ContextMenu';
+import { PageAddButton } from './PageAddButton';
 import { FontSize } from './extensions/FontSize';
 import { FontWeight } from './extensions/FontWeight';
 import { SmallCaps } from './extensions/SmallCaps';
@@ -102,6 +103,7 @@ export const Editor = ({
   };
 
   const [pages, setPages] = useState<string[]>(['page-1', 'page-2', 'page-3']);
+  const [pageBackgrounds, setPageBackgrounds] = useState<Record<number, string>>({});
   const [zoom, setZoom] = useState(1);
   const [targetZoom, setTargetZoom] = useState(1);
   const [isZooming, setIsZooming] = useState(false);
@@ -120,6 +122,54 @@ export const Editor = ({
         editor.commands.focus('end');
       }
     }, 100);
+  };
+
+  const addPageWithBackground = (pageNum: number) => {
+    const newPageId = `page-${pages.length + 1}`;
+    const previousBackground = pageBackgrounds[pageNum] || '';
+    
+    setPages(prev => {
+      const newPages = [...prev, newPageId];
+      onPageCountChange?.(newPages.length);
+      return newPages;
+    });
+    
+    if (previousBackground) {
+      setPageBackgrounds(prev => ({
+        ...prev,
+        [pages.length + 1]: previousBackground
+      }));
+    }
+    
+    setTimeout(() => {
+      if (editor) {
+        editor.commands.focus('end');
+      }
+    }, 100);
+  };
+
+  const changeBackground = (pageNum: number) => {
+    // Create file input to select image
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'image/*';
+    
+    input.onchange = (e) => {
+      const file = (e.target as HTMLInputElement).files?.[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          const imageUrl = event.target?.result as string;
+          setPageBackgrounds(prev => ({
+            ...prev,
+            [pageNum]: imageUrl
+          }));
+        };
+        reader.readAsDataURL(file);
+      }
+    };
+    
+    input.click();
   };
 
   // Notify parent of initial page count and provide add page function
@@ -314,12 +364,26 @@ export const Editor = ({
                 {pages.map((pageId, index) => {
                   const pageNum = index + 1;
                   const isFirstPage = index === 0 && isDoublePageLayout;
+                  const pageBackground = pageBackgrounds[pageNum];
                   return (
                     <Card 
                       key={pageId}
                       className="page-card w-[8.5in] h-[11in] bg-[hsl(var(--page-bg))] shadow-2xl rounded-none"
-                      style={isFirstPage ? { gridColumnStart: 2 } : undefined}
+                      style={{
+                        ...(isFirstPage ? { gridColumnStart: 2 } : undefined),
+                        ...(pageBackground ? { 
+                          backgroundImage: `url(${pageBackground})`,
+                          backgroundSize: 'cover',
+                          backgroundPosition: 'center'
+                        } : undefined)
+                      }}
                     >
+                      <PageAddButton
+                        pageNumber={pageNum}
+                        onAddPage={addNewPage}
+                        onAddPageWithBackground={() => addPageWithBackground(pageNum)}
+                        onChangeBackground={() => changeBackground(pageNum)}
+                      />
                       {pageNumbersVisibility[pageNum] !== false && (
                         <div 
                           className={`absolute bottom-8 text-sm text-muted-foreground ${

@@ -436,6 +436,39 @@ button[data-active="true"] {
   pointer-events: auto !important;
 }
 
+/* Page Add Button - appears on hover at top right of each page */
+.page-card {
+  position: relative;
+}
+
+.page-add-button-wrapper {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  opacity: 0;
+  transition: opacity 0.2s ease-in-out;
+  z-index: 20;
+  pointer-events: auto !important;
+}
+
+.page-card:hover .page-add-button-wrapper {
+  opacity: 1;
+}
+
+.page-add-button-trigger {
+  background: hsl(var(--accent)) !important;
+  color: hsl(var(--primary-foreground)) !important;
+  border: none;
+  box-shadow: 0 2px 8px hsla(var(--shadow), 0.3);
+  transition: all 0.2s ease-in-out;
+}
+
+.page-add-button-trigger:hover {
+  background: hsl(var(--accent-2)) !important;
+  box-shadow: 0 4px 12px hsla(var(--shadow), 0.4);
+  transform: scale(1.05);
+}
+
 /* Light purple highlight styles for Find & Replace - Apple Notes inspired */
 .ProseMirror mark[data-color="#e9d5ff"],
 .ProseMirror mark[data-color="#f3e8ff"] {

@@ -1,0 +1,69 @@
+import { Plus } from 'lucide-react';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { Button } from '@/components/ui/button';
+import { useState } from 'react';
+
+interface PageAddButtonProps {
+  pageNumber: number;
+  onAddPage: () => void;
+  onAddPageWithBackground: () => void;
+  onChangeBackground: () => void;
+}
+
+export const PageAddButton = ({
+  pageNumber,
+  onAddPage,
+  onAddPageWithBackground,
+  onChangeBackground,
+}: PageAddButtonProps) => {
+  const [open, setOpen] = useState(false);
+
+  const handleAction = (action: () => void) => {
+    action();
+    setOpen(false);
+  };
+
+  return (
+    <div className="page-add-button-wrapper">
+      <Popover open={open} onOpenChange={setOpen}>
+        <PopoverTrigger asChild>
+          <Button
+            size="sm"
+            className="page-add-button-trigger"
+            title="Add or modify page"
+          >
+            <Plus className="h-4 w-4" />
+          </Button>
+        </PopoverTrigger>
+        <PopoverContent align="end" className="w-64 p-2">
+          <div className="flex flex-col gap-1">
+            <Button
+              variant="ghost"
+              className="justify-start hover:bg-accent/10 transition-colors"
+              onClick={() => handleAction(onAddPage)}
+            >
+              <Plus className="h-4 w-4 mr-2" />
+              Add Page
+            </Button>
+            <Button
+              variant="ghost"
+              className="justify-start hover:bg-accent/10 transition-colors"
+              onClick={() => handleAction(onAddPageWithBackground)}
+            >
+              <Plus className="h-4 w-4 mr-2" />
+              Add Page with Background
+            </Button>
+            <Button
+              variant="ghost"
+              className="justify-start hover:bg-accent/10 transition-colors"
+              onClick={() => handleAction(onChangeBackground)}
+            >
+              <Plus className="h-4 w-4 mr-2" />
+              Change Background to Page
+            </Button>
+          </div>
+        </PopoverContent>
+      </Popover>
+    </div>
+  );
+};
