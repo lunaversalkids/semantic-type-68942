@@ -212,8 +212,8 @@ export const PageViewer = ({ isOpen, onClose, totalPages, onPageClick, onAddPage
                   }`}
                 >
                 {/* Bookmark Icon */}
-                <div className="absolute -top-2 -right-2 z-20">
-                  <img src={bookmarkIcon} alt="" className="w-10 h-14 drop-shadow-lg" />
+                <div className="absolute -top-2 -right-4 z-20">
+                  <img src={bookmarkIcon} alt="" className="w-14 h-16 drop-shadow-lg" />
                 </div>
 
                 {/* Page Content Preview - This would show actual page content */}
