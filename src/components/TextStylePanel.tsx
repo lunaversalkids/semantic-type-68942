@@ -263,35 +263,196 @@ export const TextStylePanel = ({
                   aria-label="Choose color"
                 />
               </PopoverTrigger>
-              <PopoverContent className="w-64 p-4 bg-white border border-gray-200 shadow-lg" align="end">
+              <PopoverContent className="w-auto p-4 bg-white border border-gray-200 shadow-[0_0_40px_rgba(200,180,255,0.4)]" align="end">
                 <div className="space-y-3">
-                  <h4 className="text-sm font-semibold text-[#8B7AB8]">Quick Colors</h4>
-                  <div className="grid grid-cols-6 gap-2">
-                    {['#000000', '#FF0000', '#FF6B00', '#FFD700', '#00FF00', '#0000FF', 
-                      '#8B5CF6', '#FF69B4', '#A52A2A', '#808080', '#FFFFFF', '#333333'].map((color) => (
+                  <div className="grid grid-cols-16 gap-1">
+                    {/* Grayscale row */}
+                    {['#FFFFFF', '#E8E8E8', '#D0D0D0', '#B8B8B8', '#A0A0A0', '#888888', '#707070', '#585858', 
+                      '#404040', '#282828', '#181818', '#0C0C0C', '#000000', '#1A1A1A', '#121212', '#0A0A0A'].map((color, i) => (
                       <button
-                        key={color}
-                        onClick={() => handleColorChange(color)}
-                        className="w-8 h-8 rounded-lg border-2 border-gray-300 hover:border-[#8B7AB8] transition-colors cursor-pointer hover:scale-110"
+                        key={`gray-${i}`}
+                        onClick={() => {
+                          handleColorChange(color);
+                          setIsColorPickerOpen(false);
+                        }}
+                        className="w-6 h-6 rounded border border-gray-300 hover:border-[#8B7AB8] hover:scale-110 transition-all cursor-pointer"
+                        style={{ backgroundColor: color }}
+                        aria-label={`Select ${color}`}
+                      />
+                    ))}
+                    
+                    {/* Dark blues to dark greens */}
+                    {['#003844', '#001F3F', '#1A0052', '#4B0082', '#6A0DAD', '#800020', '#8B0000', '#CC3300', 
+                      '#8B4513', '#654321', '#4A4A00', '#2F4F2F', '#013220', '#004D00', '#003300', '#1B3B1B'].map((color, i) => (
+                      <button
+                        key={`dark1-${i}`}
+                        onClick={() => {
+                          handleColorChange(color);
+                          setIsColorPickerOpen(false);
+                        }}
+                        className="w-6 h-6 rounded border border-gray-300 hover:border-[#8B7AB8] hover:scale-110 transition-all cursor-pointer"
+                        style={{ backgroundColor: color }}
+                        aria-label={`Select ${color}`}
+                      />
+                    ))}
+                    
+                    {/* Dark saturated colors */}
+                    {['#005F73', '#0074D9', '#4B0092', '#7209B7', '#9D00FF', '#B8001C', '#DD0000', '#FF3300', 
+                      '#B85C00', '#935A00', '#807000', '#556B2F', '#01502F', '#006400', '#004D00', '#2D5016'].map((color, i) => (
+                      <button
+                        key={`dark2-${i}`}
+                        onClick={() => {
+                          handleColorChange(color);
+                          setIsColorPickerOpen(false);
+                        }}
+                        className="w-6 h-6 rounded border border-gray-300 hover:border-[#8B7AB8] hover:scale-110 transition-all cursor-pointer"
+                        style={{ backgroundColor: color }}
+                        aria-label={`Select ${color}`}
+                      />
+                    ))}
+                    
+                    {/* Mid-dark colors */}
+                    {['#0077B6', '#0096FF', '#6A00F4', '#9D4EDD', '#BF40BF', '#E5383B', '#FF0000', '#FF4500', 
+                      '#D2691E', '#B8860B', '#9B870C', '#6B8E23', '#228B22', '#008000', '#006400', '#3A5F0B'].map((color, i) => (
+                      <button
+                        key={`mid1-${i}`}
+                        onClick={() => {
+                          handleColorChange(color);
+                          setIsColorPickerOpen(false);
+                        }}
+                        className="w-6 h-6 rounded border border-gray-300 hover:border-[#8B7AB8] hover:scale-110 transition-all cursor-pointer"
+                        style={{ backgroundColor: color }}
+                        aria-label={`Select ${color}`}
+                      />
+                    ))}
+                    
+                    {/* Bright colors */}
+                    {['#00B4D8', '#00BFFF', '#8B00FF', '#B565D8', '#DA70D6', '#FF1744', '#FF2020', '#FF5722', 
+                      '#FF8C00', '#DAA520', '#BDB76B', '#7CB342', '#2E7D32', '#00A000', '#008000', '#4E7C0F'].map((color, i) => (
+                      <button
+                        key={`bright1-${i}`}
+                        onClick={() => {
+                          handleColorChange(color);
+                          setIsColorPickerOpen(false);
+                        }}
+                        className="w-6 h-6 rounded border border-gray-300 hover:border-[#8B7AB8] hover:scale-110 transition-all cursor-pointer"
+                        style={{ backgroundColor: color }}
+                        aria-label={`Select ${color}`}
+                      />
+                    ))}
+                    
+                    {/* Vibrant colors */}
+                    {['#48CAE4', '#00D4FF', '#A020F0', '#D896FF', '#EE82EE', '#FF5252', '#FF4444', '#FF6E40', 
+                      '#FFA500', '#FFD700', '#F0E68C', '#9CCC65', '#4CAF50', '#00C853', '#00B300', '#68A357'].map((color, i) => (
+                      <button
+                        key={`vibrant1-${i}`}
+                        onClick={() => {
+                          handleColorChange(color);
+                          setIsColorPickerOpen(false);
+                        }}
+                        className="w-6 h-6 rounded border border-gray-300 hover:border-[#8B7AB8] hover:scale-110 transition-all cursor-pointer"
+                        style={{ backgroundColor: color }}
+                        aria-label={`Select ${color}`}
+                      />
+                    ))}
+                    
+                    {/* Light vibrant */}
+                    {['#90E0EF', '#5DADE2', '#BF40FF', '#E0A4FF', '#F4A6FF', '#FF7979', '#FF6B6B', '#FF8A65', 
+                      '#FFB74D', '#FFE082', '#FFF59D', '#AED581', '#66BB6A', '#4CAF50', '#00E676', '#81C784'].map((color, i) => (
+                      <button
+                        key={`light1-${i}`}
+                        onClick={() => {
+                          handleColorChange(color);
+                          setIsColorPickerOpen(false);
+                        }}
+                        className="w-6 h-6 rounded border border-gray-300 hover:border-[#8B7AB8] hover:scale-110 transition-all cursor-pointer"
+                        style={{ backgroundColor: color }}
+                        aria-label={`Select ${color}`}
+                      />
+                    ))}
+                    
+                    {/* Lighter tones */}
+                    {['#ADE8F4', '#85C1E9', '#D291FF', '#EABFFF', '#FAD6FF', '#FFB3BA', '#FFA3A3', '#FFAB91', 
+                      '#FFCC80', '#FFECB3', '#FFF9C4', '#C5E1A5', '#81C784', '#66BB6A', '#69F0AE', '#A5D6A7'].map((color, i) => (
+                      <button
+                        key={`light2-${i}`}
+                        onClick={() => {
+                          handleColorChange(color);
+                          setIsColorPickerOpen(false);
+                        }}
+                        className="w-6 h-6 rounded border border-gray-300 hover:border-[#8B7AB8] hover:scale-110 transition-all cursor-pointer"
+                        style={{ backgroundColor: color }}
+                        aria-label={`Select ${color}`}
+                      />
+                    ))}
+                    
+                    {/* Pastel colors */}
+                    {['#CAF0F8', '#AED6F1', '#E8D4FF', '#F5D7FF', '#FFE5F5', '#FFCCCB', '#FFC5C5', '#FFCCBC', 
+                      '#FFE0B2', '#FFF3CD', '#FFFDE7', '#DCEDC8', '#A5D6A7', '#81C784', '#B9F6CA', '#C8E6C9'].map((color, i) => (
+                      <button
+                        key={`pastel1-${i}`}
+                        onClick={() => {
+                          handleColorChange(color);
+                          setIsColorPickerOpen(false);
+                        }}
+                        className="w-6 h-6 rounded border border-gray-300 hover:border-[#8B7AB8] hover:scale-110 transition-all cursor-pointer"
+                        style={{ backgroundColor: color }}
+                        aria-label={`Select ${color}`}
+                      />
+                    ))}
+                    
+                    {/* Very light pastels */}
+                    {['#E0F7FA', '#D4E7F5', '#F3E8FF', '#FBF0FF', '#FFF0F8', '#FFE5E5', '#FFE3E3', '#FFE0D6', 
+                      '#FFF0E0', '#FFFAEB', '#FFFFF0', '#E8F5E9', '#C8E6C9', '#A5D6A7', '#DCEDC8', '#E0F2F1'].map((color, i) => (
+                      <button
+                        key={`pastel2-${i}`}
+                        onClick={() => {
+                          handleColorChange(color);
+                          setIsColorPickerOpen(false);
+                        }}
+                        className="w-6 h-6 rounded border border-gray-300 hover:border-[#8B7AB8] hover:scale-110 transition-all cursor-pointer"
+                        style={{ backgroundColor: color }}
+                        aria-label={`Select ${color}`}
+                      />
+                    ))}
+                    
+                    {/* Near white tints */}
+                    {['#F0FEFF', '#EBF4FA', '#FAF5FF', '#FEF9FF', '#FFF8FC', '#FFF5F5', '#FFF3F3', '#FFF5F0', 
+                      '#FFFAF5', '#FFFDFA', '#FFFFFA', '#F1F8F4', '#E8F5E9', '#E0F2F1', '#F1F8E9', '#F0F4F0'].map((color, i) => (
+                      <button
+                        key={`tint1-${i}`}
+                        onClick={() => {
+                          handleColorChange(color);
+                          setIsColorPickerOpen(false);
+                        }}
+                        className="w-6 h-6 rounded border border-gray-300 hover:border-[#8B7AB8] hover:scale-110 transition-all cursor-pointer"
+                        style={{ backgroundColor: color }}
+                        aria-label={`Select ${color}`}
+                      />
+                    ))}
+                    
+                    {/* Almost white */}
+                    {['#FCFEFF', '#F8FBFF', '#FEFCFF', '#FFFDFF', '#FFFCFE', '#FFFBFB', '#FFFAFA', '#FFFCFA', 
+                      '#FFFEFC', '#FFFFFE', '#FFFFFD', '#FAFCFB', '#F5F9F5', '#F1F8F1', '#F9FDF9', '#F8FAF8'].map((color, i) => (
+                      <button
+                        key={`tint2-${i}`}
+                        onClick={() => {
+                          handleColorChange(color);
+                          setIsColorPickerOpen(false);
+                        }}
+                        className="w-6 h-6 rounded border border-gray-300 hover:border-[#8B7AB8] hover:scale-110 transition-all cursor-pointer"
                         style={{ backgroundColor: color }}
                         aria-label={`Select ${color}`}
                       />
                     ))}
                   </div>
-                  <div className="pt-2 border-t border-gray-200">
-                    <label className="relative cursor-pointer">
-                      <button className="w-full h-10 bg-gradient-to-b from-[#C9B5FF] to-[#A890FF] hover:from-[#B9A1FF] hover:to-[#9B7FFF] text-white rounded-lg transition-colors flex items-center justify-center gap-2 font-medium text-sm">
-                        <span>Advanced Picker</span>
-                      </button>
-                      <input 
-                        type="color" 
-                        value={textColor} 
-                        onChange={(e) => handleColorChange(e.target.value)}
-                        className="absolute inset-0 opacity-0 cursor-pointer"
-                        aria-label="Open advanced color picker"
-                      />
-                    </label>
-                  </div>
+                  
+                  <button
+                    onClick={() => setIsColorPickerOpen(false)}
+                    className="w-full h-10 bg-gradient-to-b from-[#C9B5FF] to-[#A890FF] hover:from-[#B9A1FF] hover:to-[#9B7FFF] text-white rounded-lg transition-colors font-medium text-sm mt-3"
+                  >
+                    Done
+                  </button>
                 </div>
               </PopoverContent>
             </Popover>
