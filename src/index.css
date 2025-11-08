@@ -361,6 +361,11 @@ button[data-active="true"] {
   grid-auto-rows: 11in;
 }
 
+.pages-grid-container.double-page-layout {
+  grid-template-columns: repeat(2, 8.5in);
+  gap: 0.5rem;
+}
+
 /* Background page cards - non-interactive */
 .pages-background {
   grid-column: 1;
@@ -371,6 +376,12 @@ button[data-active="true"] {
   gap: 0.25rem;
   pointer-events: none;
   user-select: none;
+}
+
+.pages-background.double-page-layout {
+  grid-column: 1 / -1;
+  grid-template-columns: repeat(2, 8.5in);
+  gap: 0.5rem;
 }
 
 .page-card {
@@ -390,6 +401,12 @@ button[data-active="true"] {
   pointer-events: auto !important;
   z-index: 10;
   cursor: text;
+}
+
+.editor-overlay.double-page-layout {
+  grid-column: 1 / -1;
+  grid-template-columns: repeat(2, 8.5in);
+  gap: 0.5rem;
 }
 
 .editor-overlay .ProseMirror {

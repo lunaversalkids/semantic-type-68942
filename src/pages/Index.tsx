@@ -50,6 +50,7 @@ const Index = () => {
   const [pdfImportOpen, setPdfImportOpen] = useState(false);
   const [pageViewerOpen, setPageViewerOpen] = useState(false);
   const [styles, setStyles] = useState(defaultStyles);
+  const [isDoublePageLayout, setIsDoublePageLayout] = useState(false);
   const { toast } = useToast();
 
   // Auto-renumber footnotes when content changes
@@ -448,6 +449,8 @@ const Index = () => {
         onPdfImportClick={() => setPdfImportOpen(true)}
         onPageViewerClick={() => setPageViewerOpen(prev => !prev)}
         pageViewerOpen={pageViewerOpen}
+        onLayoutToggle={() => setIsDoublePageLayout(prev => !prev)}
+        isDoublePageLayout={isDoublePageLayout}
       />
 
       <div className="grid grid-cols-[auto_1fr_auto] gap-3 overflow-hidden relative">
@@ -545,6 +548,7 @@ const Index = () => {
                 [pageNum]: !prev[pageNum]
               }));
             }}
+            isDoublePageLayout={isDoublePageLayout}
           />
         </main>
 

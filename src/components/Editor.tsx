@@ -54,6 +54,7 @@ interface EditorProps {
   onTogglePageNumber?: (pageNum: number) => void;
   onPageCountChange?: (count: number) => void;
   onAddPageReady?: (addPageFn: () => void) => void;
+  isDoublePageLayout?: boolean;
 }
 
 export const Editor = ({ 
@@ -80,7 +81,8 @@ export const Editor = ({
   totalPages = 2,
   onTogglePageNumber,
   onPageCountChange,
-  onAddPageReady
+  onAddPageReady,
+  isDoublePageLayout = false
 }: EditorProps) => {
   const getPageNumberText = (pageNum: number) => {
     const { format } = pageNumberSettings;
@@ -306,9 +308,9 @@ export const Editor = ({
             showPageNumber={pageNumbersVisibility[1] ?? true}
             pageNumber={1}
           >
-            <div className="pages-grid-container">
+            <div className={`pages-grid-container ${isDoublePageLayout ? 'double-page-layout' : ''}`}>
               {/* Background page cards */}
-              <div className="pages-background">
+              <div className={`pages-background ${isDoublePageLayout ? 'double-page-layout' : ''}`}>
                 {pages.map((pageId, index) => {
                   const pageNum = index + 1;
                   return (
@@ -334,7 +336,7 @@ export const Editor = ({
 
               {/* Editable content overlay */}
               <div 
-                className="editor-overlay"
+                className={`editor-overlay ${isDoublePageLayout ? 'double-page-layout' : ''}`}
                 onClick={(e) => {
                   // Focus editor when clicking anywhere
                   if (editor) {
