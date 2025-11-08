@@ -255,34 +255,19 @@ export const TextStylePanel = ({
                 </div>
               </PopoverContent>
             </Popover>
-            <Popover open={isColorPickerOpen} onOpenChange={setIsColorPickerOpen}>
-              <PopoverTrigger asChild>
-                <div 
-                  className="w-16 h-8 rounded-lg border-2 border-gray-300 hover:border-[#8B7AB8] transition-colors cursor-pointer"
-                  style={{ backgroundColor: textColor }}
-                />
-              </PopoverTrigger>
-              <PopoverContent className="w-auto p-3 bg-white border border-gray-200 shadow-lg" align="end">
-                <div className="flex flex-col gap-3">
-                  <label className="relative cursor-pointer block">
-                    <input 
-                      type="color" 
-                      value={textColor} 
-                      onChange={(e) => handleColorChange(e.target.value)}
-                      className="w-full h-32 cursor-pointer rounded-lg border-2 border-gray-300"
-                      aria-label="Choose color"
-                    />
-                  </label>
-                  <Button 
-                    onClick={() => setIsColorPickerOpen(false)}
-                    className="w-full bg-[#8B5CF6] hover:bg-[#7C3AED] text-white"
-                    size="sm"
-                  >
-                    Done
-                  </Button>
-                </div>
-              </PopoverContent>
-            </Popover>
+            <label className="relative cursor-pointer">
+              <div 
+                className="w-16 h-8 rounded-lg border-2 border-gray-300 hover:border-[#8B7AB8] transition-colors"
+                style={{ backgroundColor: textColor }}
+              />
+              <input 
+                type="color" 
+                value={textColor} 
+                onChange={(e) => handleColorChange(e.target.value)}
+                className="absolute inset-0 opacity-0 cursor-pointer"
+                aria-label="Choose color"
+              />
+            </label>
           </div>
         </div>
         
