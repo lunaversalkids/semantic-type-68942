@@ -456,16 +456,16 @@ button[data-active="true"] {
 }
 
 .page-add-button-trigger {
-  background: hsl(var(--accent)) !important;
-  color: hsl(var(--primary-foreground)) !important;
+  background: hsl(var(--primary)) !important;
+  color: white !important;
   border: none;
-  box-shadow: 0 2px 8px hsla(var(--shadow), 0.3);
+  box-shadow: 0 2px 8px hsla(var(--primary) / 0.3);
   transition: all 0.2s ease-in-out;
 }
 
 .page-add-button-trigger:hover {
-  background: hsl(var(--accent-2)) !important;
-  box-shadow: 0 4px 12px hsla(var(--shadow), 0.4);
+  background: hsl(var(--primary) / 0.9) !important;
+  box-shadow: 0 4px 12px hsla(var(--primary) / 0.4);
   transform: scale(1.05);
 }
 
