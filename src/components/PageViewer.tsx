@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Search, ChevronDown, BookOpen, Maximize2, Plus, Copy } from 'lucide-react';
+import { Search, ChevronDown, BookOpen, Maximize2, Plus, Copy, FileText } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -27,6 +27,7 @@ export const PageViewer = ({ isOpen, onClose, totalPages, onPageClick, onAddPage
   const [copiedPages, setCopiedPages] = useState<number[]>([]);
   const [copiedContent, setCopiedContent] = useState<string>('');
   const [openPageMenu, setOpenPageMenu] = useState<number | null>(null);
+  const [isSinglePage, setIsSinglePage] = useState(false);
 
   // Generate array of page numbers
   const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
@@ -159,9 +160,17 @@ export const PageViewer = ({ isOpen, onClose, totalPages, onPageClick, onAddPage
             </SelectContent>
           </Select>
 
-          <div className="w-10 h-10 bg-white/60 backdrop-blur-sm border-2 border-[#C4B5FD]/40 rounded-xl flex items-center justify-center shadow-lg justify-self-center">
-            <BookOpen className="w-4.5 h-4.5 text-[#8D60FF]" />
-          </div>
+          <button 
+            onClick={() => setIsSinglePage(!isSinglePage)}
+            className="w-10 h-10 bg-white/60 backdrop-blur-sm border-2 border-[#C4B5FD]/40 rounded-xl flex items-center justify-center shadow-lg justify-self-center hover:bg-white/80 hover:scale-105 transition-all duration-300 cursor-pointer"
+            title={isSinglePage ? "Switch to double-page layout" : "Switch to single-page layout"}
+          >
+            {isSinglePage ? (
+              <FileText className="w-4.5 h-4.5 text-[#8D60FF]" />
+            ) : (
+              <BookOpen className="w-4.5 h-4.5 text-[#8D60FF]" />
+            )}
+          </button>
 
           <button 
             onClick={() => {
@@ -180,7 +189,7 @@ export const PageViewer = ({ isOpen, onClose, totalPages, onPageClick, onAddPage
 
       {/* Page Grid - Scrollable */}
       <div className={`flex-1 overflow-y-auto px-6 pt-6 ${selectMode ? 'pb-24' : 'pb-6'}`}>
-        <div className="grid grid-cols-2 gap-4">
+        <div className={`grid ${isSinglePage ? 'grid-cols-1' : 'grid-cols-2'} gap-4 transition-all duration-300`}>
           {pages.map((pageNum) => {
             const isSelected = selectedPages.has(pageNum);
             return (
