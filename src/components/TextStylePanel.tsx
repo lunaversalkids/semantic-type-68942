@@ -66,7 +66,7 @@ export const TextStylePanel = ({ editor }: TextStylePanelProps) => {
         >
           <ChevronLeft className="w-4 h-4" />
         </Button>
-        <div className="writing-mode-vertical text-sm font-medium text-muted-foreground uppercase tracking-wide" style={{ writingMode: 'vertical-rl' }}>
+        <div className="text-sm font-medium text-muted-foreground uppercase tracking-wide" style={{ writingMode: 'vertical-rl', transform: 'rotate(180deg)' }}>
           Paragraph Mode
         </div>
       </aside>
