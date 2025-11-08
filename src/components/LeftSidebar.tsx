@@ -47,19 +47,24 @@ export const LeftSidebar = ({
   const width = stylesExpanded ? 'w-[340px]' : 'w-16';
   return <div className={`h-full bg-sidebar border-r border-sidebar-border flex transition-all duration-300 ${width} overflow-hidden`}>
       {/* Icon Column */}
-      <div className="w-16 flex-shrink-0 flex flex-col items-center gap-4 py-4">
-        <Button size="icon" variant="ghost" className="h-8 w-8 text-muted-foreground hover:bg-sidebar-accent" onClick={toggleStyles}>
+      <div className="w-16 flex-shrink-0 flex flex-col items-center py-4">
+        <Button size="icon" variant="ghost" className="h-8 w-8 text-muted-foreground hover:bg-sidebar-accent mb-4" onClick={toggleStyles}>
           {stylesExpanded ? <ChevronLeft className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}
         </Button>
+        {!stylesExpanded && (
+          <div className="writing-mode-vertical text-sm font-medium text-muted-foreground uppercase tracking-wide" style={{ writingMode: 'vertical-rl' }}>
+            Smart Styling
+          </div>
+        )}
       </div>
 
       {/* Styles Panel */}
       {stylesExpanded && <div className="flex-1 flex flex-col p-2.5 gap-2 overflow-hidden">
           {/* Header */}
           <div className="flex items-center justify-between">
-            <div className="font-extrabold flex items-center gap-2.5">
+            <div className="flex items-center gap-2.5">
               <span className="text-lg">🎨</span>
-              <span className="text-foreground">Styles</span>
+              <h2 className="text-sm font-bold text-[#8B7AB8] uppercase tracking-wide">Smart Styling</h2>
             </div>
             <div className="flex gap-2">
               <Button size="icon" variant="outline" onClick={handleAddStyle} className="h-9 w-9">
