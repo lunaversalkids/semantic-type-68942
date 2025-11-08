@@ -2,7 +2,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { History, ChevronLeft, ChevronRight, Palette, Plus, X, Trash2, Bold, Italic } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Plus, X, Trash2, Bold, Italic } from 'lucide-react';
 import { TextStyle } from '@/types/styles';
 import { useState } from 'react';
 interface LeftSidebarProps {
@@ -44,16 +44,10 @@ export const LeftSidebar = ({
     setStylesExpanded(!stylesExpanded);
     setEditingId(null);
   };
-  const width = stylesExpanded ? 'w-[400px]' : 'w-16';
+  const width = stylesExpanded ? 'w-[340px]' : 'w-16';
   return <div className={`h-full bg-sidebar border-r border-sidebar-border flex transition-all duration-300 ${width} overflow-hidden`}>
       {/* Icon Column */}
       <div className="w-16 flex-shrink-0 flex flex-col items-center gap-4 py-4">
-        <Button size="icon" variant="ghost" className="h-10 w-10 text-primary hover:bg-sidebar-accent" title="History">
-          <History className="w-5 h-5" />
-        </Button>
-        
-        
-        
         <Button size="icon" variant="ghost" className="h-8 w-8 text-muted-foreground hover:bg-sidebar-accent" onClick={toggleStyles}>
           {stylesExpanded ? <ChevronLeft className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}
         </Button>
