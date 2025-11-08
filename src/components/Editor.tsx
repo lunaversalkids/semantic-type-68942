@@ -22,6 +22,9 @@ import { Image } from '@tiptap/extension-image';
 import { Footnote } from './extensions/FootnoteExtension';
 import { Chapter } from './extensions/ChapterNode';
 import { PageBreak } from './extensions/PageBreak';
+import { CustomBulletList } from './extensions/CustomBulletList';
+import { CustomOrderedList } from './extensions/CustomOrderedList';
+import ListItem from '@tiptap/extension-list-item';
 
 interface EditorProps {
   onSelectionChange?: (text: string) => void;
@@ -125,7 +128,13 @@ export const Editor = ({
 
   const editor = useEditor({
     extensions: [
-      StarterKit,
+      StarterKit.configure({
+        bulletList: false,
+        orderedList: false,
+      }),
+      CustomBulletList,
+      CustomOrderedList,
+      ListItem,
       TextStyle,
       FontFamily,
       FontSize,

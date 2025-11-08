@@ -110,20 +110,87 @@ export const TextStylePanel = ({
     
     switch (type) {
       case 'none':
-        editor.chain().focus().liftListItem('listItem').run();
+        if (editor.isActive('bulletList')) {
+          editor.chain().focus().toggleBulletList().run();
+        } else if (editor.isActive('orderedList')) {
+          editor.chain().focus().toggleOrderedList().run();
+        }
         break;
       case 'bullet':
-        editor.chain().focus().toggleBulletList().run();
+        if (editor.isActive('orderedList')) {
+          editor.chain().focus().toggleOrderedList().run();
+        }
+        if (!editor.isActive('bulletList')) {
+          editor.chain().focus().toggleBulletList().run();
+        }
+        // Update to remove custom class
+        editor.chain().focus().updateAttributes('bulletList', { class: null }).run();
         break;
       case 'numbered':
-        editor.chain().focus().toggleOrderedList().run();
+        if (editor.isActive('bulletList')) {
+          editor.chain().focus().toggleBulletList().run();
+        }
+        if (!editor.isActive('orderedList')) {
+          editor.chain().focus().toggleOrderedList().run();
+        }
+        // Update to remove custom class
+        editor.chain().focus().updateAttributes('orderedList', { class: null }).run();
         break;
       case 'lettered':
-        // For now, use ordered list - can be customized with CSS
-        editor.chain().focus().toggleOrderedList().run();
+        if (editor.isActive('bulletList')) {
+          editor.chain().focus().toggleBulletList().run();
+        }
+        if (!editor.isActive('orderedList')) {
+          editor.chain().focus().toggleOrderedList().run();
+        }
+        editor.chain().focus().updateAttributes('orderedList', { class: 'list-lettered' }).run();
+        break;
+      case 'image':
+        if (editor.isActive('orderedList')) {
+          editor.chain().focus().toggleOrderedList().run();
+        }
+        if (!editor.isActive('bulletList')) {
+          editor.chain().focus().toggleBulletList().run();
+        }
+        editor.chain().focus().updateAttributes('bulletList', { class: 'list-square' }).run();
+        break;
+      case 'harvard':
+        if (editor.isActive('orderedList')) {
+          editor.chain().focus().toggleOrderedList().run();
+        }
+        if (!editor.isActive('bulletList')) {
+          editor.chain().focus().toggleBulletList().run();
+        }
+        editor.chain().focus().updateAttributes('bulletList', { class: 'list-harvard' }).run();
+        break;
+      case 'dash':
+        if (editor.isActive('orderedList')) {
+          editor.chain().focus().toggleOrderedList().run();
+        }
+        if (!editor.isActive('bulletList')) {
+          editor.chain().focus().toggleBulletList().run();
+        }
+        editor.chain().focus().updateAttributes('bulletList', { class: 'list-dash' }).run();
+        break;
+      case 'note-taking':
+        if (editor.isActive('orderedList')) {
+          editor.chain().focus().toggleOrderedList().run();
+        }
+        if (!editor.isActive('bulletList')) {
+          editor.chain().focus().toggleBulletList().run();
+        }
+        editor.chain().focus().updateAttributes('bulletList', { class: 'list-note' }).run();
+        break;
+      case 'custom':
+        if (editor.isActive('orderedList')) {
+          editor.chain().focus().toggleOrderedList().run();
+        }
+        if (!editor.isActive('bulletList')) {
+          editor.chain().focus().toggleBulletList().run();
+        }
+        // Placeholder for custom icon functionality
         break;
       default:
-        // Other types can be implemented as needed
         break;
     }
   };

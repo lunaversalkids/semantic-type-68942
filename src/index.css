@@ -759,3 +759,46 @@ button[data-active="true"] {
     break-before: page;
   }
 }
+
+/* Custom List Styles */
+.ProseMirror ul.list-square li::marker {
+  content: "▣ ";
+  font-size: 1.1em;
+  color: hsl(var(--primary));
+}
+
+.ProseMirror ul.list-harvard li::marker {
+  content: "✓ ";
+  font-size: 1.1em;
+  color: hsl(var(--primary));
+}
+
+.ProseMirror ul.list-dash li::marker {
+  content: "— ";
+  font-size: 1.1em;
+}
+
+.ProseMirror ul.list-note li::marker {
+  content: "– ";
+  font-size: 1.1em;
+}
+
+.ProseMirror ol.list-lettered {
+  list-style-type: lower-alpha;
+}
+
+.ProseMirror ol.list-lettered li::marker {
+  font-weight: 500;
+}
+
+/* Ensure proper spacing and alignment for all lists */
+.ProseMirror ul,
+.ProseMirror ol {
+  padding-left: 1.5rem;
+  margin: 0.75rem 0;
+}
+
+.ProseMirror li {
+  margin: 0.25rem 0;
+  padding-left: 0.25rem;
+}
