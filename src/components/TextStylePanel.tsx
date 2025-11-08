@@ -3,6 +3,7 @@ import { ChevronDown, ChevronLeft, AlignLeft, AlignCenter, AlignRight, AlignJust
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Button } from '@/components/ui/button';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import capitalizeIcon from '@/assets/capitalize-icon.jpg';
 import baselineIcon from '@/assets/baseline-icon.jpg';
 interface TextStylePanelProps {
@@ -18,6 +19,19 @@ export const TextStylePanel = ({
   const [isFontOpen, setIsFontOpen] = useState(false);
   const [textColor, setTextColor] = useState('#000000');
   const [isColorPickerOpen, setIsColorPickerOpen] = useState(false);
+  const [formattingMode, setFormattingMode] = useState('Normal');
+
+  const formattingModes = [
+    'Normal',
+    'Double Sentence',
+    'Indented',
+    'No Indent (Block)',
+    'Left-Aligned Header',
+    'Centered Header',
+    'Expanded Line',
+    'Justified',
+    'Hanging Indent'
+  ];
 
   const availableFonts = [
     'Graphik',
@@ -100,6 +114,60 @@ export const TextStylePanel = ({
       editor.chain().focus().updateAttributes('paragraph', {
         textIndent: `${Math.max(0, currentValue - 30)}px`
       }).run();
+    }
+  };
+
+  const handleFormattingMode = (mode: string) => {
+    if (!editor) return;
+    setFormattingMode(mode);
+
+    switch (mode) {
+      case 'Normal':
+        editor.chain().focus().updateAttributes('paragraph', {
+          textIndent: '0px',
+          marginBottom: '0px',
+          lineHeight: 'normal'
+        }).run();
+        break;
+      case 'Double Sentence':
+        editor.chain().focus().updateAttributes('paragraph', {
+          marginBottom: '1.5em'
+        }).run();
+        break;
+      case 'Indented':
+        editor.chain().focus().updateAttributes('paragraph', {
+          textIndent: '2em',
+          marginBottom: '0px'
+        }).run();
+        break;
+      case 'No Indent (Block)':
+        editor.chain().focus().updateAttributes('paragraph', {
+          textIndent: '0px',
+          marginBottom: '1em'
+        }).run();
+        break;
+      case 'Left-Aligned Header':
+        editor.chain().focus().setTextAlign('left').run();
+        break;
+      case 'Centered Header':
+        editor.chain().focus().setTextAlign('center').run();
+        break;
+      case 'Expanded Line':
+        editor.chain().focus().updateAttributes('paragraph', {
+          lineHeight: '1.8'
+        }).run();
+        break;
+      case 'Justified':
+        editor.chain().focus().setTextAlign('justify').run();
+        break;
+      case 'Hanging Indent':
+        editor.chain().focus().updateAttributes('paragraph', {
+          textIndent: '-2em',
+          paddingLeft: '2em'
+        }).run();
+        break;
+      default:
+        break;
     }
   };
 
@@ -217,11 +285,29 @@ export const TextStylePanel = ({
         </Button>
       </div>
 
-      {/* Normal Dropdown */}
-      <button className="w-full bg-white rounded-xl px-4 py-3 flex items-center justify-between border border-[hsl(var(--stroke))] hover:bg-gray-50 transition-colors">
-        <span className="text-lg font-semibold text-[hsl(var(--ink))]">Normal</span>
-        <ChevronRight className="w-5 h-5 text-gray-400" />
-      </button>
+      {/* Formatting Mode Dropdown */}
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <button className="w-full bg-white rounded-xl px-4 py-3 flex items-center justify-between border border-[hsl(var(--stroke))] hover:bg-gray-50 transition-colors">
+            <span className="text-lg font-semibold text-[hsl(var(--ink))]">{formattingMode}</span>
+            <ChevronDown className="w-5 h-5 text-gray-400" />
+          </button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent className="w-64 bg-white border border-gray-200 shadow-lg" align="start">
+          {formattingModes.map((mode) => (
+            <DropdownMenuItem
+              key={mode}
+              onClick={() => handleFormattingMode(mode)}
+              className={`px-4 py-2 cursor-pointer hover:bg-[#F5F0FF] transition-colors ${
+                formattingMode === mode ? 'bg-[#E8DDFF] text-[#8B5CF6] font-medium' : 'text-[hsl(var(--ink))]'
+              }`}
+            >
+              {mode}
+              {formattingMode === mode && <Check className="w-4 h-4 ml-auto" />}
+            </DropdownMenuItem>
+          ))}
+        </DropdownMenuContent>
+      </DropdownMenu>
 
       {/* Font Section */}
       <div className="space-y-2">
