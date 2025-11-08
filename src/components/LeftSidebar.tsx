@@ -105,12 +105,35 @@ export const LeftSidebar = ({
                           <SelectTrigger className="h-8 mt-1">
                             <SelectValue />
                           </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="Inter">Inter</SelectItem>
-                            <SelectItem value="Georgia">Georgia</SelectItem>
-                            <SelectItem value="Monaco">Monaco</SelectItem>
+                          <SelectContent className="max-h-60">
+                            <SelectItem value="Graphik">Graphik</SelectItem>
                             <SelectItem value="Arial">Arial</SelectItem>
                             <SelectItem value="Times New Roman">Times New Roman</SelectItem>
+                            <SelectItem value="Georgia">Georgia</SelectItem>
+                            <SelectItem value="Helvetica">Helvetica</SelectItem>
+                            <SelectItem value="Courier New">Courier New</SelectItem>
+                            <SelectItem value="Verdana">Verdana</SelectItem>
+                            <SelectItem value="Garamond">Garamond</SelectItem>
+                            <SelectItem value="Palatino">Palatino</SelectItem>
+                            <SelectItem value="Bookman">Bookman</SelectItem>
+                            <SelectItem value="Comic Sans MS">Comic Sans MS</SelectItem>
+                            <SelectItem value="Trebuchet MS">Trebuchet MS</SelectItem>
+                            <SelectItem value="Impact">Impact</SelectItem>
+                            <SelectItem value="Lucida Console">Lucida Console</SelectItem>
+                            <SelectItem value="Tahoma">Tahoma</SelectItem>
+                            <SelectItem value="Lucida Sans">Lucida Sans</SelectItem>
+                            <SelectItem value="Monaco">Monaco</SelectItem>
+                            <SelectItem value="Gill Sans">Gill Sans</SelectItem>
+                            <SelectItem value="Century Gothic">Century Gothic</SelectItem>
+                            <SelectItem value="Franklin Gothic Medium">Franklin Gothic Medium</SelectItem>
+                            <SelectItem value="Cambria">Cambria</SelectItem>
+                            <SelectItem value="Calibri">Calibri</SelectItem>
+                            <SelectItem value="Consolas">Consolas</SelectItem>
+                            <SelectItem value="Didot">Didot</SelectItem>
+                            <SelectItem value="Futura">Futura</SelectItem>
+                            <SelectItem value="Optima">Optima</SelectItem>
+                            <SelectItem value="Baskerville">Baskerville</SelectItem>
+                            <SelectItem value="Inter">Inter</SelectItem>
                           </SelectContent>
                         </Select>
                       </div>
