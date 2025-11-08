@@ -358,12 +358,17 @@ button[data-active="true"] {
   display: grid;
   grid-template-columns: 8.5in;
   gap: 0.25rem;
-  min-height: 33in;
+  grid-auto-rows: 11in;
 }
 
 /* Background page cards - non-interactive */
 .pages-background {
-  display: contents;
+  grid-column: 1;
+  grid-row: 1;
+  display: grid;
+  grid-template-columns: 8.5in;
+  grid-auto-rows: 11in;
+  gap: 0.25rem;
   pointer-events: none;
   user-select: none;
 }
@@ -376,22 +381,27 @@ button[data-active="true"] {
 
 /* Editor overlay - fully interactive */
 .editor-overlay {
-  grid-column: 1 / -1;
-  grid-row: 1 / -1;
+  grid-column: 1;
+  grid-row: 1;
+  display: grid;
+  grid-template-columns: 8.5in;
+  grid-auto-rows: 11in;
+  gap: 0.25rem;
   pointer-events: auto !important;
   z-index: 10;
   cursor: text;
 }
 
 .editor-overlay .ProseMirror {
-  width: 100%;
-  min-height: 100%;
+  width: 8.5in;
+  height: 11in;
   padding: 4rem;
   cursor: text !important;
   pointer-events: auto !important;
   user-select: text !important;
   -webkit-user-select: text !important;
   box-sizing: border-box;
+  overflow: visible;
 }
 
 /* Ensure all editor content is clickable and editable */
