@@ -16,9 +16,11 @@ interface PageViewerProps {
   onAddPage?: () => void;
   onCopyPages?: (pageNumbers: number[], editorContent: string, insertBeforePage?: number) => void;
   editor?: any;
+  bookmarkedPages?: Set<number>;
+  onBookmarkToggle?: (pageNum: number) => void;
 }
 
-export const PageViewer = ({ isOpen, onClose, totalPages, onPageClick, onAddPage, onCopyPages, editor }: PageViewerProps) => {
+export const PageViewer = ({ isOpen, onClose, totalPages, onPageClick, onAddPage, onCopyPages, editor, bookmarkedPages = new Set(), onBookmarkToggle }: PageViewerProps) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [searchFilter, setSearchFilter] = useState('all');
   const [selectMode, setSelectMode] = useState(false);
@@ -29,7 +31,6 @@ export const PageViewer = ({ isOpen, onClose, totalPages, onPageClick, onAddPage
   const [copiedContent, setCopiedContent] = useState<string>('');
   const [openPageMenu, setOpenPageMenu] = useState<number | null>(null);
   const [isSinglePage, setIsSinglePage] = useState(true);
-  const [bookmarkedPages, setBookmarkedPages] = useState<Set<number>>(new Set());
 
   // Generate array of page numbers
   const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
@@ -217,11 +218,7 @@ export const PageViewer = ({ isOpen, onClose, totalPages, onPageClick, onAddPage
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
-                      setBookmarkedPages(prev => {
-                        const newSet = new Set(prev);
-                        newSet.delete(pageNum);
-                        return newSet;
-                      });
+                      onBookmarkToggle?.(pageNum);
                       toast.success('Bookmark removed');
                     }}
                     className="absolute -top-2 -right-6 z-20 hover:scale-110 transition-transform"
@@ -339,17 +336,12 @@ export const PageViewer = ({ isOpen, onClose, totalPages, onPageClick, onAddPage
                       <button
                         onClick={(e) => {
                           e.stopPropagation();
-                          setBookmarkedPages(prev => {
-                            const newSet = new Set(prev);
-                            if (newSet.has(pageNum)) {
-                              newSet.delete(pageNum);
-                              toast.success('Bookmark removed');
-                            } else {
-                              newSet.add(pageNum);
-                              toast.success('Bookmark added');
-                            }
-                            return newSet;
-                          });
+                          onBookmarkToggle?.(pageNum);
+                          if (bookmarkedPages.has(pageNum)) {
+                            toast.success('Bookmark removed');
+                          } else {
+                            toast.success('Bookmark added');
+                          }
                           setOpenPageMenu(null);
                         }}
                         className="w-full px-4 py-2.5 text-left text-[#8D60FF] font-semibold text-sm hover:bg-[#8D60FF]/10 transition-colors"

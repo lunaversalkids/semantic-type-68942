@@ -41,6 +41,7 @@ const Index = () => {
   const [footnoteCounter, setFootnoteCounter] = useState(1);
   const [totalPages, setTotalPages] = useState(3);
   const [documentSaved, setDocumentSaved] = useState(false);
+  const [bookmarkedPages, setBookmarkedPages] = useState<Set<number>>(new Set([1]));
   const [saveDialogOpen, setSaveDialogOpen] = useState(false);
   const [documentManagerOpen, setDocumentManagerOpen] = useState(false);
   const [findReplaceOpen, setFindReplaceOpen] = useState(false);
@@ -312,8 +313,18 @@ const Index = () => {
   const handleInsertBookmark = () => {
     if (!editor) return;
     const bookmarkId = `bookmark-${Date.now()}`;
-    editor.chain().focus().insertContent(`<span id="${bookmarkId}" style="display: inline-flex; align-items: center; vertical-align: middle; margin: 0 2px;"><img src="${purpleBookmark}" alt="Bookmark" style="width: 24px; height: 32px; display: inline-block; vertical-align: middle; margin-right: 4px; filter: drop-shadow(0 2px 4px rgba(122, 73, 255, 0.3));" /></span>`).run();
-    toast({ title: 'Bookmark Inserted', description: `ID: ${bookmarkId}` });
+    // Calculate current page (simplified - assumes 1 page = ~3000 chars of content)
+    const currentPos = editor.state.selection.from;
+    const contentBefore = editor.state.doc.textBetween(0, currentPos, '\n');
+    const estimatedPage = Math.floor(contentBefore.length / 3000) + 1;
+    const actualPage = Math.min(estimatedPage, totalPages);
+    
+    editor.chain().focus().insertContent(`<span id="${bookmarkId}" data-page="${actualPage}" style="display: inline-flex; align-items: center; vertical-align: middle; margin: 0 2px;"><img src="${purpleBookmark}" alt="Bookmark" style="width: 14px; height: 18px; display: inline-block; vertical-align: middle; filter: drop-shadow(0 1px 2px rgba(122, 73, 255, 0.3));" /></span>`).run();
+    
+    // Add page to bookmarked pages
+    setBookmarkedPages(prev => new Set([...prev, actualPage]));
+    
+    toast({ title: 'Bookmark Inserted', description: `Added to page ${actualPage}` });
   };
 
   const handleInsertTableOfContents = () => {
@@ -613,6 +624,23 @@ const Index = () => {
         onPageClick={(pageNum) => {
           console.log('Navigate to page:', pageNum);
           // Future: Add page navigation logic
+        }}
+        onAddPage={addPageFn}
+        onCopyPages={(pageNumbers, content, insertBefore) => {
+          console.log('Copy pages:', pageNumbers, 'Insert before:', insertBefore);
+        }}
+        editor={editor}
+        bookmarkedPages={bookmarkedPages}
+        onBookmarkToggle={(pageNum) => {
+          setBookmarkedPages(prev => {
+            const newSet = new Set(prev);
+            if (newSet.has(pageNum)) {
+              newSet.delete(pageNum);
+            } else {
+              newSet.add(pageNum);
+            }
+            return newSet;
+          });
         }}
       />
       
