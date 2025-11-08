@@ -150,7 +150,20 @@ export const Editor = ({
         types: ['heading', 'paragraph'],
       }),
     ],
-    content: '<p></p>',
+    content: `
+      <h1 style="color: #6366f1; font-size: 3rem; margin-bottom: 1.5rem;">Insects</h1>
+      
+      <h2 style="font-size: 1.5rem; margin-bottom: 1rem;">Arthropods</h2>
+      <p>Insects are an ind-isub sclass units of the class <span style="color: #6366f1; font-weight: 500;">Hexapoda</span> - In from novellisms them from other arthropods by their three-part body, compound eyes, and external skeleton, in an abusant serza.</p>
+      
+      <h2 style="color: #6366f1; font-size: 1.5rem; margin: 1.5rem 0 1rem 0;">Hexapoda</h2>
+      <p><span style="color: #6366f1;">Arthroprod</span> <em>soptrtrice</em> <span style="color: #6366f1;">Hexapoda</span></p>
+      <p>Insects comprise the most diverse group of animals an Earth.</p>
+      
+      <h2 style="font-size: 1.5rem; margin: 1.5rem 0 1rem 0;">Classification and Evolution</h2>
+      <p><span style="color: #6366f1;">Insects</span> comprise the most diverse group of animals on Earth.</p>
+      <p>Insects are the largest group of arthropods. The evolution, their evolution, Murninary endurseries, during the De-vonian period after thorough</p>
+    `,
     editorProps: {
       attributes: {
         class: 'prose prose-sm sm:prose lg:prose-lg xl:prose-xl focus:outline-none max-w-none editor-content',
