@@ -41,15 +41,7 @@ export const PageAddButton = ({
           <div className="flex flex-col gap-1">
             <Button
               variant="ghost"
-              className="justify-start hover:bg-accent/10 transition-colors"
-              onClick={() => handleAction(onAddPage)}
-            >
-              <Plus className="h-4 w-4 mr-2" />
-              Add Page
-            </Button>
-            <Button
-              variant="ghost"
-              className="justify-start hover:bg-accent/10 transition-colors"
+              className="justify-start hover:bg-accent/10 transition-colors text-primary"
               onClick={() => handleAction(onAddPageWithBackground)}
             >
               <Plus className="h-4 w-4 mr-2" />
@@ -57,7 +49,7 @@ export const PageAddButton = ({
             </Button>
             <Button
               variant="ghost"
-              className="justify-start hover:bg-accent/10 transition-colors"
+              className="justify-start hover:bg-accent/10 transition-colors text-primary"
               onClick={() => handleAction(onChangeBackground)}
             >
               <Plus className="h-4 w-4 mr-2" />
@@ -65,7 +57,7 @@ export const PageAddButton = ({
             </Button>
             <Button
               variant="ghost"
-              className="justify-start hover:bg-accent/10 transition-colors"
+              className="justify-start hover:bg-accent/10 transition-colors text-primary"
               onClick={() => handleAction(onCopyPage)}
             >
               <Plus className="h-4 w-4 mr-2" />
