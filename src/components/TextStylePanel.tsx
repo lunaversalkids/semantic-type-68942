@@ -255,43 +255,19 @@ export const TextStylePanel = ({
                 </div>
               </PopoverContent>
             </Popover>
-            <Popover open={isColorPickerOpen} onOpenChange={setIsColorPickerOpen}>
-              <PopoverTrigger asChild>
-                <button 
-                  className="w-16 h-8 rounded-lg border-2 border-gray-300 hover:border-[#8B7AB8] transition-colors cursor-pointer"
-                  style={{ backgroundColor: textColor }}
-                  aria-label="Choose color"
-                />
-              </PopoverTrigger>
-              <PopoverContent 
-                className="w-64 p-4 bg-white border border-gray-200 shadow-lg z-50" 
-                align="end"
-              >
-                <div className="space-y-3">
-                  <div className="flex items-center gap-2">
-                    <input 
-                      type="color" 
-                      value={textColor} 
-                      onChange={(e) => handleColorChange(e.target.value)}
-                      className="h-10 w-16 rounded-lg cursor-pointer border-2 border-gray-300"
-                    />
-                    <input 
-                      type="text" 
-                      value={textColor} 
-                      onChange={(e) => handleColorChange(e.target.value)}
-                      className="flex-1 h-10 px-3 rounded-lg border-2 border-gray-300 text-sm font-mono"
-                      placeholder="#000000"
-                    />
-                  </div>
-                  <button 
-                    onClick={() => setIsColorPickerOpen(false)}
-                    className="w-full py-2 bg-[#8B5CF6] hover:bg-[#7C3AED] text-white rounded-lg transition-colors font-medium"
-                  >
-                    Done
-                  </button>
-                </div>
-              </PopoverContent>
-            </Popover>
+            <label className="relative cursor-pointer">
+              <div 
+                className="w-16 h-8 rounded-lg border-2 border-gray-300 hover:border-[#8B7AB8] transition-colors"
+                style={{ backgroundColor: textColor }}
+              />
+              <input 
+                type="color" 
+                value={textColor} 
+                onChange={(e) => handleColorChange(e.target.value)}
+                className="absolute inset-0 opacity-0 cursor-pointer"
+                aria-label="Choose color"
+              />
+            </label>
           </div>
         </div>
         
