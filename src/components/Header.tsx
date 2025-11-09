@@ -4,6 +4,8 @@ import penIcon from '@/assets/pen-icon.png';
 import quotationIcon from '@/assets/quotation-icon.png';
 import textFrameIcon from '@/assets/text-frame-icon.png';
 import paletteIcon from '@/assets/palette-icon.png';
+import pageSizerIcon from '@/assets/page-sizer-icon.png';
+import headerFooterIcon from '@/assets/header-footer-icon.png';
 import searchIcon from '@/assets/search-icon.png';
 import cloudIcon from '@/assets/cloud-icon.png';
 import singlePageIcon from '@/assets/single-page-icon.png';
@@ -19,6 +21,8 @@ interface HeaderProps {
   onQuotationClick?: () => void;
   onTextFrameClick?: () => void;
   onPaletteClick?: () => void;
+  onPageSizerClick?: () => void;
+  onHeaderFooterClick?: () => void;
   onExportClick?: () => void;
   onImportClick?: () => void;
   onPdfImportClick?: () => void;
@@ -36,6 +40,8 @@ export const Header = ({
   onQuotationClick,
   onTextFrameClick,
   onPaletteClick,
+  onPageSizerClick,
+  onHeaderFooterClick,
   onExportClick,
   onImportClick,
   onPdfImportClick,
@@ -91,6 +97,14 @@ export const Header = ({
 
         <button onClick={onPaletteClick} className="h-9 w-9 border border-[hsl(var(--stroke))] rounded-[var(--r-sm)] grid place-items-center hover:bg-[hsl(var(--panel-2))] transition-colors overflow-hidden" title="Color Palette">
           <img src={paletteIcon} alt="" className="w-full h-full object-cover" />
+        </button>
+
+        <button onClick={onPageSizerClick} className="h-9 w-9 border border-[hsl(var(--stroke))] rounded-[var(--r-sm)] grid place-items-center hover:bg-[hsl(var(--panel-2))] transition-colors overflow-hidden" title="Page Sizer">
+          <img src={pageSizerIcon} alt="" className="w-full h-full object-cover" />
+        </button>
+
+        <button onClick={onHeaderFooterClick} className="h-9 w-9 border border-[hsl(var(--stroke))] rounded-[var(--r-sm)] grid place-items-center hover:bg-[hsl(var(--panel-2))] transition-colors overflow-hidden" title="Header & Footer">
+          <img src={headerFooterIcon} alt="" className="w-full h-full object-cover" />
         </button>
 
         <button onClick={onFindClick} className="h-9 w-9 border border-[hsl(var(--stroke))] rounded-[var(--r-sm)] grid place-items-center hover:bg-[hsl(var(--panel-2))] transition-colors overflow-hidden" title="Find & Replace">
