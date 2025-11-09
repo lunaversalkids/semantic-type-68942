@@ -139,7 +139,7 @@ Insects are the largest group of arthropods. The evolution, their evolution, Mur
       {/* Main content */}
       <div className="flex flex-col items-center space-y-12 max-w-5xl w-full">
         {/* Logo and title section */}
-        <div className="flex flex-col items-center space-y-2">
+        <div className="flex flex-col items-center space-y-1">
           {/* Infinity logo */}
           <div className="relative w-80 h-80 flex items-center justify-center">
             <img 
@@ -148,20 +148,20 @@ Insects are the largest group of arthropods. The evolution, their evolution, Mur
               className="w-80 h-80 object-contain"
               style={{ backgroundColor: 'transparent', mixBlendMode: 'multiply' }}
             />
-            {/* Bottom-concentrated glow */}
-            <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-full h-1/2 rounded-full bg-gradient-to-t from-[hsl(253,100%,64%)] to-transparent opacity-35 blur-3xl -z-10"></div>
+            {/* Bottom glow effect - starts from bottom and fades down */}
+            <div className="absolute bottom-8 left-1/2 -translate-x-1/2 w-4/5 h-32 rounded-full bg-gradient-to-b from-[hsl(253,100%,64%,0.4)] to-transparent blur-3xl -z-10"></div>
           </div>
 
           {/* App title */}
           <div className="flex flex-col items-center space-y-3">
             <h1 
-              className="text-[7rem] font-black tracking-tight leading-none" 
+              className="text-[5.5rem] font-extrabold tracking-tight leading-none" 
               style={{ 
                 fontFamily: 'system-ui, -apple-system, "Segoe UI", sans-serif',
-                color: '#4338ca',
-                WebkitTextStroke: '3px white',
+                color: '#3730a3',
+                WebkitTextStroke: '2px white',
                 paintOrder: 'stroke fill',
-                textShadow: '0 4px 12px hsl(253 100% 64% / 0.15)'
+                textShadow: '0 2px 8px hsl(253 100% 64% / 0.1)'
               }}
             >
               Doc One
