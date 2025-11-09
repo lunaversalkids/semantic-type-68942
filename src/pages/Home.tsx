@@ -142,35 +142,31 @@ Insects are the largest group of arthropods. The evolution, their evolution, Mur
       {/* Main content */}
       <div className="flex flex-col items-center space-y-12 max-w-5xl w-full">
         {/* Logo and title section */}
-        <div className="flex flex-col items-center space-y-2">
+        <div className="flex flex-col items-center space-y-6">
           {/* Infinity logo */}
-          <div className="relative w-80 h-80 flex items-center justify-center">
-            <img 
-              src={infinityLogo}
-              alt="Doc One Infinity Logo" 
-              className="w-80 h-80 object-contain"
-              style={{ backgroundColor: 'transparent', mixBlendMode: 'multiply' }}
-            />
-            {/* Bottom glow effect - starts from bottom and fades down */}
-            <div className="absolute bottom-8 left-1/2 -translate-x-1/2 w-4/5 h-32 rounded-full bg-gradient-to-b from-[hsl(253,100%,64%,0.4)] to-transparent blur-3xl -z-10"></div>
+          <div className="relative w-[280px] h-[280px] flex items-center justify-center">
+            <div className="w-[280px] h-[280px] rounded-full bg-gradient-to-br from-[hsl(265,100%,75%)] to-[hsl(265,85%,65%)] flex items-center justify-center shadow-[0_20px_60px_rgba(139,92,246,0.4)]">
+              <img 
+                src={infinityLogo}
+                alt="Doc One Infinity Logo" 
+                className="w-32 h-32 object-contain"
+                style={{ filter: 'brightness(0) invert(1)' }}
+              />
+            </div>
           </div>
 
           {/* App title */}
-          <div className="flex flex-col items-center space-y-3 -mt-[360px]">
+          <div className="flex flex-col items-center space-y-1 -mt-4">
             <h1 
-              className="text-[5.5rem] font-extrabold tracking-tight leading-none" 
+              className="text-[5.5rem] font-bold tracking-tight leading-none" 
               style={{ 
-                fontFamily: 'system-ui, -apple-system, "Segoe UI", Roboto, sans-serif',
                 color: '#3730a3',
-                WebkitTextStroke: '3px white',
-                paintOrder: 'stroke fill',
-                textShadow: '0 4px 12px hsl(253 100% 64% / 0.15)',
                 fontWeight: '700'
               }}
             >
               Doc One
             </h1>
-            <p className="text-xl text-[hsl(253,28%,40%)] font-medium tracking-wide">
+            <p className="text-[1.35rem] font-normal" style={{ color: '#8b7bc7' }}>
               Create. Teach. Publish. Evolve.
             </p>
           </div>
@@ -178,26 +174,28 @@ Insects are the largest group of arthropods. The evolution, their evolution, Mur
           {/* Start Writing button */}
           <button 
             onClick={handleStartWriting}
-            className="relative px-16 py-5 bg-[hsl(253,100%,64%)] hover:bg-[hsl(253,100%,60%)] text-white text-xl font-bold rounded-[20px] shadow-[0_12px_40px_hsl(253,100%,64%,0.5)] hover:shadow-[0_16px_48px_hsl(253,100%,64%,0.7)] transition-all duration-300 hover:scale-105 border-2 border-[hsl(253,100%,74%)] overflow-hidden group"
+            className="relative px-24 py-5 text-white text-[1.35rem] font-bold rounded-[28px] transition-all duration-300 hover:scale-105 mt-4"
+            style={{
+              background: 'linear-gradient(180deg, #6366f1 0%, #4f46e5 100%)',
+              boxShadow: '0 16px 48px rgba(99,102,241,0.4)'
+            }}
           >
-            <span className="relative z-10">Start Writing</span>
-            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
+            Start Writing
           </button>
 
           {/* Divider text */}
-          <p className="text-base text-[hsl(253,28%,40%)] font-semibold pt-2">
+          <p className="text-[1.1rem] font-medium pt-2" style={{ color: '#8b7bc7' }}>
             Choose Your Template.
           </p>
 
           {/* Chevron arrow */}
           <svg 
-            className="w-10 h-10 text-[hsl(253,100%,64%)] animate-bounce drop-shadow-[0_4px_8px_hsl(253,100%,64%,0.3)]" 
-            fill="none" 
-            stroke="currentColor" 
+            className="w-12 h-12 mt-2" 
+            fill="currentColor" 
             viewBox="0 0 24 24"
-            strokeWidth={3}
+            style={{ color: '#6366f1' }}
           >
-            <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+            <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z" />
           </svg>
         </div>
 
