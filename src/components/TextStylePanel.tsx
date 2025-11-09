@@ -53,8 +53,22 @@ export const TextStylePanel = ({
     }
   };
   const handleAlign = (alignment: 'left' | 'center' | 'right' | 'justify') => {
-    if (!editor) return;
-    editor.chain().focus().setTextAlign(alignment).run();
+    if (!editor) {
+      console.error('Editor not available');
+      return;
+    }
+    
+    try {
+      // Get current selection or set to entire content if nothing selected
+      const { from, to } = editor.state.selection;
+      
+      // Apply alignment to current paragraph/selection
+      editor.chain().focus().setTextAlign(alignment).run();
+      
+      console.log(`Text aligned to: ${alignment}`);
+    } catch (error) {
+      console.error('Error aligning text:', error);
+    }
   };
   const handleIndent = () => {
     if (!editor) return;
