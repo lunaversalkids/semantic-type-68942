@@ -5,6 +5,7 @@ import searchIcon from '@/assets/search-icon.png';
 import cloudIcon from '@/assets/cloud-icon.png';
 import singlePageIcon from '@/assets/single-page-icon.png';
 import doublePageIcon from '@/assets/double-page-icon.png';
+import importExportIcon from '@/assets/import-export-icon.png';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 interface HeaderProps {
   onFindClick?: () => void;
@@ -93,8 +94,8 @@ export const Header = ({
 
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <button className="h-9 min-w-[36px] px-2.5 border border-[hsl(var(--stroke))] rounded-[var(--r-sm)] bg-white grid place-items-center hover:bg-[hsl(var(--panel-2))] transition-colors" title="Import/Export">
-              <FileDown className="w-4 h-4 text-[hsl(var(--ink))]" />
+            <button className="h-9 w-9 border border-[hsl(var(--stroke))] rounded-[var(--r-sm)] grid place-items-center hover:bg-[hsl(var(--panel-2))] transition-colors overflow-hidden" title="Import/Export">
+              <img src={importExportIcon} alt="" className="w-full h-full object-cover" />
             </button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="bg-background z-50">
