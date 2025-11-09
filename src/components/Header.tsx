@@ -1,5 +1,6 @@
 import { Pen, Navigation, Search, Cloud, FileDown, FileUp, File, BookOpen } from 'lucide-react';
 import newInfinityButton from '@/assets/new-infinity-button.png';
+import penIcon from '@/assets/pen-icon.png';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 interface HeaderProps {
   onFindClick?: () => void;
@@ -51,7 +52,7 @@ export const Header = ({
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <button className="h-9 min-w-[36px] px-2.5 border border-[hsl(var(--stroke))] rounded-[var(--r-sm)] bg-white grid place-items-center hover:bg-[hsl(var(--panel-2))] transition-colors" title="Pen & Stylus">
-              <Pen className="w-4 h-4 text-[hsl(var(--ink))]" />
+              <img src={penIcon} alt="" className="w-5 h-5" />
             </button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="bg-background z-50">
