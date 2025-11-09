@@ -5,7 +5,9 @@ import { Button } from '@/components/ui/button';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import capitalizeIcon from '@/assets/capitalize-icon.jpg';
-import baselineCycleIcon from '@/assets/baseline-cycle-icon.jpg';
+import baselineNormalIcon from '@/assets/baseline-normal-icon.png';
+import baselineSuperscriptIcon from '@/assets/baseline-superscript-icon.png';
+import baselineSubscriptIcon from '@/assets/baseline-subscript-icon.png';
 interface TextStylePanelProps {
   editor?: any;
 }
@@ -400,7 +402,11 @@ export const TextStylePanel = ({
             }`}
           >
             <img 
-              src={baselineCycleIcon} 
+              src={
+                baselineMode === 'normal' ? baselineNormalIcon :
+                baselineMode === 'superscript' ? baselineSuperscriptIcon :
+                baselineSubscriptIcon
+              } 
               alt="Baseline Cycle" 
               className={`w-7 h-7 object-contain transition-all ${
                 baselineMode !== 'normal' ? 'brightness-0 invert' : ''
