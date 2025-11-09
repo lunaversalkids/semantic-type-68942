@@ -101,18 +101,18 @@ Insects are the largest group of arthropods. The evolution, their evolution, Mur
 
   const templates = [
     { 
-      name: 'Insects', 
+      name: 'Blank', 
       id: 'insects-document',
       thumbnail: 'content',
       isRecent: true
     },
     { 
-      name: 'Tales of Blue', 
+      name: 'Simple Novel', 
       thumbnail: 'gradient',
       gradient: 'linear-gradient(135deg, hsl(210 100% 45%), hsl(220 100% 55%))',
     },
     { 
-      name: 'City Lights', 
+      name: 'Contemporary Novel', 
       thumbnail: 'image',
       bgColor: 'hsl(220 20% 15%)',
     },
@@ -140,19 +140,27 @@ Insects are the largest group of arthropods. The evolution, their evolution, Mur
         {/* Logo and title section */}
         <div className="flex flex-col items-center space-y-8">
           {/* Infinity logo */}
-          <div className="relative w-48 h-48 flex items-center justify-center">
+          <div className="relative w-56 h-56 flex items-center justify-center">
+            {/* Purple gradient sphere */}
+            <div className="absolute w-full h-full rounded-full bg-gradient-radial from-[hsl(253,80%,75%)] via-[hsl(253,85%,65%)] to-[hsl(253,90%,55%)] shadow-[0_8px_32px_hsl(253,90%,50%,0.4),0_16px_64px_hsl(253,90%,50%,0.3),inset_0_-20px_40px_hsl(253,90%,45%,0.3),inset_0_20px_40px_hsl(253,80%,85%,0.4)]"></div>
+            
+            {/* White infinity symbol on top */}
             <svg 
               viewBox="0 0 200 100" 
-              className="w-48 h-24 drop-shadow-[0_0_20px_hsl(253,100%,64%,0.6)]"
-              fill="white"
+              className="relative z-10 w-40 h-20"
+              fill="none"
+              stroke="white"
+              strokeWidth="12"
+              strokeLinecap="round"
+              strokeLinejoin="round"
             >
               <path d="M50,50 C50,30 40,20 25,20 C10,20 0,30 0,50 C0,70 10,80 25,80 C40,80 50,70 50,50 M50,50 C50,30 60,20 75,20 C90,20 100,30 100,50 C100,70 90,80 75,80 C60,80 50,70 50,50" 
                     transform="translate(50, 0)" 
-                    strokeWidth="8" 
-                    stroke="white" 
-                    fill="none"/>
+                    filter="drop-shadow(0 2px 8px rgba(255,255,255,0.5))"/>
             </svg>
-            <div className="absolute inset-0 rounded-full bg-[hsl(253,100%,64%)] opacity-40 blur-3xl animate-glow-pulse"></div>
+            
+            {/* Outer glow */}
+            <div className="absolute inset-0 rounded-full bg-[hsl(253,100%,64%)] opacity-30 blur-3xl animate-glow-pulse"></div>
           </div>
 
           {/* App title */}
@@ -195,7 +203,7 @@ Insects are the largest group of arthropods. The evolution, their evolution, Mur
         </div>
 
         {/* Templates section */}
-        <div className="w-full bg-gradient-to-br from-white/60 via-[hsl(253,100%,98%)] to-[hsl(253,100%,96%)] rounded-[28px] p-10 shadow-[0_8px_48px_hsl(253,100%,64%,0.15),inset_0_1px_0_white] border-2 border-[hsl(253,80%,90%)] backdrop-blur-xl">
+        <div className="w-full bg-gradient-to-br from-white/70 via-[hsl(253,100%,98%)] to-[hsl(253,100%,96%)] rounded-[28px] p-10 shadow-[0_0_60px_hsl(253,100%,64%,0.25),0_8px_48px_hsl(253,100%,64%,0.15),inset_0_1px_0_white] border-2 border-[hsl(253,80%,90%)] backdrop-blur-xl">
           {/* Tabs */}
           <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
             <TabsList className="w-full justify-start mb-8 bg-transparent gap-3 h-auto p-0">
@@ -224,7 +232,7 @@ Insects are the largest group of arthropods. The evolution, their evolution, Mur
                       <button
                         key={index}
                         onClick={() => template.id ? handleOpenRecent(template.id) : handleStartWriting()}
-                        className="group relative aspect-[3/4] rounded-[20px] overflow-hidden border-[3px] border-[hsl(253,80%,88%)] hover:border-[hsl(253,100%,64%)] transition-all duration-300 hover:scale-105 hover:shadow-[0_12px_40px_hsl(253,100%,64%,0.4)]"
+                        className="group relative aspect-[3/4] rounded-[22px] overflow-hidden border-[3px] border-[hsl(253,80%,88%)] hover:border-[hsl(253,100%,64%)] transition-all duration-300 hover:scale-105 shadow-[0_0_20px_hsl(253,100%,64%,0.12)] hover:shadow-[0_0_40px_hsl(253,100%,64%,0.35),0_12px_40px_hsl(253,100%,64%,0.3)]"
                       >
                         {template.thumbnail === 'content' && doc?.thumbnail ? (
                           <div className="w-full h-full bg-white p-8 overflow-hidden flex flex-col">

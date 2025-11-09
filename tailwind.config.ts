@@ -16,6 +16,9 @@ export default {
       gridTemplateColumns: {
         '16': 'repeat(16, minmax(0, 1fr))',
       },
+      backgroundImage: {
+        'gradient-radial': 'radial-gradient(circle, var(--tw-gradient-stops))',
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
