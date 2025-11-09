@@ -85,11 +85,11 @@ export const TextStylePanel = ({
     setFormattingMode(mode);
     switch (mode) {
       case 'Normal':
-        // Standard single spacing with regular paragraph settings
+        // Default 1.15 spacing with regular paragraph settings
         editor.chain().focus().setParagraphAttributes({
           textIndent: '0px',
           marginBottom: '0px',
-          lineHeight: 'normal',
+          lineHeight: '1.15',
           paddingLeft: '0px'
         }).run();
         editor.chain().focus().setTextAlign('left').run();
