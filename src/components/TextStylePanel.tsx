@@ -164,7 +164,11 @@ export const TextStylePanel = ({
           return word.toLowerCase();
         }).join(' ');
         
-        editor.chain().focus().deleteRange({ from, to }).insertContent(transformedText).run();
+        editor.chain().focus()
+          .deleteRange({ from, to })
+          .insertContent(transformedText)
+          .setTextSelection({ from, to: from + transformedText.length })
+          .run();
         break;
       }
       case 'Start Case': {
@@ -178,7 +182,11 @@ export const TextStylePanel = ({
           return part;
         }).join('');
         
-        editor.chain().focus().deleteRange({ from, to }).insertContent(transformedText).run();
+        editor.chain().focus()
+          .deleteRange({ from, to })
+          .insertContent(transformedText)
+          .setTextSelection({ from, to: from + transformedText.length })
+          .run();
         break;
       }
     }
