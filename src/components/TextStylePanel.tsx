@@ -5,9 +5,6 @@ import { Button } from '@/components/ui/button';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import capitalizeIcon from '@/assets/capitalize-icon.jpg';
-import baselineNormalIcon from '@/assets/baseline-normal-icon.jpg';
-import baselineSuperscriptIcon from '@/assets/baseline-superscript-icon.png';
-import baselineSubscriptIcon from '@/assets/baseline-subscript-icon.png';
 interface TextStylePanelProps {
   editor?: any;
 }
@@ -402,17 +399,35 @@ export const TextStylePanel = ({
                 : 'bg-white hover:bg-gray-50 border-gray-200'
             }`}
           >
-            <img 
-              src={
-                baselineMode === 'superscript' 
-                  ? baselineSuperscriptIcon 
-                  : baselineMode === 'subscript' 
-                  ? baselineSubscriptIcon 
-                  : baselineNormalIcon
-              } 
-              alt="Baseline" 
-              className={`w-7 h-7 object-contain ${baselineMode !== 'normal' ? 'invert brightness-0' : ''}`}
-            />
+            <svg 
+              width="28" 
+              height="28" 
+              viewBox="0 0 28 28" 
+              fill="none" 
+              xmlns="http://www.w3.org/2000/svg"
+              className="w-7 h-7"
+            >
+              {baselineMode === 'normal' && (
+                <>
+                  <text x="14" y="18" textAnchor="middle" fontSize="16" fontWeight="600" fill="#6B7280">T</text>
+                  <line x1="6" y1="20" x2="22" y2="20" stroke="#A78BFA" strokeWidth="2" />
+                </>
+              )}
+              {baselineMode === 'superscript' && (
+                <>
+                  <text x="14" y="15" textAnchor="middle" fontSize="16" fontWeight="600" fill="#FFFFFF">T</text>
+                  <text x="20" y="12" textAnchor="middle" fontSize="10" fontWeight="600" fill="#FFFFFF">↑</text>
+                  <line x1="6" y1="20" x2="22" y2="20" stroke="#FFFFFF" strokeWidth="2" />
+                </>
+              )}
+              {baselineMode === 'subscript' && (
+                <>
+                  <text x="14" y="15" textAnchor="middle" fontSize="16" fontWeight="600" fill="#FFFFFF">T</text>
+                  <text x="20" y="24" textAnchor="middle" fontSize="10" fontWeight="600" fill="#FFFFFF">↓</text>
+                  <line x1="6" y1="20" x2="22" y2="20" stroke="#FFFFFF" strokeWidth="2" />
+                </>
+              )}
+            </svg>
           </button>
         </div>
       </div>
