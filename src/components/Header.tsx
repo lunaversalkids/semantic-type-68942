@@ -51,8 +51,8 @@ export const Header = ({
       <div className="flex justify-end gap-2 w-[340px]">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <button className="h-9 min-w-[36px] px-2.5 border border-[hsl(var(--stroke))] rounded-[var(--r-sm)] grid place-items-center hover:bg-[hsl(var(--panel-2))] transition-colors" title="Pen & Stylus">
-              <img src={penIcon} alt="" className="w-4 h-4 object-contain" />
+            <button className="h-9 w-9 border border-[hsl(var(--stroke))] rounded-[var(--r-sm)] grid place-items-center hover:bg-[hsl(var(--panel-2))] transition-colors overflow-hidden" title="Pen & Stylus">
+              <img src={penIcon} alt="" className="w-full h-full object-cover" />
             </button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="bg-background z-50">
