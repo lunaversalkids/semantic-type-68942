@@ -107,6 +107,9 @@ Insects are the largest group of arthropods. The evolution, their evolution, Mur
       thumbnail: 'content',
       isRecent: true
     },
+  ];
+
+  const bookTemplates = [
     { 
       name: 'Simple Novel', 
       thumbnail: 'gradient',
@@ -222,21 +225,35 @@ Insects are the largest group of arthropods. The evolution, their evolution, Mur
                 </div>
                 
                 <div className="grid grid-cols-4 gap-6">
-                  {templates.map((template, index) => {
-                    const doc = recentDocs.find(d => d.id === template.id);
-                    return (
+                  {activeTab === 'Recents' ? (
+                    recentDocs.map((doc, index) => (
                       <button
                         key={index}
-                        onClick={() => template.id ? handleOpenRecent(template.id) : handleStartWriting()}
+                        onClick={() => handleOpenRecent(doc.id)}
                         className="group relative aspect-[3/4] rounded-[22px] overflow-hidden border-[3px] border-[hsl(253,80%,88%)] hover:border-[hsl(253,100%,64%)] transition-all duration-300 hover:scale-105 shadow-[0_0_20px_hsl(253,100%,64%,0.12)] hover:shadow-[0_0_40px_hsl(253,100%,64%,0.35),0_12px_40px_hsl(253,100%,64%,0.3)]"
                       >
-                        {template.thumbnail === 'content' && doc?.thumbnail ? (
-                          <div className="w-full h-full bg-white p-8 overflow-hidden flex flex-col">
-                            <div className="text-left text-[15px] leading-relaxed text-[hsl(253,47%,18%)] whitespace-pre-line font-serif line-clamp-[20]">
-                              {doc.thumbnail}
-                            </div>
+                        <div className="w-full h-full bg-white p-8 overflow-hidden flex flex-col">
+                          <div className="text-left text-[15px] leading-relaxed text-[hsl(253,47%,18%)] whitespace-pre-line font-serif line-clamp-[20]">
+                            {doc.thumbnail}
                           </div>
-                        ) : template.thumbnail === 'gradient' ? (
+                        </div>
+                        
+                        {/* Title overlay */}
+                        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 via-black/50 to-transparent p-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                          <p className="text-white text-sm font-bold text-center truncate drop-shadow-md">
+                            {doc.title}
+                          </p>
+                        </div>
+                      </button>
+                    ))
+                  ) : (
+                    bookTemplates.map((template, index) => (
+                      <button
+                        key={index}
+                        onClick={() => handleStartWriting()}
+                        className="group relative aspect-[3/4] rounded-[22px] overflow-hidden border-[3px] border-[hsl(253,80%,88%)] hover:border-[hsl(253,100%,64%)] transition-all duration-300 hover:scale-105 shadow-[0_0_20px_hsl(253,100%,64%,0.12)] hover:shadow-[0_0_40px_hsl(253,100%,64%,0.35),0_12px_40px_hsl(253,100%,64%,0.3)]"
+                      >
+                        {template.thumbnail === 'gradient' ? (
                           <div 
                             className="w-full h-full flex items-center justify-center"
                             style={{ background: template.gradient }}
@@ -284,8 +301,8 @@ Insects are the largest group of arthropods. The evolution, their evolution, Mur
                           </p>
                         </div>
                       </button>
-                    );
-                  })}
+                    ))
+                  )}
                 </div>
               </div>
 
