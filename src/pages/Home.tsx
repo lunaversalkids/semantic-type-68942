@@ -140,14 +140,18 @@ Insects are the largest group of arthropods. The evolution, their evolution, Mur
         {/* Logo and title section */}
         <div className="flex flex-col items-center space-y-8">
           {/* Infinity logo */}
-          <div className="relative">
-            <div className="w-48 h-48 rounded-full bg-gradient-to-br from-[hsl(253,100%,98%)] via-[hsl(253,100%,92%)] to-[hsl(253,100%,85%)] flex items-center justify-center border-[6px] border-[hsl(253,100%,70%)] shadow-[0_0_80px_hsl(253,100%,64%,0.6),0_0_120px_hsl(253,100%,64%,0.3)]">
-              <img 
-                src="/src/assets/new-infinity-icon.png" 
-                alt="Infinity" 
-                className="w-28 h-28 object-contain drop-shadow-[0_0_12px_hsl(253,100%,64%)]"
-              />
-            </div>
+          <div className="relative w-48 h-48 flex items-center justify-center">
+            <svg 
+              viewBox="0 0 200 100" 
+              className="w-48 h-24 drop-shadow-[0_0_20px_hsl(253,100%,64%,0.6)]"
+              fill="white"
+            >
+              <path d="M50,50 C50,30 40,20 25,20 C10,20 0,30 0,50 C0,70 10,80 25,80 C40,80 50,70 50,50 M50,50 C50,30 60,20 75,20 C90,20 100,30 100,50 C100,70 90,80 75,80 C60,80 50,70 50,50" 
+                    transform="translate(50, 0)" 
+                    strokeWidth="8" 
+                    stroke="white" 
+                    fill="none"/>
+            </svg>
             <div className="absolute inset-0 rounded-full bg-[hsl(253,100%,64%)] opacity-40 blur-3xl animate-glow-pulse"></div>
           </div>
 
