@@ -176,7 +176,7 @@ Insects are the largest group of arthropods. The evolution, their evolution, Mur
           {fromEditor ?
         // Simple recent documents view when coming from editor
         <div className="space-y-6">
-              <h2 className="text-3xl font-bold text-[hsl(253,47%,18%)]">Recent Documents</h2>
+              <h2 className="text-3xl font-bold text-[hsl(253,47%,18%)]">Recent & Saved Documents</h2>
               <div className="grid grid-cols-4 gap-6">
                 {recentDocs.map((doc, index) => <button key={index} onClick={() => handleOpenRecent(doc.id)} className="group relative aspect-[3/4] rounded-[22px] overflow-hidden border-[3px] border-[hsl(253,80%,88%)] hover:border-[hsl(253,100%,64%)] transition-all duration-300 hover:scale-105 shadow-[0_0_20px_hsl(253,100%,64%,0.12)] hover:shadow-[0_0_40px_hsl(253,100%,64%,0.35),0_12px_40px_hsl(253,100%,64%,0.3)]">
                     <div className="w-full h-full bg-white p-8 overflow-hidden flex flex-col">
