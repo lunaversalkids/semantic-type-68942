@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
-import infinityLogo from '@/assets/infinity-logo.jpg';
+import infinityLogo from '@/assets/infinity-logo.png';
 
 interface RecentDocument {
   id: string;
@@ -145,10 +145,11 @@ Insects are the largest group of arthropods. The evolution, their evolution, Mur
             <img 
               src={infinityLogo}
               alt="Doc One Infinity Logo" 
-              className="w-56 h-56 object-contain"
+              className="w-56 h-56 object-contain drop-shadow-[0_8px_24px_hsl(253,90%,50%,0.4)]"
+              style={{ mixBlendMode: 'normal' }}
             />
             {/* Outer glow */}
-            <div className="absolute inset-0 rounded-full bg-[hsl(253,100%,64%)] opacity-30 blur-3xl animate-glow-pulse"></div>
+            <div className="absolute inset-0 rounded-full bg-[hsl(253,100%,64%)] opacity-30 blur-3xl animate-glow-pulse -z-10"></div>
           </div>
 
           {/* App title */}
