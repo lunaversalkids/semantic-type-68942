@@ -14,6 +14,7 @@ const Home = () => {
   const navigate = useNavigate();
   const [recentDocs, setRecentDocs] = useState<RecentDocument[]>([]);
   const [activeTab, setActiveTab] = useState('Recents');
+  const [isTemplatesExpanded, setIsTemplatesExpanded] = useState(false);
 
   useEffect(() => {
     // Load recent documents from localStorage
@@ -310,16 +311,26 @@ Insects are the largest group of arthropods. The evolution, their evolution, Mur
               {activeTab === 'Recents' && (
                 <>
                   <div className="flex justify-center pt-6">
-                    <button className="text-[hsl(253,28%,40%)] hover:text-[hsl(253,100%,64%)] font-semibold flex items-center gap-2 transition-all duration-200 hover:gap-3">
-                      See All
-                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                    <button 
+                      onClick={() => setIsTemplatesExpanded(!isTemplatesExpanded)}
+                      className="text-[hsl(253,28%,40%)] hover:text-[hsl(253,100%,64%)] font-semibold flex items-center gap-2 transition-all duration-200"
+                    >
+                      See All Templates
+                      <svg 
+                        className={`w-5 h-5 transition-transform duration-200 ${isTemplatesExpanded ? 'rotate-180' : 'rotate-90'}`}
+                        fill="none" 
+                        stroke="currentColor" 
+                        viewBox="0 0 24 24" 
+                        strokeWidth={2.5}
+                      >
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
                       </svg>
                     </button>
                   </div>
 
                   {/* Template options below See All */}
-                  <div className="grid grid-cols-4 gap-6 pt-6">
+                  {isTemplatesExpanded && (
+                    <div className="grid grid-cols-4 gap-6 pt-6">
                     {bookTemplates.map((template, index) => (
                       <button
                         key={index}
@@ -375,7 +386,8 @@ Insects are the largest group of arthropods. The evolution, their evolution, Mur
                         </div>
                       </button>
                     ))}
-                  </div>
+                    </div>
+                  )}
                 </>
               )}
             </TabsContent>
