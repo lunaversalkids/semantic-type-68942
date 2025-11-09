@@ -99,11 +99,11 @@ export const Header = ({
           <img src={quotationIcon} alt="" className="w-full h-full object-cover" />
         </button>
 
-        <button onClick={onTextFrameClick} className="h-9 w-9 border border-[hsl(var(--stroke))] rounded-[var(--r-sm)] grid place-items-center hover:bg-[hsl(var(--panel-2))] transition-colors overflow-hidden" title="Text Frame">
+        <button onClick={onTextFrameClick} className="h-9 w-9 border border-[hsl(var(--stroke))] rounded-[var(--r-sm)] grid place-items-center hover:bg-[hsl(var(--panel-2))] transition-colors overflow-hidden" title="Text Box">
           <img src={textFrameIcon} alt="" className="w-full h-full object-cover" />
         </button>
 
-        <button onClick={onPaletteClick} className="h-9 w-9 border border-[hsl(var(--stroke))] rounded-[var(--r-sm)] grid place-items-center hover:bg-[hsl(var(--panel-2))] transition-colors overflow-hidden" title="Color Palette">
+        <button onClick={onPaletteClick} className="h-9 w-9 border border-[hsl(var(--stroke))] rounded-[var(--r-sm)] grid place-items-center hover:bg-[hsl(var(--panel-2))] transition-colors overflow-hidden" title="Interface Color Palette">
           <img src={paletteIcon} alt="" className="w-full h-full object-cover" />
         </button>
 
