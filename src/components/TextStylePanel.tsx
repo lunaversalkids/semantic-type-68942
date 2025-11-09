@@ -125,24 +125,28 @@ export const TextStylePanel = ({
     setCapitalizationMode(mode);
     
     const { from, to } = editor.state.selection;
-    const text = editor.state.doc.textBetween(from, to, ' ');
     
+    // If no text is selected, do nothing
+    if (from === to) return;
+    
+    // First, remove any existing Small Caps mark
+    if (editor.isActive('smallCaps')) {
+      editor.chain().focus().unsetSmallCaps().run();
+    }
+    
+    const text = editor.state.doc.textBetween(from, to, ' ');
     let transformedText = text;
     
     switch (mode) {
       case 'None':
-        // Remove any text transformation marks
-        editor.chain().focus().unsetMark('textStyle').run();
-        if (editor.isActive('smallCaps')) {
-          editor.chain().focus().toggleSmallCaps().run();
-        }
+        // Just remove Small Caps, text stays as is
         return;
       case 'All Caps':
         transformedText = text.toUpperCase();
         break;
       case 'Small Caps':
-        // Use the SmallCaps extension
-        editor.chain().focus().toggleSmallCaps().run();
+        // Apply Small Caps mark to the selection
+        editor.chain().focus().setSmallCaps().run();
         return;
       case 'Title Case':
         transformedText = text.replace(/\w\S*/g, (word) => {
@@ -157,6 +161,7 @@ export const TextStylePanel = ({
         break;
     }
     
+    // Replace the text with transformed version
     if (transformedText !== text) {
       editor.chain().focus().deleteRange({ from, to }).insertContent(transformedText).run();
     }

@@ -34,6 +34,16 @@ export const SmallCaps = Mark.create({
 
   addCommands() {
     return {
+      setSmallCaps:
+        () =>
+        ({ commands }: any) => {
+          return commands.setMark(this.name);
+        },
+      unsetSmallCaps:
+        () =>
+        ({ commands }: any) => {
+          return commands.unsetMark(this.name);
+        },
       toggleSmallCaps:
         () =>
         ({ commands }: any) => {
