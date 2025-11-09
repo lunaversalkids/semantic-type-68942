@@ -1,5 +1,7 @@
-import { Pen, Navigation, Search, Cloud, FileDown, FileUp, File, BookOpen } from 'lucide-react';
+import { Pen, Navigation, Search, Cloud, FileDown, FileUp } from 'lucide-react';
 import newInfinityButton from '@/assets/new-infinity-button.png';
+import singlePageIcon from '@/assets/single-page-icon.png';
+import doublePageIcon from '@/assets/double-page-icon.png';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 interface HeaderProps {
   onFindClick?: () => void;
@@ -76,14 +78,14 @@ export const Header = ({
 
         <button 
           onClick={onLayoutToggle} 
-          className="h-9 min-w-[36px] px-2.5 border border-[hsl(var(--stroke))] rounded-[var(--r-sm)] bg-white grid place-items-center hover:bg-[hsl(var(--panel-2))] transition-colors" 
+          className="h-9 min-w-[36px] px-2.5 border border-[hsl(var(--stroke))] rounded-[var(--r-sm)] bg-white grid place-items-center hover:bg-[hsl(var(--panel-2))] transition-all" 
           title={isDoublePageLayout ? "Switch to Single Page" : "Switch to Double Page"}
         >
-          {isDoublePageLayout ? (
-            <BookOpen className="w-4 h-4 text-[hsl(var(--ink))]" />
-          ) : (
-            <File className="w-4 h-4 text-[hsl(var(--ink))]" />
-          )}
+          <img 
+            src={isDoublePageLayout ? doublePageIcon : singlePageIcon} 
+            alt={isDoublePageLayout ? "Double page layout" : "Single page layout"} 
+            className="w-5 h-5"
+          />
         </button>
 
         <DropdownMenu>
