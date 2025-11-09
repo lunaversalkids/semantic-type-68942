@@ -22,6 +22,7 @@ export const TextStylePanel = ({
   const [isColorPickerOpen, setIsColorPickerOpen] = useState(false);
   const [formattingMode, setFormattingMode] = useState('Normal');
   const [baselineMode, setBaselineMode] = useState<'superscript' | 'subscript' | 'normal'>('normal');
+  const [capitalizationMode, setCapitalizationMode] = useState('None');
   const formattingModes = ['Normal', 'Single Spacing', '1.15 Spacing', '1.5 Spacing', '2.5 Spacing', 'Hanging Indent'];
   const availableFonts = ['Graphik', 'Arial', 'Times New Roman', 'Georgia', 'Helvetica', 'Courier New', 'Verdana', 'Garamond', 'Palatino', 'Bookman', 'Comic Sans MS', 'Trebuchet MS', 'Impact', 'Lucida Console', 'Tahoma', 'Lucida Sans', 'Monaco', 'Gill Sans', 'Century Gothic', 'Franklin Gothic Medium', 'Cambria', 'Calibri', 'Consolas', 'Didot', 'Futura', 'Optima', 'Baskerville'];
   const handleFontChange = (font: string) => {
@@ -116,6 +117,48 @@ export const TextStylePanel = ({
       // Switch to superscript: turn on superscript
       editor.chain().focus().setSuperscript().run();
       setBaselineMode('superscript');
+    }
+  };
+
+  const handleCapitalization = (mode: string) => {
+    if (!editor) return;
+    setCapitalizationMode(mode);
+    
+    const { from, to } = editor.state.selection;
+    const text = editor.state.doc.textBetween(from, to, ' ');
+    
+    let transformedText = text;
+    
+    switch (mode) {
+      case 'None':
+        // Remove any text transformation marks
+        editor.chain().focus().unsetMark('textStyle').run();
+        if (editor.isActive('smallCaps')) {
+          editor.chain().focus().toggleSmallCaps().run();
+        }
+        return;
+      case 'All Caps':
+        transformedText = text.toUpperCase();
+        break;
+      case 'Small Caps':
+        // Use the SmallCaps extension
+        editor.chain().focus().toggleSmallCaps().run();
+        return;
+      case 'Title Case':
+        transformedText = text.replace(/\w\S*/g, (word) => {
+          const lowerWords = ['a', 'an', 'the', 'and', 'but', 'or', 'for', 'nor', 'on', 'at', 'to', 'by', 'of', 'in'];
+          return lowerWords.includes(word.toLowerCase()) && word !== text.split(' ')[0]
+            ? word.toLowerCase()
+            : word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+        });
+        break;
+      case 'Start Case':
+        transformedText = text.charAt(0).toUpperCase() + text.slice(1).toLowerCase();
+        break;
+    }
+    
+    if (transformedText !== text) {
+      editor.chain().focus().deleteRange({ from, to }).insertContent(transformedText).run();
     }
   };
 
@@ -392,9 +435,50 @@ export const TextStylePanel = ({
           <button onClick={() => handleFormat('strike')} className="flex-1 h-12 bg-white hover:bg-gray-50 text-[#8B5CF6] font-semibold line-through rounded-lg border border-gray-200 transition-colors text-lg">
             S
           </button>
-          <button className="flex-1 h-12 bg-white hover:bg-gray-50 rounded-lg border border-gray-200 transition-colors flex items-center justify-center p-2">
-            <img src={capitalizeIcon} alt="Capitalize" className="w-7 h-7 object-contain" />
-          </button>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <button className="flex-1 h-12 bg-white hover:bg-gray-50 rounded-lg border border-gray-200 transition-colors flex items-center justify-center p-2">
+                <img src={capitalizeIcon} alt="Capitalize" className="w-7 h-7 object-contain" />
+              </button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="w-48 bg-white border border-gray-200 shadow-lg" align="start">
+              <DropdownMenuItem 
+                onClick={() => handleCapitalization('None')}
+                className={`px-4 py-2 cursor-pointer hover:bg-[#F5F0FF] transition-colors ${capitalizationMode === 'None' ? 'bg-[#E8DDFF] text-[#8B5CF6] font-medium' : 'text-[hsl(var(--ink))]'}`}
+              >
+                <span className="text-[#8B7AB8]">None</span>
+                {capitalizationMode === 'None' && <Check className="w-4 h-4 ml-auto text-[#8B5CF6]" />}
+              </DropdownMenuItem>
+              <DropdownMenuItem 
+                onClick={() => handleCapitalization('All Caps')}
+                className={`px-4 py-2 cursor-pointer hover:bg-[#F5F0FF] transition-colors ${capitalizationMode === 'All Caps' ? 'bg-[#E8DDFF] text-[#8B5CF6] font-medium' : 'text-[hsl(var(--ink))]'}`}
+              >
+                <span className="text-[#8B7AB8] uppercase">All Caps</span>
+                {capitalizationMode === 'All Caps' && <Check className="w-4 h-4 ml-auto text-[#8B5CF6]" />}
+              </DropdownMenuItem>
+              <DropdownMenuItem 
+                onClick={() => handleCapitalization('Small Caps')}
+                className={`px-4 py-2 cursor-pointer hover:bg-[#F5F0FF] transition-colors ${capitalizationMode === 'Small Caps' ? 'bg-[#E8DDFF] text-[#8B5CF6] font-medium' : 'text-[hsl(var(--ink))]'}`}
+              >
+                <span className="text-[#8B7AB8]" style={{ fontVariantCaps: 'small-caps' }}>Small Caps</span>
+                {capitalizationMode === 'Small Caps' && <Check className="w-4 h-4 ml-auto text-[#8B5CF6]" />}
+              </DropdownMenuItem>
+              <DropdownMenuItem 
+                onClick={() => handleCapitalization('Title Case')}
+                className={`px-4 py-2 cursor-pointer hover:bg-[#F5F0FF] transition-colors ${capitalizationMode === 'Title Case' ? 'bg-[#E8DDFF] text-[#8B5CF6] font-medium' : 'text-[hsl(var(--ink))]'}`}
+              >
+                <span className="text-[#8B7AB8]">Title Case</span>
+                {capitalizationMode === 'Title Case' && <Check className="w-4 h-4 ml-auto text-[#8B5CF6]" />}
+              </DropdownMenuItem>
+              <DropdownMenuItem 
+                onClick={() => handleCapitalization('Start Case')}
+                className={`px-4 py-2 cursor-pointer hover:bg-[#F5F0FF] transition-colors ${capitalizationMode === 'Start Case' ? 'bg-[#E8DDFF] text-[#8B5CF6] font-medium' : 'text-[hsl(var(--ink))]'}`}
+              >
+                <span className="text-[#8B7AB8]">Start case</span>
+                {capitalizationMode === 'Start Case' && <Check className="w-4 h-4 ml-auto text-[#8B5CF6]" />}
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
           <button 
             onClick={handleBaselineCycle}
             className={`flex-1 h-12 rounded-lg border transition-all flex items-center justify-center p-2 ${
