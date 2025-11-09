@@ -226,7 +226,7 @@ Insects are the largest group of arthropods. The evolution, their evolution, Mur
                 
                 <div className="grid grid-cols-4 gap-6">
                   {activeTab === 'Recents' ? (
-                    recentDocs.map((doc, index) => (
+                    recentDocs.slice(0, 1).map((doc, index) => (
                       <button
                         key={index}
                         onClick={() => handleOpenRecent(doc.id)}
@@ -306,15 +306,78 @@ Insects are the largest group of arthropods. The evolution, their evolution, Mur
                 </div>
               </div>
 
-              {/* See all button */}
-              <div className="flex justify-center pt-6">
-                <button className="text-[hsl(253,28%,40%)] hover:text-[hsl(253,100%,64%)] font-semibold flex items-center gap-2 transition-all duration-200 hover:gap-3">
-                  See All
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-                  </svg>
-                </button>
-              </div>
+              {/* See all button and templates section - only show in Recents tab */}
+              {activeTab === 'Recents' && (
+                <>
+                  <div className="flex justify-center pt-6">
+                    <button className="text-[hsl(253,28%,40%)] hover:text-[hsl(253,100%,64%)] font-semibold flex items-center gap-2 transition-all duration-200 hover:gap-3">
+                      See All
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                      </svg>
+                    </button>
+                  </div>
+
+                  {/* Template options below See All */}
+                  <div className="grid grid-cols-4 gap-6 pt-6">
+                    {bookTemplates.map((template, index) => (
+                      <button
+                        key={index}
+                        onClick={() => handleStartWriting()}
+                        className="group relative aspect-[3/4] rounded-[22px] overflow-hidden border-[3px] border-[hsl(253,80%,88%)] hover:border-[hsl(253,100%,64%)] transition-all duration-300 hover:scale-105 shadow-[0_0_20px_hsl(253,100%,64%,0.12)] hover:shadow-[0_0_40px_hsl(253,100%,64%,0.35),0_12px_40px_hsl(253,100%,64%,0.3)]"
+                      >
+                        {template.thumbnail === 'gradient' ? (
+                          <div 
+                            className="w-full h-full flex items-center justify-center"
+                            style={{ background: template.gradient }}
+                          >
+                            <h3 className="text-white text-2xl font-bold uppercase tracking-wider px-4 text-center drop-shadow-lg">
+                              {template.name}
+                            </h3>
+                          </div>
+                        ) : template.thumbnail === 'image' ? (
+                          <div 
+                            className="w-full h-full flex items-center justify-center relative"
+                            style={{ backgroundColor: template.bgColor }}
+                          >
+                            {/* City lights effect */}
+                            <div className="absolute inset-0 bg-gradient-to-t from-transparent via-transparent to-[hsl(220,30%,20%)]"></div>
+                            <div className="absolute bottom-0 left-0 right-0 h-1/3 bg-gradient-to-t from-[hsl(220,20%,10%)] to-transparent"></div>
+                            {/* Scattered light dots for city lights */}
+                            <div className="absolute inset-0">
+                              {[...Array(30)].map((_, i) => (
+                                <div
+                                  key={i}
+                                  className="absolute w-1 h-1 bg-yellow-300 rounded-full opacity-70"
+                                  style={{
+                                    left: `${Math.random() * 100}%`,
+                                    bottom: `${Math.random() * 40 + 10}%`,
+                                    boxShadow: '0 0 4px hsl(45 100% 70%)',
+                                  }}
+                                ></div>
+                              ))}
+                            </div>
+                            <h3 className="relative z-10 text-white text-2xl font-bold uppercase tracking-wider px-4 text-center drop-shadow-lg">
+                              {template.name}
+                            </h3>
+                          </div>
+                        ) : (
+                          <div className="w-full h-full bg-gradient-to-br from-white to-[hsl(253,100%,98%)] flex items-center justify-center">
+                            <div className="text-[hsl(253,60%,88%)] text-6xl">📄</div>
+                          </div>
+                        )}
+                        
+                        {/* Title overlay */}
+                        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 via-black/50 to-transparent p-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                          <p className="text-white text-sm font-bold text-center truncate drop-shadow-md">
+                            {template.name}
+                          </p>
+                        </div>
+                      </button>
+                    ))}
+                  </div>
+                </>
+              )}
             </TabsContent>
           </Tabs>
         </div>
