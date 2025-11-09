@@ -418,9 +418,7 @@ export const TextStylePanel = ({
           <button onClick={handleIndent} className="h-10 bg-white/20 hover:bg-white/30 text-white rounded-lg transition-colors flex items-center justify-center">
             <ChevronRight className="w-5 h-5" />
           </button>
-          <button className="h-10 bg-white/20 hover:bg-white/30 text-white rounded-lg transition-colors flex items-center justify-center">
-            <Indent className="w-4 h-4" />
-          </button>
+          
         </div>
       </div>
 
