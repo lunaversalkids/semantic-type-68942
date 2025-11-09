@@ -226,7 +226,7 @@ Insects are the largest group of arthropods. The evolution, their evolution, Mur
                 
                 <div className="grid grid-cols-4 gap-6">
                   {activeTab === 'Recents' ? (
-                    recentDocs.slice(0, 1).map((doc, index) => (
+                    recentDocs.map((doc, index) => (
                       <button
                         key={index}
                         onClick={() => handleOpenRecent(doc.id)}

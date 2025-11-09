@@ -502,7 +502,7 @@ const Editor = () => {
         onHomeClick={() => navigate('/home')}
         onFindClick={handleFind}
         onDocumentClick={() => setDocumentManagerOpen(true)}
-        onCloudClick={() => setDocumentManagerOpen(true)}
+        onCloudClick={() => navigate('/home')}
         onPenModeClick={handlePenMode}
         onStylusModeClick={handleStylusMode}
         onExportClick={() => setExportOpen(true)}
