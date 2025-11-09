@@ -212,6 +212,14 @@ button[data-active="true"] {
   font-weight: normal;
 }
 
+/* Subscript styling - matches superscript size */
+.ProseMirror sub {
+  font-size: 0.6em;
+  vertical-align: sub;
+  line-height: 0;
+  font-weight: normal;
+}
+
 .ProseMirror hr {
   border: none;
   border-top: 0.5px solid hsl(var(--border));
