@@ -20,7 +20,7 @@ export const TextStylePanel = ({
   const [textColor, setTextColor] = useState('#000000');
   const [isColorPickerOpen, setIsColorPickerOpen] = useState(false);
   const [formattingMode, setFormattingMode] = useState('Normal');
-  const formattingModes = ['Normal', 'Single Spacing', '1.15 Spacing', '1.5 Spacing', '2.5 Spacing', 'Double Sentence', 'Expanded Line', 'Hanging Indent'];
+  const formattingModes = ['Normal', 'Single Spacing', '1.15 Spacing', '1.5 Spacing', '2.5 Spacing', 'Hanging Indent'];
   const availableFonts = ['Graphik', 'Arial', 'Times New Roman', 'Georgia', 'Helvetica', 'Courier New', 'Verdana', 'Garamond', 'Palatino', 'Bookman', 'Comic Sans MS', 'Trebuchet MS', 'Impact', 'Lucida Console', 'Tahoma', 'Lucida Sans', 'Monaco', 'Gill Sans', 'Century Gothic', 'Franklin Gothic Medium', 'Cambria', 'Calibri', 'Consolas', 'Didot', 'Futura', 'Optima', 'Baskerville'];
   const handleFontChange = (font: string) => {
     setFontFamily(font);
@@ -123,23 +123,6 @@ export const TextStylePanel = ({
           lineHeight: '2.5',
           textIndent: '0px',
           marginBottom: '0px',
-          paddingLeft: '0px'
-        }).run();
-        break;
-      case 'Double Sentence':
-        // Extra spacing between paragraphs for sentence separation
-        editor.chain().focus().setParagraphAttributes({
-          textIndent: '0px',
-          marginBottom: '1.5em',
-          lineHeight: 'normal',
-          paddingLeft: '0px'
-        }).run();
-        break;
-      case 'Expanded Line':
-        // Increased line spacing for readability
-        editor.chain().focus().setParagraphAttributes({
-          lineHeight: '1.8',
-          textIndent: '0px',
           paddingLeft: '0px'
         }).run();
         break;
