@@ -78,7 +78,7 @@ export const Header = ({
 
         <button 
           onClick={onLayoutToggle} 
-          className="h-9 min-w-[36px] px-2.5 border border-[hsl(var(--stroke))] rounded-[var(--r-sm)] bg-white grid place-items-center hover:bg-[hsl(var(--panel-2))] transition-all" 
+          className="h-9 min-w-[36px] px-2.5 border border-[hsl(var(--stroke))] rounded-[var(--r-sm)] bg-transparent grid place-items-center hover:bg-[hsl(var(--panel-2))]/50 transition-all" 
           title={isDoublePageLayout ? "Switch to Single Page" : "Switch to Double Page"}
         >
           <img 
