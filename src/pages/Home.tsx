@@ -18,23 +18,10 @@ const Home = () => {
   useEffect(() => {
     // Load recent documents from localStorage
     const stored = localStorage.getItem('recentDocuments');
-    let docs: RecentDocument[] = [];
-    
     if (stored) {
-      docs = JSON.parse(stored) as RecentDocument[];
+      const docs = JSON.parse(stored) as RecentDocument[];
+      setRecentDocs(docs.sort((a, b) => b.lastOpened - a.lastOpened).slice(0, 4));
     }
-    
-    // Add default recent document if none exists
-    if (docs.length === 0) {
-      docs = [{
-        id: 'insects-document',
-        title: "What's over there?",
-        lastOpened: Date.now(),
-      }];
-      localStorage.setItem('recentDocuments', JSON.stringify(docs));
-    }
-    
-    setRecentDocs(docs.sort((a, b) => b.lastOpened - a.lastOpened).slice(0, 4));
   }, []);
 
   const handleStartWriting = () => {
@@ -126,40 +113,41 @@ const Home = () => {
           </div>
 
           <div className="grid grid-cols-4 gap-6 mb-8">
-            {/* Show recent docs first, then fill remaining slots with templates */}
-            {recentDocs.map((doc) => (
-              <button
-                key={doc.id}
-                onClick={() => handleOpenRecent(doc)}
-                className="group relative aspect-[3/4] rounded-2xl overflow-hidden border-4 border-[hsl(253,80%,85%)] hover:border-[hsl(253,100%,64%)] transition-all duration-300 hover:scale-105 hover:shadow-xl bg-white"
-              >
-                {doc.thumbnail ? (
-                  <img src={doc.thumbnail} alt={doc.title} className="w-full h-full object-cover" />
-                ) : (
-                  <div className="w-full h-full bg-gradient-to-br from-[hsl(253,100%,97%)] to-[hsl(260,100%,95%)]" />
-                )}
-                <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/60 to-transparent">
-                  <p className="text-white font-semibold text-center">{doc.title}</p>
-                </div>
-              </button>
-            ))}
-            {/* Fill remaining slots with templates */}
-            {templates.slice(0, 4 - recentDocs.length).map((template) => (
-              <button
-                key={template.name}
-                onClick={handleStartWriting}
-                className="group relative aspect-[3/4] rounded-2xl overflow-hidden border-4 border-[hsl(253,80%,85%)] hover:border-[hsl(253,100%,64%)] transition-all duration-300 hover:scale-105 hover:shadow-xl bg-white"
-              >
-                {template.thumbnail ? (
-                  <img src={template.thumbnail} alt={template.name} className="w-full h-full object-cover" />
-                ) : (
-                  <div className="w-full h-full bg-gradient-to-br from-[hsl(253,100%,97%)] to-[hsl(260,100%,95%)]" />
-                )}
-                <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/60 to-transparent">
-                  <p className="text-white font-semibold text-center">{template.name}</p>
-                </div>
-              </button>
-            ))}
+            {recentDocs.length > 0 ? (
+              recentDocs.map((doc) => (
+                <button
+                  key={doc.id}
+                  onClick={() => handleOpenRecent(doc)}
+                  className="group relative aspect-[3/4] rounded-2xl overflow-hidden border-4 border-[hsl(253,80%,85%)] hover:border-[hsl(253,100%,64%)] transition-all duration-300 hover:scale-105 hover:shadow-xl bg-white"
+                >
+                  {doc.thumbnail ? (
+                    <img src={doc.thumbnail} alt={doc.title} className="w-full h-full object-cover" />
+                  ) : (
+                    <div className="w-full h-full bg-gradient-to-br from-[hsl(253,100%,97%)] to-[hsl(260,100%,95%)]" />
+                  )}
+                  <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/60 to-transparent">
+                    <p className="text-white font-semibold text-center">{doc.title}</p>
+                  </div>
+                </button>
+              ))
+            ) : (
+              templates.map((template) => (
+                <button
+                  key={template.name}
+                  onClick={handleStartWriting}
+                  className="group relative aspect-[3/4] rounded-2xl overflow-hidden border-4 border-[hsl(253,80%,85%)] hover:border-[hsl(253,100%,64%)] transition-all duration-300 hover:scale-105 hover:shadow-xl bg-white"
+                >
+                  {template.thumbnail ? (
+                    <img src={template.thumbnail} alt={template.name} className="w-full h-full object-cover" />
+                  ) : (
+                    <div className="w-full h-full bg-gradient-to-br from-[hsl(253,100%,97%)] to-[hsl(260,100%,95%)]" />
+                  )}
+                  <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/60 to-transparent">
+                    <p className="text-white font-semibold text-center">{template.name}</p>
+                  </div>
+                </button>
+              ))
+            )}
           </div>
 
           <button className="flex items-center justify-between w-full text-left group">
