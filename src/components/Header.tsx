@@ -84,7 +84,7 @@ export const Header = ({
           <img 
             src={isDoublePageLayout ? doublePageIcon : singlePageIcon} 
             alt={isDoublePageLayout ? "Double page layout" : "Single page layout"} 
-            className="w-5 h-5 object-contain"
+            className="w-7 h-7 object-contain"
           />
         </button>
 
