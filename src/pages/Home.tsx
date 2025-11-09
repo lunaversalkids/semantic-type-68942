@@ -20,19 +20,41 @@ const Home = () => {
     const stored = localStorage.getItem('recentDocuments');
     if (stored) {
       const docs = JSON.parse(stored) as RecentDocument[];
-      // Ensure "Insects" document exists and is first
+      // Ensure "Insects" document exists and is first with default content
       const insectsDoc = docs.find(doc => doc.id === 'insects-document');
+      const defaultInsectsContent = `Insects
+
+Arthropods
+
+Insects are an ind-isub sclass units of the class Hexapoda – In from novellisms them from other arthropods by their three-part body, compound eyes, and external skeleton, in an abusant serza.
+
+Hexapoda
+
+Arthroprod soptrtrice Hexapoda
+
+Insects comprise the most diverse group of animals on Earth.
+
+Classification and Evolution
+
+Insects comprise the most diverse group of animals on Earth.
+
+Insects are the largest group of arthropods. The evolution, their evolution, Murninary endurseries, during the De-vonian period after thorough.`;
+      
       if (insectsDoc) {
-        insectsDoc.title = 'Insects'; // Update title if it exists
+        insectsDoc.title = 'Insects';
+        if (!insectsDoc.thumbnail) {
+          insectsDoc.thumbnail = defaultInsectsContent;
+        }
         const otherDocs = docs.filter(doc => doc.id !== 'insects-document');
         const sortedDocs = [insectsDoc, ...otherDocs.sort((a, b) => b.lastOpened - a.lastOpened)];
         localStorage.setItem('recentDocuments', JSON.stringify(sortedDocs));
         setRecentDocs(sortedDocs.slice(0, 4));
       } else {
-        // Add Insects document if it doesn't exist
+        // Add Insects document with default content
         const defaultDoc: RecentDocument = {
           id: 'insects-document',
           title: 'Insects',
+          thumbnail: defaultInsectsContent,
           lastOpened: Date.now()
         };
         const sortedDocs = [defaultDoc, ...docs.sort((a, b) => b.lastOpened - a.lastOpened)];
@@ -41,9 +63,28 @@ const Home = () => {
       }
     } else {
       // Initialize with default "Insects" document
+      const defaultInsectsContent = `Insects
+
+Arthropods
+
+Insects are an ind-isub sclass units of the class Hexapoda – In from novellisms them from other arthropods by their three-part body, compound eyes, and external skeleton, in an abusant serza.
+
+Hexapoda
+
+Arthroprod soptrtrice Hexapoda
+
+Insects comprise the most diverse group of animals on Earth.
+
+Classification and Evolution
+
+Insects comprise the most diverse group of animals on Earth.
+
+Insects are the largest group of arthropods. The evolution, their evolution, Murninary endurseries, during the De-vonian period after thorough.`;
+      
       const defaultDoc: RecentDocument = {
         id: 'insects-document',
         title: 'Insects',
+        thumbnail: defaultInsectsContent,
         lastOpened: Date.now()
       };
       localStorage.setItem('recentDocuments', JSON.stringify([defaultDoc]));
@@ -147,8 +188,8 @@ const Home = () => {
                 className="group relative aspect-[3/4] rounded-2xl overflow-hidden border-4 border-[hsl(253,80%,85%)] hover:border-[hsl(253,100%,64%)] transition-all duration-300 hover:scale-105 hover:shadow-xl bg-white"
               >
                 {doc.thumbnail ? (
-                  <div className="w-full h-full bg-white p-6 overflow-hidden">
-                    <div className="text-left text-sm leading-relaxed text-[hsl(253,47%,18%)] whitespace-pre-wrap font-serif">
+                  <div className="w-full h-full bg-white p-8 overflow-hidden flex flex-col">
+                    <div className="text-left text-base leading-relaxed text-[hsl(253,47%,18%)] whitespace-pre-line font-serif line-clamp-[20]">
                       {doc.thumbnail}
                     </div>
                   </div>
