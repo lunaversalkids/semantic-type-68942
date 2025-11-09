@@ -68,7 +68,7 @@ export const Header = ({
       </div>
 
       {/* Toolbar */}
-      <div className="flex justify-end gap-2 w-[340px]">
+      <div className="flex justify-end gap-2 w-[450px]">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <button className="h-9 w-9 border border-[hsl(var(--stroke))] rounded-[var(--r-sm)] grid place-items-center hover:bg-[hsl(var(--panel-2))] transition-colors overflow-hidden" title="Pen & Stylus">
