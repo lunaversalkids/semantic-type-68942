@@ -8,18 +8,6 @@ export const CustomParagraph = Node.create({
 
   addAttributes() {
     return {
-      textAlign: {
-        default: 'left',
-        parseHTML: element => element.style.textAlign || 'left',
-        renderHTML: attributes => {
-          if (!attributes.textAlign) {
-            return {};
-          }
-          return {
-            style: `text-align: ${attributes.textAlign}`,
-          };
-        },
-      },
       textIndent: {
         default: '0px',
         parseHTML: element => element.style.textIndent || '0px',
@@ -47,9 +35,6 @@ export const CustomParagraph = Node.create({
     // Build style string from custom attributes
     const styles: string[] = [];
     
-    if (HTMLAttributes.textAlign && HTMLAttributes.textAlign !== 'left') {
-      styles.push(`text-align: ${HTMLAttributes.textAlign}`);
-    }
     if (HTMLAttributes.textIndent && HTMLAttributes.textIndent !== '0px') {
       styles.push(`text-indent: ${HTMLAttributes.textIndent}`);
     }
@@ -68,7 +53,6 @@ export const CustomParagraph = Node.create({
     
     // Clean up - remove custom attributes so they don't appear as HTML attributes
     const finalAttrs: any = { ...attrs };
-    delete finalAttrs.textAlign;
     delete finalAttrs.textIndent;
     delete finalAttrs.marginBottom;
     delete finalAttrs.lineHeight;
