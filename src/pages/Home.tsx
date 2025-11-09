@@ -147,7 +147,11 @@ const Home = () => {
                 className="group relative aspect-[3/4] rounded-2xl overflow-hidden border-4 border-[hsl(253,80%,85%)] hover:border-[hsl(253,100%,64%)] transition-all duration-300 hover:scale-105 hover:shadow-xl bg-white"
               >
                 {doc.thumbnail ? (
-                  <img src={doc.thumbnail} alt={doc.title} className="w-full h-full object-cover" />
+                  <div className="w-full h-full bg-white p-6 overflow-hidden">
+                    <div className="text-left text-sm leading-relaxed text-[hsl(253,47%,18%)] whitespace-pre-wrap font-serif">
+                      {doc.thumbnail}
+                    </div>
+                  </div>
                 ) : (
                   <div className="w-full h-full bg-gradient-to-br from-[hsl(253,100%,97%)] to-[hsl(260,100%,95%)] flex items-center justify-center">
                     <span className="text-6xl text-[hsl(253,100%,64%)]">📄</span>

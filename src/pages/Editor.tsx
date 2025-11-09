@@ -66,6 +66,10 @@ const Editor = () => {
       // Get the first heading from the editor as the title
       const title = editor?.getText().split('\n')[0] || 'Insects';
       
+      // Get first page preview content (first 500 characters of text)
+      const fullText = editor?.getText() || '';
+      const previewText = fullText.slice(0, 500);
+      
       const existingIndex = recentDocs.findIndex((doc: any) => doc.id === docId);
       
       if (existingIndex >= 0) {
@@ -74,6 +78,7 @@ const Editor = () => {
           ...recentDocs[existingIndex],
           lastOpened: Date.now(),
           title,
+          thumbnail: previewText,
         };
       } else {
         // Add new document
@@ -81,6 +86,7 @@ const Editor = () => {
           id: docId,
           title,
           lastOpened: Date.now(),
+          thumbnail: previewText,
         });
       }
       
