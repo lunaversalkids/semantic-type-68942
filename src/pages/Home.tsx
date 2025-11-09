@@ -20,7 +20,25 @@ const Home = () => {
     const stored = localStorage.getItem('recentDocuments');
     if (stored) {
       const docs = JSON.parse(stored) as RecentDocument[];
-      setRecentDocs(docs.sort((a, b) => b.lastOpened - a.lastOpened).slice(0, 4));
+      // Ensure "Insects" document exists and is first
+      const insectsDoc = docs.find(doc => doc.id === 'insects-document');
+      if (insectsDoc) {
+        insectsDoc.title = 'Insects'; // Update title if it exists
+        const otherDocs = docs.filter(doc => doc.id !== 'insects-document');
+        const sortedDocs = [insectsDoc, ...otherDocs.sort((a, b) => b.lastOpened - a.lastOpened)];
+        localStorage.setItem('recentDocuments', JSON.stringify(sortedDocs));
+        setRecentDocs(sortedDocs.slice(0, 4));
+      } else {
+        // Add Insects document if it doesn't exist
+        const defaultDoc: RecentDocument = {
+          id: 'insects-document',
+          title: 'Insects',
+          lastOpened: Date.now()
+        };
+        const sortedDocs = [defaultDoc, ...docs.sort((a, b) => b.lastOpened - a.lastOpened)];
+        localStorage.setItem('recentDocuments', JSON.stringify(sortedDocs));
+        setRecentDocs(sortedDocs.slice(0, 4));
+      }
     } else {
       // Initialize with default "Insects" document
       const defaultDoc: RecentDocument = {
