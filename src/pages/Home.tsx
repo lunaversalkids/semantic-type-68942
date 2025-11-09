@@ -153,7 +153,7 @@ Insects are the largest group of arthropods. The evolution, their evolution, Mur
           </div>
 
           {/* App title */}
-          <div className="flex flex-col items-center space-y-3 -mt-8">
+          <div className="flex flex-col items-center space-y-3 -mt-16">
             <h1 
               className="text-[5.5rem] font-extrabold tracking-tight leading-none" 
               style={{ 
