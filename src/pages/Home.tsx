@@ -135,7 +135,7 @@ Insects are the largest group of arthropods. The evolution, their evolution, Mur
       {/* Top left icon - sparkles */}
       <div className="absolute top-8 left-8">
         <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-white/80 to-[hsl(253,100%,95%)] flex items-center justify-center border-2 border-[hsl(253,80%,85%)] shadow-[0_4px_24px_hsl(253,100%,64%,0.2)]">
-          <img src={sparklesIcon} alt="Sparkles" className="w-11 h-11" />
+          <img src={sparklesIcon} alt="Sparkles" className="w-full h-full p-1" />
         </div>
       </div>
 
