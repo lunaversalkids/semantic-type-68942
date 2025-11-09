@@ -5,10 +5,14 @@ import { Button } from '@/components/ui/button';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import capitalizeIcon from '@/assets/capitalize-icon.jpg';
-import baselineIcon from '@/assets/baseline-icon.jpg';
+import baselineNormalIcon from '@/assets/baseline-normal-icon.jpg';
+import baselineSuperscriptIcon from '@/assets/baseline-superscript-icon.png';
+import baselineSubscriptIcon from '@/assets/baseline-subscript-icon.png';
 interface TextStylePanelProps {
   editor?: any;
 }
+type BaselineMode = 'normal' | 'superscript' | 'subscript';
+
 export const TextStylePanel = ({
   editor
 }: TextStylePanelProps) => {
@@ -20,6 +24,7 @@ export const TextStylePanel = ({
   const [textColor, setTextColor] = useState('#000000');
   const [isColorPickerOpen, setIsColorPickerOpen] = useState(false);
   const [formattingMode, setFormattingMode] = useState('Normal');
+  const [baselineMode, setBaselineMode] = useState<BaselineMode>('normal');
   const formattingModes = ['Normal', 'Single Spacing', '1.15 Spacing', '1.5 Spacing', '2.5 Spacing', 'Hanging Indent'];
   const availableFonts = ['Graphik', 'Arial', 'Times New Roman', 'Georgia', 'Helvetica', 'Courier New', 'Verdana', 'Garamond', 'Palatino', 'Bookman', 'Comic Sans MS', 'Trebuchet MS', 'Impact', 'Lucida Console', 'Tahoma', 'Lucida Sans', 'Monaco', 'Gill Sans', 'Century Gothic', 'Franklin Gothic Medium', 'Cambria', 'Calibri', 'Consolas', 'Didot', 'Futura', 'Optima', 'Baskerville'];
   const handleFontChange = (font: string) => {
@@ -92,6 +97,25 @@ export const TextStylePanel = ({
   const handleTab = () => {
     if (!editor) return;
     editor.chain().focus().insertContent('\t').run();
+  };
+
+  const handleBaselineCycle = () => {
+    if (!editor) return;
+    
+    if (baselineMode === 'normal') {
+      // Activate superscript
+      editor.chain().focus().toggleSuperscript().run();
+      setBaselineMode('superscript');
+    } else if (baselineMode === 'superscript') {
+      // Deactivate superscript and activate subscript
+      editor.chain().focus().toggleSuperscript().run();
+      editor.chain().focus().toggleSubscript().run();
+      setBaselineMode('subscript');
+    } else {
+      // Deactivate subscript and return to normal
+      editor.chain().focus().toggleSubscript().run();
+      setBaselineMode('normal');
+    }
   };
 
   const handleFormattingMode = (mode: string) => {
@@ -370,8 +394,25 @@ export const TextStylePanel = ({
           <button className="flex-1 h-12 bg-white hover:bg-gray-50 rounded-lg border border-gray-200 transition-colors flex items-center justify-center p-2">
             <img src={capitalizeIcon} alt="Capitalize" className="w-7 h-7 object-contain" />
           </button>
-          <button className="flex-1 h-12 bg-white hover:bg-gray-50 rounded-lg border border-gray-200 transition-colors flex items-center justify-center p-2">
-            <img src={baselineIcon} alt="Baseline" className="w-7 h-7 object-contain" />
+          <button 
+            onClick={handleBaselineCycle}
+            className={`flex-1 h-12 rounded-lg border transition-all flex items-center justify-center p-2 ${
+              baselineMode !== 'normal' 
+                ? 'bg-[#8B5CF6] border-[#8B5CF6] shadow-[0_0_12px_rgba(139,92,246,0.6)]' 
+                : 'bg-white hover:bg-gray-50 border-gray-200'
+            }`}
+          >
+            <img 
+              src={
+                baselineMode === 'superscript' 
+                  ? baselineSuperscriptIcon 
+                  : baselineMode === 'subscript' 
+                  ? baselineSubscriptIcon 
+                  : baselineNormalIcon
+              } 
+              alt="Baseline" 
+              className={`w-7 h-7 object-contain ${baselineMode !== 'normal' ? 'invert brightness-0' : ''}`}
+            />
           </button>
         </div>
       </div>
