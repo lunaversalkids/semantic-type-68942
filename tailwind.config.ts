@@ -13,9 +13,6 @@ export default {
       },
     },
     extend: {
-      fontFamily: {
-        'poppins': ['Poppins', 'SF Pro Display', 'sans-serif'],
-      },
       gridTemplateColumns: {
         '16': 'repeat(16, minmax(0, 1fr))',
       },
@@ -99,22 +96,11 @@ export default {
             boxShadow: "0 0 30px hsl(253 100% 64% / 0.6)",
           },
         },
-        "pulse-arrow": {
-          "0%, 100%": {
-            transform: "translateY(0)",
-            opacity: "1",
-          },
-          "50%": {
-            transform: "translateY(5px)",
-            opacity: "0.7",
-          },
-        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
         "glow-pulse": "glow-pulse 2s ease-in-out infinite",
-        "pulse-arrow": "pulse-arrow 2.5s ease-in-out infinite",
       },
     },
   },
