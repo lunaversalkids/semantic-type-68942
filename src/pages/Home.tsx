@@ -157,11 +157,12 @@ Insects are the largest group of arthropods. The evolution, their evolution, Mur
             <h1 
               className="text-[5.5rem] font-extrabold tracking-tight leading-none" 
               style={{ 
-                fontFamily: 'system-ui, -apple-system, "Segoe UI", sans-serif',
+                fontFamily: 'system-ui, -apple-system, "Segoe UI", Roboto, sans-serif',
                 color: '#3730a3',
-                WebkitTextStroke: '2px white',
+                WebkitTextStroke: '3px white',
                 paintOrder: 'stroke fill',
-                textShadow: '0 2px 8px hsl(253 100% 64% / 0.1)'
+                textShadow: '0 4px 12px hsl(253 100% 64% / 0.15)',
+                fontWeight: '900'
               }}
             >
               Doc One
