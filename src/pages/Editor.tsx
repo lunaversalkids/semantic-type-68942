@@ -63,8 +63,16 @@ const Editor = () => {
       const stored = localStorage.getItem('recentDocuments');
       const recentDocs = stored ? JSON.parse(stored) : [];
       
-      // Get the first heading from the editor as the title
-      const title = editor?.getText().split('\n')[0] || 'Insects';
+      // Get the first heading from the editor as the title, default based on docId
+      let title = 'Untitled Document';
+      if (docId === 'insects-document') {
+        title = "What's over there?";
+      } else if (editor) {
+        const text = editor.getText().split('\n')[0];
+        if (text && text.trim().length > 0) {
+          title = text.trim();
+        }
+      }
       
       const existingIndex = recentDocs.findIndex((doc: any) => doc.id === docId);
       
@@ -90,7 +98,9 @@ const Editor = () => {
     };
 
     // Update on mount
-    updateRecentDocuments();
+    if (docId) {
+      updateRecentDocuments();
+    }
 
     // Update when editor content changes
     if (editor) {
