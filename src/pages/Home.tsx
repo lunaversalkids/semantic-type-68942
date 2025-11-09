@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import infinityLogo from '@/assets/infinity-logo.png';
+import sparklesIcon from '@/assets/sparkles-icon.png';
 
 interface RecentDocument {
   id: string;
@@ -134,9 +135,7 @@ Insects are the largest group of arthropods. The evolution, their evolution, Mur
       {/* Top left icon - sparkles */}
       <div className="absolute top-8 left-8">
         <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-white/80 to-[hsl(253,100%,95%)] flex items-center justify-center border-2 border-[hsl(253,80%,85%)] shadow-[0_4px_24px_hsl(253,100%,64%,0.2)]">
-          <svg className="w-7 h-7 text-[hsl(253,100%,64%)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 3l14 9-14 9V3z" />
-          </svg>
+          <img src={sparklesIcon} alt="Sparkles" className="w-7 h-7" />
         </div>
       </div>
 
