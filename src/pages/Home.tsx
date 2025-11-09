@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
+import infinityLogo from '@/assets/infinity-logo.jpg';
 
 interface RecentDocument {
   id: string;
@@ -141,24 +142,11 @@ Insects are the largest group of arthropods. The evolution, their evolution, Mur
         <div className="flex flex-col items-center space-y-8">
           {/* Infinity logo */}
           <div className="relative w-56 h-56 flex items-center justify-center">
-            {/* Purple gradient sphere */}
-            <div className="absolute w-full h-full rounded-full bg-gradient-radial from-[hsl(253,80%,75%)] via-[hsl(253,85%,65%)] to-[hsl(253,90%,55%)] shadow-[0_8px_32px_hsl(253,90%,50%,0.4),0_16px_64px_hsl(253,90%,50%,0.3),inset_0_-20px_40px_hsl(253,90%,45%,0.3),inset_0_20px_40px_hsl(253,80%,85%,0.4)]"></div>
-            
-            {/* White infinity symbol on top */}
-            <svg 
-              viewBox="0 0 200 100" 
-              className="relative z-10 w-40 h-20"
-              fill="none"
-              stroke="white"
-              strokeWidth="12"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <path d="M50,50 C50,30 40,20 25,20 C10,20 0,30 0,50 C0,70 10,80 25,80 C40,80 50,70 50,50 M50,50 C50,30 60,20 75,20 C90,20 100,30 100,50 C100,70 90,80 75,80 C60,80 50,70 50,50" 
-                    transform="translate(50, 0)" 
-                    filter="drop-shadow(0 2px 8px rgba(255,255,255,0.5))"/>
-            </svg>
-            
+            <img 
+              src={infinityLogo}
+              alt="Doc One Infinity Logo" 
+              className="w-56 h-56 object-contain"
+            />
             {/* Outer glow */}
             <div className="absolute inset-0 rounded-full bg-[hsl(253,100%,64%)] opacity-30 blur-3xl animate-glow-pulse"></div>
           </div>
