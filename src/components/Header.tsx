@@ -9,6 +9,8 @@ import cloudIcon from '@/assets/cloud-icon.png';
 import singlePageIcon from '@/assets/single-page-icon.png';
 import doublePageIcon from '@/assets/double-page-icon.png';
 import importExportIcon from '@/assets/import-export-icon.png';
+import pageSizerIcon from '@/assets/page-sizer-icon.png';
+import headerFooterIcon from '@/assets/header-footer-icon.png';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 interface HeaderProps {
   onFindClick?: () => void;
@@ -16,6 +18,8 @@ interface HeaderProps {
   onCloudClick?: () => void;
   onPenModeClick?: () => void;
   onStylusModeClick?: () => void;
+  onPageSizerClick?: () => void;
+  onHeaderFooterClick?: () => void;
   onQuotationClick?: () => void;
   onTextFrameClick?: () => void;
   onPaletteClick?: () => void;
@@ -33,6 +37,8 @@ export const Header = ({
   onCloudClick,
   onPenModeClick,
   onStylusModeClick,
+  onPageSizerClick,
+  onHeaderFooterClick,
   onQuotationClick,
   onTextFrameClick,
   onPaletteClick,
@@ -80,6 +86,14 @@ export const Header = ({
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
+
+        <button onClick={onPageSizerClick} className="h-9 w-9 border border-[hsl(var(--stroke))] rounded-[var(--r-sm)] grid place-items-center hover:bg-[hsl(var(--panel-2))] transition-colors overflow-hidden" title="Page Sizer">
+          <img src={pageSizerIcon} alt="" className="w-full h-full object-cover" />
+        </button>
+
+        <button onClick={onHeaderFooterClick} className="h-9 w-9 border border-[hsl(var(--stroke))] rounded-[var(--r-sm)] grid place-items-center hover:bg-[hsl(var(--panel-2))] transition-colors overflow-hidden" title="Header & Footer">
+          <img src={headerFooterIcon} alt="" className="w-full h-full object-cover" />
+        </button>
 
         <button onClick={onQuotationClick} className="h-9 w-9 border border-[hsl(var(--stroke))] rounded-[var(--r-sm)] grid place-items-center hover:bg-[hsl(var(--panel-2))] transition-colors overflow-hidden" title="Quotation">
           <img src={quotationIcon} alt="" className="w-full h-full object-cover" />
