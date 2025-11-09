@@ -1,6 +1,7 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
+import { ArrowLeft } from 'lucide-react';
 import infinityLogo from '@/assets/infinity-logo.png';
 import sparklesIcon from '@/assets/sparkles-icon.png';
 
@@ -13,6 +14,8 @@ interface RecentDocument {
 
 const Home = () => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const fromEditor = searchParams.get('from') === 'editor';
   const [recentDocs, setRecentDocs] = useState<RecentDocument[]>([]);
   const [activeTab, setActiveTab] = useState('Recents');
   const [isTemplatesExpanded, setIsTemplatesExpanded] = useState(false);
@@ -132,12 +135,25 @@ Insects are the largest group of arthropods. The evolution, their evolution, Mur
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center p-8 relative overflow-hidden">
-      {/* Top left icon - sparkles */}
-      <div className="absolute top-8 left-8">
-        <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-white/80 to-[hsl(253,100%,95%)] flex items-center justify-center border-2 border-[hsl(253,80%,85%)] shadow-[0_4px_24px_hsl(253,100%,64%,0.2)]">
-          <img src={sparklesIcon} alt="Sparkles" className="w-full h-full p-1" />
+      {/* Back button - only show when coming from editor */}
+      {fromEditor && (
+        <button
+          onClick={() => navigate(-1)}
+          className="absolute top-8 left-8 flex items-center gap-2 px-4 py-2 bg-white/80 hover:bg-white border-2 border-[hsl(253,80%,85%)] rounded-full shadow-lg hover:shadow-xl transition-all duration-200 text-[hsl(253,47%,18%)] font-semibold"
+        >
+          <ArrowLeft className="w-5 h-5" />
+          Back to Editor
+        </button>
+      )}
+      
+      {/* Top left icon - sparkles - only show when NOT from editor */}
+      {!fromEditor && (
+        <div className="absolute top-8 left-8">
+          <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-white/80 to-[hsl(253,100%,95%)] flex items-center justify-center border-2 border-[hsl(253,80%,85%)] shadow-[0_4px_24px_hsl(253,100%,64%,0.2)]">
+            <img src={sparklesIcon} alt="Sparkles" className="w-full h-full p-1" />
+          </div>
         </div>
-      </div>
+      )}
 
       {/* Main content */}
       <div className="flex flex-col items-center space-y-12 max-w-5xl w-full">
@@ -201,10 +217,38 @@ Insects are the largest group of arthropods. The evolution, their evolution, Mur
           </svg>
         </div>
 
-        {/* Templates section */}
+        {/* Templates section or Recent documents only */}
         <div className="w-full bg-gradient-to-br from-white/70 via-[hsl(253,100%,98%)] to-[hsl(253,100%,96%)] rounded-[28px] p-10 shadow-[0_0_60px_hsl(253,100%,64%,0.25),0_8px_48px_hsl(253,100%,64%,0.15),inset_0_1px_0_white] border-2 border-[hsl(253,80%,90%)] backdrop-blur-xl">
-          {/* Tabs */}
-          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+          {fromEditor ? (
+            // Simple recent documents view when coming from editor
+            <div className="space-y-6">
+              <h2 className="text-3xl font-bold text-[hsl(253,47%,18%)]">Recent Documents</h2>
+              <div className="grid grid-cols-4 gap-6">
+                {recentDocs.map((doc, index) => (
+                  <button
+                    key={index}
+                    onClick={() => handleOpenRecent(doc.id)}
+                    className="group relative aspect-[3/4] rounded-[22px] overflow-hidden border-[3px] border-[hsl(253,80%,88%)] hover:border-[hsl(253,100%,64%)] transition-all duration-300 hover:scale-105 shadow-[0_0_20px_hsl(253,100%,64%,0.12)] hover:shadow-[0_0_40px_hsl(253,100%,64%,0.35),0_12px_40px_hsl(253,100%,64%,0.3)]"
+                  >
+                    <div className="w-full h-full bg-white p-8 overflow-hidden flex flex-col">
+                      <div className="text-left text-[15px] leading-relaxed text-[hsl(253,47%,18%)] whitespace-pre-line font-serif line-clamp-[20]">
+                        {doc.thumbnail}
+                      </div>
+                    </div>
+                    
+                    {/* Title overlay */}
+                    <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 via-black/50 to-transparent p-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                      <p className="text-white text-sm font-bold text-center truncate drop-shadow-md">
+                        {doc.title}
+                      </p>
+                    </div>
+                  </button>
+                ))}
+              </div>
+            </div>
+          ) : (
+            // Full templates view with tabs
+            <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
             <TabsList className="w-full justify-start mb-8 bg-transparent gap-3 h-auto p-0">
               {tabs.map((tab) => (
                 <TabsTrigger
@@ -391,6 +435,7 @@ Insects are the largest group of arthropods. The evolution, their evolution, Mur
               )}
             </TabsContent>
           </Tabs>
+          )}
         </div>
       </div>
     </div>
