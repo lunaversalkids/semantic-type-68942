@@ -13,6 +13,7 @@ import pageSizerIcon from '@/assets/page-sizer-icon.png';
 import headerFooterIcon from '@/assets/header-footer-icon.png';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 interface HeaderProps {
+  onHomeClick?: () => void;
   onFindClick?: () => void;
   onDocumentClick?: () => void;
   onCloudClick?: () => void;
@@ -32,6 +33,7 @@ interface HeaderProps {
   isDoublePageLayout?: boolean;
 }
 export const Header = ({
+  onHomeClick,
   onFindClick,
   onDocumentClick,
   onCloudClick,
@@ -56,7 +58,9 @@ export const Header = ({
         <button onClick={onPageViewerClick} className={`transition-all hover:opacity-80 ${pageViewerOpen ? 'shadow-lg ring-2 ring-[#8D60FF]/50 rounded-full' : ''}`}>
           <img src={newInfinityButton} alt="" className="w-10 h-10" />
         </button>
-        <div className="text-[hsl(var(--ink))]">Doc One</div>
+        <button onClick={onHomeClick} className="text-[hsl(var(--ink))] hover:text-[hsl(var(--accent))] transition-colors">
+          Doc One
+        </button>
       </div>
 
       {/* Title - Centered */}
