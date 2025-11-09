@@ -20,7 +20,7 @@ export const TextStylePanel = ({
   const [textColor, setTextColor] = useState('#000000');
   const [isColorPickerOpen, setIsColorPickerOpen] = useState(false);
   const [formattingMode, setFormattingMode] = useState('Normal');
-  const formattingModes = ['Normal', 'Single Spacing', '1.15 Spacing', '1.5 Spacing', 'Double Spacing', '2.5 Spacing', 'Double Sentence', 'Indented', 'No Indent (Block)', 'Left-Aligned Header', 'Centered Header', 'Expanded Line', 'Justified', 'Hanging Indent'];
+  const formattingModes = ['Normal', 'Single Spacing', '1.15 Spacing', '1.5 Spacing', '2.5 Spacing', 'Double Sentence', 'Expanded Line', 'Hanging Indent'];
   const availableFonts = ['Graphik', 'Arial', 'Times New Roman', 'Georgia', 'Helvetica', 'Courier New', 'Verdana', 'Garamond', 'Palatino', 'Bookman', 'Comic Sans MS', 'Trebuchet MS', 'Impact', 'Lucida Console', 'Tahoma', 'Lucida Sans', 'Monaco', 'Gill Sans', 'Century Gothic', 'Franklin Gothic Medium', 'Cambria', 'Calibri', 'Consolas', 'Didot', 'Futura', 'Optima', 'Baskerville'];
   const handleFontChange = (font: string) => {
     setFontFamily(font);
@@ -118,14 +118,6 @@ export const TextStylePanel = ({
           paddingLeft: '0px'
         }).run();
         break;
-      case 'Double Spacing':
-        editor.chain().focus().setParagraphAttributes({
-          lineHeight: '2',
-          textIndent: '0px',
-          marginBottom: '0px',
-          paddingLeft: '0px'
-        }).run();
-        break;
       case '2.5 Spacing':
         editor.chain().focus().setParagraphAttributes({
           lineHeight: '2.5',
@@ -143,52 +135,10 @@ export const TextStylePanel = ({
           paddingLeft: '0px'
         }).run();
         break;
-      case 'Indented':
-        // First line indent for each paragraph
-        editor.chain().focus().setParagraphAttributes({
-          textIndent: '2em',
-          marginBottom: '0px',
-          lineHeight: 'normal',
-          paddingLeft: '0px'
-        }).run();
-        break;
-      case 'No Indent (Block)':
-        // No indentation, spacing between paragraphs
-        editor.chain().focus().setParagraphAttributes({
-          textIndent: '0px',
-          marginBottom: '1em',
-          lineHeight: 'normal',
-          paddingLeft: '0px'
-        }).run();
-        break;
-      case 'Left-Aligned Header':
-        // Only affects headers - keeps them left-aligned
-        ['heading', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'].forEach(nodeType => {
-          if (editor.isActive(nodeType)) {
-            editor.chain().focus().setTextAlign('left').run();
-          }
-        });
-        break;
-      case 'Centered Header':
-        // Only affects headers - centers them
-        ['heading', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'].forEach(nodeType => {
-          if (editor.isActive(nodeType)) {
-            editor.chain().focus().setTextAlign('center').run();
-          }
-        });
-        break;
       case 'Expanded Line':
         // Increased line spacing for readability
         editor.chain().focus().setParagraphAttributes({
           lineHeight: '1.8',
-          textIndent: '0px',
-          paddingLeft: '0px'
-        }).run();
-        break;
-      case 'Justified':
-        // Even alignment on both margins
-        editor.chain().focus().setTextAlign('justify').run();
-        editor.chain().focus().setParagraphAttributes({
           textIndent: '0px',
           paddingLeft: '0px'
         }).run();
