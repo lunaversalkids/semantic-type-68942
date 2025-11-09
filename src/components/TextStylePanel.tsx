@@ -441,10 +441,10 @@ export const TextStylePanel = ({
             S
           </button>
           <button className="flex-1 h-12 bg-white hover:bg-gray-50 rounded-lg border border-gray-200 transition-colors flex items-center justify-center p-2">
-            <img src={capitalizeIcon} alt="Capitalize" className="w-5 h-5 object-contain" />
+            <img src={capitalizeIcon} alt="Capitalize" className="w-7 h-7 object-contain" />
           </button>
           <button className="flex-1 h-12 bg-white hover:bg-gray-50 rounded-lg border border-gray-200 transition-colors flex items-center justify-center p-2">
-            <img src={baselineIcon} alt="Baseline" className="w-5 h-5 object-contain" />
+            <img src={baselineIcon} alt="Baseline" className="w-7 h-7 object-contain" />
           </button>
         </div>
       </div>
