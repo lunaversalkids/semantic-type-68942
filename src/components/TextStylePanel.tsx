@@ -20,9 +20,7 @@ export const TextStylePanel = ({
   const [textColor, setTextColor] = useState('#000000');
   const [isColorPickerOpen, setIsColorPickerOpen] = useState(false);
   const [formattingMode, setFormattingMode] = useState('Normal');
-  const [isParagraphSpacingActive, setIsParagraphSpacingActive] = useState(false);
-  const [lineHeight, setLineHeight] = useState('1.5');
-  const formattingModes = ['Normal', 'Double Sentence', 'Indented', 'No Indent (Block)', 'Left-Aligned Header', 'Centered Header', 'Expanded Line', 'Justified', 'Hanging Indent'];
+  const formattingModes = ['Normal', 'Single Spacing', '1.15 Spacing', '1.5 Spacing', 'Double Spacing', '2.5 Spacing', 'Double Sentence', 'Indented', 'No Indent (Block)', 'Left-Aligned Header', 'Centered Header', 'Expanded Line', 'Justified', 'Hanging Indent'];
   const availableFonts = ['Graphik', 'Arial', 'Times New Roman', 'Georgia', 'Helvetica', 'Courier New', 'Verdana', 'Garamond', 'Palatino', 'Bookman', 'Comic Sans MS', 'Trebuchet MS', 'Impact', 'Lucida Console', 'Tahoma', 'Lucida Sans', 'Monaco', 'Gill Sans', 'Century Gothic', 'Franklin Gothic Medium', 'Cambria', 'Calibri', 'Consolas', 'Didot', 'Futura', 'Optima', 'Baskerville'];
   const handleFontChange = (font: string) => {
     setFontFamily(font);
@@ -82,18 +80,6 @@ export const TextStylePanel = ({
     editor.chain().focus().insertContent('\t').run();
   };
 
-  const handleParagraphSpacing = (spacing?: string) => {
-    if (!editor) return;
-    
-    if (spacing) {
-      setLineHeight(spacing);
-      editor.chain().focus().updateAttributes('paragraph', {
-        lineHeight: spacing
-      }).run();
-    } else {
-      setIsParagraphSpacingActive(!isParagraphSpacingActive);
-    }
-  };
   const handleFormattingMode = (mode: string) => {
     if (!editor) return;
     setFormattingMode(mode);
@@ -107,6 +93,46 @@ export const TextStylePanel = ({
           paddingLeft: '0px'
         }).run();
         editor.chain().focus().setTextAlign('left').run();
+        break;
+      case 'Single Spacing':
+        editor.chain().focus().setParagraphAttributes({
+          lineHeight: '1',
+          textIndent: '0px',
+          marginBottom: '0px',
+          paddingLeft: '0px'
+        }).run();
+        break;
+      case '1.15 Spacing':
+        editor.chain().focus().setParagraphAttributes({
+          lineHeight: '1.15',
+          textIndent: '0px',
+          marginBottom: '0px',
+          paddingLeft: '0px'
+        }).run();
+        break;
+      case '1.5 Spacing':
+        editor.chain().focus().setParagraphAttributes({
+          lineHeight: '1.5',
+          textIndent: '0px',
+          marginBottom: '0px',
+          paddingLeft: '0px'
+        }).run();
+        break;
+      case 'Double Spacing':
+        editor.chain().focus().setParagraphAttributes({
+          lineHeight: '2',
+          textIndent: '0px',
+          marginBottom: '0px',
+          paddingLeft: '0px'
+        }).run();
+        break;
+      case '2.5 Spacing':
+        editor.chain().focus().setParagraphAttributes({
+          lineHeight: '2.5',
+          textIndent: '0px',
+          marginBottom: '0px',
+          paddingLeft: '0px'
+        }).run();
         break;
       case 'Double Sentence':
         // Extra spacing between paragraphs for sentence separation
@@ -419,63 +445,6 @@ export const TextStylePanel = ({
           <button onClick={() => handleAlign('justify')} className="h-10 bg-white/20 hover:bg-white/30 text-white rounded-lg transition-colors flex items-center justify-center">
             <AlignJustify className="w-5 h-5" />
           </button>
-        </div>
-
-        {/* Middle row - Paragraph spacing with dropdown */}
-        <div className="flex gap-2">
-          <Popover>
-            <PopoverTrigger asChild>
-              <button 
-                onClick={() => handleParagraphSpacing()}
-                className={`flex-1 h-10 rounded-lg transition-colors flex items-center justify-center gap-2 ${
-                  isParagraphSpacingActive 
-                    ? 'bg-[#8B5CF6] hover:bg-[#7C3AED] text-white' 
-                    : 'bg-white/20 hover:bg-white/30 text-white'
-                }`}
-              >
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <line x1="4" y1="6" x2="20" y2="6"/>
-                  <line x1="4" y1="12" x2="20" y2="12"/>
-                  <line x1="4" y1="18" x2="20" y2="18"/>
-                </svg>
-                <span className="text-xs font-medium">{lineHeight}</span>
-              </button>
-            </PopoverTrigger>
-            <PopoverContent className="w-40 p-2" align="start">
-              <div className="space-y-1">
-                <button
-                  onClick={() => handleParagraphSpacing('1')}
-                  className="w-full text-left px-3 py-2 text-sm rounded hover:bg-gray-100 flex items-center justify-between"
-                >
-                  Single {lineHeight === '1' && <Check className="w-4 h-4" />}
-                </button>
-                <button
-                  onClick={() => handleParagraphSpacing('1.15')}
-                  className="w-full text-left px-3 py-2 text-sm rounded hover:bg-gray-100 flex items-center justify-between"
-                >
-                  1.15 {lineHeight === '1.15' && <Check className="w-4 h-4" />}
-                </button>
-                <button
-                  onClick={() => handleParagraphSpacing('1.5')}
-                  className="w-full text-left px-3 py-2 text-sm rounded hover:bg-gray-100 flex items-center justify-between"
-                >
-                  1.5 {lineHeight === '1.5' && <Check className="w-4 h-4" />}
-                </button>
-                <button
-                  onClick={() => handleParagraphSpacing('2')}
-                  className="w-full text-left px-3 py-2 text-sm rounded hover:bg-gray-100 flex items-center justify-between"
-                >
-                  Double {lineHeight === '2' && <Check className="w-4 h-4" />}
-                </button>
-                <button
-                  onClick={() => handleParagraphSpacing('2.5')}
-                  className="w-full text-left px-3 py-2 text-sm rounded hover:bg-gray-100 flex items-center justify-between"
-                >
-                  2.5 {lineHeight === '2.5' && <Check className="w-4 h-4" />}
-                </button>
-              </div>
-            </PopoverContent>
-          </Popover>
         </div>
 
         {/* Bottom row - Tab and indent buttons */}
