@@ -72,19 +72,19 @@ export const TextStylePanel = ({
   };
   const handleIndent = () => {
     if (!editor) return;
-    const currentIndent = editor.getAttributes('paragraph').textIndent || '0px';
-    const currentValue = parseInt(currentIndent) || 0;
-    editor.chain().focus().updateAttributes('paragraph', {
-      textIndent: `${currentValue + 30}px`
+    const currentPadding = editor.getAttributes('paragraph').paddingLeft || '0px';
+    const currentValue = parseInt(currentPadding) || 0;
+    editor.chain().focus().setParagraphAttributes({
+      paddingLeft: `${currentValue + 30}px`
     }).run();
   };
   const handleOutdent = () => {
     if (!editor) return;
-    const currentIndent = editor.getAttributes('paragraph').textIndent || '0px';
-    const currentValue = parseInt(currentIndent) || 0;
+    const currentPadding = editor.getAttributes('paragraph').paddingLeft || '0px';
+    const currentValue = parseInt(currentPadding) || 0;
     if (currentValue > 0) {
-      editor.chain().focus().updateAttributes('paragraph', {
-        textIndent: `${Math.max(0, currentValue - 30)}px`
+      editor.chain().focus().setParagraphAttributes({
+        paddingLeft: `${Math.max(0, currentValue - 30)}px`
       }).run();
     }
   };
