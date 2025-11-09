@@ -116,7 +116,7 @@ Insects are the largest group of arthropods. The evolution, their evolution, Mur
     thumbnail: 'blank'
   }];
   const tabs = ['Recents', 'Basic', 'Reports', 'Books', 'Study Books', 'Letters'];
-  return <div className="min-h-screen flex flex-col items-center justify-center p-8 relative overflow-hidden">
+  return <div className="min-h-screen flex flex-col items-center justify-center p-8 relative overflow-hidden animate-fade-in">
       {/* Back button - only show when coming from editor */}
       {fromEditor && <button onClick={() => navigate('/editor')} className="absolute top-8 left-8 flex items-center gap-2 px-4 py-2 bg-white/80 hover:bg-white border-2 border-[hsl(253,80%,85%)] rounded-full shadow-lg hover:shadow-xl transition-all duration-200 text-[hsl(253,47%,18%)] font-semibold">
           <ArrowLeft className="w-5 h-5" />

@@ -497,7 +497,7 @@ const Editor = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="h-screen grid grid-rows-[58px_1fr_86px] gap-3 p-3 overflow-hidden">
+    <div className="h-screen grid grid-rows-[58px_1fr_86px] gap-3 p-3 overflow-hidden animate-fade-in">
       <Header
         onHomeClick={() => navigate('/home')}
         onFindClick={handleFind}
