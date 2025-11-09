@@ -408,14 +408,14 @@ export const TextStylePanel = ({
         </div>
 
         {/* Bottom row - Tab and indent buttons */}
-        <div className="grid grid-cols-4 gap-2">
-          <button className="h-10 bg-white/20 hover:bg-white/30 text-white rounded-lg transition-colors flex items-center justify-center text-sm font-medium">
+        <div className="flex gap-2">
+          <button className="w-16 h-10 bg-white/20 hover:bg-white/30 text-white rounded-lg transition-colors flex items-center justify-center text-sm font-medium">
             Tab
           </button>
-          <button onClick={handleOutdent} className="h-10 bg-white/20 hover:bg-white/30 text-white rounded-lg transition-colors flex items-center justify-center">
+          <button onClick={handleOutdent} className="flex-1 h-10 bg-white/20 hover:bg-white/30 text-white rounded-lg transition-colors flex items-center justify-center">
             <ChevronLeft className="w-5 h-5" />
           </button>
-          <button onClick={handleIndent} className="h-10 bg-white/20 hover:bg-white/30 text-white rounded-lg transition-colors flex items-center justify-center">
+          <button onClick={handleIndent} className="flex-1 h-10 bg-white/20 hover:bg-white/30 text-white rounded-lg transition-colors flex items-center justify-center">
             <ChevronRight className="w-5 h-5" />
           </button>
           
