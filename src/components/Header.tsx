@@ -1,6 +1,9 @@
 import { Pen, Navigation, Search, Cloud, FileDown, FileUp, File, BookOpen } from 'lucide-react';
 import newInfinityButton from '@/assets/new-infinity-button.png';
 import penIcon from '@/assets/pen-icon.png';
+import quotationIcon from '@/assets/quotation-icon.png';
+import textFrameIcon from '@/assets/text-frame-icon.png';
+import paletteIcon from '@/assets/palette-icon.png';
 import searchIcon from '@/assets/search-icon.png';
 import cloudIcon from '@/assets/cloud-icon.png';
 import singlePageIcon from '@/assets/single-page-icon.png';
@@ -13,6 +16,9 @@ interface HeaderProps {
   onCloudClick?: () => void;
   onPenModeClick?: () => void;
   onStylusModeClick?: () => void;
+  onQuotationClick?: () => void;
+  onTextFrameClick?: () => void;
+  onPaletteClick?: () => void;
   onExportClick?: () => void;
   onImportClick?: () => void;
   onPdfImportClick?: () => void;
@@ -27,6 +33,9 @@ export const Header = ({
   onCloudClick,
   onPenModeClick,
   onStylusModeClick,
+  onQuotationClick,
+  onTextFrameClick,
+  onPaletteClick,
   onExportClick,
   onImportClick,
   onPdfImportClick,
@@ -71,6 +80,18 @@ export const Header = ({
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
+
+        <button onClick={onQuotationClick} className="h-9 w-9 border border-[hsl(var(--stroke))] rounded-[var(--r-sm)] grid place-items-center hover:bg-[hsl(var(--panel-2))] transition-colors overflow-hidden" title="Quotation">
+          <img src={quotationIcon} alt="" className="w-full h-full object-cover" />
+        </button>
+
+        <button onClick={onTextFrameClick} className="h-9 w-9 border border-[hsl(var(--stroke))] rounded-[var(--r-sm)] grid place-items-center hover:bg-[hsl(var(--panel-2))] transition-colors overflow-hidden" title="Text Frame">
+          <img src={textFrameIcon} alt="" className="w-full h-full object-cover" />
+        </button>
+
+        <button onClick={onPaletteClick} className="h-9 w-9 border border-[hsl(var(--stroke))] rounded-[var(--r-sm)] grid place-items-center hover:bg-[hsl(var(--panel-2))] transition-colors overflow-hidden" title="Color Palette">
+          <img src={paletteIcon} alt="" className="w-full h-full object-cover" />
+        </button>
 
         <button onClick={onFindClick} className="h-9 w-9 border border-[hsl(var(--stroke))] rounded-[var(--r-sm)] grid place-items-center hover:bg-[hsl(var(--panel-2))] transition-colors overflow-hidden" title="Find & Replace">
           <img src={searchIcon} alt="" className="w-full h-full object-cover" />
