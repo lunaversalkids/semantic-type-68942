@@ -114,9 +114,10 @@ All colors MUST be HSL.
     font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, Arial;
     color: hsl(var(--ink));
     background: 
-      radial-gradient(1200px 600px at 12% -10%, #EBDFFF 0%, transparent 70%),
-      radial-gradient(900px 600px at 88% -10%, #EFE6FF 0%, transparent 70%),
-      hsl(var(--bg));
+      radial-gradient(ellipse 1400px 800px at 50% -20%, hsl(253 100% 92%) 0%, transparent 60%),
+      radial-gradient(ellipse 1000px 600px at 10% 50%, hsl(253 90% 94%) 0%, transparent 50%),
+      radial-gradient(ellipse 1000px 600px at 90% 50%, hsl(253 85% 96%) 0%, transparent 50%),
+      linear-gradient(180deg, hsl(253 100% 98%) 0%, hsl(0 0% 100%) 100%);
   }
 }
 
