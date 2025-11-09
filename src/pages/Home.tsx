@@ -18,80 +18,30 @@ const Home = () => {
   const [isTemplatesExpanded, setIsTemplatesExpanded] = useState(false);
 
   useEffect(() => {
-    // Load recent documents from localStorage
-    const stored = localStorage.getItem('recentDocuments');
-    if (stored) {
-      const docs = JSON.parse(stored) as RecentDocument[];
-      // Ensure "Insects" document exists and is first with default content
-      const insectsDoc = docs.find(doc => doc.id === 'insects-document');
-      const defaultInsectsContent = `Insects
-
-Arthropods
-
-Insects are an ind-isub sclass units of the class Hexapoda – In from novellisms them from other arthropods by their three-part body, compound eyes, and external skeleton, in an abusant serza.
-
-Hexapoda
-
-Arthroprod soptrtrice Hexapoda
-
-Insects comprise the most diverse group of animals on Earth.
-
-Classification and Evolution
-
-Insects comprise the most diverse group of animals on Earth.
-
-Insects are the largest group of arthropods. The evolution, their evolution, Murninary endurseries, during the De-vonian period after thorough.`;
-      
-      if (insectsDoc) {
-        insectsDoc.title = 'Insects';
-        if (!insectsDoc.thumbnail) {
-          insectsDoc.thumbnail = defaultInsectsContent;
-        }
-        const otherDocs = docs.filter(doc => doc.id !== 'insects-document');
-        const sortedDocs = [insectsDoc, ...otherDocs.sort((a, b) => b.lastOpened - a.lastOpened)];
-        localStorage.setItem('recentDocuments', JSON.stringify(sortedDocs));
-        setRecentDocs(sortedDocs.slice(0, 4));
-      } else {
-        // Add Insects document with default content
-        const defaultDoc: RecentDocument = {
-          id: 'insects-document',
-          title: 'Insects',
-          thumbnail: defaultInsectsContent,
-          lastOpened: Date.now()
-        };
-        const sortedDocs = [defaultDoc, ...docs.sort((a, b) => b.lastOpened - a.lastOpened)];
-        localStorage.setItem('recentDocuments', JSON.stringify(sortedDocs));
-        setRecentDocs(sortedDocs.slice(0, 4));
-      }
-    } else {
-      // Initialize with default "Insects" document
-      const defaultInsectsContent = `Insects
-
-Arthropods
-
-Insects are an ind-isub sclass units of the class Hexapoda – In from novellisms them from other arthropods by their three-part body, compound eyes, and external skeleton, in an abusant serza.
-
-Hexapoda
-
-Arthroprod soptrtrice Hexapoda
-
-Insects comprise the most diverse group of animals on Earth.
-
-Classification and Evolution
-
-Insects comprise the most diverse group of animals on Earth.
-
-Insects are the largest group of arthropods. The evolution, their evolution, Murninary endurseries, during the De-vonian period after thorough.`;
-      
-      const defaultDoc: RecentDocument = {
-        id: 'insects-document',
-        title: 'Insects',
-        thumbnail: defaultInsectsContent,
+    // Set up hardcoded recent documents
+    const hardcodedDocs: RecentDocument[] = [
+      {
+        id: 'blank-document',
+        title: 'Blank',
         lastOpened: Date.now()
-      };
-      localStorage.setItem('recentDocuments', JSON.stringify([defaultDoc]));
-      setRecentDocs([defaultDoc]);
-    }
+      },
+      {
+        id: 'tales-of-blue',
+        title: 'Tales of Blue',
+        lastOpened: Date.now() - 1000
+      },
+      {
+        id: 'city-lights',
+        title: 'City Lights',
+        lastOpened: Date.now() - 2000
+      },
+      {
+        id: 'blank-book-portrait',
+        title: 'Blank Book Portrait',
+        lastOpened: Date.now() - 3000
+      }
+    ];
+    setRecentDocs(hardcodedDocs);
   }, []);
 
   const handleStartWriting = () => {
@@ -226,26 +176,36 @@ Insects are the largest group of arthropods. The evolution, their evolution, Mur
                 
                 <div className="grid grid-cols-4 gap-6">
                   {activeTab === 'Recents' ? (
-                    recentDocs.slice(0, 1).map((doc, index) => (
-                      <button
-                        key={index}
-                        onClick={() => handleOpenRecent(doc.id)}
-                        className="group relative aspect-[3/4] rounded-[22px] overflow-hidden border-[3px] border-[hsl(253,80%,88%)] hover:border-[hsl(253,100%,64%)] transition-all duration-300 hover:scale-105 shadow-[0_0_20px_hsl(253,100%,64%,0.12)] hover:shadow-[0_0_40px_hsl(253,100%,64%,0.35),0_12px_40px_hsl(253,100%,64%,0.3)]"
-                      >
-                        <div className="w-full h-full bg-white p-8 overflow-hidden flex flex-col">
-                          <div className="text-left text-[15px] leading-relaxed text-[hsl(253,47%,18%)] whitespace-pre-line font-serif line-clamp-[20]">
-                            {doc.thumbnail}
+                    recentDocs.map((doc, index) => {
+                      const getDocumentStyle = (title: string) => {
+                        switch(title) {
+                          case 'Blank':
+                            return 'bg-white';
+                          case 'Tales of Blue':
+                            return 'bg-gradient-to-br from-blue-400 to-blue-600';
+                          case 'City Lights':
+                            return 'bg-gradient-to-br from-purple-500 to-pink-500';
+                          case 'Blank Book Portrait':
+                            return 'bg-gradient-to-br from-gray-100 to-gray-200';
+                          default:
+                            return 'bg-white';
+                        }
+                      };
+                      
+                      return (
+                        <button
+                          key={index}
+                          onClick={() => handleOpenRecent(doc.id)}
+                          className="group relative aspect-[3/4] rounded-[22px] overflow-hidden border-[3px] border-[hsl(253,80%,88%)] hover:border-[hsl(253,100%,64%)] transition-all duration-300 hover:scale-105 shadow-[0_0_20px_hsl(253,100%,64%,0.12)] hover:shadow-[0_0_40px_hsl(253,100%,64%,0.35),0_12px_40px_hsl(253,100%,64%,0.3)]"
+                        >
+                          <div className={`w-full h-full flex items-center justify-center ${getDocumentStyle(doc.title)}`}>
+                            <h3 className={`text-2xl font-bold text-center px-4 ${doc.title === 'Blank' || doc.title === 'Blank Book Portrait' ? 'text-gray-400' : 'text-white drop-shadow-lg'}`}>
+                              {doc.title}
+                            </h3>
                           </div>
-                        </div>
-                        
-                        {/* Title overlay */}
-                        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 via-black/50 to-transparent p-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                          <p className="text-white text-sm font-bold text-center truncate drop-shadow-md">
-                            {doc.title}
-                          </p>
-                        </div>
-                      </button>
-                    ))
+                        </button>
+                      );
+                    })
                   ) : (
                     bookTemplates.map((template, index) => (
                       <button
