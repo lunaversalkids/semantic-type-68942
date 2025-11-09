@@ -1,6 +1,7 @@
 import { Pen, Navigation, Search, Cloud, FileDown, FileUp, File, BookOpen } from 'lucide-react';
 import newInfinityButton from '@/assets/new-infinity-button.png';
 import penIcon from '@/assets/pen-icon.png';
+import searchIcon from '@/assets/search-icon.png';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 interface HeaderProps {
   onFindClick?: () => void;
@@ -67,8 +68,8 @@ export const Header = ({
           </DropdownMenuContent>
         </DropdownMenu>
 
-        <button onClick={onFindClick} className="h-9 min-w-[36px] px-2.5 border border-[hsl(var(--stroke))] rounded-[var(--r-sm)] bg-white grid place-items-center hover:bg-[hsl(var(--panel-2))] transition-colors" title="Find & Replace">
-          <Search className="w-4 h-4 text-[hsl(var(--ink))]" />
+        <button onClick={onFindClick} className="h-9 w-9 border border-[hsl(var(--stroke))] rounded-[var(--r-sm)] grid place-items-center hover:bg-[hsl(var(--panel-2))] transition-colors overflow-hidden" title="Find & Replace">
+          <img src={searchIcon} alt="" className="w-full h-full object-cover" />
         </button>
         
         <button onClick={onCloudClick} className="h-9 min-w-[36px] px-2.5 border border-[hsl(var(--stroke))] rounded-[var(--r-sm)] bg-white grid place-items-center hover:bg-[hsl(var(--panel-2))] transition-colors" title="My Documents">
