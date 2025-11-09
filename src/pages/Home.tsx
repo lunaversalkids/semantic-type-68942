@@ -141,19 +141,22 @@ Insects are the largest group of arthropods. The evolution, their evolution, Mur
         <div className="flex flex-col items-center space-y-8">
           {/* Infinity logo */}
           <div className="relative">
-            <div className="w-28 h-28 rounded-full bg-gradient-to-br from-white via-[hsl(253,100%,96%)] to-[hsl(253,100%,90%)] flex items-center justify-center border-4 border-[hsl(253,100%,64%)] shadow-[0_0_60px_hsl(253,100%,64%,0.5)]">
+            <div className="w-48 h-48 rounded-full bg-gradient-to-br from-[hsl(253,100%,98%)] via-[hsl(253,100%,92%)] to-[hsl(253,100%,85%)] flex items-center justify-center border-[6px] border-[hsl(253,100%,70%)] shadow-[0_0_80px_hsl(253,100%,64%,0.6),0_0_120px_hsl(253,100%,64%,0.3)]">
               <img 
                 src="/src/assets/new-infinity-icon.png" 
                 alt="Infinity" 
-                className="w-18 h-18 object-contain drop-shadow-[0_0_8px_hsl(253,100%,64%)]"
+                className="w-28 h-28 object-contain drop-shadow-[0_0_12px_hsl(253,100%,64%)]"
               />
             </div>
-            <div className="absolute inset-0 rounded-full bg-[hsl(253,100%,64%)] opacity-30 blur-2xl animate-glow-pulse"></div>
+            <div className="absolute inset-0 rounded-full bg-[hsl(253,100%,64%)] opacity-40 blur-3xl animate-glow-pulse"></div>
           </div>
 
           {/* App title */}
           <div className="flex flex-col items-center space-y-3">
-            <h1 className="text-7xl font-bold text-[hsl(253,47%,18%)] tracking-tight">
+            <h1 className="text-[7rem] font-black text-[hsl(253,47%,18%)] tracking-tight leading-none" style={{ 
+              fontFamily: 'system-ui, -apple-system, "Segoe UI", sans-serif',
+              textShadow: '0 4px 12px hsl(253 100% 64% / 0.15)'
+            }}>
               Doc One
             </h1>
             <p className="text-xl text-[hsl(253,28%,40%)] font-medium tracking-wide">
