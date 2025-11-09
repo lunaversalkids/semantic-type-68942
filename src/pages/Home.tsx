@@ -21,6 +21,15 @@ const Home = () => {
     if (stored) {
       const docs = JSON.parse(stored) as RecentDocument[];
       setRecentDocs(docs.sort((a, b) => b.lastOpened - a.lastOpened).slice(0, 4));
+    } else {
+      // Initialize with default "Insects" document
+      const defaultDoc: RecentDocument = {
+        id: 'insects-document',
+        title: 'Insects',
+        lastOpened: Date.now()
+      };
+      localStorage.setItem('recentDocuments', JSON.stringify([defaultDoc]));
+      setRecentDocs([defaultDoc]);
     }
   }, []);
 
@@ -113,25 +122,25 @@ const Home = () => {
           </div>
 
           <div className="grid grid-cols-4 gap-6 mb-8">
-            {recentDocs.length > 0 ? (
-              recentDocs.map((doc) => (
-                <button
-                  key={doc.id}
-                  onClick={() => handleOpenRecent(doc)}
-                  className="group relative aspect-[3/4] rounded-2xl overflow-hidden border-4 border-[hsl(253,80%,85%)] hover:border-[hsl(253,100%,64%)] transition-all duration-300 hover:scale-105 hover:shadow-xl bg-white"
-                >
-                  {doc.thumbnail ? (
-                    <img src={doc.thumbnail} alt={doc.title} className="w-full h-full object-cover" />
-                  ) : (
-                    <div className="w-full h-full bg-gradient-to-br from-[hsl(253,100%,97%)] to-[hsl(260,100%,95%)]" />
-                  )}
-                  <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/60 to-transparent">
-                    <p className="text-white font-semibold text-center">{doc.title}</p>
+            {recentDocs.map((doc) => (
+              <button
+                key={doc.id}
+                onClick={() => handleOpenRecent(doc)}
+                className="group relative aspect-[3/4] rounded-2xl overflow-hidden border-4 border-[hsl(253,80%,85%)] hover:border-[hsl(253,100%,64%)] transition-all duration-300 hover:scale-105 hover:shadow-xl bg-white"
+              >
+                {doc.thumbnail ? (
+                  <img src={doc.thumbnail} alt={doc.title} className="w-full h-full object-cover" />
+                ) : (
+                  <div className="w-full h-full bg-gradient-to-br from-[hsl(253,100%,97%)] to-[hsl(260,100%,95%)] flex items-center justify-center">
+                    <span className="text-6xl text-[hsl(253,100%,64%)]">📄</span>
                   </div>
-                </button>
-              ))
-            ) : (
-              templates.map((template) => (
+                )}
+                <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/60 to-transparent">
+                  <p className="text-white font-semibold text-center">{doc.title}</p>
+                </div>
+              </button>
+            ))}
+            {recentDocs.length < 4 && templates.slice(0, 4 - recentDocs.length).map((template) => (
                 <button
                   key={template.name}
                   onClick={handleStartWriting}
@@ -146,8 +155,7 @@ const Home = () => {
                     <p className="text-white font-semibold text-center">{template.name}</p>
                   </div>
                 </button>
-              ))
-            )}
+            ))}
           </div>
 
           <button className="flex items-center justify-between w-full text-left group">
