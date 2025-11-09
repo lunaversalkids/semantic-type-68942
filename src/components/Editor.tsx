@@ -8,7 +8,6 @@ import Highlight from '@tiptap/extension-highlight';
 import Underline from '@tiptap/extension-underline';
 import TextAlign from '@tiptap/extension-text-align';
 import Superscript from '@tiptap/extension-superscript';
-import Subscript from '@tiptap/extension-subscript';
 import { Card } from '@/components/ui/card';
 import { EditorContextMenu } from './ContextMenu';
 import { PageAddButton } from './PageAddButton';
@@ -229,7 +228,6 @@ export const Editor = ({
       Highlight.configure({ multicolor: true }),
       Underline,
       Superscript,
-      Subscript,
       SmallCaps,
       IconNode,
       Image,

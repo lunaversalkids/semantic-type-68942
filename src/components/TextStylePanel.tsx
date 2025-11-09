@@ -5,11 +5,10 @@ import { Button } from '@/components/ui/button';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import capitalizeIcon from '@/assets/capitalize-icon.jpg';
+import baselineIcon from '@/assets/baseline-icon.jpg';
 interface TextStylePanelProps {
   editor?: any;
 }
-type BaselineMode = 'normal' | 'superscript' | 'subscript';
-
 export const TextStylePanel = ({
   editor
 }: TextStylePanelProps) => {
@@ -21,7 +20,6 @@ export const TextStylePanel = ({
   const [textColor, setTextColor] = useState('#000000');
   const [isColorPickerOpen, setIsColorPickerOpen] = useState(false);
   const [formattingMode, setFormattingMode] = useState('Normal');
-  const [baselineMode, setBaselineMode] = useState<BaselineMode>('normal');
   const formattingModes = ['Normal', 'Single Spacing', '1.15 Spacing', '1.5 Spacing', '2.5 Spacing', 'Hanging Indent'];
   const availableFonts = ['Graphik', 'Arial', 'Times New Roman', 'Georgia', 'Helvetica', 'Courier New', 'Verdana', 'Garamond', 'Palatino', 'Bookman', 'Comic Sans MS', 'Trebuchet MS', 'Impact', 'Lucida Console', 'Tahoma', 'Lucida Sans', 'Monaco', 'Gill Sans', 'Century Gothic', 'Franklin Gothic Medium', 'Cambria', 'Calibri', 'Consolas', 'Didot', 'Futura', 'Optima', 'Baskerville'];
   const handleFontChange = (font: string) => {
@@ -94,25 +92,6 @@ export const TextStylePanel = ({
   const handleTab = () => {
     if (!editor) return;
     editor.chain().focus().insertContent('\t').run();
-  };
-
-  const handleBaselineCycle = () => {
-    if (!editor) return;
-    
-    if (baselineMode === 'normal') {
-      // Activate superscript
-      editor.chain().focus().toggleSuperscript().run();
-      setBaselineMode('superscript');
-    } else if (baselineMode === 'superscript') {
-      // Deactivate superscript and activate subscript
-      editor.chain().focus().toggleSuperscript().run();
-      editor.chain().focus().toggleSubscript().run();
-      setBaselineMode('subscript');
-    } else {
-      // Deactivate subscript and return to normal
-      editor.chain().focus().toggleSubscript().run();
-      setBaselineMode('normal');
-    }
   };
 
   const handleFormattingMode = (mode: string) => {
@@ -391,43 +370,8 @@ export const TextStylePanel = ({
           <button className="flex-1 h-12 bg-white hover:bg-gray-50 rounded-lg border border-gray-200 transition-colors flex items-center justify-center p-2">
             <img src={capitalizeIcon} alt="Capitalize" className="w-7 h-7 object-contain" />
           </button>
-          <button 
-            onClick={handleBaselineCycle}
-            className={`flex-1 h-12 rounded-lg border transition-all flex items-center justify-center p-2 ${
-              baselineMode !== 'normal' 
-                ? 'bg-[#8B5CF6] border-[#8B5CF6] shadow-[0_0_12px_rgba(139,92,246,0.6)]' 
-                : 'bg-white hover:bg-gray-50 border-gray-200'
-            }`}
-          >
-            <svg 
-              width="28" 
-              height="28" 
-              viewBox="0 0 28 28" 
-              fill="none" 
-              xmlns="http://www.w3.org/2000/svg"
-              className="w-7 h-7"
-            >
-              {baselineMode === 'normal' && (
-                <>
-                  <text x="14" y="18" textAnchor="middle" fontSize="16" fontWeight="600" fill="#6B7280">T</text>
-                  <line x1="6" y1="20" x2="22" y2="20" stroke="#A78BFA" strokeWidth="2" />
-                </>
-              )}
-              {baselineMode === 'superscript' && (
-                <>
-                  <text x="14" y="15" textAnchor="middle" fontSize="16" fontWeight="600" fill="#FFFFFF">T</text>
-                  <text x="20" y="12" textAnchor="middle" fontSize="10" fontWeight="600" fill="#FFFFFF">↑</text>
-                  <line x1="6" y1="20" x2="22" y2="20" stroke="#FFFFFF" strokeWidth="2" />
-                </>
-              )}
-              {baselineMode === 'subscript' && (
-                <>
-                  <text x="14" y="15" textAnchor="middle" fontSize="16" fontWeight="600" fill="#FFFFFF">T</text>
-                  <text x="20" y="24" textAnchor="middle" fontSize="10" fontWeight="600" fill="#FFFFFF">↓</text>
-                  <line x1="6" y1="20" x2="22" y2="20" stroke="#FFFFFF" strokeWidth="2" />
-                </>
-              )}
-            </svg>
+          <button className="flex-1 h-12 bg-white hover:bg-gray-50 rounded-lg border border-gray-200 transition-colors flex items-center justify-center p-2">
+            <img src={baselineIcon} alt="Baseline" className="w-7 h-7 object-contain" />
           </button>
         </div>
       </div>
