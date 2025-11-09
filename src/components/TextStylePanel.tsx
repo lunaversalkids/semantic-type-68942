@@ -129,31 +129,58 @@ export const TextStylePanel = ({
     // If no text is selected, do nothing
     if (from === to) return;
     
+    const text = editor.state.doc.textBetween(from, to, ' ');
+    
     // First, remove all capitalization marks
-    editor.chain().focus()
-      .unsetSmallCaps()
-      .unsetAllCaps()
-      .unsetTitleCase()
-      .unsetStartCase()
-      .run();
+    if (editor.isActive('smallCaps')) {
+      editor.chain().focus().unsetSmallCaps().run();
+    }
+    if (editor.isActive('allCaps')) {
+      editor.chain().focus().unsetAllCaps().run();
+    }
     
     // Then apply the selected capitalization style
     switch (mode) {
       case 'None':
-        // All marks already removed
+        // All marks already removed, text stays as originally typed
         break;
       case 'All Caps':
+        // Use CSS transform for uppercase
         editor.chain().focus().setAllCaps().run();
         break;
       case 'Small Caps':
+        // Use CSS small-caps
         editor.chain().focus().setSmallCaps().run();
         break;
-      case 'Title Case':
-        editor.chain().focus().setTitleCase().run();
+      case 'Title Case': {
+        // Transform text: capitalize first letter of major words
+        const minorWords = ['a', 'an', 'the', 'and', 'but', 'or', 'for', 'nor', 'on', 'at', 'to', 'by', 'of', 'in', 'with', 'from'];
+        const words = text.split(' ');
+        const transformedText = words.map((word, index) => {
+          // Always capitalize first and last word, or if not a minor word
+          if (index === 0 || index === words.length - 1 || !minorWords.includes(word.toLowerCase())) {
+            return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+          }
+          return word.toLowerCase();
+        }).join(' ');
+        
+        editor.chain().focus().deleteRange({ from, to }).insertContent(transformedText).run();
         break;
-      case 'Start Case':
-        editor.chain().focus().setStartCase().run();
+      }
+      case 'Start Case': {
+        // Transform text: capitalize only first letter of first word
+        const sentences = text.split(/([.!?]\s+)/);
+        const transformedText = sentences.map((part, index) => {
+          // Check if this is actual text (not punctuation)
+          if (index % 2 === 0 && part.length > 0) {
+            return part.charAt(0).toUpperCase() + part.slice(1).toLowerCase();
+          }
+          return part;
+        }).join('');
+        
+        editor.chain().focus().deleteRange({ from, to }).insertContent(transformedText).run();
         break;
+      }
     }
   };
 
