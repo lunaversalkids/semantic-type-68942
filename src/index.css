@@ -220,6 +220,15 @@ button[data-active="true"] {
   font-weight: normal;
 }
 
+/* Start Case (sentence case) styling */
+.start-case {
+  text-transform: lowercase;
+}
+
+.start-case::first-letter {
+  text-transform: uppercase;
+}
+
 .ProseMirror hr {
   border: none;
   border-top: 0.5px solid hsl(var(--border));

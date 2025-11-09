@@ -15,6 +15,9 @@ import { PageAddButton } from './PageAddButton';
 import { FontSize } from './extensions/FontSize';
 import { FontWeight } from './extensions/FontWeight';
 import { SmallCaps } from './extensions/SmallCaps';
+import { AllCaps } from './extensions/AllCaps';
+import { TitleCase } from './extensions/TitleCase';
+import { StartCase } from './extensions/StartCase';
 import { IconNode } from './extensions/IconNode';
 import { Table } from '@tiptap/extension-table';
 import { TableRow } from '@tiptap/extension-table-row';
@@ -231,6 +234,9 @@ export const Editor = ({
       Superscript,
       Subscript,
       SmallCaps,
+      AllCaps,
+      TitleCase,
+      StartCase,
       IconNode,
       Image,
       Footnote,

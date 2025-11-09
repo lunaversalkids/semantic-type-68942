@@ -129,41 +129,31 @@ export const TextStylePanel = ({
     // If no text is selected, do nothing
     if (from === to) return;
     
-    // First, remove any existing Small Caps mark
-    if (editor.isActive('smallCaps')) {
-      editor.chain().focus().unsetSmallCaps().run();
-    }
+    // First, remove all capitalization marks
+    editor.chain().focus()
+      .unsetSmallCaps()
+      .unsetAllCaps()
+      .unsetTitleCase()
+      .unsetStartCase()
+      .run();
     
-    const text = editor.state.doc.textBetween(from, to, ' ');
-    let transformedText = text;
-    
+    // Then apply the selected capitalization style
     switch (mode) {
       case 'None':
-        // Just remove Small Caps, text stays as is
-        return;
+        // All marks already removed
+        break;
       case 'All Caps':
-        transformedText = text.toUpperCase();
+        editor.chain().focus().setAllCaps().run();
         break;
       case 'Small Caps':
-        // Apply Small Caps mark to the selection
         editor.chain().focus().setSmallCaps().run();
-        return;
+        break;
       case 'Title Case':
-        transformedText = text.replace(/\w\S*/g, (word) => {
-          const lowerWords = ['a', 'an', 'the', 'and', 'but', 'or', 'for', 'nor', 'on', 'at', 'to', 'by', 'of', 'in'];
-          return lowerWords.includes(word.toLowerCase()) && word !== text.split(' ')[0]
-            ? word.toLowerCase()
-            : word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
-        });
+        editor.chain().focus().setTitleCase().run();
         break;
       case 'Start Case':
-        transformedText = text.charAt(0).toUpperCase() + text.slice(1).toLowerCase();
+        editor.chain().focus().setStartCase().run();
         break;
-    }
-    
-    // Replace the text with transformed version
-    if (transformedText !== text) {
-      editor.chain().focus().deleteRange({ from, to }).insertContent(transformedText).run();
     }
   };
 
@@ -479,7 +469,7 @@ export const TextStylePanel = ({
                 onClick={() => handleCapitalization('Start Case')}
                 className={`px-4 py-2 cursor-pointer hover:bg-[#F5F0FF] transition-colors ${capitalizationMode === 'Start Case' ? 'bg-[#E8DDFF] text-[#8B5CF6] font-medium' : 'text-[hsl(var(--ink))]'}`}
               >
-                <span className="text-[#8B7AB8]">Start case</span>
+                <span className="text-[#8B7AB8]">Start Case</span>
                 {capitalizationMode === 'Start Case' && <Check className="w-4 h-4 ml-auto text-[#8B5CF6]" />}
               </DropdownMenuItem>
             </DropdownMenuContent>
