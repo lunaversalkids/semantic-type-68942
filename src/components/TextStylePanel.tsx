@@ -100,14 +100,18 @@ export const TextStylePanel = ({
     if (!editor) return;
     
     if (baselineMode === 'superscript') {
-      // Switch to subscript
-      editor.chain().focus().toggleSuperscript().run();
-      editor.chain().focus().toggleSubscript().run();
+      // Switch to subscript: first turn off superscript, then turn on subscript
+      if (editor.isActive('superscript')) {
+        editor.chain().focus().unsetSuperscript().run();
+      }
+      editor.chain().focus().setSubscript().run();
       setBaselineMode('subscript');
     } else {
-      // Switch to superscript
-      editor.chain().focus().toggleSubscript().run();
-      editor.chain().focus().toggleSuperscript().run();
+      // Switch to superscript: first turn off subscript, then turn on superscript
+      if (editor.isActive('subscript')) {
+        editor.chain().focus().unsetSubscript().run();
+      }
+      editor.chain().focus().setSuperscript().run();
       setBaselineMode('superscript');
     }
   };
