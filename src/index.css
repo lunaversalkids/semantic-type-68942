@@ -206,7 +206,7 @@ button[data-active="true"] {
 
 /* Superscript styling for footnotes */
 .ProseMirror sup {
-  font-size: 0.6em;
+  font-size: 0.75em;
   vertical-align: super;
   line-height: 0;
   font-weight: normal;
@@ -214,7 +214,7 @@ button[data-active="true"] {
 
 /* Subscript styling - matches superscript size */
 .ProseMirror sub {
-  font-size: 0.6em;
+  font-size: 0.75em;
   vertical-align: sub;
   line-height: 0;
   font-weight: normal;

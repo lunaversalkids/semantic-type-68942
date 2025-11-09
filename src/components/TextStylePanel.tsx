@@ -21,7 +21,7 @@ export const TextStylePanel = ({
   const [textColor, setTextColor] = useState('#000000');
   const [isColorPickerOpen, setIsColorPickerOpen] = useState(false);
   const [formattingMode, setFormattingMode] = useState('Normal');
-  const [baselineMode, setBaselineMode] = useState<'superscript' | 'subscript'>('superscript');
+  const [baselineMode, setBaselineMode] = useState<'superscript' | 'subscript' | 'normal'>('normal');
   const formattingModes = ['Normal', 'Single Spacing', '1.15 Spacing', '1.5 Spacing', '2.5 Spacing', 'Hanging Indent'];
   const availableFonts = ['Graphik', 'Arial', 'Times New Roman', 'Georgia', 'Helvetica', 'Courier New', 'Verdana', 'Garamond', 'Palatino', 'Bookman', 'Comic Sans MS', 'Trebuchet MS', 'Impact', 'Lucida Console', 'Tahoma', 'Lucida Sans', 'Monaco', 'Gill Sans', 'Century Gothic', 'Franklin Gothic Medium', 'Cambria', 'Calibri', 'Consolas', 'Didot', 'Futura', 'Optima', 'Baskerville'];
   const handleFontChange = (font: string) => {
@@ -100,17 +100,20 @@ export const TextStylePanel = ({
     if (!editor) return;
     
     if (baselineMode === 'superscript') {
-      // Switch to subscript: first turn off superscript, then turn on subscript
+      // Switch to subscript: turn off superscript, turn on subscript
       if (editor.isActive('superscript')) {
         editor.chain().focus().unsetSuperscript().run();
       }
       editor.chain().focus().setSubscript().run();
       setBaselineMode('subscript');
-    } else {
-      // Switch to superscript: first turn off subscript, then turn on superscript
+    } else if (baselineMode === 'subscript') {
+      // Switch to normal: turn off subscript
       if (editor.isActive('subscript')) {
         editor.chain().focus().unsetSubscript().run();
       }
+      setBaselineMode('normal');
+    } else {
+      // Switch to superscript: turn on superscript
       editor.chain().focus().setSuperscript().run();
       setBaselineMode('superscript');
     }
@@ -394,7 +397,11 @@ export const TextStylePanel = ({
           </button>
           <button 
             onClick={handleBaselineCycle}
-            className="flex-1 h-12 bg-[#8B5CF6] border-[#8B5CF6] shadow-[0_0_20px_rgba(139,92,246,0.5)] rounded-lg border transition-all flex items-center justify-center p-2"
+            className={`flex-1 h-12 rounded-lg border transition-all flex items-center justify-center p-2 ${
+              baselineMode !== 'normal' 
+                ? 'bg-[#8B5CF6] border-[#8B5CF6] shadow-[0_0_20px_rgba(139,92,246,0.5)]' 
+                : 'bg-white hover:bg-gray-50 border-gray-200'
+            }`}
           >
             <img 
               src={baselineMode === 'superscript' ? baselineSuperscriptIcon : baselineSubscriptIcon} 
