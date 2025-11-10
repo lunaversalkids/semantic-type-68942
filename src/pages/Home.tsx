@@ -248,7 +248,7 @@ Insects are the largest group of arthropods. The evolution, their evolution, Mur
                       <PopoverTrigger asChild>
                         <button 
                           onClick={(e) => e.stopPropagation()}
-                          className="absolute top-3 right-3 w-8 h-8 rounded-full bg-gradient-to-br from-[hsl(253,100%,64%)] to-[hsl(266,100%,70%)] opacity-0 group-hover:opacity-100 hover:shadow-[0_0_16px_hsl(253,100%,64%,0.6)] transition-all duration-200 flex items-center justify-center"
+                          className="absolute bottom-3 right-3 w-8 h-8 rounded-full bg-gradient-to-br from-[hsl(253,100%,64%)] to-[hsl(266,100%,70%)] opacity-0 group-hover:opacity-100 hover:shadow-[0_0_16px_hsl(253,100%,64%,0.6)] transition-all duration-200 flex items-center justify-center z-10"
                         >
                           <MoreVertical className="w-4 h-4 text-white" />
                         </button>
@@ -348,7 +348,7 @@ Insects are the largest group of arthropods. The evolution, their evolution, Mur
                           <PopoverTrigger asChild>
                             <button 
                               onClick={(e) => e.stopPropagation()}
-                              className="absolute top-3 right-3 w-8 h-8 rounded-full bg-gradient-to-br from-[hsl(253,100%,64%)] to-[hsl(266,100%,70%)] opacity-0 group-hover:opacity-100 hover:shadow-[0_0_16px_hsl(253,100%,64%,0.6)] transition-all duration-200 flex items-center justify-center"
+                              className="absolute bottom-3 right-3 w-8 h-8 rounded-full bg-gradient-to-br from-[hsl(253,100%,64%)] to-[hsl(266,100%,70%)] opacity-0 group-hover:opacity-100 hover:shadow-[0_0_16px_hsl(253,100%,64%,0.6)] transition-all duration-200 flex items-center justify-center z-10"
                             >
                               <MoreVertical className="w-4 h-4 text-white" />
                             </button>
