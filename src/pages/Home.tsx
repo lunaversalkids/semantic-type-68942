@@ -213,13 +213,29 @@ Insects are the largest group of arthropods. The evolution, their evolution, Mur
               Doc One
             </h1>
             
+            {/* Show tagline and button only on homepage (NOT from editor) */}
+            {!fromEditor && (
+              <>
+                {/* Tagline */}
+                <p className="text-2xl font-semibold text-transparent bg-clip-text bg-gradient-to-r from-[hsl(253,100%,64%)] to-[hsl(266,100%,70%)] tracking-wide" style={{
+                  textShadow: '0 0 20px hsl(253 100% 64% / 0.3)'
+                }}>
+                  Create. Teach. Publish. Evolve.
+                </p>
+
+                {/* Start Writing button */}
+                <button
+                  onClick={handleStartWriting}
+                  className="mt-4 px-12 py-4 bg-gradient-to-r from-[hsl(253,100%,64%)] to-[hsl(266,100%,70%)] text-white text-xl font-bold rounded-full shadow-[0_0_30px_hsl(253,100%,64%,0.5)] hover:shadow-[0_0_50px_hsl(253,100%,64%,0.7)] hover:scale-105 transition-all duration-300"
+                >
+                  Start Writing
+                </button>
+              </>
+            )}
           </div>
 
-          {/* Start Writing button */}
-          
-
-          {/* Divider text */}
-          <p className="text-base text-[hsl(253,28%,40%)] font-semibold pt-2">Choose Your Document</p>
+          {/* Divider text - only show on homepage */}
+          {!fromEditor && <p className="text-base text-[hsl(253,28%,40%)] font-semibold pt-2">Choose Your Template.</p>}
 
           {/* Chevron arrow */}
           <svg className="w-10 h-10 text-[hsl(253,100%,64%)] animate-bounce drop-shadow-[0_4px_8px_hsl(253,100%,64%,0.3)]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={3}>
