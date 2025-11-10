@@ -127,6 +127,9 @@ Insects are the largest group of arthropods. The evolution, their evolution, Mur
   };
 
   const handleDuplicateDocument = (doc: RecentDocument) => {
+    // Close menu immediately to prevent glitching
+    setOpenMenuId(null);
+    
     const stored = localStorage.getItem('recentDocuments');
     if (stored) {
       const docs = JSON.parse(stored) as RecentDocument[];
@@ -141,21 +144,25 @@ Insects are the largest group of arthropods. The evolution, their evolution, Mur
       setRecentDocs(updatedDocs.slice(0, 4));
       toast.success('Document duplicated');
     }
-    setOpenMenuId(null);
   };
 
   const handleDeleteDocument = (docId: string, docTitle: string) => {
-    if (!confirm(`Delete "${docTitle}"?`)) return;
-
-    const stored = localStorage.getItem('recentDocuments');
-    if (stored) {
-      const docs = JSON.parse(stored) as RecentDocument[];
-      const updatedDocs = docs.filter(doc => doc.id !== docId);
-      localStorage.setItem('recentDocuments', JSON.stringify(updatedDocs));
-      setRecentDocs(updatedDocs.slice(0, 4));
-      toast.success('Document deleted');
-    }
+    // Close menu immediately to prevent glitching
     setOpenMenuId(null);
+    
+    // Small delay to let the popover close before showing confirm dialog
+    setTimeout(() => {
+      if (!confirm(`Delete "${docTitle}"?`)) return;
+
+      const stored = localStorage.getItem('recentDocuments');
+      if (stored) {
+        const docs = JSON.parse(stored) as RecentDocument[];
+        const updatedDocs = docs.filter(doc => doc.id !== docId);
+        localStorage.setItem('recentDocuments', JSON.stringify(updatedDocs));
+        setRecentDocs(updatedDocs.slice(0, 4));
+        toast.success('Document deleted');
+      }
+    }, 100);
   };
 
   const templates: any[] = [];
