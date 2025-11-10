@@ -3,7 +3,8 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } f
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { FileText, Trash2, Download, Search } from 'lucide-react';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import { FileText, Trash2, Copy, MoreVertical, Search } from 'lucide-react';
 import { toast } from 'sonner';
 import { formatDistanceToNow } from 'date-fns';
 
@@ -67,6 +68,27 @@ export const DocumentManager = ({ open, onOpenChange, onLoadDocument }: Document
     }
   };
 
+  const handleDuplicateDocument = (doc: Document) => {
+    try {
+      const savedDocs = localStorage.getItem('savedDocuments');
+      if (savedDocs) {
+        const docs = JSON.parse(savedDocs);
+        const newDoc: Document = {
+          id: crypto.randomUUID(),
+          name: `${doc.name} (Copy)`,
+          content: doc.content,
+          savedAt: new Date().toISOString()
+        };
+        const updatedDocs = [...docs, newDoc];
+        localStorage.setItem('savedDocuments', JSON.stringify(updatedDocs));
+        setDocuments(updatedDocs);
+        toast.success('Document duplicated');
+      }
+    } catch (error: any) {
+      toast.error('Failed to duplicate document');
+    }
+  };
+
   const filteredDocuments = documents.filter(doc =>
     doc.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
@@ -104,7 +126,8 @@ export const DocumentManager = ({ open, onOpenChange, onLoadDocument }: Document
                 {filteredDocuments.map((doc) => (
                   <div
                     key={doc.id}
-                    className="flex items-center gap-3 p-3 rounded-lg border bg-card hover:bg-accent transition-colors"
+                    className="flex items-center gap-3 p-3 rounded-lg border bg-card hover:bg-accent transition-colors cursor-pointer"
+                    onClick={() => handleLoadDocument(doc)}
                   >
                     <FileText className="h-5 w-5 text-muted-foreground flex-shrink-0" />
                     <div className="flex-1 min-w-0">
@@ -113,22 +136,36 @@ export const DocumentManager = ({ open, onOpenChange, onLoadDocument }: Document
                         Saved {formatDistanceToNow(new Date(doc.savedAt), { addSuffix: true })}
                       </p>
                     </div>
-                    <div className="flex items-center gap-1">
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => handleLoadDocument(doc)}
-                      >
-                        <Download className="h-4 w-4" />
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => handleDeleteDocument(doc.id, doc.name)}
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
-                    </div>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild onClick={(e) => e.stopPropagation()}>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="h-6 w-6 p-0 opacity-60 hover:opacity-100"
+                        >
+                          <MoreVertical className="h-4 w-4" />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end" className="w-40">
+                        <DropdownMenuItem onClick={(e) => {
+                          e.stopPropagation();
+                          handleDuplicateDocument(doc);
+                        }}>
+                          <Copy className="h-4 w-4 mr-2" />
+                          Duplicate
+                        </DropdownMenuItem>
+                        <DropdownMenuItem 
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleDeleteDocument(doc.id, doc.name);
+                          }}
+                          className="text-destructive focus:text-destructive"
+                        >
+                          <Trash2 className="h-4 w-4 mr-2" />
+                          Delete
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
                   </div>
                 ))}
               </div>

@@ -97,12 +97,7 @@ Insects are the largest group of arthropods. The evolution, their evolution, Mur
   const handleOpenRecent = (docId: string) => {
     navigate(`/editor?doc=${docId}`);
   };
-  const templates = [{
-    name: 'Blank',
-    id: 'insects-document',
-    thumbnail: 'content',
-    isRecent: true
-  }];
+  const templates: any[] = [];
   const bookTemplates = [{
     name: 'Simple Novel',
     thumbnail: 'gradient',
