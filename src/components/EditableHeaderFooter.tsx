@@ -219,11 +219,18 @@ export const EditableHeaderFooter = ({
   };
 
   const shouldShowPageNumber = showPageNumber && pageNumberSettings.location === type;
+  const hasContent = layoutStyle === 'single' ? !!localContent : 
+    layoutStyle === 'two' ? !!(localContent?.left || localContent?.right) :
+    !!(localContent?.left || localContent?.center || localContent?.right);
+  
+  // Always visible if: selected, has page number, or has content
+  // Otherwise only visible on hover
+  const isAlwaysVisible = isSelected || shouldShowPageNumber || hasContent;
 
   return (
     <div 
       className={`relative transition-opacity duration-200 ${
-        isSelected ? 'opacity-100' : 'opacity-0 hover:opacity-100'
+        isAlwaysVisible ? 'opacity-100' : 'opacity-0 hover:opacity-100'
       }`}
     >
       {/* Apply Button - shown when selected */}

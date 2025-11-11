@@ -357,16 +357,42 @@ const Editor = () => {
   ) => {
     setPageNumberSettings({ position, format, location });
     
+    // Auto-enable header or footer if not already active
+    if (!headerFooterConfig) {
+      setHeaderFooterConfig({
+        showHeader: location === 'header',
+        showFooter: location === 'footer',
+        layoutStyle: 'single',
+        headerContent: '',
+        footerContent: '',
+        headerHeight: 60,
+        footerHeight: 60,
+      });
+    } else {
+      // Enable the specific header or footer if not already enabled
+      if (location === 'header' && !headerFooterConfig.showHeader) {
+        setHeaderFooterConfig({
+          ...headerFooterConfig,
+          showHeader: true,
+        });
+      } else if (location === 'footer' && !headerFooterConfig.showFooter) {
+        setHeaderFooterConfig({
+          ...headerFooterConfig,
+          showFooter: true,
+        });
+      }
+    }
+    
     if (applyToAll) {
       // Show page numbers on all pages
       const updatedVisibility: Record<number, boolean> = {};
-      for (let i = 1; i <= 2; i++) {
+      for (let i = 1; i <= totalPages; i++) {
         updatedVisibility[i] = true;
       }
       setPageNumbersVisibility(updatedVisibility);
       toast({ 
         title: 'Page Numbers Applied', 
-        description: `Applied to all pages (${position}, ${format})` 
+        description: `Applied to all pages in ${location} (${position}, ${format})` 
       });
     } else {
       // Show only on current page
@@ -376,7 +402,7 @@ const Editor = () => {
       }));
       toast({ 
         title: 'Page Number Applied', 
-        description: `Applied to page ${currentPageForNumber}` 
+        description: `Applied to page ${currentPageForNumber} in ${location}` 
       });
     }
   };
