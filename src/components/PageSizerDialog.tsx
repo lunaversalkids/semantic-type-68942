@@ -30,6 +30,18 @@ const presetSizes: PageSize[] = [
   { name: 'Square storybook', width: 7.5, height: 7.5, category: "Children's Books / Illustrated" },
   { name: 'Large illustrated', width: 8, height: 10, category: "Children's Books / Illustrated" },
   { name: 'Landscape picture book', width: 10, height: 8, category: "Children's Books / Illustrated" },
+  
+  // Horizontal Layout
+  { name: 'Standard U.S. Letter (Landscape)', width: 11, height: 8.5, category: 'Horizontal Layout' },
+  { name: 'Picture Book Format', width: 10, height: 8, category: 'Horizontal Layout' },
+  { name: "Designer's Format", width: 9, height: 7, category: 'Horizontal Layout' },
+  { name: 'Compact Workbook Size', width: 8.5, height: 6, category: 'Horizontal Layout' },
+  { name: 'Small Storybook / Journal Size', width: 7.5, height: 5, category: 'Horizontal Layout' },
+  { name: 'Pocket Landscape Format', width: 6, height: 4, category: 'Horizontal Layout' },
+  { name: 'Artbook / Visual Presentation Size', width: 12, height: 9, category: 'Horizontal Layout' },
+  { name: 'Large Display Format', width: 14, height: 11, category: 'Horizontal Layout' },
+  { name: 'Widescreen / Cinematic Layout', width: 16, height: 9, category: 'Horizontal Layout' },
+  { name: 'A4 Landscape', width: 11.69, height: 8.27, category: 'Horizontal Layout' },
 ];
 
 interface PageSizerDialogProps {
