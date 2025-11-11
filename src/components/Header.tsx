@@ -73,9 +73,59 @@ export const Header = ({
 
       {/* Toolbar */}
       <div className="flex justify-end gap-2 w-[450px]">
-        <button onClick={onCloudClick} className="h-9 w-9 border border-[hsl(var(--stroke))] rounded-[var(--r-sm)] grid place-items-center hover:bg-[hsl(var(--panel-2))] transition-colors overflow-hidden" title="My Documents">
-          <img src={cloudIcon} alt="" className="w-full h-full object-cover" />
+        <button 
+          onClick={onLayoutToggle} 
+          className="h-9 w-9 border border-[hsl(var(--stroke))] rounded-[var(--r-sm)] grid place-items-center hover:bg-[hsl(var(--panel-2))] transition-colors overflow-hidden" 
+          title={isDoublePageLayout ? "Switch to Single Page" : "Switch to Double Page"}
+        >
+          <img 
+            src={isDoublePageLayout ? doublePageIcon : singlePageIcon} 
+            alt="" 
+            className="w-full h-full object-cover" 
+          />
         </button>
+
+        <button onClick={onFindClick} className="h-9 w-9 border border-[hsl(var(--stroke))] rounded-[var(--r-sm)] grid place-items-center hover:bg-[hsl(var(--panel-2))] transition-colors overflow-hidden" title="Find & Replace">
+          <img src={searchIcon} alt="" className="w-full h-full object-cover" />
+        </button>
+
+        <button onClick={onPaletteClick} className="h-9 w-9 border border-[hsl(var(--stroke))] rounded-[var(--r-sm)] grid place-items-center hover:bg-[hsl(var(--panel-2))] transition-colors overflow-hidden" title="Interface Color Palette">
+          <img src={paletteIcon} alt="" className="w-full h-full object-cover" />
+        </button>
+
+        <button onClick={onTextFrameClick} className="h-9 w-9 border border-[hsl(var(--stroke))] rounded-[var(--r-sm)] grid place-items-center hover:bg-[hsl(var(--panel-2))] transition-colors overflow-hidden" title="Text Box">
+          <img src={textFrameIcon} alt="" className="w-full h-full object-cover" />
+        </button>
+
+        <button onClick={onQuotationClick} className="h-9 w-9 border border-[hsl(var(--stroke))] rounded-[var(--r-sm)] grid place-items-center hover:bg-[hsl(var(--panel-2))] transition-colors overflow-hidden" title="Quotation">
+          <img src={quotationIcon} alt="" className="w-full h-full object-cover" />
+        </button>
+
+        <button onClick={onHeaderFooterClick} className="h-9 w-9 border border-[hsl(var(--stroke))] rounded-[var(--r-sm)] grid place-items-center hover:bg-[hsl(var(--panel-2))] transition-colors overflow-hidden" title="Header & Footer">
+          <img src={headerFooterIcon} alt="" className="w-full h-full object-cover" />
+        </button>
+
+        <button onClick={onPageSizerClick} className="h-9 w-9 border border-[hsl(var(--stroke))] rounded-[var(--r-sm)] grid place-items-center hover:bg-[hsl(var(--panel-2))] transition-colors overflow-hidden" title="Page Sizer">
+          <img src={pageSizerIcon} alt="" className="w-full h-full object-cover" />
+        </button>
+
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <button className="h-9 w-9 border border-[hsl(var(--stroke))] rounded-[var(--r-sm)] grid place-items-center hover:bg-[hsl(var(--panel-2))] transition-colors overflow-hidden" title="Pen & Stylus">
+              <img src={penIcon} alt="" className="w-full h-full object-cover" />
+            </button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="bg-background z-50">
+            <DropdownMenuItem onClick={onPenModeClick}>
+              <Pen className="w-4 h-4 mr-2" />
+              Pen / Insert Mode
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={onStylusModeClick}>
+              <Navigation className="w-4 h-4 mr-2" />
+              Stylus Mode
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
 
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -99,58 +149,8 @@ export const Header = ({
           </DropdownMenuContent>
         </DropdownMenu>
 
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <button className="h-9 w-9 border border-[hsl(var(--stroke))] rounded-[var(--r-sm)] grid place-items-center hover:bg-[hsl(var(--panel-2))] transition-colors overflow-hidden" title="Pen & Stylus">
-              <img src={penIcon} alt="" className="w-full h-full object-cover" />
-            </button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="bg-background z-50">
-            <DropdownMenuItem onClick={onPenModeClick}>
-              <Pen className="w-4 h-4 mr-2" />
-              Pen / Insert Mode
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={onStylusModeClick}>
-              <Navigation className="w-4 h-4 mr-2" />
-              Stylus Mode
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-
-        <button onClick={onPageSizerClick} className="h-9 w-9 border border-[hsl(var(--stroke))] rounded-[var(--r-sm)] grid place-items-center hover:bg-[hsl(var(--panel-2))] transition-colors overflow-hidden" title="Page Sizer">
-          <img src={pageSizerIcon} alt="" className="w-full h-full object-cover" />
-        </button>
-
-        <button onClick={onHeaderFooterClick} className="h-9 w-9 border border-[hsl(var(--stroke))] rounded-[var(--r-sm)] grid place-items-center hover:bg-[hsl(var(--panel-2))] transition-colors overflow-hidden" title="Header & Footer">
-          <img src={headerFooterIcon} alt="" className="w-full h-full object-cover" />
-        </button>
-
-        <button onClick={onQuotationClick} className="h-9 w-9 border border-[hsl(var(--stroke))] rounded-[var(--r-sm)] grid place-items-center hover:bg-[hsl(var(--panel-2))] transition-colors overflow-hidden" title="Quotation">
-          <img src={quotationIcon} alt="" className="w-full h-full object-cover" />
-        </button>
-
-        <button onClick={onTextFrameClick} className="h-9 w-9 border border-[hsl(var(--stroke))] rounded-[var(--r-sm)] grid place-items-center hover:bg-[hsl(var(--panel-2))] transition-colors overflow-hidden" title="Text Box">
-          <img src={textFrameIcon} alt="" className="w-full h-full object-cover" />
-        </button>
-
-        <button onClick={onPaletteClick} className="h-9 w-9 border border-[hsl(var(--stroke))] rounded-[var(--r-sm)] grid place-items-center hover:bg-[hsl(var(--panel-2))] transition-colors overflow-hidden" title="Interface Color Palette">
-          <img src={paletteIcon} alt="" className="w-full h-full object-cover" />
-        </button>
-
-        <button onClick={onFindClick} className="h-9 w-9 border border-[hsl(var(--stroke))] rounded-[var(--r-sm)] grid place-items-center hover:bg-[hsl(var(--panel-2))] transition-colors overflow-hidden" title="Find & Replace">
-          <img src={searchIcon} alt="" className="w-full h-full object-cover" />
-        </button>
-
-        <button 
-          onClick={onLayoutToggle} 
-          className="h-9 w-9 border border-[hsl(var(--stroke))] rounded-[var(--r-sm)] grid place-items-center hover:bg-[hsl(var(--panel-2))] transition-colors overflow-hidden" 
-          title={isDoublePageLayout ? "Switch to Single Page" : "Switch to Double Page"}
-        >
-          <img 
-            src={isDoublePageLayout ? doublePageIcon : singlePageIcon} 
-            alt="" 
-            className="w-full h-full object-cover" 
-          />
+        <button onClick={onCloudClick} className="h-9 w-9 border border-[hsl(var(--stroke))] rounded-[var(--r-sm)] grid place-items-center hover:bg-[hsl(var(--panel-2))] transition-colors overflow-hidden" title="My Documents">
+          <img src={cloudIcon} alt="" className="w-full h-full object-cover" />
         </button>
       </div>
     </header>;
