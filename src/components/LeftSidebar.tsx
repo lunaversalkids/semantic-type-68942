@@ -52,44 +52,26 @@ export const LeftSidebar = ({
   };
   const width = stylesExpanded ? 'w-[340px]' : 'w-16';
   return <div className={`h-full bg-sidebar border-r border-sidebar-border flex transition-all duration-300 ${width} overflow-hidden relative`}>
-      {/* Page Counter - Top Left */}
+      {/* Page Counter - Square, positioned left */}
       <div 
-        className="absolute top-2 left-2 z-50 pointer-events-none"
-        style={{
-          clipPath: 'polygon(20% 0%, 80% 0%, 100% 15%, 100% 100%, 0% 100%, 0% 15%)',
-        }}
+        className="absolute top-2 left-1 z-50 pointer-events-none"
       >
-        <div className="bg-[hsl(253,45%,85%)] text-[hsl(266,50%,35%)] font-bold text-center px-4 py-2 flex flex-col items-center justify-center min-w-[72px]">
-          <div className="text-[9px] tracking-[0.15em] leading-none mb-0.5">PAGE</div>
+        <div className="bg-[hsl(253,45%,85%)] text-[hsl(266,50%,35%)] font-bold text-center flex flex-col items-center justify-center w-[56px] h-[56px] rounded-md shadow-sm">
+          <div className="text-[8px] tracking-[0.15em] leading-none mb-1">PAGE</div>
           <div className="text-xl leading-none">{pageCount}</div>
         </div>
       </div>
 
-      {/* Word Counter - Top Right (only visible when expanded) */}
-      {stylesExpanded && (
-        <div 
-          className="absolute top-2 right-2 z-50 pointer-events-none animate-fade-in"
-          style={{
-            clipPath: 'polygon(20% 0%, 80% 0%, 100% 15%, 100% 100%, 0% 100%, 0% 15%)',
-          }}
-        >
-          <div className="bg-[hsl(253,45%,85%)] text-[hsl(266,50%,35%)] font-bold text-center px-4 py-2 flex flex-col items-center justify-center min-w-[72px]">
-            <div className="text-[9px] tracking-[0.15em] leading-none mb-0.5">WORD</div>
-            <div className="text-xl leading-none">{wordCount}</div>
-          </div>
-        </div>
-      )}
-
       {/* Icon Column */}
-      <div className="w-16 flex-shrink-0 flex flex-col items-center py-4 mt-16">
+      <div className="w-16 flex-shrink-0 flex flex-col items-center pt-[72px] pb-4">
         <Button size="icon" variant="ghost" className="h-8 w-8 text-muted-foreground hover:bg-sidebar-accent mb-4" onClick={toggleStyles}>
           {stylesExpanded ? <ChevronLeft className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}
         </Button>
-        {!stylesExpanded && <div className="writing-mode-vertical text-sm font-medium text-muted-foreground uppercase tracking-wide" style={{
+        {!stylesExpanded && <div className="writing-mode-vertical text-sm font-medium text-muted-foreground uppercase tracking-wide mt-14" style={{
         writingMode: 'vertical-rl'
       }}>
-            Smart Styling
-          </div>}
+          Smart Styling
+        </div>}
       </div>
 
       {/* Styles Panel */}

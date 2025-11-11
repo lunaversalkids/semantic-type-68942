@@ -9,9 +9,11 @@ import baselineSuperscriptIcon from '@/assets/baseline-superscript-icon.jpg';
 import baselineSubscriptIcon from '@/assets/baseline-subscript-icon.jpg';
 interface TextStylePanelProps {
   editor?: any;
+  wordCount?: number;
 }
 export const TextStylePanel = ({
-  editor
+  editor,
+  wordCount = 0
 }: TextStylePanelProps) => {
   const [fontSize, setFontSize] = useState('12');
   const [fontFamily, setFontFamily] = useState('Graphik');
@@ -355,11 +357,21 @@ export const TextStylePanel = ({
     }
   };
   if (isCollapsed) {
-    return <aside className="w-16 h-full bg-sidebar border-l border-sidebar-border flex flex-col items-center py-4">
-        <Button size="icon" variant="ghost" className="h-8 w-8 text-muted-foreground hover:bg-sidebar-accent mb-4" onClick={() => setIsCollapsed(false)}>
+    return <aside className="w-16 h-full bg-sidebar border-l border-sidebar-border flex flex-col items-center py-4 relative">
+        {/* Word Counter - Square, positioned top right to align with page count */}
+        <div 
+          className="absolute top-2 right-1 z-50 pointer-events-none"
+        >
+          <div className="bg-[hsl(253,45%,85%)] text-[hsl(266,50%,35%)] font-bold text-center flex flex-col items-center justify-center w-[56px] h-[56px] rounded-md shadow-sm">
+            <div className="text-[8px] tracking-[0.15em] leading-none mb-1">WORD</div>
+            <div className="text-xl leading-none">{wordCount}</div>
+          </div>
+        </div>
+
+        <Button size="icon" variant="ghost" className="h-8 w-8 text-muted-foreground hover:bg-sidebar-accent mb-4 mt-14" onClick={() => setIsCollapsed(false)}>
           <ChevronLeft className="w-4 h-4" />
         </Button>
-        <div className="writing-mode-vertical text-sm font-medium text-muted-foreground uppercase tracking-wide" style={{
+        <div className="writing-mode-vertical text-sm font-medium text-muted-foreground uppercase tracking-wide mt-2" style={{
         writingMode: 'vertical-rl'
       }}>
           Paragraph Mode

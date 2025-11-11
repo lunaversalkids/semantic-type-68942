@@ -882,7 +882,7 @@ const Editor = () => {
           />
         </main>
 
-        <TextStylePanel editor={editor} />
+        <TextStylePanel editor={editor} wordCount={wordCount} />
       </div>
       
       <div className="relative">
