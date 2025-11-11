@@ -267,8 +267,8 @@ export const EditableHeaderFooter = ({
         onMouseDown={handleMouseDown}
       >
         {/* Column Guide Overlays - only visible on hover or when selected */}
-        <div className={`absolute inset-0 pointer-events-none z-10 transition-opacity duration-200 ${
-          isSelected ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
+        <div className={`absolute inset-0 z-10 transition-opacity duration-200 ${
+          isSelected ? 'opacity-100 pointer-events-auto' : 'opacity-0 group-hover:opacity-100 pointer-events-none'
         }`}>
             {/* Helper text */}
             <div 
@@ -404,10 +404,10 @@ export const EditableHeaderFooter = ({
 
         {/* Content Area */}
         <div
-          className={`w-full h-full px-8 py-4 transition-all duration-200 relative z-20 ${
+          className={`w-full h-full px-8 py-4 transition-all duration-200 relative ${
             isSelected 
-              ? 'opacity-60' 
-              : ''
+              ? 'opacity-60 z-10' 
+              : 'z-30'
           }`}
         >
         {shouldShowPageNumber && (
@@ -427,7 +427,9 @@ export const EditableHeaderFooter = ({
             suppressContentEditableWarning
             onBlur={(e) => handleContentUpdate('single', e.currentTarget.textContent || '')}
             onMouseDown={(e) => e.stopPropagation()}
-            className="w-full h-full min-h-[40px] outline-none text-sm text-gray-700 cursor-text"
+            onClick={(e) => e.stopPropagation()}
+            onFocus={(e) => e.stopPropagation()}
+            className="w-full h-full min-h-[40px] outline-none text-sm text-gray-700 cursor-text relative z-40 hover:bg-purple-50/30 transition-colors"
             style={{ 
               padding: '8px',
               borderRadius: '4px',
@@ -438,13 +440,15 @@ export const EditableHeaderFooter = ({
         )}
 
         {layoutStyle === 'two' && (
-          <div className="flex gap-0 h-full">
+          <div className="flex gap-0 h-full relative z-40">
             <div
               contentEditable
               suppressContentEditableWarning
               onBlur={(e) => handleContentUpdate('left', e.currentTarget.textContent || '')}
               onMouseDown={(e) => e.stopPropagation()}
-              className="outline-none text-sm text-gray-700 cursor-text text-left border-r-2 border-purple-200/50 pr-3"
+              onClick={(e) => e.stopPropagation()}
+              onFocus={(e) => e.stopPropagation()}
+              className="outline-none text-sm text-gray-700 cursor-text text-left border-r-2 border-purple-200/50 pr-3 hover:bg-purple-50/30 transition-colors"
               style={{ 
                 padding: '12px',
                 width: `${columnWidths[0]}%`,
@@ -457,7 +461,9 @@ export const EditableHeaderFooter = ({
               suppressContentEditableWarning
               onBlur={(e) => handleContentUpdate('right', e.currentTarget.textContent || '')}
               onMouseDown={(e) => e.stopPropagation()}
-              className="outline-none text-sm text-gray-700 cursor-text text-right pl-3"
+              onClick={(e) => e.stopPropagation()}
+              onFocus={(e) => e.stopPropagation()}
+              className="outline-none text-sm text-gray-700 cursor-text text-right pl-3 hover:bg-purple-50/30 transition-colors"
               style={{ 
                 padding: '12px',
                 width: `${100 - columnWidths[0]}%`,
@@ -469,13 +475,15 @@ export const EditableHeaderFooter = ({
         )}
 
         {layoutStyle === 'three' && (
-          <div className="flex gap-0 h-full">
+          <div className="flex gap-0 h-full relative z-40">
             <div
               contentEditable
               suppressContentEditableWarning
               onBlur={(e) => handleContentUpdate('left', e.currentTarget.textContent || '')}
               onMouseDown={(e) => e.stopPropagation()}
-              className="outline-none text-sm text-gray-700 cursor-text text-left border-r-2 border-purple-200/50 pr-2"
+              onClick={(e) => e.stopPropagation()}
+              onFocus={(e) => e.stopPropagation()}
+              className="outline-none text-sm text-gray-700 cursor-text text-left border-r-2 border-purple-200/50 pr-2 hover:bg-purple-50/30 transition-colors"
               style={{ 
                 padding: '12px',
                 width: `${columnWidths[0]}%`,
@@ -488,7 +496,9 @@ export const EditableHeaderFooter = ({
               suppressContentEditableWarning
               onBlur={(e) => handleContentUpdate('center', e.currentTarget.textContent || '')}
               onMouseDown={(e) => e.stopPropagation()}
-              className="outline-none text-sm text-gray-700 cursor-text text-center border-r-2 border-purple-200/50 px-2"
+              onClick={(e) => e.stopPropagation()}
+              onFocus={(e) => e.stopPropagation()}
+              className="outline-none text-sm text-gray-700 cursor-text text-center border-r-2 border-purple-200/50 px-2 hover:bg-purple-50/30 transition-colors"
               style={{ 
                 padding: '12px',
                 width: `${columnWidths[1] - columnWidths[0]}%`,
@@ -501,16 +511,18 @@ export const EditableHeaderFooter = ({
               suppressContentEditableWarning
               onBlur={(e) => handleContentUpdate('right', e.currentTarget.textContent || '')}
               onMouseDown={(e) => e.stopPropagation()}
-              className="outline-none text-sm text-gray-700 cursor-text text-right pl-2"
+              onClick={(e) => e.stopPropagation()}
+              onFocus={(e) => e.stopPropagation()}
+              className="outline-none text-sm text-gray-700 cursor-text text-right pl-2 hover:bg-purple-50/30 transition-colors"
               style={{ 
                 padding: '12px',
                 width: `${100 - columnWidths[1]}%`,
               }}
             >
-            {localContent?.right || ''}
+              {localContent?.right || ''}
+            </div>
           </div>
-        </div>
-      )}
+        )}
         </div>
       </div>
     </div>

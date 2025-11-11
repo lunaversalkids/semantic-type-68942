@@ -1,7 +1,8 @@
-import { Plus, EyeOff } from 'lucide-react';
+import { Plus } from 'lucide-react';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Button } from '@/components/ui/button';
 import { useState } from 'react';
+import { cn } from '@/lib/utils';
 
 interface PageAddButtonProps {
   pageNumber: number;
@@ -68,27 +69,42 @@ export const PageAddButton = ({
               Duplicate Page
             </Button>
             {(onHideHeader || onHideFooter) && (
-              <div className="flex gap-1 mt-1">
-                {onHideHeader && (
-                  <Button
-                    variant="ghost"
-                    className="flex-1 justify-start hover:bg-accent/10 transition-colors text-primary text-xs"
-                    onClick={() => handleAction(onHideHeader)}
-                  >
-                    <EyeOff className="h-3 w-3 mr-1" />
-                    Hide Header
-                  </Button>
-                )}
-                {onHideFooter && (
-                  <Button
-                    variant="ghost"
-                    className="flex-1 justify-start hover:bg-accent/10 transition-colors text-primary text-xs"
-                    onClick={() => handleAction(onHideFooter)}
-                  >
-                    <EyeOff className="h-3 w-3 mr-1" />
-                    Hide Footer
-                  </Button>
-                )}
+              <div className="px-2 py-3 mt-2 border-t border-border/20">
+                <div className="text-xs text-muted-foreground mb-2 font-medium">Hide Sections:</div>
+                <div className="flex flex-col gap-2">
+                  {onHideHeader && (
+                    <div 
+                      className="flex items-center gap-3 cursor-pointer hover:bg-accent/10 p-2 rounded-md transition-colors"
+                      onClick={() => handleAction(onHideHeader)}
+                    >
+                      <div 
+                        className={cn(
+                          "w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all duration-200",
+                          "border-primary hover:border-primary/80"
+                        )}
+                      >
+                        <div className="w-3 h-3 rounded-full bg-gradient-to-br from-[#8B70F7] to-[#A78BFA]" />
+                      </div>
+                      <span className="text-sm text-primary">Header</span>
+                    </div>
+                  )}
+                  {onHideFooter && (
+                    <div 
+                      className="flex items-center gap-3 cursor-pointer hover:bg-accent/10 p-2 rounded-md transition-colors"
+                      onClick={() => handleAction(onHideFooter)}
+                    >
+                      <div 
+                        className={cn(
+                          "w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all duration-200",
+                          "border-primary hover:border-primary/80"
+                        )}
+                      >
+                        <div className="w-3 h-3 rounded-full bg-gradient-to-br from-[#8B70F7] to-[#A78BFA]" />
+                      </div>
+                      <span className="text-sm text-primary">Footer</span>
+                    </div>
+                  )}
+                </div>
               </div>
             )}
           </div>
