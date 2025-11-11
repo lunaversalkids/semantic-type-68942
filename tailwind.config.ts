@@ -17,9 +17,7 @@ export default {
         '16': 'repeat(16, minmax(0, 1fr))',
       },
       backgroundImage: {
-        "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
-        "gradient-conic":
-          "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
+        'gradient-radial': 'radial-gradient(circle, var(--tw-gradient-stops))',
       },
       colors: {
         border: "hsl(var(--border))",
