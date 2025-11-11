@@ -238,16 +238,19 @@ export const PageViewer = ({ isOpen, onClose, totalPages, onPageClick, onAddPage
                 )}
 
                 {/* Page Content Preview - Shows actual page content */}
-                <div className="w-full h-full overflow-hidden p-2 bg-white">
+                <div className="w-full h-full overflow-hidden relative bg-white">
                   <div 
-                    className="prose prose-sm max-w-none text-[4px] leading-tight"
+                    className="origin-top-left"
                     style={{ 
-                      transform: 'scale(0.12)',
-                      transformOrigin: 'top left',
-                      width: '833%',
-                      height: '833%',
+                      transform: 'scale(0.08)',
+                      width: '1250%',
+                      height: '1250%',
+                      fontSize: '16px',
+                      lineHeight: '1.5',
+                      fontFamily: 'system-ui, -apple-system, sans-serif',
                       color: '#000',
-                      fontFamily: 'system-ui, -apple-system, sans-serif'
+                      padding: '20px',
+                      overflow: 'hidden'
                     }}
                     dangerouslySetInnerHTML={{ 
                       __html: pageContents[pageNum - 1] || '<p style="color: #999;">Empty page</p>' 
