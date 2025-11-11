@@ -227,13 +227,13 @@ export const EditableHeaderFooter = ({
     <div className="relative group w-full">
       {/* Always-visible hover target - this ensures the area is always interactive */}
       <div 
-        className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"
+        className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-all duration-500 ease-out pointer-events-none"
         style={{ background: 'rgba(139, 112, 247, 0.02)' }}
       />
       {/* Apply Button - shown when selected */}
       {isSelected && (
         <div 
-          className="absolute left-1/2 transform -translate-x-1/2 z-50 animate-fade-in"
+          className="absolute left-1/2 transform -translate-x-1/2 z-50 animate-fade-in transition-all duration-300"
           style={{
             top: type === 'header' ? `${height + 10}px` : '-50px',
           }}
@@ -243,45 +243,65 @@ export const EditableHeaderFooter = ({
               e.stopPropagation();
               onApply();
             }}
-            className="bg-gradient-to-r from-[#8B70F7] to-[#A78BFA] hover:from-[#7C5FE6] hover:to-[#9670E6] text-white shadow-lg shadow-purple-500/50 px-6 py-2"
+            className="bg-gradient-to-r from-[#8B70F7] to-[#A78BFA] hover:from-[#7C5FE6] hover:to-[#9670E6] text-white shadow-lg shadow-purple-500/50 px-6 py-2 transition-all duration-200"
           >
             Apply
           </Button>
         </div>
       )}
 
+      {/* Drag Handle - shown when selected */}
+      {isSelected && (
+        <div 
+          className="absolute left-1/2 transform -translate-x-1/2 z-50 cursor-ns-resize animate-fade-in"
+          style={{
+            [type === 'header' ? 'top' : 'bottom']: type === 'header' ? `${height - 10}px` : `${height - 10}px`,
+          }}
+          onMouseDown={handleMouseDown}
+        >
+          <div className="bg-gradient-to-r from-[#8B70F7] to-[#A78BFA] text-white px-4 py-1.5 rounded-full shadow-lg shadow-purple-500/50 text-xs font-medium flex items-center gap-2 hover:shadow-purple-500/70 transition-all duration-200">
+            <span>⬍</span>
+            <span>Drag to Position</span>
+            <span>⬍</span>
+          </div>
+        </div>
+      )}
+
       <div
         ref={containerRef}
-        className={`w-full transition-all duration-300 ${animationClass} absolute left-0 right-0`}
+        className={`w-full ${animationClass} absolute left-0 right-0`}
         style={{ 
           height: `${height}px`,
           cursor: isSelected ? 'ns-resize' : 'default',
           // Position from top for header, from bottom for footer
           ...(type === 'header' ? { top: `${position}px` } : { bottom: `${position}px` }),
           zIndex: isSelected ? 30 : 20,
+          transition: isDragging ? 'none' : 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
         }}
         onClick={onSelect}
-        onMouseDown={handleMouseDown}
       >
         {/* Column Guide Overlays - ONLY visible on hover or when selected */}
-        <div className={`absolute inset-0 z-10 transition-opacity duration-200 pointer-events-none ${
+        <div className={`absolute inset-0 z-10 pointer-events-none transition-all duration-500 ease-out ${
           isSelected ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
         }`}>
             {/* Helper text */}
-            <div 
-              className="absolute left-1/2 transform -translate-x-1/2 z-40 text-xs text-purple-600 font-medium bg-white/90 px-3 py-1 rounded-full shadow-lg animate-fade-in"
-              style={{
-                top: type === 'header' ? '-35px' : `${height + 10}px`,
-              }}
-            >
-              {isDragging ? 'Dragging...' : 'Click and drag to reposition'}
-            </div>
+            {!isSelected && (
+              <div 
+                className="absolute left-1/2 transform -translate-x-1/2 z-40 text-xs text-purple-600 font-medium bg-white/90 px-3 py-1 rounded-full shadow-lg transition-all duration-300"
+                style={{
+                  top: type === 'header' ? '-35px' : `${height + 10}px`,
+                  opacity: isDragging ? 1 : 0,
+                }}
+              >
+                {type === 'header' ? 'Drag down to position header' : 'Drag up to position footer'}
+              </div>
+            )}
 
             {/* Single Column Layout */}
             {layoutStyle === 'single' && (
-              <div className="absolute inset-x-8 inset-y-0 animate-fade-in">
+              <div className="absolute inset-x-8 inset-y-0 transition-all duration-500 ease-out">
                 <div 
-                  className="w-full h-full border-[3px] border-solid relative transition-all duration-200"
+                  className="w-full h-full border-[3px] border-solid relative transition-all duration-300 ease-out"
                   style={{
                     borderColor: isDragging ? '#A78BFA' : '#8B70F7',
                     background: isDragging 
@@ -297,34 +317,35 @@ export const EditableHeaderFooter = ({
             
             {/* Two Column Layout */}
             {layoutStyle === 'two' && (
-              <div className="absolute inset-x-8 inset-y-0 animate-fade-in">
+              <div className="absolute inset-x-8 inset-y-0 transition-all duration-500 ease-out">
                 <div 
-                  className="w-full h-full border-[3px] border-solid relative transition-all duration-200"
+                  className="w-full h-full border-[3px] border-solid relative transition-all duration-300 ease-out"
                   style={{
-                    borderColor: isDragging ? '#A78BFA' : '#8B70F7',
-                    background: isDragging 
+                    borderColor: isDragging || isDraggingDivider !== null ? '#A78BFA' : '#8B70F7',
+                    background: isDragging || isDraggingDivider !== null
                       ? 'linear-gradient(135deg, rgba(167, 139, 250, 0.15), rgba(139, 112, 247, 0.15))' 
                       : 'linear-gradient(135deg, rgba(167, 139, 250, 0.10), rgba(139, 112, 247, 0.10))',
-                    boxShadow: isDragging 
+                    boxShadow: isDragging || isDraggingDivider !== null
                       ? '0 0 40px rgba(167, 139, 250, 0.6), inset 0 0 30px rgba(167, 139, 250, 0.2)' 
                       : '0 0 25px rgba(139, 112, 247, 0.4), inset 0 0 20px rgba(139, 112, 247, 0.1)',
                   }}
                 >
                   {/* Vertical dividing line with draggable handle */}
                   <div 
-                    className="absolute top-0 bottom-0 transform -translate-x-1/2 transition-all duration-200 group"
+                    className="absolute top-0 bottom-0 transform -translate-x-1/2 group"
                     style={{
                       left: `${columnWidths[0]}%`,
                       width: '3px',
                       background: isDraggingDivider === 0 ? '#A78BFA' : '#8B70F7',
                       cursor: 'ew-resize',
                       pointerEvents: 'auto',
+                      transition: isDraggingDivider === 0 ? 'none' : 'all 0.15s cubic-bezier(0.4, 0, 0.2, 1)',
                     }}
                     onMouseDown={(e) => handleDividerMouseDown(0, e)}
                   >
                     {/* Draggable handle indicator */}
                     <div 
-                      className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-purple-500 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center"
+                      className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-purple-500 opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-center justify-center"
                       style={{
                         boxShadow: '0 0 15px rgba(139, 112, 247, 0.6)',
                       }}
@@ -338,33 +359,34 @@ export const EditableHeaderFooter = ({
             
             {/* Three Column Layout */}
             {layoutStyle === 'three' && (
-              <div className="absolute inset-x-8 inset-y-0 animate-fade-in">
+              <div className="absolute inset-x-8 inset-y-0 transition-all duration-500 ease-out">
                 <div 
-                  className="w-full h-full border-[3px] border-solid relative transition-all duration-200"
+                  className="w-full h-full border-[3px] border-solid relative transition-all duration-300 ease-out"
                   style={{
-                    borderColor: isDragging ? '#A78BFA' : '#8B70F7',
-                    background: isDragging 
+                    borderColor: isDragging || isDraggingDivider !== null ? '#A78BFA' : '#8B70F7',
+                    background: isDragging || isDraggingDivider !== null
                       ? 'linear-gradient(135deg, rgba(167, 139, 250, 0.15), rgba(139, 112, 247, 0.15))' 
                       : 'linear-gradient(135deg, rgba(167, 139, 250, 0.10), rgba(139, 112, 247, 0.10))',
-                    boxShadow: isDragging 
+                    boxShadow: isDragging || isDraggingDivider !== null
                       ? '0 0 40px rgba(167, 139, 250, 0.6), inset 0 0 30px rgba(167, 139, 250, 0.2)' 
                       : '0 0 25px rgba(139, 112, 247, 0.4), inset 0 0 20px rgba(139, 112, 247, 0.1)',
                   }}
                 >
                   {/* First vertical line with draggable handle */}
                   <div 
-                    className="absolute top-0 bottom-0 transform -translate-x-1/2 transition-all duration-200 group"
+                    className="absolute top-0 bottom-0 transform -translate-x-1/2 group"
                     style={{
                       left: `${columnWidths[0]}%`,
                       width: '3px',
                       background: isDraggingDivider === 0 ? '#A78BFA' : '#8B70F7',
                       cursor: 'ew-resize',
                       pointerEvents: 'auto',
+                      transition: isDraggingDivider === 0 ? 'none' : 'all 0.15s cubic-bezier(0.4, 0, 0.2, 1)',
                     }}
                     onMouseDown={(e) => handleDividerMouseDown(0, e)}
                   >
                     <div 
-                      className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-purple-500 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center"
+                      className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-purple-500 opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-center justify-center"
                       style={{
                         boxShadow: '0 0 15px rgba(139, 112, 247, 0.6)',
                       }}
@@ -375,18 +397,19 @@ export const EditableHeaderFooter = ({
                   
                   {/* Second vertical line with draggable handle */}
                   <div 
-                    className="absolute top-0 bottom-0 transform -translate-x-1/2 transition-all duration-200 group"
+                    className="absolute top-0 bottom-0 transform -translate-x-1/2 group"
                     style={{
                       left: `${columnWidths[1]}%`,
                       width: '3px',
                       background: isDraggingDivider === 1 ? '#A78BFA' : '#8B70F7',
                       cursor: 'ew-resize',
                       pointerEvents: 'auto',
+                      transition: isDraggingDivider === 1 ? 'none' : 'all 0.15s cubic-bezier(0.4, 0, 0.2, 1)',
                     }}
                     onMouseDown={(e) => handleDividerMouseDown(1, e)}
                   >
                     <div 
-                      className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-purple-500 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center"
+                      className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-purple-500 opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-center justify-center"
                       style={{
                         boxShadow: '0 0 15px rgba(139, 112, 247, 0.6)',
                       }}
@@ -400,7 +423,7 @@ export const EditableHeaderFooter = ({
           </div>
 
         {/* Content Area - Always accessible for typing */}
-        <div className="w-full h-full px-8 py-4 relative z-30">
+        <div className="w-full h-full px-8 py-4 relative z-30 transition-all duration-300 ease-out">
         {shouldShowPageNumber && (
           <div 
             className={`absolute inset-x-8 inset-y-4 text-sm text-foreground pointer-events-none z-40 flex items-center ${
@@ -420,7 +443,7 @@ export const EditableHeaderFooter = ({
             onMouseDown={(e) => e.stopPropagation()}
             onClick={(e) => e.stopPropagation()}
             onFocus={(e) => e.stopPropagation()}
-            className="w-full h-full min-h-[40px] outline-none text-sm text-foreground cursor-text relative z-50 hover:bg-purple-50/20 transition-colors rounded"
+            className="w-full h-full min-h-[40px] outline-none text-sm text-foreground cursor-text relative z-50 hover:bg-purple-50/20 transition-all duration-300 ease-out rounded"
             style={{ 
               padding: '8px',
             }}
@@ -438,7 +461,7 @@ export const EditableHeaderFooter = ({
               onMouseDown={(e) => e.stopPropagation()}
               onClick={(e) => e.stopPropagation()}
               onFocus={(e) => e.stopPropagation()}
-              className="outline-none text-sm text-foreground cursor-text text-left pr-3 hover:bg-purple-50/20 transition-colors rounded-l"
+              className="outline-none text-sm text-foreground cursor-text text-left pr-3 hover:bg-purple-50/20 transition-all duration-300 ease-out rounded-l"
               style={{ 
                 padding: '12px',
                 width: `${columnWidths[0]}%`,
@@ -453,7 +476,7 @@ export const EditableHeaderFooter = ({
               onMouseDown={(e) => e.stopPropagation()}
               onClick={(e) => e.stopPropagation()}
               onFocus={(e) => e.stopPropagation()}
-              className="outline-none text-sm text-foreground cursor-text text-right pl-3 hover:bg-purple-50/20 transition-colors rounded-r"
+              className="outline-none text-sm text-foreground cursor-text text-right pl-3 hover:bg-purple-50/20 transition-all duration-300 ease-out rounded-r"
               style={{ 
                 padding: '12px',
                 width: `${100 - columnWidths[0]}%`,
@@ -473,7 +496,7 @@ export const EditableHeaderFooter = ({
               onMouseDown={(e) => e.stopPropagation()}
               onClick={(e) => e.stopPropagation()}
               onFocus={(e) => e.stopPropagation()}
-              className="outline-none text-sm text-foreground cursor-text text-left pr-2 hover:bg-purple-50/20 transition-colors rounded-l"
+              className="outline-none text-sm text-foreground cursor-text text-left pr-2 hover:bg-purple-50/20 transition-all duration-300 ease-out rounded-l"
               style={{ 
                 padding: '12px',
                 width: `${columnWidths[0]}%`,
@@ -488,7 +511,7 @@ export const EditableHeaderFooter = ({
               onMouseDown={(e) => e.stopPropagation()}
               onClick={(e) => e.stopPropagation()}
               onFocus={(e) => e.stopPropagation()}
-              className="outline-none text-sm text-foreground cursor-text text-center px-2 hover:bg-purple-50/20 transition-colors"
+              className="outline-none text-sm text-foreground cursor-text text-center px-2 hover:bg-purple-50/20 transition-all duration-300 ease-out"
               style={{ 
                 padding: '12px',
                 width: `${columnWidths[1] - columnWidths[0]}%`,
@@ -503,7 +526,7 @@ export const EditableHeaderFooter = ({
               onMouseDown={(e) => e.stopPropagation()}
               onClick={(e) => e.stopPropagation()}
               onFocus={(e) => e.stopPropagation()}
-              className="outline-none text-sm text-foreground cursor-text text-right pl-2 hover:bg-purple-50/20 transition-colors rounded-r"
+              className="outline-none text-sm text-foreground cursor-text text-right pl-2 hover:bg-purple-50/20 transition-all duration-300 ease-out rounded-r"
               style={{ 
                 padding: '12px',
                 width: `${100 - columnWidths[1]}%`,
