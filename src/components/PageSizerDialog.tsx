@@ -80,41 +80,8 @@ export const PageSizerDialog = ({ open, onOpenChange, onSizeSelect }: PageSizerD
         
         <ScrollArea className="h-[500px] pr-4">
           <div className="space-y-8">
-            {categories.map(category => (
-              <div key={category}>
-                <h3 className="text-lg font-semibold mb-4 text-foreground">{category}</h3>
-                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                  {presetSizes
-                    .filter(size => size.category === category)
-                    .map((size, idx) => (
-                      <button
-                        key={idx}
-                        onClick={() => handlePresetSelect(size)}
-                        className="flex flex-col items-center gap-2 p-4 border border-border rounded-lg hover:bg-accent hover:border-primary transition-colors"
-                      >
-                        <div
-                          className="bg-muted border-2 border-border rounded shadow-sm"
-                          style={{
-                            width: `${size.width * 10}px`,
-                            height: `${size.height * 10}px`,
-                            maxWidth: '80px',
-                            maxHeight: '120px',
-                          }}
-                        />
-                        <div className="text-center">
-                          <div className="text-sm font-medium text-foreground">{size.name}</div>
-                          <div className="text-xs text-muted-foreground">
-                            {size.width}″ × {size.height}″
-                          </div>
-                        </div>
-                      </button>
-                    ))}
-                </div>
-              </div>
-            ))}
-
-            {/* Manual Input Section */}
-            <div className="border-t pt-6">
+            {/* Manual Input Section - Now First */}
+            <div>
               <h3 className="text-lg font-semibold mb-4 text-foreground">Custom Page Size</h3>
               <div className="flex gap-4 items-end max-w-md">
                 <div className="flex-1">
@@ -149,6 +116,40 @@ export const PageSizerDialog = ({ open, onOpenChange, onSizeSelect }: PageSizerD
                 </button>
               </div>
             </div>
+
+            {/* Preset Categories */}
+            {categories.map(category => (
+              <div key={category} className="border-t pt-6">
+                <h3 className="text-lg font-semibold mb-4 text-foreground">{category}</h3>
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                  {presetSizes
+                    .filter(size => size.category === category)
+                    .map((size, idx) => (
+                      <button
+                        key={idx}
+                        onClick={() => handlePresetSelect(size)}
+                        className="flex flex-col items-center gap-2 p-4 border border-border rounded-lg hover:bg-accent hover:border-primary transition-colors"
+                      >
+                        <div
+                          className="bg-muted border-2 border-border rounded shadow-sm"
+                          style={{
+                            width: `${size.width * 10}px`,
+                            height: `${size.height * 10}px`,
+                            maxWidth: '80px',
+                            maxHeight: '120px',
+                          }}
+                        />
+                        <div className="text-center">
+                          <div className="text-sm font-medium text-foreground">{size.name}</div>
+                          <div className="text-xs text-muted-foreground">
+                            {size.width}″ × {size.height}″
+                          </div>
+                        </div>
+                      </button>
+                    ))}
+                </div>
+              </div>
+            ))}
           </div>
         </ScrollArea>
       </DialogContent>
