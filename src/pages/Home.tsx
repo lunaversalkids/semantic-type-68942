@@ -179,43 +179,135 @@ Insects are the largest group of arthropods. The evolution, their evolution, Mur
     thumbnail: 'blank'
   }];
   const tabs = ['Recents', 'Basic', 'Reports', 'Books', 'Study Books', 'Letters'];
-  return <div className="min-h-screen flex flex-col items-center justify-center p-8 relative overflow-hidden animate-fade-in">
+  return <div className="min-h-screen flex flex-col items-center justify-center p-8 relative overflow-hidden" style={{
+      background: 'linear-gradient(135deg, hsl(270, 65%, 85%) 0%, hsl(260, 70%, 75%) 50%, hsl(270, 65%, 85%) 100%)'
+    }}>
+      {/* Decorative background elements */}
+      {/* Top left sparkles button */}
+      {!fromEditor && (
+        <div className="absolute top-8 left-8 z-20">
+          <div className="w-12 h-12 rounded-xl bg-white/90 flex items-center justify-center border-2 border-[hsl(270,60%,70%)] shadow-lg hover:scale-105 transition-transform cursor-pointer">
+            <img src={sparklesIcon} alt="Sparkles" className="w-7 h-7" />
+          </div>
+        </div>
+      )}
+      
       {/* Back button - only show when coming from editor */}
-      {fromEditor && <button onClick={() => navigate('/editor')} className="absolute top-8 left-8 flex items-center gap-2 px-4 py-2 bg-white/80 hover:bg-white border-2 border-[hsl(253,80%,85%)] rounded-full shadow-lg hover:shadow-xl transition-all duration-200 text-[hsl(253,47%,18%)] font-semibold">
+      {fromEditor && <button onClick={() => navigate('/editor')} className="absolute top-8 left-8 z-20 flex items-center gap-2 px-4 py-2 bg-white/90 hover:bg-white border-2 border-[hsl(270,60%,70%)] rounded-full shadow-lg hover:shadow-xl transition-all duration-200 text-[hsl(253,47%,18%)] font-semibold">
           <ArrowLeft className="w-5 h-5" />
           Back to Editor
         </button>}
-      
-      {/* Top left icon - sparkles - only show when NOT from editor */}
-      {!fromEditor && <div className="absolute top-8 left-8">
-          <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-white/80 to-[hsl(253,100%,95%)] flex items-center justify-center border-2 border-[hsl(253,80%,85%)] shadow-[0_4px_24px_hsl(253,100%,64%,0.2)]">
-            <img src={sparklesIcon} alt="Sparkles" className="w-full h-full p-1" />
-          </div>
-        </div>}
+
+      {/* Left side decorative flowers/petals */}
+      <div className="absolute left-0 top-1/4 -translate-y-1/2 w-64 h-64 opacity-40">
+        <div className="absolute inset-0 rounded-full bg-gradient-to-br from-purple-500 to-purple-700" style={{
+          clipPath: 'polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%)'
+        }}></div>
+      </div>
+
+      {/* Left side stars */}
+      <div className="absolute left-10 bottom-20 opacity-60">
+        <svg width="120" height="120" viewBox="0 0 120 120" className="text-purple-700">
+          <path d="M60,10 L68,45 L100,50 L75,72 L82,110 L60,90 L38,110 L45,72 L20,50 L52,45 Z" fill="currentColor" />
+        </svg>
+      </div>
+      <div className="absolute left-16 bottom-48 opacity-40">
+        <svg width="60" height="60" viewBox="0 0 60 60" className="text-purple-700">
+          <path d="M30,5 L34,22.5 L50,25 L37.5,36 L41,55 L30,45 L19,55 L22.5,36 L10,25 L26,22.5 Z" fill="currentColor" />
+        </svg>
+      </div>
+      <div className="absolute left-8 bottom-72 opacity-30">
+        <svg width="40" height="40" viewBox="0 0 40 40" className="text-purple-700">
+          <path d="M20,3 L23,15 L33,17 L25,24 L27,37 L20,30 L13,37 L15,24 L7,17 L17,15 Z" fill="currentColor" />
+        </svg>
+      </div>
+
+      {/* Left side silhouette - person with braids */}
+      <div className="absolute left-8 top-12 w-48 h-64 opacity-30">
+        <div className="absolute inset-0">
+          <svg viewBox="0 0 100 150" className="w-full h-full text-purple-700">
+            <ellipse cx="50" cy="35" rx="22" ry="28" fill="currentColor" />
+            <circle cx="35" cy="20" rx="8" ry="15" fill="currentColor" />
+            <circle cx="65" cy="20" rx="8" ry="15" fill="currentColor" />
+            <path d="M30,60 Q50,50 70,60 L70,120 Q50,130 30,120 Z" fill="currentColor" />
+          </svg>
+        </div>
+      </div>
+
+      {/* Right side silhouette - person profile */}
+      <div className="absolute right-32 top-16 w-40 h-56 opacity-30">
+        <div className="absolute inset-0">
+          <svg viewBox="0 0 80 120" className="w-full h-full text-purple-700">
+            <ellipse cx="40" cy="25" rx="18" ry="22" fill="currentColor" />
+            <path d="M40,25 L55,20 L60,35 L55,50" fill="currentColor" />
+            <path d="M25,45 Q40,40 55,45 L55,95 Q40,105 25,95 Z" fill="currentColor" />
+          </svg>
+        </div>
+      </div>
+
+      {/* Top right document icon */}
+      <div className="absolute top-28 right-20 w-20 h-20 opacity-50">
+        <div className="w-full h-full rounded-2xl bg-white/40 border-4 border-purple-600/50 flex items-center justify-center backdrop-blur-sm">
+          <svg viewBox="0 0 24 24" className="w-12 h-12 text-purple-600" fill="none" stroke="currentColor" strokeWidth="2.5">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+            <polyline points="14 2 14 8 20 8"></polyline>
+            <line x1="8" y1="13" x2="16" y2="13"></line>
+            <line x1="8" y1="17" x2="16" y2="17"></line>
+          </svg>
+        </div>
+      </div>
+
+      {/* Bottom right book icon */}
+      <div className="absolute bottom-32 right-16 w-20 h-20 opacity-50">
+        <div className="w-full h-full rounded-2xl bg-white/40 border-4 border-purple-600/50 flex items-center justify-center backdrop-blur-sm">
+          <svg viewBox="0 0 24 24" className="w-12 h-12 text-purple-600" fill="none" stroke="currentColor" strokeWidth="2.5">
+            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+            <line x1="12" y1="12" x2="12" y2="12"></line>
+          </svg>
+        </div>
+      </div>
+
+      {/* Top right ESTHER text with star */}
+      <div className="absolute top-1/3 right-8 flex items-center gap-2 opacity-70">
+        <span className="text-2xl font-bold text-purple-800 tracking-wider">ESTHER</span>
+        <svg width="60" height="60" viewBox="0 0 60 60" className="text-purple-800">
+          <path d="M30,5 L34,22.5 L50,25 L37.5,36 L41,55 L30,45 L19,55 L22.5,36 L10,25 L26,22.5 Z" fill="currentColor" />
+        </svg>
+      </div>
+
+      {/* Right side stars */}
+      <div className="absolute right-12 bottom-44 opacity-40">
+        <svg width="50" height="50" viewBox="0 0 50 50" className="text-purple-700">
+          <path d="M25,4 L28,18.75 L41.67,20.83 L31.25,30 L34.17,45.83 L25,37.5 L15.83,45.83 L18.75,30 L8.33,20.83 L22,18.75 Z" fill="currentColor" />
+        </svg>
+      </div>
+
+      {/* Sparkles throughout */}
+      <div className="absolute top-20 left-1/4 w-2 h-2 bg-white rounded-full animate-pulse"></div>
+      <div className="absolute top-40 right-1/3 w-2 h-2 bg-white rounded-full animate-pulse" style={{animationDelay: '0.5s'}}></div>
+      <div className="absolute bottom-1/3 left-1/3 w-2 h-2 bg-white rounded-full animate-pulse" style={{animationDelay: '1s'}}></div>
+      <div className="absolute top-1/2 right-1/4 w-2 h-2 bg-white rounded-full animate-pulse" style={{animationDelay: '1.5s'}}></div>
+      <div className="absolute bottom-20 right-40 w-2 h-2 bg-white rounded-full animate-pulse" style={{animationDelay: '0.7s'}}></div>
 
       {/* Main content */}
-      <div className="flex flex-col items-center space-y-12 max-w-5xl w-full">
+      <div className="flex flex-col items-center space-y-8 max-w-5xl w-full z-10">
         {/* Logo and title section */}
         <div className="flex flex-col items-center space-y-2">
-          {/* Infinity logo */}
-          <div className="relative w-80 h-80 flex items-center justify-center">
-            <img src={infinityLogo} alt="Doc One Infinity Logo" className="w-80 h-80 object-contain" style={{
-            backgroundColor: 'transparent',
-            mixBlendMode: 'multiply'
-          }} />
-            {/* Bottom glow effect - starts from bottom and fades down */}
-            <div className="absolute bottom-8 left-1/2 -translate-x-1/2 w-4/5 h-32 rounded-full bg-gradient-to-b from-[hsl(253,100%,64%,0.4)] to-transparent blur-3xl -z-10"></div>
+          {/* Infinity logo with circular background */}
+          <div className="relative w-64 h-64 flex items-center justify-center mb-4">
+            <div className="absolute inset-0 rounded-full bg-gradient-to-br from-purple-400 to-purple-600 opacity-80 blur-2xl"></div>
+            <div className="relative w-48 h-48 rounded-full bg-gradient-to-br from-purple-500/90 to-purple-600/90 flex items-center justify-center shadow-2xl">
+              <img src={infinityLogo} alt="Doc One Infinity Logo" className="w-32 h-32 object-contain brightness-0 invert" />
+            </div>
           </div>
 
           {/* App title */}
-          <div className="flex flex-col items-center space-y-3 -mt-[360px]">
-            <h1 className="text-[5.5rem] font-extrabold tracking-tight leading-none" style={{
+          <div className="flex flex-col items-center space-y-3">
+            <h1 className="text-7xl font-extrabold tracking-tight leading-none" style={{
             fontFamily: 'system-ui, -apple-system, "Segoe UI", Roboto, sans-serif',
-            color: '#3730a3',
-            WebkitTextStroke: '3px white',
-            paintOrder: 'stroke fill',
-            textShadow: '0 4px 12px hsl(253 100% 64% / 0.15)',
-            fontWeight: '700'
+            color: '#2d1b69',
+            fontWeight: '900'
           }}>
               Doc One
             </h1>
@@ -224,14 +316,14 @@ Insects are the largest group of arthropods. The evolution, their evolution, Mur
             {!fromEditor && (
               <>
                 {/* Tagline */}
-                <p className="text-base text-[hsl(253,28%,40%)] font-semibold">
+                <p className="text-base text-[#2d1b69] font-semibold mt-1">
                   Create. Teach. Publish. Evolve.
                 </p>
 
                 {/* Start Writing button */}
                 <button
                   onClick={handleStartWriting}
-                  className="mt-4 px-12 py-4 bg-gradient-to-r from-[hsl(253,100%,64%)] to-[hsl(266,100%,70%)] text-white text-xl font-bold rounded-full shadow-[0_0_30px_hsl(253,100%,64%,0.5)] hover:shadow-[0_0_50px_hsl(253,100%,64%,0.7)] hover:scale-105 transition-all duration-300"
+                  className="mt-6 px-12 py-3.5 bg-gradient-to-r from-[hsl(253,100%,64%)] to-[hsl(266,100%,70%)] text-white text-lg font-bold rounded-full shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300"
                 >
                   Start Writing
                 </button>
@@ -240,20 +332,20 @@ Insects are the largest group of arthropods. The evolution, their evolution, Mur
           </div>
 
           {/* Divider text - only show on homepage */}
-          {!fromEditor && <p className="text-base text-[hsl(253,28%,40%)] font-semibold pt-2">Choose Your Template.</p>}
+          {!fromEditor && <p className="text-base text-[#2d1b69] font-semibold pt-4">Choose Your Template.</p>}
 
           {/* Chevron arrow */}
-          <svg className="w-10 h-10 text-[hsl(253,100%,64%)] animate-bounce drop-shadow-[0_4px_8px_hsl(253,100%,64%,0.3)]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={3}>
+          <svg className="w-8 h-8 text-[hsl(253,100%,64%)] animate-bounce mt-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={3}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
           </svg>
         </div>
 
         {/* Templates section or Recent documents only */}
-        <div className="w-full bg-gradient-to-br from-white/70 via-[hsl(253,100%,98%)] to-[hsl(253,100%,96%)] rounded-[28px] p-10 shadow-[0_0_60px_hsl(253,100%,64%,0.25),0_8px_48px_hsl(253,100%,64%,0.15),inset_0_1px_0_white] border-2 border-[hsl(253,80%,90%)] backdrop-blur-xl">
+        <div className="w-full bg-white/60 backdrop-blur-md rounded-[32px] p-10 shadow-[0_8px_32px_rgba(139,92,246,0.3)] border-3 border-purple-300/60">
           {fromEditor ?
         // Simple recent documents view when coming from editor
         <div className="space-y-6">
-              <h2 className="text-3xl font-bold text-[hsl(253,47%,18%)]">Recent & Saved Documents</h2>
+              <h2 className="text-3xl font-bold text-[#1a1443]">Recent & Saved Documents</h2>
               <div className="grid grid-cols-4 gap-6">
                 {recentDocs.map((doc, index) => <div key={index} className="group relative aspect-[3/4] rounded-[22px] overflow-hidden border-[3px] border-[hsl(253,80%,88%)] hover:border-[hsl(253,100%,64%)] transition-all duration-300 hover:scale-105 shadow-[0_0_20px_hsl(253,100%,64%,0.12)] hover:shadow-[0_0_40px_hsl(253,100%,64%,0.35),0_12px_40px_hsl(253,100%,64%,0.3)]">
                     <button onClick={() => handleOpenRecent(doc.id)} className="w-full h-full">
@@ -341,8 +433,8 @@ Insects are the largest group of arthropods. The evolution, their evolution, Mur
             </div> :
         // Full templates view with tabs
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-            <TabsList className="w-full justify-start mb-8 bg-transparent gap-3 h-auto p-0">
-              {tabs.map(tab => <TabsTrigger key={tab} value={tab} className="px-7 py-3 rounded-[16px] text-[hsl(253,28%,40%)] data-[state=active]:text-[hsl(253,100%,64%)] data-[state=active]:bg-white data-[state=active]:shadow-[0_4px_20px_hsl(253,100%,64%,0.3),inset_0_1px_0_white] transition-all duration-200 font-semibold hover:text-[hsl(253,100%,64%)] border-2 border-transparent data-[state=active]:border-[hsl(253,100%,64%)]">
+            <TabsList className="w-full justify-start mb-6 bg-transparent gap-4 h-auto p-0">
+              {tabs.map(tab => <TabsTrigger key={tab} value={tab} className="px-6 py-2.5 rounded-xl text-[#4338ca] text-lg data-[state=active]:text-[#4338ca] data-[state=active]:bg-transparent data-[state=active]:shadow-none transition-all duration-200 font-semibold hover:text-[#4338ca] border-0 data-[state=active]:border-b-3 data-[state=active]:border-[#4338ca]">
                   {tab}
                 </TabsTrigger>)}
             </TabsList>
@@ -351,7 +443,7 @@ Insects are the largest group of arthropods. The evolution, their evolution, Mur
               {/* Recent documents grid */}
               <div>
                 <div className="flex items-center justify-between mb-6">
-                  <h2 className="text-3xl font-bold text-[hsl(253,47%,18%)]">{activeTab}</h2>
+                  <h2 className="text-3xl font-bold text-[#1a1443]">{activeTab}</h2>
                 </div>
                 
                 <div className="grid grid-cols-4 gap-6">
@@ -476,11 +568,11 @@ Insects are the largest group of arthropods. The evolution, their evolution, Mur
 
               {/* See all button and templates section - only show in Recents tab */}
               {activeTab === 'Recents' && <>
-                  <div className="flex justify-center pt-6">
-                    <button onClick={() => setIsTemplatesExpanded(!isTemplatesExpanded)} className="text-[hsl(253,28%,40%)] hover:text-[hsl(253,100%,64%)] font-semibold flex items-center gap-2 transition-all duration-200">
+                  <div className="flex justify-center pt-8">
+                    <button onClick={() => setIsTemplatesExpanded(!isTemplatesExpanded)} className="text-[#2d3748] hover:text-[#4338ca] font-bold text-xl flex items-center gap-2 transition-all duration-200">
                       See All Templates
-                      <svg className={`w-5 h-5 transition-transform duration-200 ${isTemplatesExpanded ? 'rotate-180' : 'rotate-90'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+                      <svg className={`w-6 h-6 transition-transform duration-200 ${isTemplatesExpanded ? 'rotate-180' : 'rotate-0'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
                       </svg>
                     </button>
                   </div>
