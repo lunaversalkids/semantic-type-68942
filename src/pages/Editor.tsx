@@ -494,6 +494,64 @@ const Editor = () => {
     toast({ title: 'Stylus Mode', description: 'Stylus mode activated' });
   };
 
+  const handleQuotation = () => {
+    if (!editor) return;
+    
+    const { from, to } = editor.state.selection;
+    const selectedText = editor.state.doc.textBetween(from, to, '');
+    
+    if (!selectedText) {
+      toast({
+        title: 'No Text Selected',
+        description: 'Please select text to add or remove quotations',
+        variant: 'destructive',
+      });
+      return;
+    }
+    
+    // Check if text already has quotes
+    const hasQuotes = (selectedText.startsWith('"') && selectedText.endsWith('"')) ||
+                     (selectedText.startsWith("'") && selectedText.endsWith("'"));
+    
+    if (hasQuotes) {
+      // Remove quotes
+      const unquoted = selectedText.slice(1, -1);
+      editor.chain()
+        .focus()
+        .deleteRange({ from, to })
+        .insertContent(unquoted)
+        .setTextSelection(from)
+        .run();
+      toast({ title: 'Quotations Removed' });
+    } else {
+      // Add quotes
+      const quoted = `"${selectedText}"`;
+      editor.chain()
+        .focus()
+        .deleteRange({ from, to })
+        .insertContent(quoted)
+        .setTextSelection(from)
+        .run();
+      toast({ title: 'Quotations Added' });
+    }
+  };
+
+  const handlePageSizer = () => {
+    toast({ title: 'Page Sizer', description: 'Page sizing options coming soon' });
+  };
+
+  const handleHeaderFooter = () => {
+    toast({ title: 'Header & Footer', description: 'Header and footer editor coming soon' });
+  };
+
+  const handleTextFrame = () => {
+    toast({ title: 'Text Box', description: 'Text box insertion coming soon' });
+  };
+
+  const handlePalette = () => {
+    toast({ title: 'Color Palette', description: 'Interface color customization coming soon' });
+  };
+
   const navigate = useNavigate();
 
   return (
@@ -505,6 +563,11 @@ const Editor = () => {
         onCloudClick={() => navigate('/home?from=editor')}
         onPenModeClick={handlePenMode}
         onStylusModeClick={handleStylusMode}
+        onPageSizerClick={handlePageSizer}
+        onHeaderFooterClick={handleHeaderFooter}
+        onQuotationClick={handleQuotation}
+        onTextFrameClick={handleTextFrame}
+        onPaletteClick={handlePalette}
         onExportClick={() => setExportOpen(true)}
         onImportClick={() => setImportOpen(true)}
         onPdfImportClick={() => setPdfImportOpen(true)}
