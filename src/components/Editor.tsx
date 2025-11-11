@@ -488,22 +488,6 @@ export const Editor = ({
                           onAddPageWithBackground={() => addPageWithBackground(pageNum)}
                           onChangeBackground={() => changeBackground(pageNum)}
                           onCopyPage={() => copyPage(pageNum)}
-                          onHideHeader={headerFooterConfig?.showHeader ? () => {
-                            if (onHeaderFooterConfigChange && headerFooterConfig) {
-                              onHeaderFooterConfigChange({
-                                ...headerFooterConfig,
-                                showHeader: false,
-                              });
-                            }
-                          } : undefined}
-                          onHideFooter={headerFooterConfig?.showFooter ? () => {
-                            if (onHeaderFooterConfigChange && headerFooterConfig) {
-                              onHeaderFooterConfigChange({
-                                ...headerFooterConfig,
-                                showFooter: false,
-                              });
-                            }
-                          } : undefined}
                         />
                       </div>
 
