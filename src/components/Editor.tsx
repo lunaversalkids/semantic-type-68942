@@ -118,6 +118,8 @@ export const Editor = ({
   const [targetZoom, setTargetZoom] = useState(1);
   const [isZooming, setIsZooming] = useState(false);
   const [selectedHeaderFooter, setSelectedHeaderFooter] = useState<{ type: 'header' | 'footer', pageNum: number } | null>(null);
+  const [headerPosition, setHeaderPosition] = useState(0); // Distance from top edge
+  const [footerPosition, setFooterPosition] = useState(0); // Distance from bottom edge
 
   const addNewPage = () => {
     const newPageId = `page-${pages.length + 1}`;
@@ -428,46 +430,34 @@ export const Editor = ({
                     >
                       {/* Header */}
                       {headerFooterConfig?.showHeader && (
-                        <>
-                          <EditableHeaderFooter
-                            type="header"
-                            layoutStyle={headerFooterConfig.layoutStyle}
-                            content={headerFooterConfig.headerContent}
-                            height={headerFooterConfig.headerHeight}
-                            onHeightChange={(height) => {
-                              if (onHeaderFooterConfigChange) {
-                                onHeaderFooterConfigChange({
-                                  ...headerFooterConfig,
-                                  headerHeight: height,
-                                });
-                              }
-                            }}
-                            onContentChange={(content) => {
-                              if (onHeaderFooterConfigChange) {
-                                onHeaderFooterConfigChange({
-                                  ...headerFooterConfig,
-                                  headerContent: content,
-                                });
-                              }
-                            }}
-                            isSelected={selectedHeaderFooter?.type === 'header' && selectedHeaderFooter?.pageNum === pageNum}
-                            onSelect={() => setSelectedHeaderFooter({ type: 'header', pageNum })}
-                            onDeselect={() => setSelectedHeaderFooter(null)}
-                            onApply={() => setSelectedHeaderFooter(null)}
-                          />
-                          <DraggableBoundary
-                            type="header"
-                            initialPosition={headerFooterConfig.headerHeight}
-                            onPositionChange={(height) => {
-                              if (onHeaderFooterConfigChange) {
-                                onHeaderFooterConfigChange({
-                                  ...headerFooterConfig,
-                                  headerHeight: height,
-                                });
-                              }
-                            }}
-                          />
-                        </>
+                        <EditableHeaderFooter
+                          type="header"
+                          layoutStyle={headerFooterConfig.layoutStyle}
+                          content={headerFooterConfig.headerContent}
+                          height={headerFooterConfig.headerHeight}
+                          position={headerPosition}
+                          onHeightChange={(height) => {
+                            if (onHeaderFooterConfigChange) {
+                              onHeaderFooterConfigChange({
+                                ...headerFooterConfig,
+                                headerHeight: height,
+                              });
+                            }
+                          }}
+                          onPositionChange={setHeaderPosition}
+                          onContentChange={(content) => {
+                            if (onHeaderFooterConfigChange) {
+                              onHeaderFooterConfigChange({
+                                ...headerFooterConfig,
+                                headerContent: content,
+                              });
+                            }
+                          }}
+                          isSelected={selectedHeaderFooter?.type === 'header' && selectedHeaderFooter?.pageNum === pageNum}
+                          onSelect={() => setSelectedHeaderFooter({ type: 'header', pageNum })}
+                          onDeselect={() => setSelectedHeaderFooter(null)}
+                          onApply={() => setSelectedHeaderFooter(null)}
+                        />
                       )}
 
                       {/* Page Content Area */}
@@ -509,46 +499,34 @@ export const Editor = ({
 
                       {/* Footer */}
                       {headerFooterConfig?.showFooter && (
-                        <>
-                          <DraggableBoundary
-                            type="footer"
-                            initialPosition={headerFooterConfig.footerHeight}
-                            onPositionChange={(height) => {
-                              if (onHeaderFooterConfigChange) {
-                                onHeaderFooterConfigChange({
-                                  ...headerFooterConfig,
-                                  footerHeight: height,
-                                });
-                              }
-                            }}
-                          />
-                          <EditableHeaderFooter
-                            type="footer"
-                            layoutStyle={headerFooterConfig.layoutStyle}
-                            content={headerFooterConfig.footerContent}
-                            height={headerFooterConfig.footerHeight}
-                            onHeightChange={(height) => {
-                              if (onHeaderFooterConfigChange) {
-                                onHeaderFooterConfigChange({
-                                  ...headerFooterConfig,
-                                  footerHeight: height,
-                                });
-                              }
-                            }}
-                            onContentChange={(content) => {
-                              if (onHeaderFooterConfigChange) {
-                                onHeaderFooterConfigChange({
-                                  ...headerFooterConfig,
-                                  footerContent: content,
-                                });
-                              }
-                            }}
-                            isSelected={selectedHeaderFooter?.type === 'footer' && selectedHeaderFooter?.pageNum === pageNum}
-                            onSelect={() => setSelectedHeaderFooter({ type: 'footer', pageNum })}
-                            onDeselect={() => setSelectedHeaderFooter(null)}
-                            onApply={() => setSelectedHeaderFooter(null)}
-                          />
-                        </>
+                        <EditableHeaderFooter
+                          type="footer"
+                          layoutStyle={headerFooterConfig.layoutStyle}
+                          content={headerFooterConfig.footerContent}
+                          height={headerFooterConfig.footerHeight}
+                          position={footerPosition}
+                          onHeightChange={(height) => {
+                            if (onHeaderFooterConfigChange) {
+                              onHeaderFooterConfigChange({
+                                ...headerFooterConfig,
+                                footerHeight: height,
+                              });
+                            }
+                          }}
+                          onPositionChange={setFooterPosition}
+                          onContentChange={(content) => {
+                            if (onHeaderFooterConfigChange) {
+                              onHeaderFooterConfigChange({
+                                ...headerFooterConfig,
+                                footerContent: content,
+                              });
+                            }
+                          }}
+                          isSelected={selectedHeaderFooter?.type === 'footer' && selectedHeaderFooter?.pageNum === pageNum}
+                          onSelect={() => setSelectedHeaderFooter({ type: 'footer', pageNum })}
+                          onDeselect={() => setSelectedHeaderFooter(null)}
+                          onApply={() => setSelectedHeaderFooter(null)}
+                        />
                       )}
                     </Card>
                   );

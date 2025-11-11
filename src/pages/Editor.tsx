@@ -85,6 +85,8 @@ const Editor = () => {
   const [headerHeight, setHeaderHeight] = useState(60);
   const [footerHeight, setFooterHeight] = useState(60);
   const [selectedHeaderFooter, setSelectedHeaderFooter] = useState<'header' | 'footer' | null>(null);
+  const [headerPosition, setHeaderPosition] = useState(0); // Distance from top edge
+  const [footerPosition, setFooterPosition] = useState(0); // Distance from bottom edge
   const { toast } = useToast();
 
   // Track document access for recents
@@ -593,7 +595,7 @@ const Editor = () => {
     const removingFooter = headerFooterConfig?.showFooter && !config.showFooter;
     
     if (removingHeader || removingFooter) {
-      // User is removing - clear content
+      // User is removing - clear content and reset positions
       const updatedConfig = {
         ...config,
         headerContent: removingHeader ? '' : config.headerContent,
@@ -602,6 +604,10 @@ const Editor = () => {
       setHeaderFooterConfig(updatedConfig);
       setHeaderHeight(config.headerHeight);
       setFooterHeight(config.footerHeight);
+      
+      // Reset positions
+      if (removingHeader) setHeaderPosition(0);
+      if (removingFooter) setFooterPosition(0);
       
       const removedParts = [];
       if (removingHeader) removedParts.push('Header');
@@ -619,7 +625,7 @@ const Editor = () => {
     const reTogglingFooter = !headerFooterConfig?.showFooter && config.showFooter;
     
     if (reTogglingHeader || reTogglingFooter) {
-      // Reset to empty placeholders (not previous content)
+      // Reset to empty placeholders (not previous content) and reset positions
       const resetConfig = {
         ...config,
         headerContent: reTogglingHeader ? getDefaultContent(config.layoutStyle) : config.headerContent,
@@ -628,6 +634,10 @@ const Editor = () => {
       setHeaderFooterConfig(resetConfig);
       setHeaderHeight(config.headerHeight);
       setFooterHeight(config.footerHeight);
+      
+      // Reset positions
+      if (reTogglingHeader) setHeaderPosition(0);
+      if (reTogglingFooter) setFooterPosition(0);
     } else {
       // Normal save
       setHeaderFooterConfig(config);
