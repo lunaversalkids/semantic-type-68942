@@ -1,76 +1,61 @@
-import { useNavigate, useSearchParams } from 'react-router-dom';
-import { useEffect, useState } from 'react';
-import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
-import { ArrowLeft, MoreVertical, Copy, Trash2, Edit3 } from 'lucide-react';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-import { toast } from 'sonner';
-import infinityLogo from '@/assets/infinity-logo.png';
-import sparklesIcon from '@/assets/sparkles-icon.png';
-import leftFlower from '@/assets/left-flower.png';
-import leftSilhouette from '@/assets/left-silhouette.png';
-import rightSilhouette from '@/assets/right-silhouette.png';
-import purpleStar from '@/assets/purple-star.png';
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Sparkles, Cloud, Pen, ArrowUpDown, ChevronDown, FileText, ArrowLeft, MoreVertical, BookOpen } from "lucide-react";
+import leftFlower from "@/assets/left-flower.png";
+import leftSilhouette from "@/assets/left-silhouette.png";
+import rightSilhouette from "@/assets/right-silhouette.png";
+import purpleStar from "@/assets/purple-star.png";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { toast } from "sonner";
+
 interface RecentDocument {
   id: string;
   title: string;
   thumbnail?: string;
   lastOpened: number;
 }
+
 const Home = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const fromEditor = searchParams.get('from') === 'editor';
+  const fromEditor = searchParams.get("from") === "editor";
   const [recentDocs, setRecentDocs] = useState<RecentDocument[]>([]);
-  const [activeTab, setActiveTab] = useState('Recents');
-  const [isTemplatesExpanded, setIsTemplatesExpanded] = useState(false);
+  const [activeTab, setActiveTab] = useState("recents");
   const [openMenuId, setOpenMenuId] = useState<string | null>(null);
-  const [renamingId, setRenamingId] = useState<string | null>(null);
-  const [newName, setNewName] = useState('');
+
   useEffect(() => {
     // Load recent documents from localStorage
-    const stored = localStorage.getItem('recentDocuments');
+    const stored = localStorage.getItem("recentDocuments");
     if (stored) {
       const docs = JSON.parse(stored) as RecentDocument[];
-      // Ensure "Insects" document exists and is first with default content
-      const insectsDoc = docs.find(doc => doc.id === 'insects-document');
+      // Ensure "Insects" document exists and is first
+      const insectsDoc = docs.find((doc) => doc.id === "insects-document");
       const defaultInsectsContent = `Insects
 
 Arthropods
 
-Insects are an ind-isub sclass units of the class Hexapoda – In from novellisms them from other arthropods by their three-part body, compound eyes, and external skeleton, in an abusant serza.
+Insects are an ind-isub sclass units of the class Hexapoda – In from novellisms them from other arthropods by their three-part body, compound eyes, and external skeleton, in an abusant serza.`;
 
-Hexapoda
-
-Arthroprod soptrtrice Hexapoda
-
-Insects comprise the most diverse group of animals on Earth.
-
-Classification and Evolution
-
-Insects comprise the most diverse group of animals on Earth.
-
-Insects are the largest group of arthropods. The evolution, their evolution, Murninary endurseries, during the De-vonian period after thorough.`;
       if (insectsDoc) {
-        insectsDoc.title = 'Insects';
+        insectsDoc.title = "Insects";
         if (!insectsDoc.thumbnail) {
           insectsDoc.thumbnail = defaultInsectsContent;
         }
-        const otherDocs = docs.filter(doc => doc.id !== 'insects-document');
+        const otherDocs = docs.filter((doc) => doc.id !== "insects-document");
         const sortedDocs = [insectsDoc, ...otherDocs.sort((a, b) => b.lastOpened - a.lastOpened)];
-        localStorage.setItem('recentDocuments', JSON.stringify(sortedDocs));
+        localStorage.setItem("recentDocuments", JSON.stringify(sortedDocs));
         setRecentDocs(sortedDocs.slice(0, 4));
       } else {
-        // Add Insects document with default content
+        // Add Insects document
         const defaultDoc: RecentDocument = {
-          id: 'insects-document',
-          title: 'Insects',
+          id: "insects-document",
+          title: "Insects",
           thumbnail: defaultInsectsContent,
-          lastOpened: Date.now()
+          lastOpened: Date.now(),
         };
         const sortedDocs = [defaultDoc, ...docs.sort((a, b) => b.lastOpened - a.lastOpened)];
-        localStorage.setItem('recentDocuments', JSON.stringify(sortedDocs));
+        localStorage.setItem("recentDocuments", JSON.stringify(sortedDocs));
         setRecentDocs(sortedDocs.slice(0, 4));
       }
     } else {
@@ -79,524 +64,413 @@ Insects are the largest group of arthropods. The evolution, their evolution, Mur
 
 Arthropods
 
-Insects are an ind-isub sclass units of the class Hexapoda – In from novellisms them from other arthropods by their three-part body, compound eyes, and external skeleton, in an abusant serza.
-
-Hexapoda
-
-Arthroprod soptrtrice Hexapoda
-
-Insects comprise the most diverse group of animals on Earth.
-
-Classification and Evolution
-
-Insects comprise the most diverse group of animals on Earth.
-
-Insects are the largest group of arthropods. The evolution, their evolution, Murninary endurseries, during the De-vonian period after thorough.`;
+Insects are an ind-isub sclass units of the class Hexapoda – In from novellisms them from other arthropods by their three-part body, compound eyes, and external skeleton, in an abusant serza.`;
       const defaultDoc: RecentDocument = {
-        id: 'insects-document',
-        title: 'Insects',
+        id: "insects-document",
+        title: "Insects",
         thumbnail: defaultInsectsContent,
-        lastOpened: Date.now()
+        lastOpened: Date.now(),
       };
-      localStorage.setItem('recentDocuments', JSON.stringify([defaultDoc]));
+      localStorage.setItem("recentDocuments", JSON.stringify([defaultDoc]));
       setRecentDocs([defaultDoc]);
     }
   }, []);
+
   const handleStartWriting = () => {
-    navigate('/editor');
+    navigate("/editor");
   };
+
   const handleOpenRecent = (docId: string) => {
     navigate(`/editor?doc=${docId}`);
   };
 
-  const handleRenameDocument = (docId: string) => {
-    if (!newName.trim()) {
-      toast.error('Please enter a name');
-      return;
-    }
-
-    const stored = localStorage.getItem('recentDocuments');
-    if (stored) {
-      const docs = JSON.parse(stored) as RecentDocument[];
-      const updatedDocs = docs.map(doc => 
-        doc.id === docId ? { ...doc, title: newName.trim() } : doc
-      );
-      localStorage.setItem('recentDocuments', JSON.stringify(updatedDocs));
-      setRecentDocs(updatedDocs.slice(0, 4));
-      toast.success('Document renamed');
-    }
-    setRenamingId(null);
-    setNewName('');
-    setOpenMenuId(null);
-  };
-
   const handleDuplicateDocument = (doc: RecentDocument) => {
-    // Close menu immediately to prevent glitching
     setOpenMenuId(null);
-    
-    const stored = localStorage.getItem('recentDocuments');
+    const stored = localStorage.getItem("recentDocuments");
     if (stored) {
       const docs = JSON.parse(stored) as RecentDocument[];
       const newDoc: RecentDocument = {
         id: crypto.randomUUID(),
         title: `${doc.title} (Copy)`,
         thumbnail: doc.thumbnail,
-        lastOpened: Date.now()
+        lastOpened: Date.now(),
       };
       const updatedDocs = [newDoc, ...docs];
-      localStorage.setItem('recentDocuments', JSON.stringify(updatedDocs));
+      localStorage.setItem("recentDocuments", JSON.stringify(updatedDocs));
       setRecentDocs(updatedDocs.slice(0, 4));
-      toast.success('Document duplicated');
+      toast.success("Document duplicated");
     }
   };
 
   const handleDeleteDocument = (docId: string, docTitle: string) => {
-    // Close menu immediately to prevent glitching
     setOpenMenuId(null);
-    
-    // Small delay to let the popover close before showing confirm dialog
     setTimeout(() => {
       if (!confirm(`Delete "${docTitle}"?`)) return;
-
-      const stored = localStorage.getItem('recentDocuments');
+      const stored = localStorage.getItem("recentDocuments");
       if (stored) {
         const docs = JSON.parse(stored) as RecentDocument[];
-        const updatedDocs = docs.filter(doc => doc.id !== docId);
-        localStorage.setItem('recentDocuments', JSON.stringify(updatedDocs));
+        const updatedDocs = docs.filter((doc) => doc.id !== docId);
+        localStorage.setItem("recentDocuments", JSON.stringify(updatedDocs));
         setRecentDocs(updatedDocs.slice(0, 4));
-        toast.success('Document deleted');
+        toast.success("Document deleted");
       }
     }, 100);
   };
 
-  const templates: any[] = [];
-  const bookTemplates = [{
-    name: 'Simple Novel',
-    thumbnail: 'gradient',
-    gradient: 'linear-gradient(135deg, hsl(210 100% 45%), hsl(220 100% 55%))'
-  }, {
-    name: 'Contemporary Novel',
-    thumbnail: 'image',
-    bgColor: 'hsl(220 20% 15%)'
-  }, {
-    name: 'Blank Book Portrait',
-    thumbnail: 'blank'
-  }];
-  const tabs = ['Recents', 'Basic', 'Reports', 'Books', 'Study Books', 'Letters'];
-  return <div className="min-h-screen flex flex-col items-center justify-center p-8 relative overflow-hidden" style={{
-      background: 'linear-gradient(135deg, hsl(270, 65%, 85%) 0%, hsl(260, 70%, 75%) 50%, hsl(270, 65%, 85%) 100%)'
-    }}>
-      {/* Decorative background elements */}
-      {/* Top left sparkles button */}
-      {!fromEditor && (
-        <div className="absolute top-8 left-8 z-20">
-          <div className="w-12 h-12 rounded-xl bg-white/90 flex items-center justify-center border-2 border-[hsl(270,60%,70%)] shadow-lg hover:scale-105 transition-transform cursor-pointer">
-            <img src={sparklesIcon} alt="Sparkles" className="w-7 h-7" />
+  return (
+    <div className="min-h-screen overflow-hidden relative">
+      {/* Radial gradient background */}
+      <div className="fixed inset-0 bg-gradient-to-br from-[#a88fff] via-[#8f6eff] to-[#6e3fff]" />
+      
+      {/* Decorative elements */}
+      <div className="fixed inset-0 pointer-events-none overflow-hidden">
+        {/* Left girl silhouette with flowers */}
+        <div className="absolute left-0 top-[10%] w-[300px] h-[400px]">
+          <img 
+            src={leftSilhouette} 
+            alt="" 
+            className="absolute inset-0 w-full h-full object-contain opacity-40"
+          />
+          <img 
+            src={leftFlower} 
+            alt="" 
+            className="absolute left-[20px] top-[30px] w-[180px] h-[180px] object-contain opacity-50"
+          />
+        </div>
+
+        {/* Right girl silhouette */}
+        <div className="absolute right-0 top-[5%] w-[350px] h-[450px]">
+          <img 
+            src={rightSilhouette} 
+            alt="" 
+            className="w-full h-full object-contain opacity-40"
+          />
+        </div>
+
+        {/* Left stars cluster */}
+        <div className="absolute left-[40px] bottom-[100px] flex flex-col gap-3">
+          <img src={purpleStar} alt="" className="w-[100px] h-[100px] opacity-80" />
+          <img src={purpleStar} alt="" className="w-[60px] h-[60px] opacity-60 ml-4" />
+          <img src={purpleStar} alt="" className="w-[45px] h-[45px] opacity-50 ml-2" />
+          <img src={purpleStar} alt="" className="w-[35px] h-[35px] opacity-40 ml-1" />
+        </div>
+
+        {/* Right star with ESTHER text */}
+        <div className="absolute right-[90px] top-[40%] -translate-y-1/2">
+          <div className="relative">
+            <img src={purpleStar} alt="" className="w-[130px] h-[130px]" />
+            <span className="absolute inset-0 flex items-center justify-center text-white font-bold text-lg tracking-wider">
+              ESTHER
+            </span>
           </div>
         </div>
-      )}
-      
-      {/* Back button - only show when coming from editor */}
-      {fromEditor && <button onClick={() => navigate('/editor')} className="absolute top-8 left-8 z-20 flex items-center gap-2 px-4 py-2 bg-white/90 hover:bg-white border-2 border-[hsl(270,60%,70%)] rounded-full shadow-lg hover:shadow-xl transition-all duration-200 text-[hsl(253,47%,18%)] font-semibold">
-          <ArrowLeft className="w-5 h-5" />
-          Back to Editor
-        </button>}
 
-      {/* Left side decorative flower */}
-      <div className="absolute left-0 top-1/4 w-64 h-64 opacity-30">
-        <img src={leftFlower} alt="" className="w-full h-full object-contain" />
-      </div>
-
-      {/* Left side stars */}
-      <div className="absolute left-8 bottom-16 w-32 h-32 opacity-60">
-        <img src={purpleStar} alt="" className="w-full h-full object-contain" />
-      </div>
-      <div className="absolute left-16 bottom-48 w-16 h-16 opacity-50">
-        <img src={purpleStar} alt="" className="w-full h-full object-contain" />
-      </div>
-      <div className="absolute left-6 bottom-72 w-12 h-12 opacity-40">
-        <img src={purpleStar} alt="" className="w-full h-full object-contain" />
-      </div>
-
-      {/* Left side silhouette - person with braids */}
-      <div className="absolute left-4 top-8 w-48 h-64 opacity-40">
-        <img src={leftSilhouette} alt="" className="w-full h-full object-contain" />
-      </div>
-
-      {/* Right side silhouette - person profile */}
-      <div className="absolute right-32 top-12 w-36 h-52 opacity-40">
-        <img src={rightSilhouette} alt="" className="w-full h-full object-contain" />
-      </div>
-
-      {/* Top right document icon */}
-      <div className="absolute top-24 right-16 w-20 h-20 opacity-50">
-        <div className="w-full h-full rounded-2xl bg-white/40 border-4 border-purple-600/50 flex items-center justify-center backdrop-blur-sm">
-          <svg viewBox="0 0 24 24" className="w-12 h-12 text-purple-600" fill="none" stroke="currentColor" strokeWidth="2.5">
-            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-            <polyline points="14 2 14 8 20 8"></polyline>
-            <line x1="8" y1="13" x2="16" y2="13"></line>
-            <line x1="8" y1="17" x2="16" y2="17"></line>
-          </svg>
+        {/* Right side icons */}
+        <div className="absolute right-[70px] top-[20%] w-[90px] h-[90px] rounded-2xl bg-white/10 backdrop-blur-sm border-2 border-white/30 flex items-center justify-center">
+          <FileText className="w-12 h-12 text-[#8f6eff]" />
         </div>
-      </div>
-
-      {/* Bottom right book icon */}
-      <div className="absolute bottom-28 right-12 w-20 h-20 opacity-50">
-        <div className="w-full h-full rounded-2xl bg-white/40 border-4 border-purple-600/50 flex items-center justify-center backdrop-blur-sm">
-          <svg viewBox="0 0 24 24" className="w-12 h-12 text-purple-600" fill="none" stroke="currentColor" strokeWidth="2.5">
-            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
-            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
-          </svg>
+        <div className="absolute right-[70px] bottom-[25%] w-[90px] h-[90px] rounded-2xl bg-white/10 backdrop-blur-sm border-2 border-white/30 flex items-center justify-center">
+          <BookOpen className="w-12 h-12 text-[#8f6eff]" />
         </div>
-      </div>
 
-      {/* Top right ESTHER text with star */}
-      <div className="absolute top-1/3 right-4 flex flex-col items-center gap-1 opacity-80">
-        <div className="w-16 h-16">
-          <img src={purpleStar} alt="" className="w-full h-full object-contain" />
-        </div>
-        <span className="text-xl font-bold text-purple-900 tracking-wider">ESTHER</span>
+        {/* Scattered small stars */}
+        <div className="absolute top-[20%] left-[15%] w-2 h-2 bg-white/40 rounded-full" />
+        <div className="absolute top-[25%] right-[25%] w-2 h-2 bg-white/40 rounded-full" />
+        <div className="absolute top-[60%] left-[30%] w-2 h-2 bg-white/40 rounded-full" />
+        <div className="absolute bottom-[30%] right-[40%] w-2 h-2 bg-white/40 rounded-full" />
+        <div className="absolute top-[15%] left-[45%] w-1.5 h-1.5 bg-white/30 rounded-full" />
+        <div className="absolute bottom-[20%] left-[20%] w-1.5 h-1.5 bg-white/30 rounded-full" />
       </div>
-
-      {/* Sparkles throughout */}
-      <div className="absolute top-20 left-1/4 w-2 h-2 bg-white rounded-full animate-pulse"></div>
-      <div className="absolute top-40 right-1/3 w-2 h-2 bg-white rounded-full animate-pulse" style={{animationDelay: '0.5s'}}></div>
-      <div className="absolute bottom-1/3 left-1/3 w-2 h-2 bg-white rounded-full animate-pulse" style={{animationDelay: '1s'}}></div>
-      <div className="absolute top-1/2 right-1/4 w-2 h-2 bg-white rounded-full animate-pulse" style={{animationDelay: '1.5s'}}></div>
-      <div className="absolute bottom-20 right-40 w-2 h-2 bg-white rounded-full animate-pulse" style={{animationDelay: '0.7s'}}></div>
-      <div className="absolute top-60 left-40 w-1.5 h-1.5 bg-white rounded-full animate-pulse" style={{animationDelay: '0.3s'}}></div>
-      <div className="absolute bottom-40 left-1/2 w-1.5 h-1.5 bg-white rounded-full animate-pulse" style={{animationDelay: '1.2s'}}></div>
 
       {/* Main content */}
-      <div className="flex flex-col items-center space-y-8 max-w-5xl w-full z-10">
-        {/* Logo and title section */}
-        <div className="flex flex-col items-center space-y-2">
-          {/* Infinity logo with circular background */}
-          <div className="relative w-64 h-64 flex items-center justify-center mb-4">
-            <div className="absolute inset-0 rounded-full bg-gradient-to-br from-purple-400 to-purple-600 opacity-80 blur-2xl"></div>
-            <div className="relative w-48 h-48 rounded-full bg-gradient-to-br from-purple-500/90 to-purple-600/90 flex items-center justify-center shadow-2xl">
-              <img src={infinityLogo} alt="Doc One Infinity Logo" className="w-32 h-32 object-contain brightness-0 invert" />
+      <div className="relative z-10 min-h-screen flex flex-col">
+        {/* Top left button */}
+        <div className="absolute top-6 left-6">
+          {fromEditor ? (
+            <button
+              onClick={() => navigate("/editor")}
+              className="flex items-center gap-2 text-white/90 hover:text-white transition-colors group"
+            >
+              <ArrowLeft className="w-5 h-5 transition-transform group-hover:-translate-x-1" />
+              <span className="font-medium">Back to Editor</span>
+            </button>
+          ) : (
+            <button className="w-12 h-12 rounded-xl bg-white/15 backdrop-blur-md border border-white/20 flex items-center justify-center hover:bg-white/25 transition-all">
+              <Sparkles className="w-6 h-6 text-white" />
+            </button>
+          )}
+        </div>
+
+        {/* Hero section */}
+        <div className="flex-1 flex flex-col items-center justify-start pt-12">
+          {/* Logo with gradient circle */}
+          <div className="relative mb-5">
+            <div className="w-28 h-28 rounded-full bg-gradient-to-b from-[#cbb8ff] to-[#6e3fff] shadow-[0_0_30px_rgba(255,255,255,0.2)] flex items-center justify-center">
+              <span className="text-6xl text-white">∞</span>
             </div>
           </div>
 
-          {/* App title */}
-          <div className="flex flex-col items-center space-y-3">
-            <h1 className="text-7xl font-extrabold tracking-tight leading-none" style={{
-            fontFamily: 'system-ui, -apple-system, "Segoe UI", Roboto, sans-serif',
-            color: '#2d1b69',
-            fontWeight: '900'
-          }}>
-              Doc One
-            </h1>
-            
-            {/* Show tagline and button only on homepage (NOT from editor) */}
-            {!fromEditor && (
-              <>
-                {/* Tagline */}
-                <p className="text-base text-[#2d1b69] font-semibold mt-1">
-                  Create. Teach. Publish. Evolve.
-                </p>
+          {/* Title and tagline */}
+          <h1 className="text-5xl font-bold text-white mb-2 tracking-tight">
+            Doc One
+          </h1>
+          <p className="text-white/80 text-sm mb-5 tracking-wide">
+            Create. Teach. Publish. Evolve.
+          </p>
 
-                {/* Start Writing button */}
-                <button
-                  onClick={handleStartWriting}
-                  className="mt-6 px-12 py-3.5 bg-gradient-to-r from-[hsl(253,100%,64%)] to-[hsl(266,100%,70%)] text-white text-lg font-bold rounded-full shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300"
-                >
-                  Start Writing
-                </button>
-              </>
-            )}
+          {/* Start Writing button */}
+          <button
+            onClick={handleStartWriting}
+            className="bg-gradient-to-r from-[#8f6eff] to-[#b893ff] text-white px-7 py-2.5 rounded-full font-bold text-base shadow-[0_0_15px_rgba(190,150,255,0.6)] hover:shadow-[0_0_25px_rgba(190,150,255,0.8)] transition-all hover:scale-105 mb-1.5"
+          >
+            Start Writing
+          </button>
+
+          {/* Choose template text */}
+          <p className="text-white/80 text-sm mb-1">Choose Your Template.</p>
+
+          {/* Down arrow */}
+          <div className="mb-9 animate-bounce">
+            <ChevronDown className="w-5 h-5 text-white/70" />
           </div>
 
-          {/* Divider text - only show on homepage */}
-          {!fromEditor && <p className="text-base text-[#2d1b69] font-semibold pt-4">Choose Your Template.</p>}
-
-          {/* Chevron arrow */}
-          <svg className="w-8 h-8 text-[hsl(253,100%,64%)] animate-bounce mt-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={3}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
-          </svg>
-        </div>
-
-        {/* Templates section or Recent documents only */}
-        <div className="w-full bg-white/60 backdrop-blur-md rounded-[32px] p-10 shadow-[0_8px_32px_rgba(139,92,246,0.3)] border-3 border-purple-300/60">
-          {fromEditor ?
-        // Simple recent documents view when coming from editor
-        <div className="space-y-6">
-              <h2 className="text-3xl font-bold text-[#1a1443]">Recent & Saved Documents</h2>
-              <div className="grid grid-cols-4 gap-6">
-                {recentDocs.map((doc, index) => <div key={index} className="group relative aspect-[3/4] rounded-[22px] overflow-hidden border-[3px] border-[hsl(253,80%,88%)] hover:border-[hsl(253,100%,64%)] transition-all duration-300 hover:scale-105 shadow-[0_0_20px_hsl(253,100%,64%,0.12)] hover:shadow-[0_0_40px_hsl(253,100%,64%,0.35),0_12px_40px_hsl(253,100%,64%,0.3)]">
-                    <button onClick={() => handleOpenRecent(doc.id)} className="w-full h-full">
-                      <div className="w-full h-full bg-white p-8 overflow-hidden flex flex-col">
-                        <div className="text-left text-[15px] leading-relaxed text-[hsl(253,47%,18%)] whitespace-pre-line font-serif line-clamp-[20]">
-                          {doc.thumbnail}
-                        </div>
-                      </div>
-                    </button>
-                    
-                    {/* Three-dot menu */}
-                    <Popover open={openMenuId === doc.id} onOpenChange={(open) => setOpenMenuId(open ? doc.id : null)}>
-                      <PopoverTrigger asChild>
-                        <button 
-                          onClick={(e) => e.stopPropagation()}
-                          className={`absolute bottom-3 right-3 w-8 h-8 rounded-full bg-gradient-to-br from-[hsl(253,100%,64%)] to-[hsl(266,100%,70%)] ${openMenuId === doc.id ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'} hover:shadow-[0_0_16px_hsl(253,100%,64%,0.6)] transition-all duration-200 flex items-center justify-center z-10`}
+          {/* Categories and content */}
+          {fromEditor ? (
+            <div className="w-full max-w-4xl px-8">
+              <div className="bg-white/15 backdrop-blur-lg rounded-3xl p-8 border border-white/20 shadow-[0_0_25px_rgba(255,255,255,0.08)]">
+                <h2 className="text-3xl font-bold text-[#1a0b3d] mb-6">Recent Documents</h2>
+                {recentDocs.length === 0 ? (
+                  <p className="text-white/70 text-center py-8">No recent documents found.</p>
+                ) : (
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {recentDocs.map((doc) => (
+                      <div key={doc.id} className="relative group">
+                        <div
+                          className="bg-white/5 backdrop-blur-sm rounded-xl p-4 border-2 border-white/30 hover:border-white/50 transition-all cursor-pointer h-40 flex flex-col items-center justify-center relative"
+                          onClick={() => handleOpenRecent(doc.id)}
                         >
-                          <MoreVertical className="w-4 h-4 text-white" />
-                        </button>
-                      </PopoverTrigger>
-                      <PopoverContent className="w-48 p-2 bg-[hsl(253,100%,98%)] border-2 border-[hsl(253,80%,85%)] rounded-2xl shadow-[0_8px_32px_hsl(253,100%,64%,0.25)]">
-                        {renamingId === doc.id ? (
-                          <div className="p-2 space-y-2">
-                            <Input
-                              value={newName}
-                              onChange={(e) => setNewName(e.target.value)}
-                              placeholder="New name"
-                              className="text-sm"
-                              autoFocus
-                              onKeyDown={(e) => {
-                                if (e.key === 'Enter') handleRenameDocument(doc.id);
-                                if (e.key === 'Escape') {
-                                  setRenamingId(null);
-                                  setNewName('');
-                                }
-                              }}
-                            />
-                            <div className="flex gap-2">
-                              <Button size="sm" onClick={() => handleRenameDocument(doc.id)} className="flex-1 text-xs bg-[hsl(253,100%,64%)]">Save</Button>
-                              <Button size="sm" variant="outline" onClick={() => {
-                                setRenamingId(null);
-                                setNewName('');
-                              }} className="flex-1 text-xs">Cancel</Button>
+                          {doc.thumbnail ? (
+                            <div className="w-full h-24 rounded-lg bg-white/10 mb-2 flex items-center justify-center p-2 overflow-hidden">
+                              <p className="text-xs text-white/60 line-clamp-4">{doc.thumbnail}</p>
                             </div>
-                          </div>
-                        ) : (
-                          <div className="space-y-1">
-                            <button
-                              onClick={() => {
-                                setRenamingId(doc.id);
-                                setNewName(doc.title);
-                              }}
-                              className="w-full flex items-center gap-3 px-3 py-2 text-sm text-[hsl(253,47%,18%)] hover:bg-[hsl(253,100%,64%,0.15)] rounded-lg transition-colors"
-                            >
-                              <Edit3 className="w-4 h-4" />
-                              Rename
-                            </button>
-                            <button
-                              onClick={() => handleDuplicateDocument(doc)}
-                              className="w-full flex items-center gap-3 px-3 py-2 text-sm text-[hsl(253,47%,18%)] hover:bg-[hsl(253,100%,64%,0.15)] rounded-lg transition-colors"
-                            >
-                              <Copy className="w-4 h-4" />
-                              Make a Duplicate Copy
-                            </button>
-                            <button
-                              onClick={() => handleDeleteDocument(doc.id, doc.title)}
-                              className="w-full flex items-center gap-3 px-3 py-2 text-sm text-red-600 hover:bg-red-50 rounded-lg transition-colors"
-                            >
-                              <Trash2 className="w-4 h-4" />
-                              Delete
-                            </button>
-                          </div>
-                        )}
-                      </PopoverContent>
-                    </Popover>
-                    
-                    {/* Title overlay */}
-                    <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 via-black/50 to-transparent p-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
-                      <p className="text-white text-sm font-bold text-center truncate drop-shadow-md">
-                        {doc.title}
-                      </p>
-                    </div>
-                  </div>)}
-              </div>
-            </div> :
-        // Full templates view with tabs
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-            <TabsList className="w-full justify-start mb-6 bg-transparent gap-4 h-auto p-0">
-              {tabs.map(tab => <TabsTrigger key={tab} value={tab} className="px-6 py-2.5 rounded-xl text-[#4338ca] text-lg data-[state=active]:text-[#4338ca] data-[state=active]:bg-transparent data-[state=active]:shadow-none transition-all duration-200 font-semibold hover:text-[#4338ca] border-0 data-[state=active]:border-b-3 data-[state=active]:border-[#4338ca]">
-                  {tab}
-                </TabsTrigger>)}
-            </TabsList>
+                          ) : (
+                            <div className="w-full h-24 rounded-lg bg-white/10 mb-2" />
+                          )}
+                          <p className="text-white text-sm font-medium text-center truncate w-full">{doc.title}</p>
+                        </div>
 
-            <TabsContent value={activeTab} className="space-y-6">
-              {/* Recent documents grid */}
-              <div>
-                <div className="flex items-center justify-between mb-6">
-                  <h2 className="text-3xl font-bold text-[#1a1443]">{activeTab}</h2>
-                </div>
-                
-                <div className="grid grid-cols-4 gap-6">
-                  {activeTab === 'Recents' ? recentDocs.map((doc, index) => <div key={index} className="group relative aspect-[3/4] rounded-[22px] overflow-hidden border-[3px] border-[hsl(253,80%,88%)] hover:border-[hsl(253,100%,64%)] transition-all duration-300 hover:scale-105 shadow-[0_0_20px_hsl(253,100%,64%,0.12)] hover:shadow-[0_0_40px_hsl(253,100%,64%,0.35),0_12px_40px_hsl(253,100%,64%,0.3)]">
-                        <button onClick={() => handleOpenRecent(doc.id)} className="w-full h-full">
-                          <div className="w-full h-full bg-white p-8 overflow-hidden flex flex-col">
-                            <div className="text-left text-[15px] leading-relaxed text-[hsl(253,47%,18%)] whitespace-pre-line font-serif line-clamp-[20]">
-                              {doc.thumbnail}
-                            </div>
-                          </div>
-                        </button>
-                        
                         {/* Three-dot menu */}
                         <Popover open={openMenuId === doc.id} onOpenChange={(open) => setOpenMenuId(open ? doc.id : null)}>
                           <PopoverTrigger asChild>
-                            <button 
+                            <button
+                              className="absolute bottom-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity w-8 h-8 rounded-full bg-gradient-to-r from-[hsl(253,100%,64%)] to-[hsl(266,100%,70%)] shadow-[0_0_10px_rgba(139,112,247,0.4)] flex items-center justify-center hover:shadow-[0_0_15px_rgba(139,112,247,0.6)] z-10"
                               onClick={(e) => e.stopPropagation()}
-                              className={`absolute bottom-3 right-3 w-8 h-8 rounded-full bg-gradient-to-br from-[hsl(253,100%,64%)] to-[hsl(266,100%,70%)] ${openMenuId === doc.id ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'} hover:shadow-[0_0_16px_hsl(253,100%,64%,0.6)] transition-all duration-200 flex items-center justify-center z-10`}
                             >
                               <MoreVertical className="w-4 h-4 text-white" />
                             </button>
                           </PopoverTrigger>
-                          <PopoverContent className="w-48 p-2 bg-[hsl(253,100%,98%)] border-2 border-[hsl(253,80%,85%)] rounded-2xl shadow-[0_8px_32px_hsl(253,100%,64%,0.25)]">
-                            {renamingId === doc.id ? (
-                              <div className="p-2 space-y-2">
-                                <Input
-                                  value={newName}
-                                  onChange={(e) => setNewName(e.target.value)}
-                                  placeholder="New name"
-                                  className="text-sm"
-                                  autoFocus
-                                  onKeyDown={(e) => {
-                                    if (e.key === 'Enter') handleRenameDocument(doc.id);
-                                    if (e.key === 'Escape') {
-                                      setRenamingId(null);
-                                      setNewName('');
-                                    }
-                                  }}
-                                />
-                                <div className="flex gap-2">
-                                  <Button size="sm" onClick={() => handleRenameDocument(doc.id)} className="flex-1 text-xs bg-[hsl(253,100%,64%)]">Save</Button>
-                                  <Button size="sm" variant="outline" onClick={() => {
-                                    setRenamingId(null);
-                                    setNewName('');
-                                  }} className="flex-1 text-xs">Cancel</Button>
+                          <PopoverContent className="w-48 bg-[#f5edff] border-[#e8defc] p-1" align="end">
+                            <button
+                              className="w-full text-left px-3 py-2 text-[#3B2061] hover:bg-[#8B70F7] hover:text-white rounded-md transition-colors text-sm"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleDuplicateDocument(doc);
+                              }}
+                            >
+                              Make a Duplicate Copy
+                            </button>
+                            <button
+                              className="w-full text-left px-3 py-2 text-[#3B2061] hover:bg-[#8B70F7] hover:text-white rounded-md transition-colors text-sm"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleDeleteDocument(doc.id, doc.title);
+                              }}
+                            >
+                              Delete
+                            </button>
+                          </PopoverContent>
+                        </Popover>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+          ) : (
+            <div className="w-full max-w-5xl px-8">
+              {/* Categories tabs */}
+              <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+                <div className="flex justify-center mb-9">
+                  <TabsList className="bg-white/15 backdrop-blur-md rounded-2xl p-2.5 border border-white/20">
+                    <TabsTrigger 
+                      value="recents" 
+                      className="text-[#e5d9ff] data-[state=active]:bg-transparent data-[state=active]:text-white rounded-xl px-6 py-2 font-medium transition-all"
+                    >
+                      Recents
+                    </TabsTrigger>
+                    <TabsTrigger 
+                      value="basic" 
+                      className="text-[#e5d9ff] data-[state=active]:bg-transparent data-[state=active]:text-white rounded-xl px-6 py-2 font-medium transition-all"
+                    >
+                      Basic
+                    </TabsTrigger>
+                    <TabsTrigger 
+                      value="reports" 
+                      className="text-[#e5d9ff] data-[state=active]:bg-transparent data-[state=active]:text-white rounded-xl px-6 py-2 font-medium transition-all"
+                    >
+                      Reports
+                    </TabsTrigger>
+                    <TabsTrigger 
+                      value="books" 
+                      className="text-[#e5d9ff] data-[state=active]:bg-transparent data-[state=active]:text-white rounded-xl px-6 py-2 font-medium transition-all"
+                    >
+                      Books
+                    </TabsTrigger>
+                    <TabsTrigger 
+                      value="studyBooks" 
+                      className="text-[#e5d9ff] data-[state=active]:bg-transparent data-[state=active]:text-white rounded-xl px-6 py-2 font-medium transition-all"
+                    >
+                      Study Books
+                    </TabsTrigger>
+                    <TabsTrigger 
+                      value="letters" 
+                      className="text-[#e5d9ff] data-[state=active]:bg-transparent data-[state=active]:text-white rounded-xl px-6 py-2 font-medium transition-all"
+                    >
+                      Letters
+                    </TabsTrigger>
+                  </TabsList>
+                </div>
+
+                <TabsContent value="recents" className="mt-0">
+                  <div className="bg-white/15 backdrop-blur-lg rounded-3xl p-8 border border-white/20 shadow-[0_0_25px_rgba(255,255,255,0.08)]">
+                    <h2 className="text-2xl font-semibold text-[#1a0b3d] mb-6">Recents</h2>
+                    {recentDocs.length === 0 ? (
+                      <p className="text-white/70 text-center py-8">No recent documents found.</p>
+                    ) : (
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+                        {recentDocs.map((doc) => (
+                          <div key={doc.id} className="relative group">
+                            <div
+                              className="bg-white/5 backdrop-blur-sm rounded-xl p-4 border-2 border-[#c5aeff]/40 hover:border-[#c5aeff]/70 transition-all cursor-pointer h-40 flex flex-col items-center justify-center relative"
+                              onClick={() => handleOpenRecent(doc.id)}
+                            >
+                              {doc.thumbnail ? (
+                                <div className="w-full h-24 rounded-lg bg-white mb-2 flex items-center justify-center p-2 overflow-hidden">
+                                  <p className="text-xs text-gray-600 line-clamp-4">{doc.thumbnail}</p>
                                 </div>
-                              </div>
-                            ) : (
-                              <div className="space-y-1">
+                              ) : (
+                                <div className="w-full h-24 rounded-lg bg-white mb-2" />
+                              )}
+                              <p className="text-[#1a0b3d] text-sm font-medium text-center truncate w-full">{doc.title}</p>
+                            </div>
+
+                            {/* Three-dot menu */}
+                            <Popover open={openMenuId === doc.id} onOpenChange={(open) => setOpenMenuId(open ? doc.id : null)}>
+                              <PopoverTrigger asChild>
                                 <button
-                                  onClick={() => {
-                                    setRenamingId(doc.id);
-                                    setNewName(doc.title);
-                                  }}
-                                  className="w-full flex items-center gap-3 px-3 py-2 text-sm text-[hsl(253,47%,18%)] hover:bg-[hsl(253,100%,64%,0.15)] rounded-lg transition-colors"
+                                  className="absolute bottom-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity w-8 h-8 rounded-full bg-gradient-to-r from-[hsl(253,100%,64%)] to-[hsl(266,100%,70%)] shadow-[0_0_10px_rgba(139,112,247,0.4)] flex items-center justify-center hover:shadow-[0_0_15px_rgba(139,112,247,0.6)] z-10"
+                                  onClick={(e) => e.stopPropagation()}
                                 >
-                                  <Edit3 className="w-4 h-4" />
-                                  Rename
+                                  <MoreVertical className="w-4 h-4 text-white" />
                                 </button>
+                              </PopoverTrigger>
+                              <PopoverContent className="w-48 bg-[#f5edff] border-[#e8defc] p-1" align="end">
                                 <button
-                                  onClick={() => handleDuplicateDocument(doc)}
-                                  className="w-full flex items-center gap-3 px-3 py-2 text-sm text-[hsl(253,47%,18%)] hover:bg-[hsl(253,100%,64%,0.15)] rounded-lg transition-colors"
+                                  className="w-full text-left px-3 py-2 text-[#3B2061] hover:bg-[#8B70F7] hover:text-white rounded-md transition-colors text-sm"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleDuplicateDocument(doc);
+                                  }}
                                 >
-                                  <Copy className="w-4 h-4" />
                                   Make a Duplicate Copy
                                 </button>
                                 <button
-                                  onClick={() => handleDeleteDocument(doc.id, doc.title)}
-                                  className="w-full flex items-center gap-3 px-3 py-2 text-sm text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                                  className="w-full text-left px-3 py-2 text-[#3B2061] hover:bg-[#8B70F7] hover:text-white rounded-md transition-colors text-sm"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleDeleteDocument(doc.id, doc.title);
+                                  }}
                                 >
-                                  <Trash2 className="w-4 h-4" />
                                   Delete
                                 </button>
-                              </div>
-                            )}
-                          </PopoverContent>
-                        </Popover>
-                        
-                        {/* Title overlay */}
-                        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 via-black/50 to-transparent p-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
-                          <p className="text-white text-sm font-bold text-center truncate drop-shadow-md">
-                            {doc.title}
-                          </p>
-                        </div>
-                      </div>) : bookTemplates.map((template, index) => <button key={index} onClick={() => handleStartWriting()} className="group relative aspect-[3/4] rounded-[22px] overflow-hidden border-[3px] border-[hsl(253,80%,88%)] hover:border-[hsl(253,100%,64%)] transition-all duration-300 hover:scale-105 shadow-[0_0_20px_hsl(253,100%,64%,0.12)] hover:shadow-[0_0_40px_hsl(253,100%,64%,0.35),0_12px_40px_hsl(253,100%,64%,0.3)]">
-                        {template.thumbnail === 'gradient' ? <div className="w-full h-full flex items-center justify-center" style={{
-                    background: template.gradient
-                  }}>
-                            <h3 className="text-white text-2xl font-bold uppercase tracking-wider px-4 text-center drop-shadow-lg">
-                              {template.name}
-                            </h3>
-                          </div> : template.thumbnail === 'image' ? <div className="w-full h-full flex items-center justify-center relative" style={{
-                    backgroundColor: template.bgColor
-                  }}>
-                            {/* City lights effect */}
-                            <div className="absolute inset-0 bg-gradient-to-t from-transparent via-transparent to-[hsl(220,30%,20%)]"></div>
-                            <div className="absolute bottom-0 left-0 right-0 h-1/3 bg-gradient-to-t from-[hsl(220,20%,10%)] to-transparent"></div>
-                            {/* Scattered light dots for city lights */}
-                            <div className="absolute inset-0">
-                              {[...Array(30)].map((_, i) => <div key={i} className="absolute w-1 h-1 bg-yellow-300 rounded-full opacity-70" style={{
-                        left: `${Math.random() * 100}%`,
-                        bottom: `${Math.random() * 40 + 10}%`,
-                        boxShadow: '0 0 4px hsl(45 100% 70%)'
-                      }}></div>)}
-                            </div>
-                            <h3 className="relative z-10 text-white text-2xl font-bold uppercase tracking-wider px-4 text-center drop-shadow-lg">
-                              {template.name}
-                            </h3>
-                          </div> : <div className="w-full h-full bg-gradient-to-br from-white to-[hsl(253,100%,98%)] flex items-center justify-center">
-                            <div className="text-[hsl(253,60%,88%)] text-6xl">📄</div>
-                          </div>}
-                        
-                        {/* Title overlay */}
-                        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 via-black/50 to-transparent p-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                          <p className="text-white text-sm font-bold text-center truncate drop-shadow-md">
-                            {template.name}
-                          </p>
-                        </div>
-                      </button>)}
-                </div>
-              </div>
-
-              {/* See all button and templates section - only show in Recents tab */}
-              {activeTab === 'Recents' && <>
-                  <div className="flex justify-center pt-8">
-                    <button onClick={() => setIsTemplatesExpanded(!isTemplatesExpanded)} className="text-[#2d3748] hover:text-[#4338ca] font-bold text-xl flex items-center gap-2 transition-all duration-200">
-                      See All Templates
-                      <svg className={`w-6 h-6 transition-transform duration-200 ${isTemplatesExpanded ? 'rotate-180' : 'rotate-0'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-                      </svg>
-                    </button>
+                              </PopoverContent>
+                            </Popover>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                    <div className="text-center">
+                      <button className="text-[#1a0b3d] font-medium text-lg hover:text-[#2a1a5d] transition-colors">
+                        See All Templates ›
+                      </button>
+                    </div>
                   </div>
+                </TabsContent>
 
-                  {/* Template options below See All */}
-                  {isTemplatesExpanded && <div className="grid grid-cols-4 gap-6 pt-6">
-                    {bookTemplates.map((template, index) => <button key={index} onClick={() => handleStartWriting()} className="group relative aspect-[3/4] rounded-[22px] overflow-hidden border-[3px] border-[hsl(253,80%,88%)] hover:border-[hsl(253,100%,64%)] transition-all duration-300 hover:scale-105 shadow-[0_0_20px_hsl(253,100%,64%,0.12)] hover:shadow-[0_0_40px_hsl(253,100%,64%,0.35),0_12px_40px_hsl(253,100%,64%,0.3)]">
-                        {template.thumbnail === 'gradient' ? <div className="w-full h-full flex items-center justify-center" style={{
-                    background: template.gradient
-                  }}>
-                            <h3 className="text-white text-2xl font-bold uppercase tracking-wider px-4 text-center drop-shadow-lg">
-                              {template.name}
-                            </h3>
-                          </div> : template.thumbnail === 'image' ? <div className="w-full h-full flex items-center justify-center relative" style={{
-                    backgroundColor: template.bgColor
-                  }}>
-                            {/* City lights effect */}
-                            <div className="absolute inset-0 bg-gradient-to-t from-transparent via-transparent to-[hsl(220,30%,20%)]"></div>
-                            <div className="absolute bottom-0 left-0 right-0 h-1/3 bg-gradient-to-t from-[hsl(220,20%,10%)] to-transparent"></div>
-                            {/* Scattered light dots for city lights */}
-                            <div className="absolute inset-0">
-                              {[...Array(30)].map((_, i) => <div key={i} className="absolute w-1 h-1 bg-yellow-300 rounded-full opacity-70" style={{
-                        left: `${Math.random() * 100}%`,
-                        bottom: `${Math.random() * 40 + 10}%`,
-                        boxShadow: '0 0 4px hsl(45 100% 70%)'
-                      }}></div>)}
-                            </div>
-                            <h3 className="relative z-10 text-white text-2xl font-bold uppercase tracking-wider px-4 text-center drop-shadow-lg">
-                              {template.name}
-                            </h3>
-                          </div> : <div className="w-full h-full bg-gradient-to-br from-white to-[hsl(253,100%,98%)] flex items-center justify-center">
-                            <div className="text-[hsl(253,60%,88%)] text-6xl">📄</div>
-                          </div>}
-                        
-                        {/* Title overlay */}
-                        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 via-black/50 to-transparent p-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                          <p className="text-white text-sm font-bold text-center truncate drop-shadow-md">
-                            {template.name}
-                          </p>
-                        </div>
-                      </button>)}
-                    </div>}
-                </>}
-            </TabsContent>
-          </Tabs>}
+                <TabsContent value="basic" className="mt-0">
+                  <div className="bg-white/15 backdrop-blur-lg rounded-3xl p-8 border border-white/20 shadow-[0_0_25px_rgba(255,255,255,0.08)]">
+                    <h2 className="text-2xl font-semibold text-[#1a0b3d] mb-6">Basic Templates</h2>
+                    <p className="text-white/70 text-center py-8">Basic templates coming soon...</p>
+                  </div>
+                </TabsContent>
+
+                <TabsContent value="reports" className="mt-0">
+                  <div className="bg-white/15 backdrop-blur-lg rounded-3xl p-8 border border-white/20 shadow-[0_0_25px_rgba(255,255,255,0.08)]">
+                    <h2 className="text-2xl font-semibold text-[#1a0b3d] mb-6">Reports</h2>
+                    <p className="text-white/70 text-center py-8">Report templates coming soon...</p>
+                  </div>
+                </TabsContent>
+
+                <TabsContent value="books" className="mt-0">
+                  <div className="bg-white/15 backdrop-blur-lg rounded-3xl p-8 border border-white/20 shadow-[0_0_25px_rgba(255,255,255,0.08)]">
+                    <h2 className="text-2xl font-semibold text-[#1a0b3d] mb-6">Books</h2>
+                    <p className="text-white/70 text-center py-8">Book templates coming soon...</p>
+                  </div>
+                </TabsContent>
+
+                <TabsContent value="studyBooks" className="mt-0">
+                  <div className="bg-white/15 backdrop-blur-lg rounded-3xl p-8 border border-white/20 shadow-[0_0_25px_rgba(255,255,255,0.08)]">
+                    <h2 className="text-2xl font-semibold text-[#1a0b3d] mb-6">Study Books</h2>
+                    <p className="text-white/70 text-center py-8">Study book templates coming soon...</p>
+                  </div>
+                </TabsContent>
+
+                <TabsContent value="letters" className="mt-0">
+                  <div className="bg-white/15 backdrop-blur-lg rounded-3xl p-8 border border-white/20 shadow-[0_0_25px_rgba(255,255,255,0.08)]">
+                    <h2 className="text-2xl font-semibold text-[#1a0b3d] mb-6">Letters</h2>
+                    <p className="text-white/70 text-center py-8">Letter templates coming soon...</p>
+                  </div>
+                </TabsContent>
+              </Tabs>
+            </div>
+          )}
+        </div>
+
+        {/* Bottom right buttons */}
+        <div className="fixed bottom-8 right-8 flex flex-col gap-4 z-20">
+          <button
+            onClick={() => navigate("/?from=editor")}
+            className="w-12 h-12 rounded-full bg-white/20 backdrop-blur-md border border-white/30 flex items-center justify-center hover:bg-white/30 transition-all"
+          >
+            <Cloud className="w-5 h-5 text-white" />
+          </button>
+
+          <button
+            onClick={handleStartWriting}
+            className="w-12 h-12 rounded-full bg-white/20 backdrop-blur-md border border-white/30 flex items-center justify-center hover:bg-white/30 transition-all"
+          >
+            <Pen className="w-5 h-5 text-white" />
+          </button>
+
+          <button
+            className="w-12 h-12 rounded-full bg-white/20 backdrop-blur-md border border-white/30 flex items-center justify-center hover:bg-white/30 transition-all"
+          >
+            <ArrowUpDown className="w-5 h-5 text-white" />
+          </button>
         </div>
       </div>
-    </div>;
+    </div>
+  );
 };
+
 export default Home;
