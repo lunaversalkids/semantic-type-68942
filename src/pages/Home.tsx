@@ -8,6 +8,10 @@ import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 import infinityLogo from '@/assets/infinity-logo.png';
 import sparklesIcon from '@/assets/sparkles-icon.png';
+import leftFlower from '@/assets/left-flower.png';
+import leftSilhouette from '@/assets/left-silhouette.png';
+import rightSilhouette from '@/assets/right-silhouette.png';
+import purpleStar from '@/assets/purple-star.png';
 interface RecentDocument {
   id: string;
   title: string;
@@ -198,55 +202,34 @@ Insects are the largest group of arthropods. The evolution, their evolution, Mur
           Back to Editor
         </button>}
 
-      {/* Left side decorative flowers/petals */}
-      <div className="absolute left-0 top-1/4 -translate-y-1/2 w-64 h-64 opacity-40">
-        <div className="absolute inset-0 rounded-full bg-gradient-to-br from-purple-500 to-purple-700" style={{
-          clipPath: 'polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%)'
-        }}></div>
+      {/* Left side decorative flower */}
+      <div className="absolute left-0 top-1/4 w-64 h-64 opacity-30">
+        <img src={leftFlower} alt="" className="w-full h-full object-contain" />
       </div>
 
       {/* Left side stars */}
-      <div className="absolute left-10 bottom-20 opacity-60">
-        <svg width="120" height="120" viewBox="0 0 120 120" className="text-purple-700">
-          <path d="M60,10 L68,45 L100,50 L75,72 L82,110 L60,90 L38,110 L45,72 L20,50 L52,45 Z" fill="currentColor" />
-        </svg>
+      <div className="absolute left-8 bottom-16 w-32 h-32 opacity-60">
+        <img src={purpleStar} alt="" className="w-full h-full object-contain" />
       </div>
-      <div className="absolute left-16 bottom-48 opacity-40">
-        <svg width="60" height="60" viewBox="0 0 60 60" className="text-purple-700">
-          <path d="M30,5 L34,22.5 L50,25 L37.5,36 L41,55 L30,45 L19,55 L22.5,36 L10,25 L26,22.5 Z" fill="currentColor" />
-        </svg>
+      <div className="absolute left-16 bottom-48 w-16 h-16 opacity-50">
+        <img src={purpleStar} alt="" className="w-full h-full object-contain" />
       </div>
-      <div className="absolute left-8 bottom-72 opacity-30">
-        <svg width="40" height="40" viewBox="0 0 40 40" className="text-purple-700">
-          <path d="M20,3 L23,15 L33,17 L25,24 L27,37 L20,30 L13,37 L15,24 L7,17 L17,15 Z" fill="currentColor" />
-        </svg>
+      <div className="absolute left-6 bottom-72 w-12 h-12 opacity-40">
+        <img src={purpleStar} alt="" className="w-full h-full object-contain" />
       </div>
 
       {/* Left side silhouette - person with braids */}
-      <div className="absolute left-8 top-12 w-48 h-64 opacity-30">
-        <div className="absolute inset-0">
-          <svg viewBox="0 0 100 150" className="w-full h-full text-purple-700">
-            <ellipse cx="50" cy="35" rx="22" ry="28" fill="currentColor" />
-            <circle cx="35" cy="20" rx="8" ry="15" fill="currentColor" />
-            <circle cx="65" cy="20" rx="8" ry="15" fill="currentColor" />
-            <path d="M30,60 Q50,50 70,60 L70,120 Q50,130 30,120 Z" fill="currentColor" />
-          </svg>
-        </div>
+      <div className="absolute left-4 top-8 w-48 h-64 opacity-40">
+        <img src={leftSilhouette} alt="" className="w-full h-full object-contain" />
       </div>
 
       {/* Right side silhouette - person profile */}
-      <div className="absolute right-32 top-16 w-40 h-56 opacity-30">
-        <div className="absolute inset-0">
-          <svg viewBox="0 0 80 120" className="w-full h-full text-purple-700">
-            <ellipse cx="40" cy="25" rx="18" ry="22" fill="currentColor" />
-            <path d="M40,25 L55,20 L60,35 L55,50" fill="currentColor" />
-            <path d="M25,45 Q40,40 55,45 L55,95 Q40,105 25,95 Z" fill="currentColor" />
-          </svg>
-        </div>
+      <div className="absolute right-32 top-12 w-36 h-52 opacity-40">
+        <img src={rightSilhouette} alt="" className="w-full h-full object-contain" />
       </div>
 
       {/* Top right document icon */}
-      <div className="absolute top-28 right-20 w-20 h-20 opacity-50">
+      <div className="absolute top-24 right-16 w-20 h-20 opacity-50">
         <div className="w-full h-full rounded-2xl bg-white/40 border-4 border-purple-600/50 flex items-center justify-center backdrop-blur-sm">
           <svg viewBox="0 0 24 24" className="w-12 h-12 text-purple-600" fill="none" stroke="currentColor" strokeWidth="2.5">
             <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
@@ -258,29 +241,21 @@ Insects are the largest group of arthropods. The evolution, their evolution, Mur
       </div>
 
       {/* Bottom right book icon */}
-      <div className="absolute bottom-32 right-16 w-20 h-20 opacity-50">
+      <div className="absolute bottom-28 right-12 w-20 h-20 opacity-50">
         <div className="w-full h-full rounded-2xl bg-white/40 border-4 border-purple-600/50 flex items-center justify-center backdrop-blur-sm">
           <svg viewBox="0 0 24 24" className="w-12 h-12 text-purple-600" fill="none" stroke="currentColor" strokeWidth="2.5">
             <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
             <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
-            <line x1="12" y1="12" x2="12" y2="12"></line>
           </svg>
         </div>
       </div>
 
       {/* Top right ESTHER text with star */}
-      <div className="absolute top-1/3 right-8 flex items-center gap-2 opacity-70">
-        <span className="text-2xl font-bold text-purple-800 tracking-wider">ESTHER</span>
-        <svg width="60" height="60" viewBox="0 0 60 60" className="text-purple-800">
-          <path d="M30,5 L34,22.5 L50,25 L37.5,36 L41,55 L30,45 L19,55 L22.5,36 L10,25 L26,22.5 Z" fill="currentColor" />
-        </svg>
-      </div>
-
-      {/* Right side stars */}
-      <div className="absolute right-12 bottom-44 opacity-40">
-        <svg width="50" height="50" viewBox="0 0 50 50" className="text-purple-700">
-          <path d="M25,4 L28,18.75 L41.67,20.83 L31.25,30 L34.17,45.83 L25,37.5 L15.83,45.83 L18.75,30 L8.33,20.83 L22,18.75 Z" fill="currentColor" />
-        </svg>
+      <div className="absolute top-1/3 right-4 flex flex-col items-center gap-1 opacity-80">
+        <div className="w-16 h-16">
+          <img src={purpleStar} alt="" className="w-full h-full object-contain" />
+        </div>
+        <span className="text-xl font-bold text-purple-900 tracking-wider">ESTHER</span>
       </div>
 
       {/* Sparkles throughout */}
@@ -289,6 +264,8 @@ Insects are the largest group of arthropods. The evolution, their evolution, Mur
       <div className="absolute bottom-1/3 left-1/3 w-2 h-2 bg-white rounded-full animate-pulse" style={{animationDelay: '1s'}}></div>
       <div className="absolute top-1/2 right-1/4 w-2 h-2 bg-white rounded-full animate-pulse" style={{animationDelay: '1.5s'}}></div>
       <div className="absolute bottom-20 right-40 w-2 h-2 bg-white rounded-full animate-pulse" style={{animationDelay: '0.7s'}}></div>
+      <div className="absolute top-60 left-40 w-1.5 h-1.5 bg-white rounded-full animate-pulse" style={{animationDelay: '0.3s'}}></div>
+      <div className="absolute bottom-40 left-1/2 w-1.5 h-1.5 bg-white rounded-full animate-pulse" style={{animationDelay: '1.2s'}}></div>
 
       {/* Main content */}
       <div className="flex flex-col items-center space-y-8 max-w-5xl w-full z-10">
