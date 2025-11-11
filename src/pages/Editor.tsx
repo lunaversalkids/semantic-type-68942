@@ -514,23 +514,23 @@ const Editor = () => {
                      (selectedText.startsWith("'") && selectedText.endsWith("'"));
     
     if (hasQuotes) {
-      // Remove quotes
+      // Remove quotes and keep selection
       const unquoted = selectedText.slice(1, -1);
       editor.chain()
         .focus()
         .deleteRange({ from, to })
         .insertContent(unquoted)
-        .setTextSelection(from)
+        .setTextSelection({ from, to: from + unquoted.length })
         .run();
       toast({ title: 'Quotations Removed' });
     } else {
-      // Add quotes
+      // Add quotes and keep selection
       const quoted = `"${selectedText}"`;
       editor.chain()
         .focus()
         .deleteRange({ from, to })
         .insertContent(quoted)
-        .setTextSelection(from)
+        .setTextSelection({ from, to: from + quoted.length })
         .run();
       toast({ title: 'Quotations Added' });
     }
