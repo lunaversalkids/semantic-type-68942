@@ -53,6 +53,7 @@ const Editor = () => {
   const [totalPages, setTotalPages] = useState(3);
   const [documentSaved, setDocumentSaved] = useState(false);
   const [bookmarkedPages, setBookmarkedPages] = useState<Set<number>>(new Set([1]));
+  const [wordCount, setWordCount] = useState(0);
   const [saveDialogOpen, setSaveDialogOpen] = useState(false);
   const [documentManagerOpen, setDocumentManagerOpen] = useState(false);
   const [findReplaceOpen, setFindReplaceOpen] = useState(false);
@@ -148,6 +149,11 @@ const Editor = () => {
   // Auto-renumber footnotes when content changes
   useEffect(() => {
     if (!editor) return;
+
+    // Calculate word count
+    const text = editor.getText() || '';
+    const words = text.trim().split(/\s+/).filter(word => word.length > 0);
+    setWordCount(words.length);
 
     const renumberFootnotes = () => {
       const html = editor.getHTML();
@@ -821,6 +827,8 @@ const Editor = () => {
         <LeftSidebar 
           styles={styles}
           onStylesChange={setStyles}
+          pageCount={totalPages}
+          wordCount={wordCount}
         />
         <main className="overflow-hidden relative">
           {/* Text Boxes Layer */}
