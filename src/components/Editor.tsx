@@ -56,6 +56,7 @@ interface EditorProps {
   pageNumberSettings?: {
     position: 'left' | 'center' | 'right';
     format: 'page-x' | 'x' | 'x-of-total';
+    location: 'header' | 'footer';
   };
   totalPages?: number;
   onTogglePageNumber?: (pageNum: number) => void;
@@ -86,7 +87,7 @@ export const Editor = ({
   onTranslate,
   onFind,
   pageNumbersVisibility = { 1: true, 2: true },
-  pageNumberSettings = { position: 'right', format: 'page-x' },
+  pageNumberSettings = { position: 'right', format: 'page-x', location: 'footer' },
   totalPages = 2,
   onTogglePageNumber,
   onPageCountChange,
@@ -436,6 +437,10 @@ export const Editor = ({
                           content={headerFooterConfig.headerContent}
                           height={headerFooterConfig.headerHeight}
                           position={headerPosition}
+                          pageNumber={pageNum}
+                          showPageNumber={pageNumbersVisibility[pageNum] ?? true}
+                          pageNumberSettings={pageNumberSettings}
+                          totalPages={totalPages}
                           onHeightChange={(height) => {
                             if (onHeaderFooterConfigChange) {
                               onHeaderFooterConfigChange({
@@ -494,6 +499,10 @@ export const Editor = ({
                           content={headerFooterConfig.footerContent}
                           height={headerFooterConfig.footerHeight}
                           position={footerPosition}
+                          pageNumber={pageNum}
+                          showPageNumber={pageNumbersVisibility[pageNum] ?? true}
+                          pageNumberSettings={pageNumberSettings}
+                          totalPages={totalPages}
                           onHeightChange={(height) => {
                             if (onHeaderFooterConfigChange) {
                               onHeaderFooterConfigChange({

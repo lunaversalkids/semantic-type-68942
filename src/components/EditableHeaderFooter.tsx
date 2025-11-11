@@ -6,14 +6,22 @@ interface EditableHeaderFooterProps {
   layoutStyle: 'single' | 'two' | 'three';
   content: any;
   height: number;
-  position: number; // NEW: vertical offset from top (header) or bottom (footer)
+  position: number;
   onHeightChange: (height: number) => void;
-  onPositionChange: (position: number) => void; // NEW: callback for position updates
+  onPositionChange: (position: number) => void;
   onContentChange: (content: any) => void;
   isSelected: boolean;
   onSelect: () => void;
   onDeselect: () => void;
   onApply: () => void;
+  pageNumber?: number;
+  showPageNumber?: boolean;
+  pageNumberSettings?: {
+    position: 'left' | 'center' | 'right';
+    format: 'page-x' | 'x' | 'x-of-total';
+    location: 'header' | 'footer';
+  };
+  totalPages?: number;
 }
 
 export const EditableHeaderFooter = ({
@@ -29,6 +37,10 @@ export const EditableHeaderFooter = ({
   onSelect,
   onDeselect,
   onApply,
+  pageNumber = 1,
+  showPageNumber = false,
+  pageNumberSettings = { position: 'right', format: 'page-x', location: 'footer' },
+  totalPages = 1,
 }: EditableHeaderFooterProps) => {
   const [localContent, setLocalContent] = useState(content || getDefaultContent(layoutStyle));
   const [isDragging, setIsDragging] = useState(false);
@@ -187,8 +199,33 @@ export const EditableHeaderFooter = ({
 
   const animationClass = type === 'header' ? 'animate-slide-down' : 'animate-slide-up';
 
+  const getPageNumberText = () => {
+    const { format } = pageNumberSettings;
+    switch (format) {
+      case 'page-x':
+        return `Page ${pageNumber}`;
+      case 'x':
+        return `${pageNumber}`;
+      case 'x-of-total':
+        return `${pageNumber} of ${totalPages}`;
+      default:
+        return `${pageNumber}`;
+    }
+  };
+
+  const getPageNumberAlignment = () => {
+    const { position } = pageNumberSettings;
+    return position === 'center' ? 'center' : position === 'left' ? 'left' : 'right';
+  };
+
+  const shouldShowPageNumber = showPageNumber && pageNumberSettings.location === type;
+
   return (
-    <div className="relative">
+    <div 
+      className={`relative transition-opacity duration-200 ${
+        isSelected ? 'opacity-100' : 'opacity-0 hover:opacity-100'
+      }`}
+    >
       {/* Apply Button - shown when selected */}
       {isSelected && (
         <div 
@@ -366,6 +403,17 @@ export const EditableHeaderFooter = ({
               : ''
           }`}
         >
+        {shouldShowPageNumber && (
+          <div 
+            className={`absolute inset-x-8 inset-y-4 text-sm text-muted-foreground pointer-events-none z-30 flex items-center ${
+              getPageNumberAlignment() === 'left' ? 'justify-start' : 
+              getPageNumberAlignment() === 'center' ? 'justify-center' : 
+              'justify-end'
+            }`}
+          >
+            {getPageNumberText()}
+          </div>
+        )}
         {layoutStyle === 'single' && (
           <div
             contentEditable

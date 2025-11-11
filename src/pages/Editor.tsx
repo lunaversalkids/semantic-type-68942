@@ -43,9 +43,11 @@ const Editor = () => {
   const [pageNumberSettings, setPageNumberSettings] = useState<{
     position: 'left' | 'center' | 'right';
     format: 'page-x' | 'x' | 'x-of-total';
+    location: 'header' | 'footer';
   }>({
     position: 'right',
     format: 'page-x',
+    location: 'footer'
   });
   const [footnoteCounter, setFootnoteCounter] = useState(1);
   const [totalPages, setTotalPages] = useState(3);
@@ -350,9 +352,10 @@ const Editor = () => {
   const handlePageNumberInsert = (
     position: 'left' | 'center' | 'right',
     format: 'page-x' | 'x' | 'x-of-total',
-    applyToAll: boolean
+    applyToAll: boolean,
+    location: 'header' | 'footer'
   ) => {
-    setPageNumberSettings({ position, format });
+    setPageNumberSettings({ position, format, location });
     
     if (applyToAll) {
       // Show page numbers on all pages

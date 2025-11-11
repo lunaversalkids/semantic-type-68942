@@ -9,7 +9,7 @@ import { useState } from 'react';
 interface PageNumberDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onInsert: (position: 'left' | 'center' | 'right', format: 'page-x' | 'x' | 'x-of-total', applyToAll: boolean) => void;
+  onInsert: (position: 'left' | 'center' | 'right', format: 'page-x' | 'x' | 'x-of-total', applyToAll: boolean, location: 'header' | 'footer') => void;
   onHide: (pageNum: number) => void;
   currentPage: number;
   totalPages: number;
@@ -26,10 +26,11 @@ export const PageNumberDialog = ({
   const [position, setPosition] = useState<'left' | 'center' | 'right'>('right');
   const [format, setFormat] = useState<'page-x' | 'x' | 'x-of-total'>('page-x');
   const [applyToAll, setApplyToAll] = useState(true);
+  const [location, setLocation] = useState<'header' | 'footer'>('footer');
   const [pageToHide, setPageToHide] = useState<string>(currentPage.toString());
 
   const handleInsert = () => {
-    onInsert(position, format, applyToAll);
+    onInsert(position, format, applyToAll, location);
     onOpenChange(false);
   };
 
@@ -57,6 +58,20 @@ export const PageNumberDialog = ({
         </DialogHeader>
         
         <div className="space-y-6 py-4">
+          <div className="space-y-3">
+            <Label>Location</Label>
+            <RadioGroup value={location} onValueChange={(v) => setLocation(v as any)}>
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="header" id="header" />
+                <Label htmlFor="header" className="font-normal cursor-pointer">Header</Label>
+              </div>
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="footer" id="footer" />
+                <Label htmlFor="footer" className="font-normal cursor-pointer">Footer</Label>
+              </div>
+            </RadioGroup>
+          </div>
+
           <div className="space-y-3">
             <Label>Position</Label>
             <RadioGroup value={position} onValueChange={(v) => setPosition(v as any)}>
