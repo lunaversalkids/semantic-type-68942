@@ -229,7 +229,7 @@ export const EditableHeaderFooter = ({
 
   return (
     <div 
-      className={`relative transition-opacity duration-200 ${
+      className={`relative transition-opacity duration-200 group ${
         isAlwaysVisible ? 'opacity-100' : 'opacity-0 hover:opacity-100'
       }`}
     >
@@ -266,9 +266,10 @@ export const EditableHeaderFooter = ({
         onClick={onSelect}
         onMouseDown={handleMouseDown}
       >
-        {/* Column Guide Overlays - match reference image style */}
-        {isSelected && (
-          <div className="absolute inset-0 pointer-events-none z-10">
+        {/* Column Guide Overlays - visible on hover */}
+        <div className={`absolute inset-0 pointer-events-none z-10 transition-opacity duration-200 ${
+          isSelected ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
+        }`}>
             {/* Helper text */}
             <div 
               className="absolute left-1/2 transform -translate-x-1/2 z-40 text-xs text-purple-600 font-medium bg-white/90 px-3 py-1 rounded-full shadow-lg animate-fade-in"
@@ -400,7 +401,6 @@ export const EditableHeaderFooter = ({
               </div>
             )}
           </div>
-        )}
 
         {/* Content Area */}
         <div
@@ -433,7 +433,7 @@ export const EditableHeaderFooter = ({
               borderRadius: '4px',
             }}
           >
-            {localContent || `Click to edit ${type}...`}
+            {localContent || ''}
           </div>
         )}
 
@@ -450,7 +450,7 @@ export const EditableHeaderFooter = ({
                 width: `${columnWidths[0]}%`,
               }}
             >
-              {localContent?.left || 'Left column...'}
+              {localContent?.left || ''}
             </div>
             <div
               contentEditable
@@ -463,7 +463,7 @@ export const EditableHeaderFooter = ({
                 width: `${100 - columnWidths[0]}%`,
               }}
             >
-              {localContent?.right || 'Right column...'}
+              {localContent?.right || ''}
             </div>
           </div>
         )}
@@ -481,7 +481,7 @@ export const EditableHeaderFooter = ({
                 width: `${columnWidths[0]}%`,
               }}
             >
-              {localContent?.left || 'Left...'}
+              {localContent?.left || ''}
             </div>
             <div
               contentEditable
@@ -494,7 +494,7 @@ export const EditableHeaderFooter = ({
                 width: `${columnWidths[1] - columnWidths[0]}%`,
               }}
             >
-              {localContent?.center || 'Center...'}
+              {localContent?.center || ''}
             </div>
             <div
               contentEditable
@@ -507,7 +507,7 @@ export const EditableHeaderFooter = ({
                 width: `${100 - columnWidths[1]}%`,
               }}
             >
-            {localContent?.right || 'Right...'}
+            {localContent?.right || ''}
           </div>
         </div>
       )}
