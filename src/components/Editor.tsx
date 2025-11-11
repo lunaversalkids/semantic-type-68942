@@ -492,7 +492,7 @@ export const Editor = ({
                             if (onHeaderFooterConfigChange && headerFooterConfig) {
                               onHeaderFooterConfigChange({
                                 ...headerFooterConfig,
-                                showHeader: false
+                                showHeader: false,
                               });
                             }
                           } : undefined}
@@ -500,7 +500,7 @@ export const Editor = ({
                             if (onHeaderFooterConfigChange && headerFooterConfig) {
                               onHeaderFooterConfigChange({
                                 ...headerFooterConfig,
-                                showFooter: false
+                                showFooter: false,
                               });
                             }
                           } : undefined}
