@@ -1,4 +1,4 @@
-import { Plus } from 'lucide-react';
+import { Plus, EyeOff } from 'lucide-react';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Button } from '@/components/ui/button';
 import { useState } from 'react';
@@ -9,6 +9,8 @@ interface PageAddButtonProps {
   onAddPageWithBackground: () => void;
   onChangeBackground: () => void;
   onCopyPage: () => void;
+  onHideHeader?: () => void;
+  onHideFooter?: () => void;
 }
 
 export const PageAddButton = ({
@@ -17,6 +19,8 @@ export const PageAddButton = ({
   onAddPageWithBackground,
   onChangeBackground,
   onCopyPage,
+  onHideHeader,
+  onHideFooter,
 }: PageAddButtonProps) => {
   const [open, setOpen] = useState(false);
 
@@ -63,6 +67,30 @@ export const PageAddButton = ({
               <Plus className="h-4 w-4 mr-2" />
               Duplicate Page
             </Button>
+            {(onHideHeader || onHideFooter) && (
+              <div className="flex gap-1 mt-1">
+                {onHideHeader && (
+                  <Button
+                    variant="ghost"
+                    className="flex-1 justify-start hover:bg-accent/10 transition-colors text-primary text-xs"
+                    onClick={() => handleAction(onHideHeader)}
+                  >
+                    <EyeOff className="h-3 w-3 mr-1" />
+                    Hide Header
+                  </Button>
+                )}
+                {onHideFooter && (
+                  <Button
+                    variant="ghost"
+                    className="flex-1 justify-start hover:bg-accent/10 transition-colors text-primary text-xs"
+                    onClick={() => handleAction(onHideFooter)}
+                  >
+                    <EyeOff className="h-3 w-3 mr-1" />
+                    Hide Footer
+                  </Button>
+                )}
+              </div>
+            )}
           </div>
         </PopoverContent>
       </Popover>
