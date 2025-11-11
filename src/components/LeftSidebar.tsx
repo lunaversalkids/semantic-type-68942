@@ -75,7 +75,7 @@ export const LeftSidebar = ({
       </div>
 
       {/* Styles Panel */}
-      {stylesExpanded && <div className="flex-1 flex flex-col p-2.5 gap-2 overflow-hidden pt-16">
+      {stylesExpanded && <div className="flex-1 flex flex-col p-2.5 gap-2 overflow-hidden pt-[72px]">
           {/* Header */}
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2.5">

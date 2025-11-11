@@ -389,18 +389,16 @@ export const TextStylePanel = ({
         </div>
       </div>
 
-      <ScrollArea className="flex-1 p-2.5 pt-16">
+      <ScrollArea className="flex-1 p-2.5 pt-[72px]">
         <div className="flex flex-col gap-2">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2.5">
           <h2 className="text-sm font-bold text-[#8B7AB8] uppercase tracking-wide">Paragraph Mode</h2>
         </div>
-        <div className="flex gap-2">
-          <Button size="icon" variant="ghost" onClick={() => setIsCollapsed(true)} className="h-9 w-9 text-muted-foreground hover:bg-sidebar-accent">
-            <ChevronRight className="w-4 h-4" />
-          </Button>
-        </div>
+        <Button size="icon" variant="ghost" onClick={() => setIsCollapsed(true)} className="h-9 w-9 text-muted-foreground hover:bg-sidebar-accent">
+          <ChevronRight className="w-4 h-4" />
+        </Button>
       </div>
 
       {/* Formatting Mode Dropdown */}
