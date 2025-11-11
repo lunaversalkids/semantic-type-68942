@@ -17,6 +17,9 @@ import { PDFImportDialog } from '@/components/PDFImportDialog';
 import { PageViewer } from '@/components/PageViewer';
 import { PageSizerDialog } from '@/components/PageSizerDialog';
 import { TextBox } from '@/components/TextBox';
+import { HeaderFooterDialog, HeaderFooterSettings } from '@/components/HeaderFooterDialog';
+import { EditableHeaderFooter } from '@/components/EditableHeaderFooter';
+import { DraggableBoundary } from '@/components/DraggableBoundary';
 import { defaultStyles } from '@/types/styles';
 import { useToast } from '@/hooks/use-toast';
 import { toast as sonnerToast } from 'sonner';
@@ -77,6 +80,11 @@ const Editor = () => {
     borderColor: string;
   }>>([]);
   const [selectedTextBoxId, setSelectedTextBoxId] = useState<string | null>(null);
+  const [headerFooterDialogOpen, setHeaderFooterDialogOpen] = useState(false);
+  const [headerFooterConfig, setHeaderFooterConfig] = useState<HeaderFooterSettings | null>(null);
+  const [headerHeight, setHeaderHeight] = useState(60);
+  const [footerHeight, setFooterHeight] = useState(60);
+  const [selectedHeaderFooter, setSelectedHeaderFooter] = useState<'header' | 'footer' | null>(null);
   const { toast } = useToast();
 
   // Track document access for recents
@@ -567,7 +575,22 @@ const Editor = () => {
   };
 
   const handleHeaderFooter = () => {
-    toast({ title: 'Header & Footer', description: 'Header and footer editor coming soon' });
+    setHeaderFooterDialogOpen(true);
+  };
+
+  const handleHeaderFooterSave = (config: HeaderFooterSettings) => {
+    setHeaderFooterConfig(config);
+    setHeaderHeight(config.headerHeight);
+    setFooterHeight(config.footerHeight);
+    
+    const parts = [];
+    if (config.showHeader) parts.push('Header');
+    if (config.showFooter) parts.push('Footer');
+    
+    toast({ 
+      title: 'Header & Footer Applied', 
+      description: `${parts.join(' & ')} added to document` 
+    });
   };
 
   const handleTextFrame = () => {
@@ -724,7 +747,7 @@ const Editor = () => {
             </div>
           ))}
 
-        <EditorComponent
+          <EditorComponent
             onSelectionChange={setSelectedText} 
             onEditorReady={setEditor}
             onApplyToAll={handleApplyToAll}
@@ -755,6 +778,8 @@ const Editor = () => {
               }));
             }}
             isDoublePageLayout={isDoublePageLayout}
+            headerFooterConfig={headerFooterConfig}
+            onHeaderFooterConfigChange={setHeaderFooterConfig}
           />
         </main>
 
@@ -858,6 +883,12 @@ const Editor = () => {
         open={pageSizerOpen}
         onOpenChange={setPageSizerOpen}
         onSizeSelect={handlePageSizeChange}
+      />
+
+      <HeaderFooterDialog
+        open={headerFooterDialogOpen}
+        onOpenChange={setHeaderFooterDialogOpen}
+        onSave={handleHeaderFooterSave}
       />
       
       <OnboardingTour />

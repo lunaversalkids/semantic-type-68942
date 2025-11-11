@@ -29,6 +29,9 @@ import { CustomBulletList } from './extensions/CustomBulletList';
 import { CustomOrderedList } from './extensions/CustomOrderedList';
 import { CustomParagraph } from './extensions/CustomParagraph';
 import ListItem from '@tiptap/extension-list-item';
+import { EditableHeaderFooter } from './EditableHeaderFooter';
+import { DraggableBoundary } from './DraggableBoundary';
+import type { HeaderFooterSettings } from './HeaderFooterDialog';
 
 interface EditorProps {
   onSelectionChange?: (text: string) => void;
@@ -59,6 +62,8 @@ interface EditorProps {
   onPageCountChange?: (count: number) => void;
   onAddPageReady?: (addPageFn: () => void) => void;
   isDoublePageLayout?: boolean;
+  headerFooterConfig?: HeaderFooterSettings | null;
+  onHeaderFooterConfigChange?: (config: HeaderFooterSettings) => void;
 }
 
 export const Editor = ({ 
@@ -86,7 +91,9 @@ export const Editor = ({
   onTogglePageNumber,
   onPageCountChange,
   onAddPageReady,
-  isDoublePageLayout = false
+  isDoublePageLayout = false,
+  headerFooterConfig = null,
+  onHeaderFooterConfigChange
 }: EditorProps) => {
   const getPageNumberText = (pageNum: number) => {
     const { format } = pageNumberSettings;
@@ -110,6 +117,7 @@ export const Editor = ({
   const [zoom, setZoom] = useState(1);
   const [targetZoom, setTargetZoom] = useState(1);
   const [isZooming, setIsZooming] = useState(false);
+  const [selectedHeaderFooter, setSelectedHeaderFooter] = useState<{ type: 'header' | 'footer', pageNum: number } | null>(null);
 
   const addNewPage = () => {
     const newPageId = `page-${pages.length + 1}`;
@@ -405,42 +413,138 @@ export const Editor = ({
                   return (
                     <Card 
                       key={pageId}
-                      className="page-card w-[8.5in] h-[11in] bg-[hsl(var(--page-bg))] shadow-2xl rounded-none"
+                      className="page-card w-[8.5in] h-[11in] bg-[hsl(var(--page-bg))] shadow-2xl rounded-none overflow-visible"
                       style={{
                         ...(isFirstPage ? { gridColumnStart: 2 } : undefined),
                         ...(pageBackground ? { 
                           backgroundImage: `url(${pageBackground})`,
                           backgroundSize: 'cover',
                           backgroundPosition: 'center'
-                        } : undefined)
+                        } : undefined),
+                        display: 'flex',
+                        flexDirection: 'column',
+                        position: 'relative',
                       }}
                     >
-                      <div className="page-add-text-button-wrapper">
-                        <button
-                          onClick={addNewPage}
-                          className="page-add-text-button"
-                          title="Add new page"
-                        >
-                          + Add Page
-                        </button>
-                      </div>
-                      <PageAddButton
-                        pageNumber={pageNum}
-                        onAddPage={addNewPage}
-                        onAddPageWithBackground={() => addPageWithBackground(pageNum)}
-                        onChangeBackground={() => changeBackground(pageNum)}
-                        onCopyPage={() => copyPage(pageNum)}
-                      />
-                      {pageNumbersVisibility[pageNum] !== false && (
-                        <div 
-                          className={`absolute bottom-8 text-sm text-muted-foreground ${
-                            getPageNumberAlignment() === 'left' ? 'left-12' : 
-                            getPageNumberAlignment() === 'center' ? 'left-1/2 -translate-x-1/2' : 
-                            'right-12'
-                          }`}
-                        >
-                          {getPageNumberText(pageNum)}
+                      {/* Header */}
+                      {headerFooterConfig?.showHeader && (
+                        <>
+                          <EditableHeaderFooter
+                            type="header"
+                            layoutStyle={headerFooterConfig.layoutStyle}
+                            content={headerFooterConfig.headerContent}
+                            height={headerFooterConfig.headerHeight}
+                            onHeightChange={(height) => {
+                              if (onHeaderFooterConfigChange) {
+                                onHeaderFooterConfigChange({
+                                  ...headerFooterConfig,
+                                  headerHeight: height,
+                                });
+                              }
+                            }}
+                            onContentChange={(content) => {
+                              if (onHeaderFooterConfigChange) {
+                                onHeaderFooterConfigChange({
+                                  ...headerFooterConfig,
+                                  headerContent: content,
+                                });
+                              }
+                            }}
+                            isSelected={selectedHeaderFooter?.type === 'header' && selectedHeaderFooter?.pageNum === pageNum}
+                            onSelect={() => setSelectedHeaderFooter({ type: 'header', pageNum })}
+                          />
+                          <DraggableBoundary
+                            type="header"
+                            initialPosition={headerFooterConfig.headerHeight}
+                            onPositionChange={(height) => {
+                              if (onHeaderFooterConfigChange) {
+                                onHeaderFooterConfigChange({
+                                  ...headerFooterConfig,
+                                  headerHeight: height,
+                                });
+                              }
+                            }}
+                          />
+                        </>
+                      )}
+
+                      {/* Page Content Area */}
+                      <div 
+                        className="flex-1 relative"
+                        style={{
+                          paddingTop: headerFooterConfig?.showHeader ? '0' : undefined,
+                          paddingBottom: headerFooterConfig?.showFooter ? '0' : undefined,
+                        }}
+                      >
+                        <div className="page-add-text-button-wrapper">
+                          <button
+                            onClick={addNewPage}
+                            className="page-add-text-button"
+                            title="Add new page"
+                          >
+                            + Add Page
+                          </button>
                         </div>
+                        <PageAddButton
+                          pageNumber={pageNum}
+                          onAddPage={addNewPage}
+                          onAddPageWithBackground={() => addPageWithBackground(pageNum)}
+                          onChangeBackground={() => changeBackground(pageNum)}
+                          onCopyPage={() => copyPage(pageNum)}
+                        />
+                        {pageNumbersVisibility[pageNum] !== false && (
+                          <div 
+                            className={`absolute bottom-8 text-sm text-muted-foreground ${
+                              getPageNumberAlignment() === 'left' ? 'left-12' : 
+                              getPageNumberAlignment() === 'center' ? 'left-1/2 -translate-x-1/2' : 
+                              'right-12'
+                            }`}
+                          >
+                            {getPageNumberText(pageNum)}
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Footer */}
+                      {headerFooterConfig?.showFooter && (
+                        <>
+                          <DraggableBoundary
+                            type="footer"
+                            initialPosition={headerFooterConfig.footerHeight}
+                            onPositionChange={(height) => {
+                              if (onHeaderFooterConfigChange) {
+                                onHeaderFooterConfigChange({
+                                  ...headerFooterConfig,
+                                  footerHeight: height,
+                                });
+                              }
+                            }}
+                          />
+                          <EditableHeaderFooter
+                            type="footer"
+                            layoutStyle={headerFooterConfig.layoutStyle}
+                            content={headerFooterConfig.footerContent}
+                            height={headerFooterConfig.footerHeight}
+                            onHeightChange={(height) => {
+                              if (onHeaderFooterConfigChange) {
+                                onHeaderFooterConfigChange({
+                                  ...headerFooterConfig,
+                                  footerHeight: height,
+                                });
+                              }
+                            }}
+                            onContentChange={(content) => {
+                              if (onHeaderFooterConfigChange) {
+                                onHeaderFooterConfigChange({
+                                  ...headerFooterConfig,
+                                  footerContent: content,
+                                });
+                              }
+                            }}
+                            isSelected={selectedHeaderFooter?.type === 'footer' && selectedHeaderFooter?.pageNum === pageNum}
+                            onSelect={() => setSelectedHeaderFooter({ type: 'footer', pageNum })}
+                          />
+                        </>
                       )}
                     </Card>
                   );
