@@ -62,6 +62,7 @@ export const TextBox = ({
   const [isVertical, setIsVertical] = useState(false);
   const [isDraggingInfinity, setIsDraggingInfinity] = useState(false);
   const [dragStartPos, setDragStartPos] = useState({ x: 0, y: 0 });
+  const boxRef = useRef<HTMLDivElement>(null);
 
   const handleContentChange = () => {
     if (contentRef.current) {
@@ -88,6 +89,25 @@ export const TextBox = ({
     setDragStartPos({ x: e.clientX, y: e.clientY });
   };
 
+  // Handle Delete key
+  useEffect(() => {
+    if (!isSelected) return;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Delete' || e.key === 'Backspace') {
+        // Only delete if not actively editing text
+        if (document.activeElement !== contentRef.current) {
+          e.preventDefault();
+          onDelete(id);
+        }
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [isSelected, id, onDelete]);
+
+  // Handle infinity icon drag
   useEffect(() => {
     if (!isDraggingInfinity) return;
 
@@ -95,10 +115,10 @@ export const TextBox = ({
       const dragX = e.clientX - dragStartPos.x;
       const dragY = e.clientY - dragStartPos.y;
 
-      // Determine orientation based on drag direction
-      if (dragX < -30 || dragY > 30) {
+      // Determine orientation based on drag direction - more responsive
+      if (dragX < -20 || dragY > 20) {
         setIsVertical(true); // Vertical stacking
-      } else if (dragX > 30 || dragY < -30) {
+      } else if (dragX > 20 || dragY < -20) {
         setIsVertical(false); // Horizontal
       }
     };
@@ -134,6 +154,7 @@ export const TextBox = ({
       minWidth={100}
       minHeight={50}
       bounds="parent"
+      dragHandleClassName="drag-handle"
       enableResizing={
         !isLocked && isSelected
           ? {
@@ -162,11 +183,12 @@ export const TextBox = ({
       style={{
         zIndex: isSelected ? 1000 : 1,
       }}
-      className="transition-all duration-200"
+      className="transition-none"
     >
       <div
+        ref={boxRef}
         onClick={handleClick}
-        className={`w-full h-full relative rounded-lg transition-all duration-300 ${
+        className={`w-full h-full relative rounded-lg drag-handle ${
           isSelected ? 'shadow-lg' : 'shadow-sm'
         }`}
         style={{
@@ -174,6 +196,7 @@ export const TextBox = ({
           borderWidth: isSelected ? '3px' : '0',
           borderStyle: isSelected ? 'dashed' : 'none',
           borderColor: isSelected ? (isLocked ? '#F87171' : '#A78BFA') : 'transparent',
+          transition: 'border-color 0.2s ease',
         }}
       >
         {/* Infinity icon for orientation control - only show when selected and unlocked */}
@@ -181,13 +204,14 @@ export const TextBox = ({
           <img
             src={infinityIcon}
             alt="Orientation control"
-            className="absolute w-6 h-6 transition-all duration-200 z-10"
+            className="absolute w-6 h-6 z-10 hover:scale-110"
             style={{
               right: '-12px',
               top: '50%',
               transform: 'translateY(-50%)',
               filter: 'drop-shadow(0 0 8px rgba(167, 139, 250, 0.5))',
               cursor: isDraggingInfinity ? 'grabbing' : 'grab',
+              transition: 'transform 0.15s ease, filter 0.15s ease',
             }}
             onMouseDown={handleInfinityMouseDown}
             draggable={false}
@@ -201,7 +225,7 @@ export const TextBox = ({
           suppressContentEditableWarning
           onBlur={handleContentChange}
           onInput={handleContentChange}
-          className="w-full h-full p-4 outline-none overflow-auto transition-all duration-300"
+          className="w-full h-full p-4 outline-none overflow-auto"
           style={{
             fontSize: `${fontSize}px`,
             fontWeight,
@@ -211,6 +235,7 @@ export const TextBox = ({
             cursor: isLocked ? 'default' : 'text',
             writingMode: isVertical ? 'vertical-rl' : 'horizontal-tb',
             textOrientation: isVertical ? 'upright' : 'mixed',
+            transition: 'writing-mode 0.3s ease, text-orientation 0.3s ease',
           }}
         >
           {localContent || 'Click to edit text...'}
