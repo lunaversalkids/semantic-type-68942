@@ -26,13 +26,14 @@ interface TextBoxProps {
 // Custom corner handle component
 const CornerHandle = ({ corner }: { corner: string }) => (
   <div
-    className="absolute w-5 h-5 rounded-full bg-gradient-to-br from-purple-400 to-purple-600 shadow-[0_0_10px_rgba(167,139,250,0.6)] hover:shadow-[0_0_15px_rgba(167,139,250,0.9)] hover:scale-110 transition-all duration-200 z-10"
+    className="absolute w-5 h-5 rounded-full bg-gradient-to-br from-purple-400 to-purple-600 shadow-[0_0_10px_rgba(167,139,250,0.6)] hover:shadow-[0_0_15px_rgba(167,139,250,0.9)] hover:scale-110 transition-all duration-200 z-[1001]"
     style={{
       top: corner.includes('top') ? '-10px' : 'auto',
       bottom: corner.includes('bottom') ? '-10px' : 'auto',
       left: corner.includes('Left') ? '-10px' : 'auto',
       right: corner.includes('Right') ? '-10px' : 'auto',
       cursor: corner === 'topLeft' || corner === 'bottomRight' ? 'nwse-resize' : 'nesw-resize',
+      pointerEvents: 'auto',
     }}
   />
 );
@@ -114,12 +115,16 @@ export const TextBox = ({
     const handleMouseMove = (e: MouseEvent) => {
       const dragX = e.clientX - dragStartPos.x;
       const dragY = e.clientY - dragStartPos.y;
+      const distance = Math.sqrt(dragX * dragX + dragY * dragY);
 
-      // Determine orientation based on drag direction - more responsive
-      if (dragX < -20 || dragY > 20) {
-        setIsVertical(true); // Vertical stacking
-      } else if (dragX > 20 || dragY < -20) {
-        setIsVertical(false); // Horizontal
+      // Only change if dragged at least 15px for stability
+      if (distance > 15) {
+        // Determine orientation based on drag direction - more responsive
+        if (dragX < -10 || dragY > 10) {
+          setIsVertical(true); // Vertical stacking
+        } else if (dragX > 10 || dragY < -10) {
+          setIsVertical(false); // Horizontal
+        }
       }
     };
 
@@ -127,7 +132,7 @@ export const TextBox = ({
       setIsDraggingInfinity(false);
     };
 
-    document.addEventListener('mousemove', handleMouseMove);
+    document.addEventListener('mousemove', handleMouseMove, { passive: true });
     document.addEventListener('mouseup', handleMouseUp);
 
     return () => {
@@ -179,6 +184,12 @@ export const TextBox = ({
             }
           : undefined
       }
+      resizeHandleStyles={{
+        topRight: { zIndex: 1001 },
+        bottomRight: { zIndex: 1001 },
+        bottomLeft: { zIndex: 1001 },
+        topLeft: { zIndex: 1001 },
+      }}
       disableDragging={isLocked}
       style={{
         zIndex: isSelected ? 1000 : 1,
@@ -204,7 +215,7 @@ export const TextBox = ({
           <img
             src={infinityIcon}
             alt="Orientation control"
-            className="absolute w-6 h-6 z-10 hover:scale-110"
+            className="absolute w-6 h-6 z-[1002] hover:scale-110"
             style={{
               right: '-12px',
               top: '50%',
@@ -212,6 +223,7 @@ export const TextBox = ({
               filter: 'drop-shadow(0 0 8px rgba(167, 139, 250, 0.5))',
               cursor: isDraggingInfinity ? 'grabbing' : 'grab',
               transition: 'transform 0.15s ease, filter 0.15s ease',
+              pointerEvents: 'auto',
             }}
             onMouseDown={handleInfinityMouseDown}
             draggable={false}
@@ -235,7 +247,7 @@ export const TextBox = ({
             cursor: isLocked ? 'default' : 'text',
             writingMode: isVertical ? 'vertical-rl' : 'horizontal-tb',
             textOrientation: isVertical ? 'upright' : 'mixed',
-            transition: 'writing-mode 0.3s ease, text-orientation 0.3s ease',
+            transition: 'writing-mode 0.2s ease, text-orientation 0.2s ease',
           }}
         >
           {localContent || 'Click to edit text...'}
