@@ -206,10 +206,12 @@ export const ColorCustomizerDialog = ({ open, onOpenChange }: ColorCustomizerDia
     onOpenChange(false);
   };
 
-  // Live preview on color changes
+  // Live preview on color changes (but don't save yet)
   useEffect(() => {
-    applyColors();
-  }, [mode, darkModeEnabled, customLightColor, customDarkColor, chakraMode, selectedChakra1, selectedChakra2]);
+    if (open) {
+      applyColors();
+    }
+  }, [mode, darkModeEnabled, customLightColor, customDarkColor, chakraMode, selectedChakra1, selectedChakra2, open]);
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
