@@ -53,6 +53,10 @@ All colors MUST be HSL.
     --sidebar-accent-foreground: 253 47% 18%;
     --sidebar-border: 253 60% 88%;
     --sidebar-ring: 253 100% 64%;
+
+    /* Dynamic color variables for customization */
+    --color-primary-light: #A78BFA;
+    --color-primary-dark: #8B70F7;
   }
 
   .dark {
