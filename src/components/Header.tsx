@@ -73,6 +73,32 @@ export const Header = ({
 
       {/* Toolbar */}
       <div className="flex justify-end gap-2 w-[450px]">
+        <button onClick={onCloudClick} className="h-9 w-9 border border-[hsl(var(--stroke))] rounded-[var(--r-sm)] grid place-items-center hover:bg-[hsl(var(--panel-2))] transition-colors overflow-hidden" title="My Documents">
+          <img src={cloudIcon} alt="" className="w-full h-full object-cover" />
+        </button>
+
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <button className="h-9 w-9 border border-[hsl(var(--stroke))] rounded-[var(--r-sm)] grid place-items-center hover:bg-[hsl(var(--panel-2))] transition-colors overflow-hidden" title="Import/Export">
+              <img src={importExportIcon} alt="" className="w-full h-full object-cover" />
+            </button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="bg-background z-50">
+            <DropdownMenuItem onClick={onImportClick}>
+              <FileUp className="w-4 h-4 mr-2" />
+              Standard Import
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={onPdfImportClick}>
+              <FileUp className="w-4 h-4 mr-2" />
+              PDF with Style Inference
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={onExportClick}>
+              <FileDown className="w-4 h-4 mr-2" />
+              Export Document
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <button className="h-9 w-9 border border-[hsl(var(--stroke))] rounded-[var(--r-sm)] grid place-items-center hover:bg-[hsl(var(--panel-2))] transition-colors overflow-hidden" title="Pen & Stylus">
@@ -114,10 +140,6 @@ export const Header = ({
         <button onClick={onFindClick} className="h-9 w-9 border border-[hsl(var(--stroke))] rounded-[var(--r-sm)] grid place-items-center hover:bg-[hsl(var(--panel-2))] transition-colors overflow-hidden" title="Find & Replace">
           <img src={searchIcon} alt="" className="w-full h-full object-cover" />
         </button>
-        
-        <button onClick={onCloudClick} className="h-9 w-9 border border-[hsl(var(--stroke))] rounded-[var(--r-sm)] grid place-items-center hover:bg-[hsl(var(--panel-2))] transition-colors overflow-hidden" title="My Documents">
-          <img src={cloudIcon} alt="" className="w-full h-full object-cover" />
-        </button>
 
         <button 
           onClick={onLayoutToggle} 
@@ -130,28 +152,6 @@ export const Header = ({
             className="w-full h-full object-cover" 
           />
         </button>
-
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <button className="h-9 w-9 border border-[hsl(var(--stroke))] rounded-[var(--r-sm)] grid place-items-center hover:bg-[hsl(var(--panel-2))] transition-colors overflow-hidden" title="Import/Export">
-              <img src={importExportIcon} alt="" className="w-full h-full object-cover" />
-            </button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="bg-background z-50">
-            <DropdownMenuItem onClick={onImportClick}>
-              <FileUp className="w-4 h-4 mr-2" />
-              Standard Import
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={onPdfImportClick}>
-              <FileUp className="w-4 h-4 mr-2" />
-              PDF with Style Inference
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={onExportClick}>
-              <FileDown className="w-4 h-4 mr-2" />
-              Export Document
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
       </div>
     </header>;
 };
