@@ -35,7 +35,7 @@ export const EditableHeaderFooter = ({
       case 'single':
         return '';
       case 'two':
-        return { row1: '', row2: '' };
+        return { left: '', right: '' };
       case 'three':
         return { left: '', center: '', right: '' };
       default:
@@ -68,8 +68,10 @@ export const EditableHeaderFooter = ({
       onClick={onSelect}
     >
       <div
-        className={`w-full h-full px-16 py-4 ${
-          isSelected ? 'border-2 border-dashed border-[rgba(139,112,247,0.3)] outline outline-2 outline-[#8B70F7]' : ''
+        className={`w-full h-full px-16 py-4 transition-all duration-200 ${
+          isSelected 
+            ? 'border-2 border-dotted border-[rgba(139,112,247,0.5)] outline outline-2 outline-offset-2 outline-[#8B70F7] bg-[rgba(139,112,247,0.08)]' 
+            : 'border-2 border-transparent'
         }`}
       >
         {layoutStyle === 'single' && (
@@ -88,30 +90,32 @@ export const EditableHeaderFooter = ({
         )}
 
         {layoutStyle === 'two' && (
-          <div className="flex flex-col gap-2 h-full">
+          <div className="grid grid-cols-2 gap-4 h-full">
             <div
               contentEditable
               suppressContentEditableWarning
-              onBlur={(e) => handleContentUpdate('row1', e.currentTarget.textContent || '')}
-              className="flex-1 outline-none text-sm text-gray-700 cursor-text"
+              onBlur={(e) => handleContentUpdate('left', e.currentTarget.textContent || '')}
+              className="outline-none text-sm text-gray-700 cursor-text text-left"
               style={{ 
                 padding: '8px',
                 borderRadius: '4px',
+                borderLeft: isSelected ? '2px dotted rgba(139, 112, 247, 0.4)' : 'none',
               }}
             >
-              {localContent?.row1 || 'Row 1...'}
+              {localContent?.left || 'Left column...'}
             </div>
             <div
               contentEditable
               suppressContentEditableWarning
-              onBlur={(e) => handleContentUpdate('row2', e.currentTarget.textContent || '')}
-              className="flex-1 outline-none text-sm text-gray-700 cursor-text"
+              onBlur={(e) => handleContentUpdate('right', e.currentTarget.textContent || '')}
+              className="outline-none text-sm text-gray-700 cursor-text text-right"
               style={{ 
                 padding: '8px',
                 borderRadius: '4px',
+                borderRight: isSelected ? '2px dotted rgba(139, 112, 247, 0.4)' : 'none',
               }}
             >
-              {localContent?.row2 || 'Row 2...'}
+              {localContent?.right || 'Right column...'}
             </div>
           </div>
         )}

@@ -578,10 +578,62 @@ const Editor = () => {
     setHeaderFooterDialogOpen(true);
   };
 
+  const getDefaultContent = (layoutStyle: string) => {
+    switch (layoutStyle) {
+      case 'single': return '';
+      case 'two': return { left: '', right: '' };
+      case 'three': return { left: '', center: '', right: '' };
+      default: return '';
+    }
+  };
+
   const handleHeaderFooterSave = (config: HeaderFooterSettings) => {
-    setHeaderFooterConfig(config);
-    setHeaderHeight(config.headerHeight);
-    setFooterHeight(config.footerHeight);
+    // Check if user is removing header/footer
+    const removingHeader = headerFooterConfig?.showHeader && !config.showHeader;
+    const removingFooter = headerFooterConfig?.showFooter && !config.showFooter;
+    
+    if (removingHeader || removingFooter) {
+      // User is removing - clear content
+      const updatedConfig = {
+        ...config,
+        headerContent: removingHeader ? '' : config.headerContent,
+        footerContent: removingFooter ? '' : config.footerContent,
+      };
+      setHeaderFooterConfig(updatedConfig);
+      setHeaderHeight(config.headerHeight);
+      setFooterHeight(config.footerHeight);
+      
+      const removedParts = [];
+      if (removingHeader) removedParts.push('Header');
+      if (removingFooter) removedParts.push('Footer');
+      
+      toast({
+        title: 'Header/Footer Removed',
+        description: `${removedParts.join(' & ')} removed from document`,
+      });
+      return;
+    }
+    
+    // Check if user is re-toggling (turning back on after removal)
+    const reTogglingHeader = !headerFooterConfig?.showHeader && config.showHeader;
+    const reTogglingFooter = !headerFooterConfig?.showFooter && config.showFooter;
+    
+    if (reTogglingHeader || reTogglingFooter) {
+      // Reset to empty placeholders (not previous content)
+      const resetConfig = {
+        ...config,
+        headerContent: reTogglingHeader ? getDefaultContent(config.layoutStyle) : config.headerContent,
+        footerContent: reTogglingFooter ? getDefaultContent(config.layoutStyle) : config.footerContent,
+      };
+      setHeaderFooterConfig(resetConfig);
+      setHeaderHeight(config.headerHeight);
+      setFooterHeight(config.footerHeight);
+    } else {
+      // Normal save
+      setHeaderFooterConfig(config);
+      setHeaderHeight(config.headerHeight);
+      setFooterHeight(config.footerHeight);
+    }
     
     const parts = [];
     if (config.showHeader) parts.push('Header');
@@ -589,7 +641,7 @@ const Editor = () => {
     
     toast({ 
       title: 'Header & Footer Applied', 
-      description: `${parts.join(' & ')} added to document` 
+      description: `${parts.join(' & ')} configured successfully` 
     });
   };
 
@@ -889,6 +941,7 @@ const Editor = () => {
         open={headerFooterDialogOpen}
         onOpenChange={setHeaderFooterDialogOpen}
         onSave={handleHeaderFooterSave}
+        existingConfig={headerFooterConfig}
       />
       
       <OnboardingTour />

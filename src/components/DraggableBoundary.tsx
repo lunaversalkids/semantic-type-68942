@@ -63,7 +63,7 @@ export const DraggableBoundary = ({
       className={`w-full relative group ${isDragging ? 'dragging' : ''}`}
       onMouseDown={handleMouseDown}
       style={{
-        height: '4px',
+        height: '6px',
         cursor: 'ns-resize',
         zIndex: 15,
         marginTop: type === 'header' ? '0' : '0',
@@ -74,16 +74,18 @@ export const DraggableBoundary = ({
         className="absolute inset-0 transition-all duration-200"
         style={{
           background: isDragging 
-            ? 'linear-gradient(to right, transparent, #8B70F7, transparent)'
-            : 'linear-gradient(to right, transparent 40%, rgba(139, 112, 247, 0.3) 50%, transparent 60%)',
-          boxShadow: isDragging ? '0 0 15px rgba(139, 112, 247, 0.6)' : 'none',
+            ? 'repeating-linear-gradient(90deg, transparent, transparent 5px, #8B70F7 5px, #8B70F7 10px)'
+            : 'repeating-linear-gradient(90deg, transparent, transparent 8px, rgba(139, 112, 247, 0.4) 8px, rgba(139, 112, 247, 0.4) 12px)',
+          boxShadow: isDragging ? '0 0 20px rgba(139, 112, 247, 0.7)' : 'none',
+          height: '6px',
         }}
       />
       <div
         className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-200"
         style={{
-          background: 'linear-gradient(to right, transparent, #A78BFA, transparent)',
-          boxShadow: '0 0 15px rgba(139, 112, 247, 0.6)',
+          background: 'repeating-linear-gradient(90deg, transparent, transparent 5px, #A78BFA 5px, #A78BFA 10px)',
+          boxShadow: '0 0 20px rgba(139, 112, 247, 0.7)',
+          height: '6px',
         }}
       />
     </div>

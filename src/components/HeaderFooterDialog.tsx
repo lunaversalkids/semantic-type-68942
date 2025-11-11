@@ -1,7 +1,7 @@
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Checkbox } from '@/components/ui/checkbox';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 
@@ -9,6 +9,7 @@ interface HeaderFooterDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   onSave: (settings: HeaderFooterSettings) => void;
+  existingConfig?: HeaderFooterSettings | null;
 }
 
 export interface HeaderFooterSettings {
@@ -21,7 +22,7 @@ export interface HeaderFooterSettings {
   footerHeight: number;
 }
 
-export const HeaderFooterDialog = ({ open, onOpenChange, onSave }: HeaderFooterDialogProps) => {
+export const HeaderFooterDialog = ({ open, onOpenChange, onSave, existingConfig }: HeaderFooterDialogProps) => {
   const [settings, setSettings] = useState<HeaderFooterSettings>({
     showHeader: false,
     showFooter: false,
@@ -32,10 +33,13 @@ export const HeaderFooterDialog = ({ open, onOpenChange, onSave }: HeaderFooterD
     footerHeight: 60,
   });
 
-  const handleSave = () => {
-    if (!settings.showHeader && !settings.showFooter) {
-      return; // Don't save if nothing selected
+  useEffect(() => {
+    if (existingConfig && open) {
+      setSettings(existingConfig);
     }
+  }, [existingConfig, open]);
+
+  const handleSave = () => {
     onSave(settings);
     onOpenChange(false);
   };
@@ -139,10 +143,10 @@ export const HeaderFooterDialog = ({ open, onOpenChange, onSave }: HeaderFooterD
                   <Label htmlFor="two" className="flex-1 cursor-pointer">
                     <div className="flex items-center justify-between">
                       <div>
-                        <div className="font-medium text-purple-900">Two Rows</div>
-                        <div className="text-sm text-purple-700">Stacked horizontal rows</div>
+                        <div className="font-medium text-purple-900">Two Columns</div>
+                        <div className="text-sm text-purple-700">Side by side columns</div>
                       </div>
-                      <div className="w-16 h-8 flex flex-col gap-1">
+                      <div className="w-16 h-8 flex gap-1">
                         <div className="flex-1 border-2 border-purple-400 rounded" />
                         <div className="flex-1 border-2 border-purple-400 rounded" />
                       </div>
@@ -190,8 +194,7 @@ export const HeaderFooterDialog = ({ open, onOpenChange, onSave }: HeaderFooterD
           </Button>
           <Button 
             onClick={handleSave}
-            disabled={!settings.showHeader && !settings.showFooter}
-            className="bg-gradient-to-r from-[#8f6eff] to-[#b893ff] text-white shadow-[0_0_20px_rgba(139,112,247,0.4)] hover:shadow-[0_0_25px_rgba(139,112,247,0.6)] disabled:opacity-50 disabled:cursor-not-allowed"
+            className="bg-gradient-to-r from-[#8f6eff] to-[#b893ff] text-white shadow-[0_0_20px_rgba(139,112,247,0.4)] hover:shadow-[0_0_25px_rgba(139,112,247,0.6)]"
           >
             Apply
           </Button>
