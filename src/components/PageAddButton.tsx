@@ -69,28 +69,30 @@ export const PageAddButton = ({
             </Button>
             
             {/* Hide Header/Footer Options - Side by Side */}
-            <div className="flex gap-1 mt-1">
-              {onHideHeader && (
-                <Button
-                  variant="ghost"
-                  className="flex-1 justify-start hover:bg-accent/10 transition-colors text-primary text-sm"
-                  onClick={() => handleAction(onHideHeader)}
-                >
-                  <EyeOff className="h-3.5 w-3.5 mr-1.5" />
-                  Hide Header
-                </Button>
-              )}
-              {onHideFooter && (
-                <Button
-                  variant="ghost"
-                  className="flex-1 justify-start hover:bg-accent/10 transition-colors text-primary text-sm"
-                  onClick={() => handleAction(onHideFooter)}
-                >
-                  <EyeOff className="h-3.5 w-3.5 mr-1.5" />
-                  Hide Footer
-                </Button>
-              )}
-            </div>
+            {(onHideHeader || onHideFooter) && (
+              <div className="flex gap-1 mt-1">
+                {onHideHeader && (
+                  <Button
+                    variant="ghost"
+                    className="flex-1 justify-start hover:bg-accent/10 transition-colors text-primary text-sm"
+                    onClick={() => handleAction(onHideHeader)}
+                  >
+                    <EyeOff className="h-3.5 w-3.5 mr-1.5" />
+                    Hide Header
+                  </Button>
+                )}
+                {onHideFooter && (
+                  <Button
+                    variant="ghost"
+                    className="flex-1 justify-start hover:bg-accent/10 transition-colors text-primary text-sm"
+                    onClick={() => handleAction(onHideFooter)}
+                  >
+                    <EyeOff className="h-3.5 w-3.5 mr-1.5" />
+                    Hide Footer
+                  </Button>
+                )}
+              </div>
+            )}
           </div>
         </PopoverContent>
       </Popover>
