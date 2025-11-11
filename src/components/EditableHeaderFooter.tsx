@@ -222,17 +222,14 @@ export const EditableHeaderFooter = ({
   const hasContent = layoutStyle === 'single' ? !!localContent : 
     layoutStyle === 'two' ? !!(localContent?.left || localContent?.right) :
     !!(localContent?.left || localContent?.center || localContent?.right);
-  
-  // Always visible if: selected, has page number, or has content
-  // Otherwise only visible on hover
-  const isAlwaysVisible = isSelected || shouldShowPageNumber || hasContent;
 
   return (
-    <div 
-      className={`relative transition-opacity duration-200 group ${
-        isAlwaysVisible ? 'opacity-100' : 'opacity-0 hover:opacity-100'
-      }`}
-    >
+    <div className="relative group w-full">
+      {/* Always-visible hover target - this ensures the area is always interactive */}
+      <div 
+        className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"
+        style={{ background: 'rgba(139, 112, 247, 0.02)' }}
+      />
       {/* Apply Button - shown when selected */}
       {isSelected && (
         <div 
@@ -258,17 +255,17 @@ export const EditableHeaderFooter = ({
         className={`w-full transition-all duration-300 ${animationClass} absolute left-0 right-0`}
         style={{ 
           height: `${height}px`,
-          cursor: isSelected ? 'ns-resize' : 'pointer',
+          cursor: isSelected ? 'ns-resize' : 'default',
           // Position from top for header, from bottom for footer
           ...(type === 'header' ? { top: `${position}px` } : { bottom: `${position}px` }),
-          zIndex: isSelected ? 30 : 10,
+          zIndex: isSelected ? 30 : 20,
         }}
         onClick={onSelect}
         onMouseDown={handleMouseDown}
       >
-        {/* Column Guide Overlays - only visible on hover or when selected */}
-        <div className={`absolute inset-0 z-10 transition-opacity duration-200 ${
-          isSelected ? 'opacity-100 pointer-events-auto' : 'opacity-0 group-hover:opacity-100 pointer-events-none'
+        {/* Column Guide Overlays - ONLY visible on hover or when selected */}
+        <div className={`absolute inset-0 z-10 transition-opacity duration-200 pointer-events-none ${
+          isSelected ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
         }`}>
             {/* Helper text */}
             <div 
@@ -402,17 +399,11 @@ export const EditableHeaderFooter = ({
             )}
           </div>
 
-        {/* Content Area */}
-        <div
-          className={`w-full h-full px-8 py-4 transition-all duration-200 relative ${
-            isSelected 
-              ? 'opacity-60 z-10' 
-              : 'z-30'
-          }`}
-        >
+        {/* Content Area - Always accessible for typing */}
+        <div className="w-full h-full px-8 py-4 relative z-30">
         {shouldShowPageNumber && (
           <div 
-            className={`absolute inset-x-8 inset-y-4 text-sm text-muted-foreground pointer-events-none z-30 flex items-center ${
+            className={`absolute inset-x-8 inset-y-4 text-sm text-foreground pointer-events-none z-40 flex items-center ${
               getPageNumberAlignment() === 'left' ? 'justify-start' : 
               getPageNumberAlignment() === 'center' ? 'justify-center' : 
               'justify-end'
@@ -429,10 +420,9 @@ export const EditableHeaderFooter = ({
             onMouseDown={(e) => e.stopPropagation()}
             onClick={(e) => e.stopPropagation()}
             onFocus={(e) => e.stopPropagation()}
-            className="w-full h-full min-h-[40px] outline-none text-sm text-gray-700 cursor-text relative z-40 hover:bg-purple-50/30 transition-colors"
+            className="w-full h-full min-h-[40px] outline-none text-sm text-foreground cursor-text relative z-50 hover:bg-purple-50/20 transition-colors rounded"
             style={{ 
               padding: '8px',
-              borderRadius: '4px',
             }}
           >
             {localContent || ''}
@@ -440,7 +430,7 @@ export const EditableHeaderFooter = ({
         )}
 
         {layoutStyle === 'two' && (
-          <div className="flex gap-0 h-full relative z-40">
+          <div className="flex gap-0 h-full relative z-50">
             <div
               contentEditable
               suppressContentEditableWarning
@@ -448,7 +438,7 @@ export const EditableHeaderFooter = ({
               onMouseDown={(e) => e.stopPropagation()}
               onClick={(e) => e.stopPropagation()}
               onFocus={(e) => e.stopPropagation()}
-              className="outline-none text-sm text-gray-700 cursor-text text-left border-r-2 border-purple-200/50 pr-3 hover:bg-purple-50/30 transition-colors"
+              className="outline-none text-sm text-foreground cursor-text text-left pr-3 hover:bg-purple-50/20 transition-colors rounded-l"
               style={{ 
                 padding: '12px',
                 width: `${columnWidths[0]}%`,
@@ -463,7 +453,7 @@ export const EditableHeaderFooter = ({
               onMouseDown={(e) => e.stopPropagation()}
               onClick={(e) => e.stopPropagation()}
               onFocus={(e) => e.stopPropagation()}
-              className="outline-none text-sm text-gray-700 cursor-text text-right pl-3 hover:bg-purple-50/30 transition-colors"
+              className="outline-none text-sm text-foreground cursor-text text-right pl-3 hover:bg-purple-50/20 transition-colors rounded-r"
               style={{ 
                 padding: '12px',
                 width: `${100 - columnWidths[0]}%`,
@@ -475,7 +465,7 @@ export const EditableHeaderFooter = ({
         )}
 
         {layoutStyle === 'three' && (
-          <div className="flex gap-0 h-full relative z-40">
+          <div className="flex gap-0 h-full relative z-50">
             <div
               contentEditable
               suppressContentEditableWarning
@@ -483,7 +473,7 @@ export const EditableHeaderFooter = ({
               onMouseDown={(e) => e.stopPropagation()}
               onClick={(e) => e.stopPropagation()}
               onFocus={(e) => e.stopPropagation()}
-              className="outline-none text-sm text-gray-700 cursor-text text-left border-r-2 border-purple-200/50 pr-2 hover:bg-purple-50/30 transition-colors"
+              className="outline-none text-sm text-foreground cursor-text text-left pr-2 hover:bg-purple-50/20 transition-colors rounded-l"
               style={{ 
                 padding: '12px',
                 width: `${columnWidths[0]}%`,
@@ -498,7 +488,7 @@ export const EditableHeaderFooter = ({
               onMouseDown={(e) => e.stopPropagation()}
               onClick={(e) => e.stopPropagation()}
               onFocus={(e) => e.stopPropagation()}
-              className="outline-none text-sm text-gray-700 cursor-text text-center border-r-2 border-purple-200/50 px-2 hover:bg-purple-50/30 transition-colors"
+              className="outline-none text-sm text-foreground cursor-text text-center px-2 hover:bg-purple-50/20 transition-colors"
               style={{ 
                 padding: '12px',
                 width: `${columnWidths[1] - columnWidths[0]}%`,
@@ -513,7 +503,7 @@ export const EditableHeaderFooter = ({
               onMouseDown={(e) => e.stopPropagation()}
               onClick={(e) => e.stopPropagation()}
               onFocus={(e) => e.stopPropagation()}
-              className="outline-none text-sm text-gray-700 cursor-text text-right pl-2 hover:bg-purple-50/30 transition-colors"
+              className="outline-none text-sm text-foreground cursor-text text-right pl-2 hover:bg-purple-50/20 transition-colors rounded-r"
               style={{ 
                 padding: '12px',
                 width: `${100 - columnWidths[1]}%`,
