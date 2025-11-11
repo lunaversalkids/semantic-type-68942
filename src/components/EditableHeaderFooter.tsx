@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 interface EditableHeaderFooterProps {
   type: 'header' | 'footer';
@@ -9,6 +9,7 @@ interface EditableHeaderFooterProps {
   onContentChange: (content: any) => void;
   isSelected: boolean;
   onSelect: () => void;
+  onDeselect: () => void;
 }
 
 export const EditableHeaderFooter = ({
@@ -16,11 +17,17 @@ export const EditableHeaderFooter = ({
   layoutStyle,
   content,
   height,
+  onHeightChange,
   onContentChange,
   isSelected,
   onSelect,
+  onDeselect,
 }: EditableHeaderFooterProps) => {
   const [localContent, setLocalContent] = useState(content || getDefaultContent(layoutStyle));
+  const [isDragging, setIsDragging] = useState(false);
+  const [dragStartY, setDragStartY] = useState(0);
+  const [dragStartHeight, setDragStartHeight] = useState(height);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!content) {
@@ -56,22 +63,139 @@ export const EditableHeaderFooter = ({
     onContentChange(updated);
   };
 
+  const handleMouseDown = (e: React.MouseEvent) => {
+    if (!isSelected) return;
+    setIsDragging(true);
+    setDragStartY(e.clientY);
+    setDragStartHeight(height);
+    e.preventDefault();
+  };
+
+  useEffect(() => {
+    if (!isDragging) return;
+
+    const handleMouseMove = (e: MouseEvent) => {
+      const deltaY = type === 'header' 
+        ? e.clientY - dragStartY 
+        : dragStartY - e.clientY;
+      
+      let newHeight = dragStartHeight + deltaY;
+      newHeight = Math.max(30, Math.min(200, newHeight));
+      
+      onHeightChange(newHeight);
+    };
+
+    const handleMouseUp = () => {
+      setIsDragging(false);
+    };
+
+    document.addEventListener('mousemove', handleMouseMove);
+    document.addEventListener('mouseup', handleMouseUp);
+
+    return () => {
+      document.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener('mouseup', handleMouseUp);
+    };
+  }, [isDragging, dragStartY, dragStartHeight, onHeightChange, type]);
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (containerRef.current && !containerRef.current.contains(e.target as Node) && isSelected) {
+        onDeselect();
+      }
+    };
+
+    if (isSelected) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isSelected, onDeselect]);
+
   const animationClass = type === 'header' ? 'animate-slide-down' : 'animate-slide-up';
 
   return (
     <div
-      className={`w-full transition-all duration-200 ${animationClass}`}
+      ref={containerRef}
+      className={`w-full transition-all duration-300 ${animationClass} relative`}
       style={{ 
-        minHeight: `${height}px`,
-        background: isSelected ? 'rgba(139, 112, 247, 0.05)' : 'transparent',
+        height: `${height}px`,
+        background: isSelected || isDragging 
+          ? 'rgba(139, 112, 247, 0.08)' 
+          : 'transparent',
+        cursor: isSelected ? 'ns-resize' : 'pointer',
       }}
       onClick={onSelect}
+      onMouseDown={handleMouseDown}
     >
+      {/* Column Guide Overlays - only show when selected */}
+      {isSelected && (
+        <div className="absolute inset-0 pointer-events-none">
+          {layoutStyle === 'single' && (
+            <div 
+              className="absolute inset-x-16 inset-y-0 border-2 border-dashed border-[rgba(139,112,247,0.4)] rounded"
+              style={{
+                background: 'repeating-linear-gradient(90deg, rgba(139, 112, 247, 0.03), rgba(139, 112, 247, 0.03) 20px, transparent 20px, transparent 40px)',
+                boxShadow: isDragging ? '0 0 30px rgba(139, 112, 247, 0.4)' : '0 0 15px rgba(139, 112, 247, 0.2)',
+              }}
+            />
+          )}
+          
+          {layoutStyle === 'two' && (
+            <div className="absolute inset-x-16 inset-y-0 grid grid-cols-2 gap-4">
+              <div 
+                className="border-2 border-dashed border-[rgba(139,112,247,0.4)] rounded"
+                style={{
+                  background: 'repeating-linear-gradient(90deg, rgba(139, 112, 247, 0.03), rgba(139, 112, 247, 0.03) 20px, transparent 20px, transparent 40px)',
+                  boxShadow: isDragging ? '0 0 30px rgba(139, 112, 247, 0.4)' : '0 0 15px rgba(139, 112, 247, 0.2)',
+                }}
+              />
+              <div 
+                className="border-2 border-dashed border-[rgba(139,112,247,0.4)] rounded"
+                style={{
+                  background: 'repeating-linear-gradient(90deg, rgba(139, 112, 247, 0.03), rgba(139, 112, 247, 0.03) 20px, transparent 20px, transparent 40px)',
+                  boxShadow: isDragging ? '0 0 30px rgba(139, 112, 247, 0.4)' : '0 0 15px rgba(139, 112, 247, 0.2)',
+                }}
+              />
+            </div>
+          )}
+          
+          {layoutStyle === 'three' && (
+            <div className="absolute inset-x-16 inset-y-0 grid grid-cols-3 gap-4">
+              <div 
+                className="border-2 border-dashed border-[rgba(139,112,247,0.4)] rounded"
+                style={{
+                  background: 'repeating-linear-gradient(90deg, rgba(139, 112, 247, 0.03), rgba(139, 112, 247, 0.03) 20px, transparent 20px, transparent 40px)',
+                  boxShadow: isDragging ? '0 0 30px rgba(139, 112, 247, 0.4)' : '0 0 15px rgba(139, 112, 247, 0.2)',
+                }}
+              />
+              <div 
+                className="border-2 border-dashed border-[rgba(139,112,247,0.4)] rounded"
+                style={{
+                  background: 'repeating-linear-gradient(90deg, rgba(139, 112, 247, 0.03), rgba(139, 112, 247, 0.03) 20px, transparent 20px, transparent 40px)',
+                  boxShadow: isDragging ? '0 0 30px rgba(139, 112, 247, 0.4)' : '0 0 15px rgba(139, 112, 247, 0.2)',
+                }}
+              />
+              <div 
+                className="border-2 border-dashed border-[rgba(139,112,247,0.4)] rounded"
+                style={{
+                  background: 'repeating-linear-gradient(90deg, rgba(139, 112, 247, 0.03), rgba(139, 112, 247, 0.03) 20px, transparent 20px, transparent 40px)',
+                  boxShadow: isDragging ? '0 0 30px rgba(139, 112, 247, 0.4)' : '0 0 15px rgba(139, 112, 247, 0.2)',
+                }}
+              />
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Content Area */}
       <div
-        className={`w-full h-full px-16 py-4 transition-all duration-200 ${
+        className={`w-full h-full px-16 py-4 transition-all duration-200 relative z-10 ${
           isSelected 
-            ? 'border-2 border-dotted border-[rgba(139,112,247,0.5)] outline outline-2 outline-offset-2 outline-[#8B70F7] bg-[rgba(139,112,247,0.08)]' 
-            : 'border-2 border-transparent'
+            ? 'opacity-70' 
+            : ''
         }`}
       >
         {layoutStyle === 'single' && (
@@ -79,6 +203,7 @@ export const EditableHeaderFooter = ({
             contentEditable
             suppressContentEditableWarning
             onBlur={(e) => handleContentUpdate('single', e.currentTarget.textContent || '')}
+            onMouseDown={(e) => e.stopPropagation()}
             className="w-full h-full min-h-[40px] outline-none text-sm text-gray-700 cursor-text"
             style={{ 
               padding: '8px',
@@ -95,11 +220,11 @@ export const EditableHeaderFooter = ({
               contentEditable
               suppressContentEditableWarning
               onBlur={(e) => handleContentUpdate('left', e.currentTarget.textContent || '')}
+              onMouseDown={(e) => e.stopPropagation()}
               className="outline-none text-sm text-gray-700 cursor-text text-left"
               style={{ 
                 padding: '8px',
                 borderRadius: '4px',
-                borderLeft: isSelected ? '2px dotted rgba(139, 112, 247, 0.4)' : 'none',
               }}
             >
               {localContent?.left || 'Left column...'}
@@ -108,11 +233,11 @@ export const EditableHeaderFooter = ({
               contentEditable
               suppressContentEditableWarning
               onBlur={(e) => handleContentUpdate('right', e.currentTarget.textContent || '')}
+              onMouseDown={(e) => e.stopPropagation()}
               className="outline-none text-sm text-gray-700 cursor-text text-right"
               style={{ 
                 padding: '8px',
                 borderRadius: '4px',
-                borderRight: isSelected ? '2px dotted rgba(139, 112, 247, 0.4)' : 'none',
               }}
             >
               {localContent?.right || 'Right column...'}
@@ -126,6 +251,7 @@ export const EditableHeaderFooter = ({
               contentEditable
               suppressContentEditableWarning
               onBlur={(e) => handleContentUpdate('left', e.currentTarget.textContent || '')}
+              onMouseDown={(e) => e.stopPropagation()}
               className="outline-none text-sm text-gray-700 cursor-text text-left"
               style={{ 
                 padding: '8px',
@@ -138,6 +264,7 @@ export const EditableHeaderFooter = ({
               contentEditable
               suppressContentEditableWarning
               onBlur={(e) => handleContentUpdate('center', e.currentTarget.textContent || '')}
+              onMouseDown={(e) => e.stopPropagation()}
               className="outline-none text-sm text-gray-700 cursor-text text-center"
               style={{ 
                 padding: '8px',
@@ -150,6 +277,7 @@ export const EditableHeaderFooter = ({
               contentEditable
               suppressContentEditableWarning
               onBlur={(e) => handleContentUpdate('right', e.currentTarget.textContent || '')}
+              onMouseDown={(e) => e.stopPropagation()}
               className="outline-none text-sm text-gray-700 cursor-text text-right"
               style={{ 
                 padding: '8px',

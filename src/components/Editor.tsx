@@ -452,6 +452,7 @@ export const Editor = ({
                             }}
                             isSelected={selectedHeaderFooter?.type === 'header' && selectedHeaderFooter?.pageNum === pageNum}
                             onSelect={() => setSelectedHeaderFooter({ type: 'header', pageNum })}
+                            onDeselect={() => setSelectedHeaderFooter(null)}
                           />
                           <DraggableBoundary
                             type="header"
@@ -543,6 +544,7 @@ export const Editor = ({
                             }}
                             isSelected={selectedHeaderFooter?.type === 'footer' && selectedHeaderFooter?.pageNum === pageNum}
                             onSelect={() => setSelectedHeaderFooter({ type: 'footer', pageNum })}
+                            onDeselect={() => setSelectedHeaderFooter(null)}
                           />
                         </>
                       )}
