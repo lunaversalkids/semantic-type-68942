@@ -67,27 +67,25 @@ export const PageAddButton = ({
               <Plus className="h-4 w-4 mr-2" />
               Duplicate Page
             </Button>
-            
-            {/* Hide Header/Footer Options - Side by Side */}
             {(onHideHeader || onHideFooter) && (
               <div className="flex gap-1 mt-1">
                 {onHideHeader && (
                   <Button
                     variant="ghost"
-                    className="flex-1 justify-start hover:bg-accent/10 transition-colors text-primary text-sm"
+                    className="flex-1 justify-start hover:bg-accent/10 transition-colors text-primary text-xs"
                     onClick={() => handleAction(onHideHeader)}
                   >
-                    <EyeOff className="h-3.5 w-3.5 mr-1.5" />
+                    <EyeOff className="h-3 w-3 mr-1" />
                     Hide Header
                   </Button>
                 )}
                 {onHideFooter && (
                   <Button
                     variant="ghost"
-                    className="flex-1 justify-start hover:bg-accent/10 transition-colors text-primary text-sm"
+                    className="flex-1 justify-start hover:bg-accent/10 transition-colors text-primary text-xs"
                     onClick={() => handleAction(onHideFooter)}
                   >
-                    <EyeOff className="h-3.5 w-3.5 mr-1.5" />
+                    <EyeOff className="h-3 w-3 mr-1" />
                     Hide Footer
                   </Button>
                 )}
