@@ -21,6 +21,8 @@ import { HeaderFooterDialog, HeaderFooterSettings } from '@/components/HeaderFoo
 import { ColorCustomizerDialog } from '@/components/ColorCustomizerDialog';
 import { EditableHeaderFooter } from '@/components/EditableHeaderFooter';
 import { DraggableBoundary } from '@/components/DraggableBoundary';
+import { HorizontalRuler } from '@/components/HorizontalRuler';
+import { VerticalRuler } from '@/components/VerticalRuler';
 import { defaultStyles } from '@/types/styles';
 import { useToast } from '@/hooks/use-toast';
 import { toast as sonnerToast } from 'sonner';
@@ -92,6 +94,8 @@ const Editor = () => {
   const [headerPosition, setHeaderPosition] = useState(0); // Distance from top edge
   const [footerPosition, setFooterPosition] = useState(0); // Distance from bottom edge
   const [colorCustomizerOpen, setColorCustomizerOpen] = useState(false);
+  const [showRuler, setShowRuler] = useState(false);
+  const [activePageNum, setActivePageNum] = useState(1);
   const { toast } = useToast();
 
   // Track document access for recents
@@ -719,6 +723,14 @@ const Editor = () => {
     setColorCustomizerOpen(true);
   };
 
+  const handleToggleRuler = () => {
+    setShowRuler(prev => !prev);
+    toast({ 
+      title: showRuler ? 'Ruler Removed' : 'Ruler Inserted',
+      description: showRuler ? 'Rulers hidden from view' : 'Horizontal and vertical rulers are now visible'
+    });
+  };
+
   // Load and apply saved color preferences on mount
   useEffect(() => {
     const saved = localStorage.getItem('docOneColorPrefs');
@@ -994,6 +1006,10 @@ const Editor = () => {
             isDoublePageLayout={isDoublePageLayout}
             headerFooterConfig={headerFooterConfig}
             onHeaderFooterConfigChange={setHeaderFooterConfig}
+            showRuler={showRuler}
+            onToggleRuler={handleToggleRuler}
+            pageWidth={pageWidth}
+            pageHeight={pageHeight}
           />
         </main>
 

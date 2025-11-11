@@ -8,7 +8,7 @@ import {
   ContextMenuSubTrigger,
   ContextMenuTrigger,
 } from '@/components/ui/context-menu';
-import { Tag, Palette, Sparkles, FileText, Hash, Bookmark, Highlighter, Languages, Search } from 'lucide-react';
+import { Tag, Palette, Sparkles, FileText, Hash, Bookmark, Highlighter, Languages, Search, Ruler } from 'lucide-react';
 import { ReactNode } from 'react';
 
 interface EditorContextMenuProps {
@@ -33,6 +33,8 @@ interface EditorContextMenuProps {
   onFind?: () => void;
   showPageNumber?: boolean;
   pageNumber?: number;
+  onToggleRuler?: () => void;
+  showRuler?: boolean;
 }
 
 export const EditorContextMenu = ({ 
@@ -56,7 +58,9 @@ export const EditorContextMenu = ({
   onTranslate,
   onFind,
   showPageNumber = true,
-  pageNumber = 1
+  pageNumber = 1,
+  onToggleRuler,
+  showRuler = false
 }: EditorContextMenuProps) => {
   if (!editor) return <>{children}</>;
 
@@ -151,6 +155,11 @@ export const EditorContextMenu = ({
             <ContextMenuItem onClick={onTogglePageNumber}>
               <Hash className="w-4 h-4 mr-2" />
               {showPageNumber ? 'Hide' : 'Show'} Page Number
+            </ContextMenuItem>
+            <ContextMenuSeparator />
+            <ContextMenuItem onClick={onToggleRuler}>
+              <Ruler className="w-4 h-4 mr-2" />
+              {showRuler ? 'Remove' : 'Insert'} Ruler
             </ContextMenuItem>
           </ContextMenuSubContent>
         </ContextMenuSub>

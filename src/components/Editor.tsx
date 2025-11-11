@@ -12,6 +12,8 @@ import Subscript from '@tiptap/extension-subscript';
 import { Card } from '@/components/ui/card';
 import { EditorContextMenu } from './ContextMenu';
 import { PageAddButton } from './PageAddButton';
+import { HorizontalRuler } from './HorizontalRuler';
+import { VerticalRuler } from './VerticalRuler';
 import { FontSize } from './extensions/FontSize';
 import { FontWeight } from './extensions/FontWeight';
 import { SmallCaps } from './extensions/SmallCaps';
@@ -65,6 +67,10 @@ interface EditorProps {
   isDoublePageLayout?: boolean;
   headerFooterConfig?: HeaderFooterSettings | null;
   onHeaderFooterConfigChange?: (config: HeaderFooterSettings) => void;
+  showRuler?: boolean;
+  onToggleRuler?: () => void;
+  pageWidth?: number;
+  pageHeight?: number;
 }
 
 export const Editor = ({ 
@@ -94,7 +100,11 @@ export const Editor = ({
   onAddPageReady,
   isDoublePageLayout = false,
   headerFooterConfig = null,
-  onHeaderFooterConfigChange
+  onHeaderFooterConfigChange,
+  showRuler = false,
+  onToggleRuler,
+  pageWidth = 8.5,
+  pageHeight = 11
 }: EditorProps) => {
   const getPageNumberText = (pageNum: number) => {
     const { format } = pageNumberSettings;
@@ -376,7 +386,16 @@ export const Editor = ({
   }, []);
 
   return (
-    <div className="h-full flex items-start justify-center bg-[hsl(var(--editor-bg))] p-8 overflow-auto">
+    <>
+      {/* Rulers */}
+      {showRuler && (
+        <>
+          <HorizontalRuler pageWidth={pageWidth} zoom={zoom} activePageNum={1} />
+          <VerticalRuler pageHeight={pageHeight} zoom={zoom} activePageNum={1} />
+        </>
+      )}
+
+      <div className="h-full flex items-start justify-center bg-[hsl(var(--editor-bg))] p-8 overflow-auto">
       <div 
         className="editor-zoom-container" 
         style={{ 
@@ -407,6 +426,8 @@ export const Editor = ({
             onTogglePageNumber={() => onTogglePageNumber?.(1)}
             showPageNumber={pageNumbersVisibility[1] ?? true}
             pageNumber={1}
+            onToggleRuler={onToggleRuler}
+            showRuler={showRuler}
           >
             <div className={`pages-grid-container ${isDoublePageLayout ? 'double-page-layout' : ''}`}>
               {/* Background page cards */}
@@ -562,6 +583,6 @@ export const Editor = ({
           </EditorContextMenu>
         </div>
       </div>
-    </div>
+    </>
   );
 };
