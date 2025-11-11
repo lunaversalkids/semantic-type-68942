@@ -10,8 +10,10 @@ interface PageAddButtonProps {
   onAddPageWithBackground: () => void;
   onChangeBackground: () => void;
   onCopyPage: () => void;
-  onHideHeader?: () => void;
-  onHideFooter?: () => void;
+  headerVisible?: boolean;
+  footerVisible?: boolean;
+  onToggleHeader?: () => void;
+  onToggleFooter?: () => void;
 }
 
 export const PageAddButton = ({
@@ -20,8 +22,10 @@ export const PageAddButton = ({
   onAddPageWithBackground,
   onChangeBackground,
   onCopyPage,
-  onHideHeader,
-  onHideFooter,
+  headerVisible,
+  footerVisible,
+  onToggleHeader,
+  onToggleFooter,
 }: PageAddButtonProps) => {
   const [open, setOpen] = useState(false);
 
@@ -68,14 +72,14 @@ export const PageAddButton = ({
               <Plus className="h-4 w-4 mr-2" />
               Duplicate Page
             </Button>
-            {(onHideHeader || onHideFooter) && (
+            {(onToggleHeader !== undefined || onToggleFooter !== undefined) && (
               <div className="px-2 py-3 mt-2 border-t border-border/20">
-                <div className="text-xs text-muted-foreground mb-2 font-medium">Hide Sections:</div>
+                <div className="text-xs text-muted-foreground mb-2 font-medium">Toggle Visibility:</div>
                 <div className="flex flex-col gap-2">
-                  {onHideHeader && (
+                  {onToggleHeader !== undefined && (
                     <div 
                       className="flex items-center gap-3 cursor-pointer hover:bg-accent/10 p-2 rounded-md transition-colors"
-                      onClick={() => handleAction(onHideHeader)}
+                      onClick={() => handleAction(onToggleHeader)}
                     >
                       <div 
                         className={cn(
@@ -83,15 +87,17 @@ export const PageAddButton = ({
                           "border-primary hover:border-primary/80"
                         )}
                       >
-                        <div className="w-3 h-3 rounded-full bg-gradient-to-br from-[#8B70F7] to-[#A78BFA]" />
+                        {headerVisible && (
+                          <div className="w-3 h-3 rounded-full bg-gradient-to-br from-[#8B70F7] to-[#A78BFA]" />
+                        )}
                       </div>
-                      <span className="text-sm text-primary">Header</span>
+                      <span className="text-sm text-primary">{headerVisible ? 'Hide Header' : 'Show Header'}</span>
                     </div>
                   )}
-                  {onHideFooter && (
+                  {onToggleFooter !== undefined && (
                     <div 
                       className="flex items-center gap-3 cursor-pointer hover:bg-accent/10 p-2 rounded-md transition-colors"
-                      onClick={() => handleAction(onHideFooter)}
+                      onClick={() => handleAction(onToggleFooter)}
                     >
                       <div 
                         className={cn(
@@ -99,9 +105,11 @@ export const PageAddButton = ({
                           "border-primary hover:border-primary/80"
                         )}
                       >
-                        <div className="w-3 h-3 rounded-full bg-gradient-to-br from-[#8B70F7] to-[#A78BFA]" />
+                        {footerVisible && (
+                          <div className="w-3 h-3 rounded-full bg-gradient-to-br from-[#8B70F7] to-[#A78BFA]" />
+                        )}
                       </div>
-                      <span className="text-sm text-primary">Footer</span>
+                      <span className="text-sm text-primary">{footerVisible ? 'Hide Footer' : 'Show Footer'}</span>
                     </div>
                   )}
                 </div>

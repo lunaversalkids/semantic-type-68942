@@ -121,6 +121,8 @@ export const Editor = ({
   const [selectedHeaderFooter, setSelectedHeaderFooter] = useState<{ type: 'header' | 'footer', pageNum: number } | null>(null);
   const [headerPosition, setHeaderPosition] = useState(0); // Distance from top edge
   const [footerPosition, setFooterPosition] = useState(0); // Distance from bottom edge
+  const [hiddenHeaders, setHiddenHeaders] = useState<Record<number, boolean>>({}); // Per-page header visibility
+  const [hiddenFooters, setHiddenFooters] = useState<Record<number, boolean>>({}); // Per-page footer visibility
 
   const addNewPage = () => {
     const newPageId = `page-${pages.length + 1}`;
@@ -430,7 +432,7 @@ export const Editor = ({
                       }}
                     >
                       {/* Header */}
-                      {headerFooterConfig?.showHeader && (
+                      {headerFooterConfig?.showHeader && !hiddenHeaders[pageNum] && (
                         <EditableHeaderFooter
                           type="header"
                           layoutStyle={headerFooterConfig.layoutStyle}
@@ -488,27 +490,19 @@ export const Editor = ({
                           onAddPageWithBackground={() => addPageWithBackground(pageNum)}
                           onChangeBackground={() => changeBackground(pageNum)}
                           onCopyPage={() => copyPage(pageNum)}
-                          onHideHeader={headerFooterConfig?.showHeader ? () => {
-                            if (onHeaderFooterConfigChange && headerFooterConfig) {
-                              onHeaderFooterConfigChange({
-                                ...headerFooterConfig,
-                                showHeader: false
-                              });
-                            }
+                          headerVisible={headerFooterConfig?.showHeader ? !hiddenHeaders[pageNum] : undefined}
+                          footerVisible={headerFooterConfig?.showFooter ? !hiddenFooters[pageNum] : undefined}
+                          onToggleHeader={headerFooterConfig?.showHeader ? () => {
+                            setHiddenHeaders(prev => ({ ...prev, [pageNum]: !prev[pageNum] }));
                           } : undefined}
-                          onHideFooter={headerFooterConfig?.showFooter ? () => {
-                            if (onHeaderFooterConfigChange && headerFooterConfig) {
-                              onHeaderFooterConfigChange({
-                                ...headerFooterConfig,
-                                showFooter: false
-                              });
-                            }
+                          onToggleFooter={headerFooterConfig?.showFooter ? () => {
+                            setHiddenFooters(prev => ({ ...prev, [pageNum]: !prev[pageNum] }));
                           } : undefined}
                         />
                       </div>
 
                       {/* Footer */}
-                      {headerFooterConfig?.showFooter && (
+                      {headerFooterConfig?.showFooter && !hiddenFooters[pageNum] && (
                         <EditableHeaderFooter
                           type="footer"
                           layoutStyle={headerFooterConfig.layoutStyle}

@@ -47,6 +47,8 @@ export const EditableHeaderFooter = ({
   const [dragStartY, setDragStartY] = useState(0);
   const [dragStartPosition, setDragStartPosition] = useState(position);
   const containerRef = useRef<HTMLDivElement>(null);
+  const pageRef = useRef<HTMLDivElement>(null);
+  const [isHovered, setIsHovered] = useState(false);
   
   // Column width state (percentages)
   const [columnWidths, setColumnWidths] = useState<number[]>(
@@ -223,8 +225,34 @@ export const EditableHeaderFooter = ({
     layoutStyle === 'two' ? !!(localContent?.left || localContent?.right) :
     !!(localContent?.left || localContent?.center || localContent?.right);
 
+  // Auto-show on hover near top/bottom
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      if (!containerRef.current) return;
+      
+      const pageElement = containerRef.current.closest('.page-card');
+      if (!pageElement) return;
+      
+      const rect = pageElement.getBoundingClientRect();
+      const mouseY = e.clientY - rect.top;
+      const hoverThreshold = 100; // Show when within 100px of top/bottom
+      
+      if (type === 'header') {
+        setIsHovered(mouseY < hoverThreshold);
+      } else {
+        setIsHovered(mouseY > rect.height - hoverThreshold);
+      }
+    };
+
+    document.addEventListener('mousemove', handleMouseMove);
+    return () => document.removeEventListener('mousemove', handleMouseMove);
+  }, [type]);
+
   return (
-    <div className="relative group w-full">
+    <div 
+      ref={pageRef}
+      className="relative group w-full"
+    >
       {/* Always-visible hover target - this ensures the area is always interactive */}
       <div 
         className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-all duration-500 ease-out pointer-events-none"
@@ -282,7 +310,7 @@ export const EditableHeaderFooter = ({
       >
         {/* Column Guide Overlays - ONLY visible on hover or when selected */}
         <div className={`absolute inset-0 z-10 pointer-events-none transition-all duration-500 ease-out ${
-          isSelected ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
+          isSelected || isHovered ? 'opacity-100' : 'opacity-0'
         }`}>
             {/* Helper text */}
             {!isSelected && (
