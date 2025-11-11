@@ -54,8 +54,8 @@ export const LeftSidebar = ({
   return <div className={`h-full bg-sidebar border-r border-sidebar-border flex transition-all duration-300 ${width} overflow-hidden relative`}>
       {/* Page Counter - Square, centered when collapsed, left when expanded */}
       <div 
-        className={`absolute top-2 z-50 pointer-events-none transition-all duration-300 ${
-          stylesExpanded ? 'left-2' : 'left-1/2 -translate-x-1/2'
+        className={`absolute top-2 z-50 pointer-events-none transition-all duration-300 ease-in-out ${
+          stylesExpanded ? 'left-2 translate-x-0' : 'left-1/2 -translate-x-1/2'
         }`}
       >
         <div className="bg-[hsl(253,45%,85%)] text-[hsl(266,50%,35%)] font-bold text-center flex flex-col items-center justify-center w-[56px] h-[56px] rounded-md shadow-sm">

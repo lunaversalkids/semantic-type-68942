@@ -360,7 +360,7 @@ export const TextStylePanel = ({
     return <aside className="w-16 h-full bg-sidebar border-l border-sidebar-border flex flex-col items-center py-4 relative">
         {/* Word Counter - Square, centered when collapsed */}
         <div 
-          className="absolute top-2 left-1/2 -translate-x-1/2 z-50 pointer-events-none"
+          className="absolute top-2 left-1/2 -translate-x-1/2 z-50 pointer-events-none transition-all duration-300 ease-in-out"
         >
           <div className="bg-[hsl(253,45%,85%)] text-[hsl(266,50%,35%)] font-bold text-center flex flex-col items-center justify-center w-[56px] h-[56px] rounded-md shadow-sm">
             <div className="text-[8px] tracking-[0.15em] leading-none mb-1">WORD</div>
@@ -381,7 +381,7 @@ export const TextStylePanel = ({
   return <aside className="w-[340px] h-full bg-sidebar border-l border-sidebar-border flex flex-col overflow-hidden relative">
       {/* Word Counter - Square, right when expanded */}
       <div 
-        className="absolute top-2 right-2 z-50 pointer-events-none"
+        className="absolute top-2 right-2 translate-x-0 z-50 pointer-events-none transition-all duration-300 ease-in-out"
       >
         <div className="bg-[hsl(253,45%,85%)] text-[hsl(266,50%,35%)] font-bold text-center flex flex-col items-center justify-center w-[56px] h-[56px] rounded-md shadow-sm">
           <div className="text-[8px] tracking-[0.15em] leading-none mb-1">WORD</div>
