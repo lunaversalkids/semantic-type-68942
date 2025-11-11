@@ -85,8 +85,8 @@ export const LeftSidebar = ({
               <Button size="icon" variant="outline" onClick={handleAddStyle} className="h-9 w-9">
                 <Plus className="w-4 h-4" />
               </Button>
-              <Button size="icon" variant="outline" onClick={toggleStyles} className="h-9 w-9">
-                <ChevronRight className="w-4 h-4" />
+              <Button size="icon" variant="ghost" onClick={toggleStyles} className="h-9 w-9 text-muted-foreground hover:bg-sidebar-accent">
+                <X className="w-4 h-4" />
               </Button>
             </div>
           </div>
