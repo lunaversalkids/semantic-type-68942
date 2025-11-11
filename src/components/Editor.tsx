@@ -484,17 +484,6 @@ export const Editor = ({
                           onChangeBackground={() => changeBackground(pageNum)}
                           onCopyPage={() => copyPage(pageNum)}
                         />
-                        {pageNumbersVisibility[pageNum] !== false && (
-                          <div 
-                            className={`absolute bottom-8 text-sm text-muted-foreground ${
-                              getPageNumberAlignment() === 'left' ? 'left-12' : 
-                              getPageNumberAlignment() === 'center' ? 'left-1/2 -translate-x-1/2' : 
-                              'right-12'
-                            }`}
-                          >
-                            {getPageNumberText(pageNum)}
-                          </div>
-                        )}
                       </div>
 
                       {/* Footer */}
