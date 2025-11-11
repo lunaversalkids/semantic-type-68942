@@ -35,6 +35,16 @@ export const PageViewer = ({ isOpen, onClose, totalPages, onPageClick, onAddPage
   // Generate array of page numbers
   const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
 
+  // Extract page contents from editor
+  const getPageContents = () => {
+    if (!editor) return [];
+    const fullContent = editor.getHTML();
+    const pageBreak = '<div class="page-break" data-type="page-break"></div>';
+    return fullContent.split(pageBreak);
+  };
+
+  const pageContents = getPageContents();
+
   const handlePageSelect = (pageNum: number) => {
     if (!selectMode) return;
     
@@ -227,14 +237,20 @@ export const PageViewer = ({ isOpen, onClose, totalPages, onPageClick, onAddPage
                   </button>
                 )}
 
-                {/* Page Content Preview - This would show actual page content */}
-                <div className="w-full h-full overflow-hidden p-3">
-                  <div className="text-left text-xs text-gray-400 space-y-1.5">
-                    <div className="w-full h-1.5 bg-gray-100 rounded"></div>
-                    <div className="w-4/5 h-1.5 bg-gray-100 rounded"></div>
-                    <div className="w-full h-1.5 bg-gray-100 rounded"></div>
-                    <div className="w-3/4 h-1.5 bg-gray-100 rounded"></div>
-                  </div>
+                {/* Page Content Preview - Shows actual page content */}
+                <div className="w-full h-full overflow-hidden p-1">
+                  <div 
+                    className="text-left text-[3px] leading-[4px] pointer-events-none"
+                    style={{ 
+                      transform: 'scale(0.08)',
+                      transformOrigin: 'top left',
+                      width: '1250%',
+                      height: '1250%'
+                    }}
+                    dangerouslySetInnerHTML={{ 
+                      __html: pageContents[pageNum - 1] || '<p>Empty page</p>' 
+                    }}
+                  />
                 </div>
 
                 {/* Infinity Icon with Menu */}
