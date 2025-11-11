@@ -173,7 +173,7 @@ export const EditableHeaderFooter = ({
       document.removeEventListener('mousemove', handleMouseMove);
       document.removeEventListener('mouseup', handleMouseUp);
     };
-  }, [isDraggingDivider, layoutStyle]);
+  }, [isDraggingDivider, layoutStyle, columnWidths]);
 
   const handleDividerMouseDown = (dividerIndex: number, e: React.MouseEvent) => {
     if (!isSelected) return;
@@ -228,19 +228,34 @@ export const EditableHeaderFooter = ({
   // Auto-show on hover near top/bottom
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
-      if (!containerRef.current) return;
+      if (!pageRef.current) return;
       
-      const pageElement = containerRef.current.closest('.page-card');
+      const pageElement = pageRef.current.closest('.page-card');
       if (!pageElement) return;
       
       const rect = pageElement.getBoundingClientRect();
-      const mouseY = e.clientY - rect.top;
+      const mouseX = e.clientX;
+      const mouseY = e.clientY;
+      
+      // Check if mouse is within the page bounds (not just Y, but X too)
+      const isInPageBounds = 
+        mouseX >= rect.left && 
+        mouseX <= rect.right && 
+        mouseY >= rect.top && 
+        mouseY <= rect.bottom;
+      
+      if (!isInPageBounds) {
+        setIsHovered(false);
+        return;
+      }
+      
+      const relativeY = mouseY - rect.top;
       const hoverThreshold = 100; // Show when within 100px of top/bottom
       
       if (type === 'header') {
-        setIsHovered(mouseY < hoverThreshold);
+        setIsHovered(relativeY < hoverThreshold);
       } else {
-        setIsHovered(mouseY > rect.height - hoverThreshold);
+        setIsHovered(relativeY > rect.height - hoverThreshold);
       }
     };
 
@@ -489,10 +504,11 @@ export const EditableHeaderFooter = ({
               onMouseDown={(e) => e.stopPropagation()}
               onClick={(e) => e.stopPropagation()}
               onFocus={(e) => e.stopPropagation()}
-              className="outline-none text-sm text-foreground cursor-text text-left pr-3 hover:bg-purple-50/20 transition-all duration-300 ease-out rounded-l"
+              className="outline-none text-sm text-foreground cursor-text text-left pr-3 hover:bg-purple-50/20 rounded-l"
               style={{ 
                 padding: '12px',
                 width: `${columnWidths[0]}%`,
+                transition: 'width 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
               }}
             >
               {localContent?.left || ''}
@@ -504,10 +520,11 @@ export const EditableHeaderFooter = ({
               onMouseDown={(e) => e.stopPropagation()}
               onClick={(e) => e.stopPropagation()}
               onFocus={(e) => e.stopPropagation()}
-              className="outline-none text-sm text-foreground cursor-text text-right pl-3 hover:bg-purple-50/20 transition-all duration-300 ease-out rounded-r"
+              className="outline-none text-sm text-foreground cursor-text text-right pl-3 hover:bg-purple-50/20 rounded-r"
               style={{ 
                 padding: '12px',
                 width: `${100 - columnWidths[0]}%`,
+                transition: 'width 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
               }}
             >
               {localContent?.right || ''}
@@ -524,10 +541,11 @@ export const EditableHeaderFooter = ({
               onMouseDown={(e) => e.stopPropagation()}
               onClick={(e) => e.stopPropagation()}
               onFocus={(e) => e.stopPropagation()}
-              className="outline-none text-sm text-foreground cursor-text text-left pr-2 hover:bg-purple-50/20 transition-all duration-300 ease-out rounded-l"
+              className="outline-none text-sm text-foreground cursor-text text-left pr-2 hover:bg-purple-50/20 rounded-l"
               style={{ 
                 padding: '12px',
                 width: `${columnWidths[0]}%`,
+                transition: 'width 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
               }}
             >
               {localContent?.left || ''}
@@ -539,10 +557,11 @@ export const EditableHeaderFooter = ({
               onMouseDown={(e) => e.stopPropagation()}
               onClick={(e) => e.stopPropagation()}
               onFocus={(e) => e.stopPropagation()}
-              className="outline-none text-sm text-foreground cursor-text text-center px-2 hover:bg-purple-50/20 transition-all duration-300 ease-out"
+              className="outline-none text-sm text-foreground cursor-text text-center px-2 hover:bg-purple-50/20"
               style={{ 
                 padding: '12px',
                 width: `${columnWidths[1] - columnWidths[0]}%`,
+                transition: 'width 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
               }}
             >
               {localContent?.center || ''}
@@ -554,10 +573,11 @@ export const EditableHeaderFooter = ({
               onMouseDown={(e) => e.stopPropagation()}
               onClick={(e) => e.stopPropagation()}
               onFocus={(e) => e.stopPropagation()}
-              className="outline-none text-sm text-foreground cursor-text text-right pl-2 hover:bg-purple-50/20 transition-all duration-300 ease-out rounded-r"
+              className="outline-none text-sm text-foreground cursor-text text-right pl-2 hover:bg-purple-50/20 rounded-r"
               style={{ 
                 padding: '12px',
                 width: `${100 - columnWidths[1]}%`,
+                transition: 'width 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
               }}
             >
               {localContent?.right || ''}
