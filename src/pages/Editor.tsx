@@ -15,6 +15,7 @@ import { ExportDialog } from '@/components/ExportDialog';
 import { ImportDialog } from '@/components/ImportDialog';
 import { PDFImportDialog } from '@/components/PDFImportDialog';
 import { PageViewer } from '@/components/PageViewer';
+import { PageSizerDialog } from '@/components/PageSizerDialog';
 import { defaultStyles } from '@/types/styles';
 import { useToast } from '@/hooks/use-toast';
 import { toast as sonnerToast } from 'sonner';
@@ -55,6 +56,9 @@ const Editor = () => {
   const [pageViewerOpen, setPageViewerOpen] = useState(false);
   const [styles, setStyles] = useState(defaultStyles);
   const [isDoublePageLayout, setIsDoublePageLayout] = useState(false);
+  const [pageSizerOpen, setPageSizerOpen] = useState(false);
+  const [pageWidth, setPageWidth] = useState(8.5); // inches
+  const [pageHeight, setPageHeight] = useState(11); // inches
   const { toast } = useToast();
 
   // Track document access for recents
@@ -536,8 +540,12 @@ const Editor = () => {
     }
   };
 
-  const handlePageSizer = () => {
-    toast({ title: 'Page Sizer', description: 'Page sizing options coming soon' });
+  const handlePageSizeChange = (width: number, height: number) => {
+    setPageWidth(width);
+    setPageHeight(height);
+    sonnerToast.success('Page Size Updated', { 
+      description: `New size: ${width}″ × ${height}″` 
+    });
   };
 
   const handleHeaderFooter = () => {
@@ -563,7 +571,7 @@ const Editor = () => {
         onCloudClick={() => navigate('/home?from=editor')}
         onPenModeClick={handlePenMode}
         onStylusModeClick={handleStylusMode}
-        onPageSizerClick={handlePageSizer}
+        onPageSizerClick={() => setPageSizerOpen(true)}
         onHeaderFooterClick={handleHeaderFooter}
         onQuotationClick={handleQuotation}
         onTextFrameClick={handleTextFrame}
@@ -770,6 +778,12 @@ const Editor = () => {
             return newSet;
           });
         }}
+      />
+
+      <PageSizerDialog
+        open={pageSizerOpen}
+        onOpenChange={setPageSizerOpen}
+        onSizeSelect={handlePageSizeChange}
       />
       
       <OnboardingTour />
