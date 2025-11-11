@@ -52,9 +52,9 @@ export const LeftSidebar = ({
   };
   const width = stylesExpanded ? 'w-[340px]' : 'w-16';
   return <div className={`h-full bg-sidebar border-r border-sidebar-border flex transition-all duration-300 ${width} overflow-hidden relative`}>
-      {/* Page Counter - Square, positioned left */}
+      {/* Page Counter - Square, positioned left with proper spacing */}
       <div 
-        className="absolute top-2 left-1 z-50 pointer-events-none"
+        className="absolute top-2 left-2 z-50 pointer-events-none"
       >
         <div className="bg-[hsl(253,45%,85%)] text-[hsl(266,50%,35%)] font-bold text-center flex flex-col items-center justify-center w-[56px] h-[56px] rounded-md shadow-sm">
           <div className="text-[8px] tracking-[0.15em] leading-none mb-1">PAGE</div>
