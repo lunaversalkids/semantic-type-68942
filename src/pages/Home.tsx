@@ -275,13 +275,21 @@ Insects are the largest group of arthropods. The evolution, their evolution, Mur
                     <Popover open={openMenuId === doc.id} onOpenChange={(open) => setOpenMenuId(open ? doc.id : null)}>
                       <PopoverTrigger asChild>
                         <button 
-                          onClick={(e) => e.stopPropagation()}
-                          className={`absolute bottom-3 right-3 w-8 h-8 rounded-full bg-gradient-to-br from-[hsl(253,100%,64%)] to-[hsl(266,100%,70%)] ${openMenuId === doc.id ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'} hover:shadow-[0_0_16px_hsl(253,100%,64%,0.6)] transition-all duration-200 flex items-center justify-center z-10`}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setOpenMenuId(openMenuId === doc.id ? null : doc.id);
+                          }}
+                          onMouseDown={(e) => e.stopPropagation()}
+                          className={`absolute bottom-3 right-3 w-10 h-10 rounded-full bg-gradient-to-br from-[hsl(253,100%,64%)] to-[hsl(266,100%,70%)] ${openMenuId === doc.id ? 'opacity-100 scale-110' : 'opacity-0 group-hover:opacity-100 hover:scale-110'} hover:shadow-[0_0_20px_hsl(253,100%,64%,0.8)] transition-all duration-200 flex items-center justify-center z-50`}
                         >
-                          <MoreVertical className="w-4 h-4 text-white" />
+                          <MoreVertical className="w-5 h-5 text-white" />
                         </button>
                       </PopoverTrigger>
-                      <PopoverContent className="w-48 p-2 bg-[hsl(253,100%,98%)] border-2 border-[hsl(253,80%,85%)] rounded-2xl shadow-[0_8px_32px_hsl(253,100%,64%,0.25)]">
+                      <PopoverContent 
+                        className="w-48 p-2 bg-[hsl(253,100%,98%)] border-2 border-[hsl(253,80%,85%)] rounded-2xl shadow-[0_8px_32px_hsl(253,100%,64%,0.25)] z-[100]"
+                        sideOffset={8}
+                        onClick={(e) => e.stopPropagation()}
+                      >
                         {renamingId === doc.id ? (
                           <div className="p-2 space-y-2">
                             <Input
@@ -375,13 +383,21 @@ Insects are the largest group of arthropods. The evolution, their evolution, Mur
                         <Popover open={openMenuId === doc.id} onOpenChange={(open) => setOpenMenuId(open ? doc.id : null)}>
                           <PopoverTrigger asChild>
                             <button 
-                              onClick={(e) => e.stopPropagation()}
-                              className={`absolute bottom-3 right-3 w-8 h-8 rounded-full bg-gradient-to-br from-[hsl(253,100%,64%)] to-[hsl(266,100%,70%)] ${openMenuId === doc.id ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'} hover:shadow-[0_0_16px_hsl(253,100%,64%,0.6)] transition-all duration-200 flex items-center justify-center z-10`}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setOpenMenuId(openMenuId === doc.id ? null : doc.id);
+                              }}
+                              onMouseDown={(e) => e.stopPropagation()}
+                              className={`absolute bottom-3 right-3 w-10 h-10 rounded-full bg-gradient-to-br from-[hsl(253,100%,64%)] to-[hsl(266,100%,70%)] ${openMenuId === doc.id ? 'opacity-100 scale-110' : 'opacity-0 group-hover:opacity-100 hover:scale-110'} hover:shadow-[0_0_20px_hsl(253,100%,64%,0.8)] transition-all duration-200 flex items-center justify-center z-50`}
                             >
-                              <MoreVertical className="w-4 h-4 text-white" />
+                              <MoreVertical className="w-5 h-5 text-white" />
                             </button>
                           </PopoverTrigger>
-                          <PopoverContent className="w-48 p-2 bg-[hsl(253,100%,98%)] border-2 border-[hsl(253,80%,85%)] rounded-2xl shadow-[0_8px_32px_hsl(253,100%,64%,0.25)]">
+                          <PopoverContent 
+                            className="w-48 p-2 bg-[hsl(253,100%,98%)] border-2 border-[hsl(253,80%,85%)] rounded-2xl shadow-[0_8px_32px_hsl(253,100%,64%,0.25)] z-[100]"
+                            sideOffset={8}
+                            onClick={(e) => e.stopPropagation()}
+                          >
                             {renamingId === doc.id ? (
                               <div className="p-2 space-y-2">
                                 <Input
