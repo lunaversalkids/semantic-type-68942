@@ -21,6 +21,7 @@ const Home = () => {
   const [recentDocs, setRecentDocs] = useState<RecentDocument[]>([]);
   const [activeTab, setActiveTab] = useState('Recents');
   const [isTemplatesExpanded, setIsTemplatesExpanded] = useState(false);
+  const [isCategoriesVisible, setIsCategoriesVisible] = useState(false);
   const [openMenuId, setOpenMenuId] = useState<string | null>(null);
   const [renamingId, setRenamingId] = useState<string | null>(null);
   const [newName, setNewName] = useState('');
@@ -243,13 +244,19 @@ Insects are the largest group of arthropods. The evolution, their evolution, Mur
           {!fromEditor && <p className="text-base text-[hsl(253,28%,40%)] font-semibold pt-2">Choose Your Template.</p>}
 
           {/* Chevron arrow */}
-          <svg className="w-10 h-10 text-[hsl(253,100%,64%)] animate-bounce drop-shadow-[0_4px_8px_hsl(253,100%,64%,0.3)]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={3}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
-          </svg>
+          <button 
+            onClick={() => setIsCategoriesVisible(!isCategoriesVisible)}
+            className="focus:outline-none"
+          >
+            <svg className={`w-10 h-10 text-[hsl(253,100%,64%)] drop-shadow-[0_4px_8px_hsl(253,100%,64%,0.3)] transition-transform duration-300 ${isCategoriesVisible ? 'rotate-180' : ''} ${!isCategoriesVisible ? 'animate-bounce' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={3}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+            </svg>
+          </button>
         </div>
 
         {/* Templates section or Recent documents only */}
-        <div className="w-full bg-gradient-to-br from-white/70 via-[hsl(253,100%,98%)] to-[hsl(253,100%,96%)] rounded-[28px] p-10 shadow-[0_0_60px_hsl(253,100%,64%,0.25),0_8px_48px_hsl(253,100%,64%,0.15),inset_0_1px_0_white] border-2 border-[hsl(253,80%,90%)] backdrop-blur-xl">
+        {isCategoriesVisible && (
+          <div className="w-full bg-gradient-to-br from-white/70 via-[hsl(253,100%,98%)] to-[hsl(253,100%,96%)] rounded-[28px] p-10 shadow-[0_0_60px_hsl(253,100%,64%,0.25),0_8px_48px_hsl(253,100%,64%,0.15),inset_0_1px_0_white] border-2 border-[hsl(253,80%,90%)] backdrop-blur-xl animate-fade-in">
           {fromEditor ?
         // Simple recent documents view when coming from editor
         <div className="space-y-6">
@@ -526,7 +533,8 @@ Insects are the largest group of arthropods. The evolution, their evolution, Mur
                 </>}
             </TabsContent>
           </Tabs>}
-        </div>
+          </div>
+        )}
       </div>
     </div>;
 };
