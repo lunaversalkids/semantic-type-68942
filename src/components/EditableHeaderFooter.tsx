@@ -266,7 +266,7 @@ export const EditableHeaderFooter = ({
         onClick={onSelect}
         onMouseDown={handleMouseDown}
       >
-        {/* Column Guide Overlays - visible on hover */}
+        {/* Column Guide Overlays - only visible on hover or when selected */}
         <div className={`absolute inset-0 pointer-events-none z-10 transition-opacity duration-200 ${
           isSelected ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
         }`}>
