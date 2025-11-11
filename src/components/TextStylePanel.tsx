@@ -379,9 +379,9 @@ export const TextStylePanel = ({
       </aside>;
   }
   return <aside className="w-[340px] h-full bg-sidebar border-l border-sidebar-border flex flex-col overflow-hidden relative">
-      {/* Word Counter - Square, positioned top right when expanded */}
+      {/* Word Counter - Square, positioned top right to match page count exactly */}
       <div 
-        className="absolute top-2 right-2 z-50 pointer-events-none"
+        className="absolute top-2 right-1 z-50 pointer-events-none"
       >
         <div className="bg-[hsl(253,45%,85%)] text-[hsl(266,50%,35%)] font-bold text-center flex flex-col items-center justify-center w-[56px] h-[56px] rounded-md shadow-sm">
           <div className="text-[8px] tracking-[0.15em] leading-none mb-1">WORD</div>
@@ -390,12 +390,14 @@ export const TextStylePanel = ({
       </div>
 
       <ScrollArea className="flex-1 p-2.5 pt-16">
-        <div className="flex flex-col gap-3">
+        <div className="flex flex-col gap-2">
       {/* Header */}
-      <div className="flex items-center justify-between mb-1">
-        <h2 className="text-sm font-bold text-[#8B7AB8] uppercase tracking-wide">Paragraph Mode</h2>
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-2.5">
+          <h2 className="text-sm font-bold text-[#8B7AB8] uppercase tracking-wide">Paragraph Mode</h2>
+        </div>
         <div className="flex gap-2">
-          <Button size="icon" variant="outline" className="h-9 w-9" onClick={() => setIsCollapsed(true)}>
+          <Button size="icon" variant="outline" onClick={() => setIsCollapsed(true)} className="h-9 w-9">
             <ChevronRight className="w-4 h-4" />
           </Button>
         </div>

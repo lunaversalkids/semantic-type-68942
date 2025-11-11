@@ -79,7 +79,6 @@ export const LeftSidebar = ({
           {/* Header */}
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2.5">
-              
               <h2 className="text-sm font-bold text-[#8B7AB8] uppercase tracking-wide">Smart Styling</h2>
             </div>
             <div className="flex gap-2">
@@ -87,7 +86,7 @@ export const LeftSidebar = ({
                 <Plus className="w-4 h-4" />
               </Button>
               <Button size="icon" variant="outline" onClick={toggleStyles} className="h-9 w-9">
-                <X className="w-4 h-4" />
+                <ChevronRight className="w-4 h-4" />
               </Button>
             </div>
           </div>
