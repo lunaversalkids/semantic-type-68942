@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import { Button } from './ui/button';
 
 interface EditableHeaderFooterProps {
   type: 'header' | 'footer';
@@ -10,6 +11,7 @@ interface EditableHeaderFooterProps {
   isSelected: boolean;
   onSelect: () => void;
   onDeselect: () => void;
+  onApply: () => void;
 }
 
 export const EditableHeaderFooter = ({
@@ -22,6 +24,7 @@ export const EditableHeaderFooter = ({
   isSelected,
   onSelect,
   onDeselect,
+  onApply,
 }: EditableHeaderFooterProps) => {
   const [localContent, setLocalContent] = useState(content || getDefaultContent(layoutStyle));
   const [isDragging, setIsDragging] = useState(false);
@@ -117,72 +120,120 @@ export const EditableHeaderFooter = ({
   const animationClass = type === 'header' ? 'animate-slide-down' : 'animate-slide-up';
 
   return (
-    <div
-      ref={containerRef}
-      className={`w-full transition-all duration-300 ${animationClass} relative`}
-      style={{ 
-        height: `${height}px`,
-        background: isSelected || isDragging 
-          ? 'rgba(139, 112, 247, 0.08)' 
-          : 'transparent',
-        cursor: isSelected ? 'ns-resize' : 'pointer',
-      }}
-      onClick={onSelect}
-      onMouseDown={handleMouseDown}
-    >
-      {/* Column Guide Overlays - only show when selected */}
+    <div className="relative">
+      {/* Apply Button - shown when selected */}
       {isSelected && (
-        <div className="absolute inset-0 pointer-events-none">
+        <div 
+          className="absolute left-1/2 transform -translate-x-1/2 z-50 animate-fade-in"
+          style={{
+            top: type === 'header' ? `${height + 10}px` : '-50px',
+          }}
+        >
+          <Button
+            onClick={(e) => {
+              e.stopPropagation();
+              onApply();
+            }}
+            className="bg-gradient-to-r from-[#8B70F7] to-[#A78BFA] hover:from-[#7C5FE6] hover:to-[#9670E6] text-white shadow-lg shadow-purple-500/50 px-6 py-2"
+          >
+            Apply
+          </Button>
+        </div>
+      )}
+
+      <div
+        ref={containerRef}
+        className={`w-full transition-all duration-300 ${animationClass} relative`}
+        style={{ 
+          height: `${height}px`,
+          cursor: isSelected ? 'ns-resize' : 'pointer',
+        }}
+        onClick={onSelect}
+        onMouseDown={handleMouseDown}
+      >
+        {/* Column Guide Overlays - highly visible when selected */}
+        {isSelected && (
+        <div className="absolute inset-0 pointer-events-none z-10">
           {layoutStyle === 'single' && (
             <div 
-              className="absolute inset-x-16 inset-y-0 border-2 border-dashed border-[rgba(139,112,247,0.4)] rounded"
+              className="absolute inset-x-16 inset-y-0 border-4 border-dashed rounded-lg animate-fade-in"
               style={{
-                background: 'repeating-linear-gradient(90deg, rgba(139, 112, 247, 0.03), rgba(139, 112, 247, 0.03) 20px, transparent 20px, transparent 40px)',
-                boxShadow: isDragging ? '0 0 30px rgba(139, 112, 247, 0.4)' : '0 0 15px rgba(139, 112, 247, 0.2)',
+                borderColor: isDragging ? '#A78BFA' : '#8B70F7',
+                background: isDragging 
+                  ? 'linear-gradient(135deg, rgba(167, 139, 250, 0.15), rgba(139, 112, 247, 0.15))' 
+                  : 'linear-gradient(135deg, rgba(167, 139, 250, 0.10), rgba(139, 112, 247, 0.10))',
+                boxShadow: isDragging 
+                  ? '0 0 40px rgba(167, 139, 250, 0.6), inset 0 0 30px rgba(167, 139, 250, 0.2)' 
+                  : '0 0 25px rgba(139, 112, 247, 0.4), inset 0 0 20px rgba(139, 112, 247, 0.1)',
               }}
             />
           )}
           
           {layoutStyle === 'two' && (
-            <div className="absolute inset-x-16 inset-y-0 grid grid-cols-2 gap-4">
+            <div className="absolute inset-x-16 inset-y-0 grid grid-cols-2 gap-6 animate-fade-in">
               <div 
-                className="border-2 border-dashed border-[rgba(139,112,247,0.4)] rounded"
+                className="border-4 border-dashed rounded-lg"
                 style={{
-                  background: 'repeating-linear-gradient(90deg, rgba(139, 112, 247, 0.03), rgba(139, 112, 247, 0.03) 20px, transparent 20px, transparent 40px)',
-                  boxShadow: isDragging ? '0 0 30px rgba(139, 112, 247, 0.4)' : '0 0 15px rgba(139, 112, 247, 0.2)',
+                  borderColor: isDragging ? '#A78BFA' : '#8B70F7',
+                  background: isDragging 
+                    ? 'linear-gradient(135deg, rgba(167, 139, 250, 0.15), rgba(139, 112, 247, 0.15))' 
+                    : 'linear-gradient(135deg, rgba(167, 139, 250, 0.10), rgba(139, 112, 247, 0.10))',
+                  boxShadow: isDragging 
+                    ? '0 0 40px rgba(167, 139, 250, 0.6), inset 0 0 30px rgba(167, 139, 250, 0.2)' 
+                    : '0 0 25px rgba(139, 112, 247, 0.4), inset 0 0 20px rgba(139, 112, 247, 0.1)',
                 }}
               />
               <div 
-                className="border-2 border-dashed border-[rgba(139,112,247,0.4)] rounded"
+                className="border-4 border-dashed rounded-lg"
                 style={{
-                  background: 'repeating-linear-gradient(90deg, rgba(139, 112, 247, 0.03), rgba(139, 112, 247, 0.03) 20px, transparent 20px, transparent 40px)',
-                  boxShadow: isDragging ? '0 0 30px rgba(139, 112, 247, 0.4)' : '0 0 15px rgba(139, 112, 247, 0.2)',
+                  borderColor: isDragging ? '#A78BFA' : '#8B70F7',
+                  background: isDragging 
+                    ? 'linear-gradient(135deg, rgba(167, 139, 250, 0.15), rgba(139, 112, 247, 0.15))' 
+                    : 'linear-gradient(135deg, rgba(167, 139, 250, 0.10), rgba(139, 112, 247, 0.10))',
+                  boxShadow: isDragging 
+                    ? '0 0 40px rgba(167, 139, 250, 0.6), inset 0 0 30px rgba(167, 139, 250, 0.2)' 
+                    : '0 0 25px rgba(139, 112, 247, 0.4), inset 0 0 20px rgba(139, 112, 247, 0.1)',
                 }}
               />
             </div>
           )}
           
           {layoutStyle === 'three' && (
-            <div className="absolute inset-x-16 inset-y-0 grid grid-cols-3 gap-4">
+            <div className="absolute inset-x-16 inset-y-0 grid grid-cols-3 gap-6 animate-fade-in">
               <div 
-                className="border-2 border-dashed border-[rgba(139,112,247,0.4)] rounded"
+                className="border-4 border-dashed rounded-lg"
                 style={{
-                  background: 'repeating-linear-gradient(90deg, rgba(139, 112, 247, 0.03), rgba(139, 112, 247, 0.03) 20px, transparent 20px, transparent 40px)',
-                  boxShadow: isDragging ? '0 0 30px rgba(139, 112, 247, 0.4)' : '0 0 15px rgba(139, 112, 247, 0.2)',
+                  borderColor: isDragging ? '#A78BFA' : '#8B70F7',
+                  background: isDragging 
+                    ? 'linear-gradient(135deg, rgba(167, 139, 250, 0.15), rgba(139, 112, 247, 0.15))' 
+                    : 'linear-gradient(135deg, rgba(167, 139, 250, 0.10), rgba(139, 112, 247, 0.10))',
+                  boxShadow: isDragging 
+                    ? '0 0 40px rgba(167, 139, 250, 0.6), inset 0 0 30px rgba(167, 139, 250, 0.2)' 
+                    : '0 0 25px rgba(139, 112, 247, 0.4), inset 0 0 20px rgba(139, 112, 247, 0.1)',
                 }}
               />
               <div 
-                className="border-2 border-dashed border-[rgba(139,112,247,0.4)] rounded"
+                className="border-4 border-dashed rounded-lg"
                 style={{
-                  background: 'repeating-linear-gradient(90deg, rgba(139, 112, 247, 0.03), rgba(139, 112, 247, 0.03) 20px, transparent 20px, transparent 40px)',
-                  boxShadow: isDragging ? '0 0 30px rgba(139, 112, 247, 0.4)' : '0 0 15px rgba(139, 112, 247, 0.2)',
+                  borderColor: isDragging ? '#A78BFA' : '#8B70F7',
+                  background: isDragging 
+                    ? 'linear-gradient(135deg, rgba(167, 139, 250, 0.15), rgba(139, 112, 247, 0.15))' 
+                    : 'linear-gradient(135deg, rgba(167, 139, 250, 0.10), rgba(139, 112, 247, 0.10))',
+                  boxShadow: isDragging 
+                    ? '0 0 40px rgba(167, 139, 250, 0.6), inset 0 0 30px rgba(167, 139, 250, 0.2)' 
+                    : '0 0 25px rgba(139, 112, 247, 0.4), inset 0 0 20px rgba(139, 112, 247, 0.1)',
                 }}
               />
               <div 
-                className="border-2 border-dashed border-[rgba(139,112,247,0.4)] rounded"
+                className="border-4 border-dashed rounded-lg"
                 style={{
-                  background: 'repeating-linear-gradient(90deg, rgba(139, 112, 247, 0.03), rgba(139, 112, 247, 0.03) 20px, transparent 20px, transparent 40px)',
-                  boxShadow: isDragging ? '0 0 30px rgba(139, 112, 247, 0.4)' : '0 0 15px rgba(139, 112, 247, 0.2)',
+                  borderColor: isDragging ? '#A78BFA' : '#8B70F7',
+                  background: isDragging 
+                    ? 'linear-gradient(135deg, rgba(167, 139, 250, 0.15), rgba(139, 112, 247, 0.15))' 
+                    : 'linear-gradient(135deg, rgba(167, 139, 250, 0.10), rgba(139, 112, 247, 0.10))',
+                  boxShadow: isDragging 
+                    ? '0 0 40px rgba(167, 139, 250, 0.6), inset 0 0 30px rgba(167, 139, 250, 0.2)' 
+                    : '0 0 25px rgba(139, 112, 247, 0.4), inset 0 0 20px rgba(139, 112, 247, 0.1)',
                 }}
               />
             </div>
@@ -190,14 +241,14 @@ export const EditableHeaderFooter = ({
         </div>
       )}
 
-      {/* Content Area */}
-      <div
-        className={`w-full h-full px-16 py-4 transition-all duration-200 relative z-10 ${
-          isSelected 
-            ? 'opacity-70' 
-            : ''
-        }`}
-      >
+        {/* Content Area */}
+        <div
+          className={`w-full h-full px-16 py-4 transition-all duration-200 relative z-20 ${
+            isSelected 
+              ? 'opacity-60' 
+              : ''
+          }`}
+        >
         {layoutStyle === 'single' && (
           <div
             contentEditable
@@ -284,10 +335,11 @@ export const EditableHeaderFooter = ({
                 borderRadius: '4px',
               }}
             >
-              {localContent?.right || 'Right...'}
-            </div>
+            {localContent?.right || 'Right...'}
           </div>
-        )}
+        </div>
+      )}
+        </div>
       </div>
     </div>
   );
