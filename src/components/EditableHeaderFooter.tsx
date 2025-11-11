@@ -21,9 +21,9 @@ export const EditableHeaderFooter = ({
   layoutStyle,
   content,
   height,
-  position, // NEW
+  position,
   onHeightChange,
-  onPositionChange, // NEW
+  onPositionChange,
   onContentChange,
   isSelected,
   onSelect,
@@ -33,8 +33,16 @@ export const EditableHeaderFooter = ({
   const [localContent, setLocalContent] = useState(content || getDefaultContent(layoutStyle));
   const [isDragging, setIsDragging] = useState(false);
   const [dragStartY, setDragStartY] = useState(0);
-  const [dragStartPosition, setDragStartPosition] = useState(position); // CHANGED from dragStartHeight
+  const [dragStartPosition, setDragStartPosition] = useState(position);
   const containerRef = useRef<HTMLDivElement>(null);
+  
+  // Column width state (percentages)
+  const [columnWidths, setColumnWidths] = useState<number[]>(
+    layoutStyle === 'two' ? [50] : layoutStyle === 'three' ? [33.33, 66.66] : []
+  );
+  const [isDraggingDivider, setIsDraggingDivider] = useState<number | null>(null);
+  const [dragStartX, setDragStartX] = useState(0);
+  const [dragStartWidths, setDragStartWidths] = useState<number[]>([]);
 
   useEffect(() => {
     if (!content) {
@@ -42,6 +50,10 @@ export const EditableHeaderFooter = ({
     } else {
       setLocalContent(content);
     }
+    // Reset column widths when layout changes
+    setColumnWidths(
+      layoutStyle === 'two' ? [50] : layoutStyle === 'three' ? [33.33, 66.66] : []
+    );
   }, [layoutStyle, content]);
 
   function getDefaultContent(style: string) {
@@ -78,19 +90,14 @@ export const EditableHeaderFooter = ({
     e.preventDefault();
   };
 
+  // Vertical drag (position adjustment)
   useEffect(() => {
     if (!isDragging) return;
 
     const handleMouseMove = (e: MouseEvent) => {
-      // Calculate delta based on drag direction
       const deltaY = e.clientY - dragStartY;
-      
-      // Calculate new position
       let newPosition = dragStartPosition + deltaY;
-      
-      // Constrain position (0 = top/bottom edge, 300 = max offset)
       newPosition = Math.max(0, Math.min(300, newPosition));
-      
       onPositionChange(newPosition);
     };
 
@@ -106,6 +113,61 @@ export const EditableHeaderFooter = ({
       document.removeEventListener('mouseup', handleMouseUp);
     };
   }, [isDragging, dragStartY, dragStartPosition, onPositionChange]);
+
+  // Horizontal drag (column width adjustment)
+  useEffect(() => {
+    if (isDraggingDivider === null) return;
+
+    const handleMouseMove = (e: MouseEvent) => {
+      if (!containerRef.current) return;
+      
+      const containerRect = containerRef.current.getBoundingClientRect();
+      const containerWidth = containerRect.width;
+      const relativeX = e.clientX - containerRect.left;
+      const percentage = (relativeX / containerWidth) * 100;
+
+      setColumnWidths((prevWidths) => {
+        const newWidths = [...prevWidths];
+        
+        if (layoutStyle === 'two') {
+          // Constrain between 20% and 80%
+          newWidths[0] = Math.max(20, Math.min(80, percentage));
+        } else if (layoutStyle === 'three') {
+          if (isDraggingDivider === 0) {
+            // First divider: constrain between 15% and (second divider - 15%)
+            const maxFirst = newWidths[1] - 15;
+            newWidths[0] = Math.max(15, Math.min(maxFirst, percentage));
+          } else if (isDraggingDivider === 1) {
+            // Second divider: constrain between (first divider + 15%) and 85%
+            const minSecond = newWidths[0] + 15;
+            newWidths[1] = Math.max(minSecond, Math.min(85, percentage));
+          }
+        }
+        
+        return newWidths;
+      });
+    };
+
+    const handleMouseUp = () => {
+      setIsDraggingDivider(null);
+    };
+
+    document.addEventListener('mousemove', handleMouseMove);
+    document.addEventListener('mouseup', handleMouseUp);
+
+    return () => {
+      document.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener('mouseup', handleMouseUp);
+    };
+  }, [isDraggingDivider, layoutStyle]);
+
+  const handleDividerMouseDown = (dividerIndex: number, e: React.MouseEvent) => {
+    if (!isSelected) return;
+    e.stopPropagation();
+    setIsDraggingDivider(dividerIndex);
+    setDragStartX(e.clientX);
+    setDragStartWidths([...columnWidths]);
+  };
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -206,14 +268,28 @@ export const EditableHeaderFooter = ({
                       : '0 0 25px rgba(139, 112, 247, 0.4), inset 0 0 20px rgba(139, 112, 247, 0.1)',
                   }}
                 >
-                  {/* Vertical dividing line in middle */}
+                  {/* Vertical dividing line with draggable handle */}
                   <div 
-                    className="absolute top-0 bottom-0 left-1/2 transform -translate-x-1/2 transition-all duration-200"
+                    className="absolute top-0 bottom-0 transform -translate-x-1/2 transition-all duration-200 group"
                     style={{
+                      left: `${columnWidths[0]}%`,
                       width: '3px',
-                      background: isDragging ? '#A78BFA' : '#8B70F7',
+                      background: isDraggingDivider === 0 ? '#A78BFA' : '#8B70F7',
+                      cursor: 'ew-resize',
+                      pointerEvents: 'auto',
                     }}
-                  />
+                    onMouseDown={(e) => handleDividerMouseDown(0, e)}
+                  >
+                    {/* Draggable handle indicator */}
+                    <div 
+                      className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-purple-500 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center"
+                      style={{
+                        boxShadow: '0 0 15px rgba(139, 112, 247, 0.6)',
+                      }}
+                    >
+                      <div className="text-white text-xs font-bold">⬌</div>
+                    </div>
+                  </div>
                 </div>
               </div>
             )}
@@ -233,22 +309,49 @@ export const EditableHeaderFooter = ({
                       : '0 0 25px rgba(139, 112, 247, 0.4), inset 0 0 20px rgba(139, 112, 247, 0.1)',
                   }}
                 >
-                  {/* First vertical line at 1/3 */}
+                  {/* First vertical line with draggable handle */}
                   <div 
-                    className="absolute top-0 bottom-0 left-1/3 transform -translate-x-1/2 transition-all duration-200"
+                    className="absolute top-0 bottom-0 transform -translate-x-1/2 transition-all duration-200 group"
                     style={{
+                      left: `${columnWidths[0]}%`,
                       width: '3px',
-                      background: isDragging ? '#A78BFA' : '#8B70F7',
+                      background: isDraggingDivider === 0 ? '#A78BFA' : '#8B70F7',
+                      cursor: 'ew-resize',
+                      pointerEvents: 'auto',
                     }}
-                  />
-                  {/* Second vertical line at 2/3 */}
+                    onMouseDown={(e) => handleDividerMouseDown(0, e)}
+                  >
+                    <div 
+                      className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-purple-500 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center"
+                      style={{
+                        boxShadow: '0 0 15px rgba(139, 112, 247, 0.6)',
+                      }}
+                    >
+                      <div className="text-white text-xs font-bold">⬌</div>
+                    </div>
+                  </div>
+                  
+                  {/* Second vertical line with draggable handle */}
                   <div 
-                    className="absolute top-0 bottom-0 left-2/3 transform -translate-x-1/2 transition-all duration-200"
+                    className="absolute top-0 bottom-0 transform -translate-x-1/2 transition-all duration-200 group"
                     style={{
+                      left: `${columnWidths[1]}%`,
                       width: '3px',
-                      background: isDragging ? '#A78BFA' : '#8B70F7',
+                      background: isDraggingDivider === 1 ? '#A78BFA' : '#8B70F7',
+                      cursor: 'ew-resize',
+                      pointerEvents: 'auto',
                     }}
-                  />
+                    onMouseDown={(e) => handleDividerMouseDown(1, e)}
+                  >
+                    <div 
+                      className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-purple-500 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center"
+                      style={{
+                        boxShadow: '0 0 15px rgba(139, 112, 247, 0.6)',
+                      }}
+                    >
+                      <div className="text-white text-xs font-bold">⬌</div>
+                    </div>
+                  </div>
                 </div>
               </div>
             )}
@@ -280,7 +383,7 @@ export const EditableHeaderFooter = ({
         )}
 
         {layoutStyle === 'two' && (
-          <div className="grid grid-cols-2 gap-0 h-full">
+          <div className="flex gap-0 h-full">
             <div
               contentEditable
               suppressContentEditableWarning
@@ -289,6 +392,7 @@ export const EditableHeaderFooter = ({
               className="outline-none text-sm text-gray-700 cursor-text text-left border-r-2 border-purple-200/50 pr-3"
               style={{ 
                 padding: '12px',
+                width: `${columnWidths[0]}%`,
               }}
             >
               {localContent?.left || 'Left column...'}
@@ -301,6 +405,7 @@ export const EditableHeaderFooter = ({
               className="outline-none text-sm text-gray-700 cursor-text text-right pl-3"
               style={{ 
                 padding: '12px',
+                width: `${100 - columnWidths[0]}%`,
               }}
             >
               {localContent?.right || 'Right column...'}
@@ -309,7 +414,7 @@ export const EditableHeaderFooter = ({
         )}
 
         {layoutStyle === 'three' && (
-          <div className="grid grid-cols-3 gap-0 h-full">
+          <div className="flex gap-0 h-full">
             <div
               contentEditable
               suppressContentEditableWarning
@@ -318,6 +423,7 @@ export const EditableHeaderFooter = ({
               className="outline-none text-sm text-gray-700 cursor-text text-left border-r-2 border-purple-200/50 pr-2"
               style={{ 
                 padding: '12px',
+                width: `${columnWidths[0]}%`,
               }}
             >
               {localContent?.left || 'Left...'}
@@ -330,6 +436,7 @@ export const EditableHeaderFooter = ({
               className="outline-none text-sm text-gray-700 cursor-text text-center border-r-2 border-purple-200/50 px-2"
               style={{ 
                 padding: '12px',
+                width: `${columnWidths[1] - columnWidths[0]}%`,
               }}
             >
               {localContent?.center || 'Center...'}
@@ -342,6 +449,7 @@ export const EditableHeaderFooter = ({
               className="outline-none text-sm text-gray-700 cursor-text text-right pl-2"
               style={{ 
                 padding: '12px',
+                width: `${100 - columnWidths[1]}%`,
               }}
             >
             {localContent?.right || 'Right...'}
