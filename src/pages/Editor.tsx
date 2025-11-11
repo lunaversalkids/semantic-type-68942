@@ -16,6 +16,7 @@ import { ImportDialog } from '@/components/ImportDialog';
 import { PDFImportDialog } from '@/components/PDFImportDialog';
 import { PageViewer } from '@/components/PageViewer';
 import { PageSizerDialog } from '@/components/PageSizerDialog';
+import { TextBox } from '@/components/TextBox';
 import { defaultStyles } from '@/types/styles';
 import { useToast } from '@/hooks/use-toast';
 import { toast as sonnerToast } from 'sonner';
@@ -59,6 +60,23 @@ const Editor = () => {
   const [pageSizerOpen, setPageSizerOpen] = useState(false);
   const [pageWidth, setPageWidth] = useState(8.5); // inches
   const [pageHeight, setPageHeight] = useState(11); // inches
+  const [textBoxes, setTextBoxes] = useState<Array<{
+    id: string;
+    content: string;
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+    isLocked: boolean;
+    fontSize: number;
+    fontWeight: string;
+    fontStyle: string;
+    textDecoration: string;
+    color: string;
+    backgroundColor: string;
+    borderColor: string;
+  }>>([]);
+  const [selectedTextBoxId, setSelectedTextBoxId] = useState<string | null>(null);
   const { toast } = useToast();
 
   // Track document access for recents
@@ -553,7 +571,26 @@ const Editor = () => {
   };
 
   const handleTextFrame = () => {
-    toast({ title: 'Text Box', description: 'Text box insertion coming soon' });
+    const newId = `textbox-${Date.now()}`;
+    const newTextBox = {
+      id: newId,
+      content: '',
+      x: window.innerWidth / 2 - 150,
+      y: window.innerHeight / 2 - 100,
+      width: 300,
+      height: 200,
+      isLocked: false,
+      fontSize: 16,
+      fontWeight: '400',
+      fontStyle: 'normal',
+      textDecoration: 'none',
+      color: '#000000',
+      backgroundColor: 'rgba(255, 255, 255, 0.95)',
+      borderColor: 'hsl(var(--primary))',
+    };
+    setTextBoxes(prev => [...prev, newTextBox]);
+    setSelectedTextBoxId(newId);
+    sonnerToast.success('Text box added! Click to edit text.');
   };
 
   const handlePalette = () => {
@@ -561,6 +598,28 @@ const Editor = () => {
   };
 
   const navigate = useNavigate();
+
+  // Handle click outside text boxes to deselect
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      if (!target.closest('[data-textbox]')) {
+        setSelectedTextBoxId(null);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  const handleTextBoxUpdate = (id: string, updates: any) => {
+    setTextBoxes(prev => prev.map(box => box.id === id ? { ...box, ...updates } : box));
+  };
+
+  const handleTextBoxDelete = (id: string) => {
+    setTextBoxes(prev => prev.filter(box => box.id !== id));
+    setSelectedTextBoxId(null);
+    sonnerToast.success('Text box deleted');
+  };
 
   return (
     <div className="h-screen grid grid-rows-[58px_1fr_86px] gap-3 p-3 overflow-hidden animate-fade-in">
@@ -649,8 +708,23 @@ const Editor = () => {
           styles={styles}
           onStylesChange={setStyles}
         />
-        <main className="overflow-hidden">
-        <EditorComponent 
+        <main className="overflow-hidden relative">
+          {/* Text Boxes Layer */}
+          {textBoxes.map(box => (
+            <div key={box.id} data-textbox className="absolute inset-0 pointer-events-none" style={{ zIndex: 999 }}>
+              <div className="pointer-events-auto">
+                <TextBox
+                  {...box}
+                  isSelected={selectedTextBoxId === box.id}
+                  onUpdate={handleTextBoxUpdate}
+                  onSelect={setSelectedTextBoxId}
+                  onDelete={handleTextBoxDelete}
+                />
+              </div>
+            </div>
+          ))}
+
+        <EditorComponent
             onSelectionChange={setSelectedText} 
             onEditorReady={setEditor}
             onApplyToAll={handleApplyToAll}
