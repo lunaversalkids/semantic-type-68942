@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -55,6 +55,7 @@ export const PageSizerDialog = ({ open, onOpenChange, onSizeSelect }: PageSizerD
   const [customHeight, setCustomHeight] = useState('');
 
   const handlePresetSelect = (size: PageSize) => {
+    console.log('Preset selected:', size.width, 'x', size.height);
     onSizeSelect(size.width, size.height);
     onOpenChange(false);
   };
@@ -63,9 +64,13 @@ export const PageSizerDialog = ({ open, onOpenChange, onSizeSelect }: PageSizerD
     const width = parseFloat(customWidth);
     const height = parseFloat(customHeight);
     
+    console.log('Custom size:', width, 'x', height);
+    
     if (width > 0 && height > 0) {
       onSizeSelect(width, height);
       onOpenChange(false);
+      setCustomWidth('');
+      setCustomHeight('');
     }
   };
 
@@ -76,6 +81,9 @@ export const PageSizerDialog = ({ open, onOpenChange, onSizeSelect }: PageSizerD
       <DialogContent className="max-w-4xl max-h-[80vh] bg-background">
         <DialogHeader>
           <DialogTitle>Select Page Size</DialogTitle>
+          <DialogDescription>
+            Choose a preset page size or enter custom dimensions for your document.
+          </DialogDescription>
         </DialogHeader>
         
         <ScrollArea className="h-[500px] pr-4">
