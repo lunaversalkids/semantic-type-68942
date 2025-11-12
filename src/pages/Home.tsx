@@ -191,6 +191,27 @@ Insects are the largest group of arthropods. The evolution, their evolution, Mur
         backgroundAttachment: 'fixed'
       }}
     >
+      {/* Animated starfield overlay */}
+      <div className="fixed inset-0 pointer-events-none overflow-hidden" style={{ zIndex: 1 }}>
+        {Array.from({ length: 50 }).map((_, i) => (
+          <div
+            key={i}
+            className="absolute rounded-full bg-white"
+            style={{
+              width: `${Math.random() * 3 + 1}px`,
+              height: `${Math.random() * 3 + 1}px`,
+              top: `${Math.random() * 100}%`,
+              left: `${Math.random() * 100}%`,
+              animation: `twinkle ${Math.random() * 3 + 2}s ease-in-out infinite ${Math.random() * 2}s, 
+                         float ${Math.random() * 8 + 5}s ease-in-out infinite ${Math.random() * 3}s,
+                         drift ${Math.random() * 20 + 15}s linear infinite ${Math.random() * 5}s`,
+              opacity: Math.random() * 0.7 + 0.3,
+              boxShadow: `0 0 ${Math.random() * 4 + 2}px rgba(255, 255, 255, 0.8)`
+            }}
+          />
+        ))}
+      </div>
+
       {/* Back button - only show when coming from editor */}
       {fromEditor && <button onClick={() => navigate('/editor')} className="absolute top-8 left-8 flex items-center gap-2 px-4 py-2 bg-white/80 hover:bg-white border-2 border-[hsl(253,80%,85%)] rounded-full shadow-lg hover:shadow-xl transition-all duration-200 text-[hsl(253,47%,18%)] font-semibold">
           <ArrowLeft className="w-5 h-5" />
