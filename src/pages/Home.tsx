@@ -266,7 +266,7 @@ Insects are the largest group of arthropods. The evolution, their evolution, Mur
 
         {/* Templates section or Recent documents only */}
         {isCategoriesVisible && (
-          <div className="w-full bg-gradient-to-br from-white/95 via-[hsl(253,100%,98%)] to-[hsl(253,80%,96%)] rounded-[28px] p-10 shadow-[0_0_40px_hsl(253,100%,64%,0.25),0_8px_32px_hsl(253,100%,64%,0.15)] border-[2px] border-[hsl(253,60%,88%)] backdrop-blur-xl animate-fade-in relative z-10">
+          <div className="w-full bg-gradient-to-br from-white/95 via-[hsl(253,100%,95%)] to-[hsl(253,80%,90%)] rounded-[28px] p-10 shadow-[0_0_60px_hsl(253,100%,64%,0.4),0_12px_48px_hsl(253,100%,64%,0.3),0_0_100px_hsl(253,100%,64%,0.2)] border-[3px] border-[hsl(253,80%,85%)] backdrop-blur-xl animate-fade-in relative z-10">
           {fromEditor ?
         // Simple recent documents view when coming from editor
         <div className="space-y-6">
