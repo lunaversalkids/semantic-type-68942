@@ -419,16 +419,18 @@ export const Editor = ({
         <div className="fixed inset-0 pointer-events-none z-[100]">
           {guidelineState.type === 'vertical' ? (
             <div
-              className="absolute top-0 bottom-0 w-px bg-accent/60"
+              className="absolute h-full w-px bg-accent/60"
               style={{
-                left: `calc(50% + ${(guidelineState.position - pageWidth / 2) * 96 * zoom}px)`,
+                left: `calc(50% - ${(pageWidth / 2 - guidelineState.position) * 96 * zoom}px)`,
+                top: '80px', // Start below the ruler
               }}
             />
           ) : (
             <div
-              className="absolute left-0 right-0 h-px bg-accent/60"
+              className="absolute w-full h-px bg-accent/60"
               style={{
-                top: `calc(50% + ${(guidelineState.position - pageHeight / 2) * 96 * zoom}px)`,
+                top: `calc(50% - ${(pageHeight / 2 - guidelineState.position) * 96 * zoom}px)`,
+                left: '20px', // Start after the ruler
               }}
             />
           )}
