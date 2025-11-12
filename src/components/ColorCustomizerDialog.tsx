@@ -35,7 +35,7 @@ export const ColorCustomizerDialog = ({ open, onOpenChange }: ColorCustomizerDia
   const [selectedChakra1, setSelectedChakra1] = useState(0);
   const [selectedChakra2, setSelectedChakra2] = useState(1);
 
-  // Load saved preferences
+  // Load saved preferences and apply on mount
   useEffect(() => {
     const saved = localStorage.getItem('docOneColorPrefs');
     if (saved) {
@@ -48,10 +48,22 @@ export const ColorCustomizerDialog = ({ open, onOpenChange }: ColorCustomizerDia
         setChakraMode(prefs.chakraMode || 'auto');
         setSelectedChakra1(prefs.chakra1 || 0);
         setSelectedChakra2(prefs.chakra2 || 1);
+        // Apply saved colors immediately
         applyColors(prefs);
       } catch (e) {
         console.error('Failed to load color preferences', e);
       }
+    } else {
+      // Apply default colors on first load
+      applyColors({
+        mode: 'default',
+        darkMode: false,
+        customLight: DEFAULT_COLORS.light,
+        customDark: DEFAULT_COLORS.dark,
+        chakraMode: 'auto',
+        chakra1: 0,
+        chakra2: 1
+      });
     }
   }, []);
 
@@ -104,6 +116,9 @@ export const ColorCustomizerDialog = ({ open, onOpenChange }: ColorCustomizerDia
       root.style.setProperty('--accent-2', '253 100% 56%');
       root.style.setProperty('--accent-3', '253 80% 85%');
       root.style.setProperty('--primary', '253 100% 64%');
+      root.style.setProperty('--ring', '253 100% 64%');
+      root.style.setProperty('--sidebar-primary', '253 100% 64%');
+      root.style.setProperty('--sidebar-ring', '253 100% 64%');
     } else if (config.mode === 'custom') {
       // Apply custom colors
       const light = config.darkMode ? adjustForDarkMode(config.customLight) : config.customLight;
@@ -116,6 +131,9 @@ export const ColorCustomizerDialog = ({ open, onOpenChange }: ColorCustomizerDia
       root.style.setProperty('--accent-2', darkHSL);
       root.style.setProperty('--accent-3', lightHSL);
       root.style.setProperty('--primary', lightHSL);
+      root.style.setProperty('--ring', lightHSL);
+      root.style.setProperty('--sidebar-primary', lightHSL);
+      root.style.setProperty('--sidebar-ring', lightHSL);
     } else if (config.mode === 'chakra') {
       // Apply chakra colors
       let light, dark;
@@ -146,6 +164,9 @@ export const ColorCustomizerDialog = ({ open, onOpenChange }: ColorCustomizerDia
       root.style.setProperty('--accent-2', darkHSL);
       root.style.setProperty('--accent-3', lightHSL);
       root.style.setProperty('--primary', lightHSL);
+      root.style.setProperty('--ring', lightHSL);
+      root.style.setProperty('--sidebar-primary', lightHSL);
+      root.style.setProperty('--sidebar-ring', lightHSL);
     }
   };
 
