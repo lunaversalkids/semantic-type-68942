@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 import infinityLogo from '@/assets/infinity-logo.png';
 import sparklesIcon from '@/assets/sparkles-icon.png';
-import homeBackground from '@/assets/home-background.jpg';
+import homeBackground from '@/assets/new-home-background.jpg';
 interface RecentDocument {
   id: string;
   title: string;
