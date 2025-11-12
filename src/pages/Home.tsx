@@ -184,7 +184,7 @@ Insects are the largest group of arthropods. The evolution, their evolution, Mur
   }];
   const tabs = ['Recents', 'Basic', 'Reports', 'Books', 'Study Books', 'Letters'];
   return <div 
-      className="min-h-screen flex flex-col items-center justify-center p-8 relative overflow-hidden animate-fade-in"
+      className="min-h-screen flex flex-col items-center justify-center p-4 md:p-8 relative overflow-hidden animate-fade-in"
       style={{
         backgroundImage: isCategoriesVisible ? `url(${estherBackground})` : `url(${homeBackground})`,
         backgroundSize: 'cover',
@@ -221,12 +221,12 @@ Insects are the largest group of arthropods. The evolution, their evolution, Mur
         </div>}
 
       {/* Main content */}
-      <div className="flex flex-col items-center space-y-8 md:space-y-12 max-w-5xl w-full">
+      <div className="flex flex-col items-center space-y-4 md:space-y-8 lg:space-y-12 max-w-5xl w-full">
         {/* Logo and title section */}
         <div className="flex flex-col items-center space-y-2">
           {/* Infinity logo */}
-          <div className="relative w-64 h-64 md:w-80 md:h-80 flex items-center justify-center">
-            <img src={infinityLogo} alt="Doc One Infinity Logo" className="w-64 h-64 md:w-80 md:h-80 object-contain" style={{
+          <div className="relative w-48 h-48 md:w-64 md:h-64 lg:w-80 lg:h-80 flex items-center justify-center">
+            <img src={infinityLogo} alt="Doc One Infinity Logo" className="w-48 h-48 md:w-64 md:h-64 lg:w-80 lg:h-80 object-contain" style={{
             backgroundColor: 'transparent',
             mixBlendMode: 'multiply'
           }} />
@@ -235,8 +235,8 @@ Insects are the largest group of arthropods. The evolution, their evolution, Mur
           </div>
 
           {/* App title */}
-          <div className="flex flex-col items-center space-y-3 -mt-[280px] md:-mt-[360px]">
-            <h1 className="text-[3rem] md:text-[4rem] font-extrabold tracking-tight leading-none" style={{
+          <div className="flex flex-col items-center space-y-3 -mt-[200px] md:-mt-[280px] lg:-mt-[360px]">
+            <h1 className="text-[2.5rem] md:text-[3rem] lg:text-[4rem] font-extrabold tracking-tight leading-none" style={{
             fontFamily: 'system-ui, -apple-system, "Segoe UI", Roboto, sans-serif',
             color: '#3730a3',
             WebkitTextStroke: '3px white',
@@ -251,14 +251,14 @@ Insects are the largest group of arthropods. The evolution, their evolution, Mur
             {!fromEditor && (
               <>
                 {/* Tagline */}
-                <p className="text-base text-[hsl(253,28%,40%)] font-semibold">
+                <p className="text-sm md:text-base text-[hsl(253,28%,40%)] font-semibold">
                   Create. Teach. Publish. Evolve.
                 </p>
 
                 {/* Start Writing button */}
                 <button
                   onClick={handleStartWriting}
-                  className="mt-4 px-12 py-4 bg-gradient-to-r from-[hsl(253,100%,64%)] to-[hsl(266,100%,70%)] text-white text-xl font-bold rounded-full shadow-[0_0_30px_hsl(253,100%,64%,0.5)] hover:shadow-[0_0_50px_hsl(253,100%,64%,0.7)] hover:scale-105 transition-all duration-300"
+                  className="mt-4 px-8 md:px-12 py-3 md:py-4 bg-gradient-to-r from-[hsl(253,100%,64%)] to-[hsl(266,100%,70%)] text-white text-lg md:text-xl font-bold rounded-full shadow-[0_0_30px_hsl(253,100%,64%,0.5)] hover:shadow-[0_0_50px_hsl(253,100%,64%,0.7)] hover:scale-105 transition-all duration-300"
                 >
                   Start Writing
                 </button>
@@ -267,14 +267,14 @@ Insects are the largest group of arthropods. The evolution, their evolution, Mur
           </div>
 
           {/* Divider text - only show on homepage */}
-          {!fromEditor && <p className="text-base text-[hsl(253,28%,40%)] font-semibold pt-2">Choose Your Template.</p>}
+          {!fromEditor && <p className="text-sm md:text-base text-[hsl(253,28%,40%)] font-semibold pt-2">Choose Your Template.</p>}
 
           {/* Chevron arrow */}
           <button 
             onClick={() => setIsCategoriesVisible(!isCategoriesVisible)}
             className="focus:outline-none"
           >
-            <svg className={`w-10 h-10 text-[hsl(253,100%,64%)] drop-shadow-[0_4px_8px_hsl(253,100%,64%,0.3)] transition-transform duration-300 ${isCategoriesVisible ? 'rotate-180' : ''} ${!isCategoriesVisible ? 'animate-bounce' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={3}>
+            <svg className={`w-8 h-8 md:w-10 md:h-10 text-[hsl(253,100%,64%)] drop-shadow-[0_4px_8px_hsl(253,100%,64%,0.3)] transition-transform duration-300 ${isCategoriesVisible ? 'rotate-180' : ''} ${!isCategoriesVisible ? 'animate-bounce' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={3}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
             </svg>
           </button>
@@ -286,7 +286,7 @@ Insects are the largest group of arthropods. The evolution, their evolution, Mur
           {fromEditor ?
         // Simple recent documents view when coming from editor
         <div className="space-y-6">
-              <h2 className="text-3xl font-bold text-[hsl(253,47%,18%)]">Recent & Saved Documents</h2>
+              <h2 className="text-2xl md:text-3xl font-bold text-[hsl(253,47%,18%)]">Recent & Saved Documents</h2>
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                 {recentDocs.map((doc, index) => <div key={index} className="group relative aspect-[3/4] rounded-[22px] overflow-hidden border-[3px] border-[hsl(253,80%,88%)] hover:border-[hsl(253,100%,64%)] transition-all duration-300 hover:scale-105 shadow-[0_0_20px_hsl(253,100%,64%,0.12)] hover:shadow-[0_0_40px_hsl(253,100%,64%,0.35),0_12px_40px_hsl(253,100%,64%,0.3)]">
                     <button onClick={() => handleOpenRecent(doc.id)} className="w-full h-full">
@@ -392,7 +392,7 @@ Insects are the largest group of arthropods. The evolution, their evolution, Mur
               {/* Recent documents grid */}
               <div>
                 <div className="flex items-center justify-between mb-6">
-                  <h2 className="text-3xl font-bold text-[hsl(253,47%,18%)]">{activeTab}</h2>
+                  <h2 className="text-2xl md:text-3xl font-bold text-[hsl(253,47%,18%)]">{activeTab}</h2>
                 </div>
                 
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
