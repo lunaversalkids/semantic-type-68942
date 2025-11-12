@@ -133,6 +133,11 @@ export const Editor = ({
   const [footerPosition, setFooterPosition] = useState(0); // Distance from bottom edge
   const [hiddenHeaders, setHiddenHeaders] = useState<Record<number, boolean>>({}); // Per-page header visibility
   const [hiddenFooters, setHiddenFooters] = useState<Record<number, boolean>>({}); // Per-page footer visibility
+  const [guidelineState, setGuidelineState] = useState<{
+    isDragging: boolean;
+    position: number;
+    type: 'horizontal' | 'vertical';
+  } | null>(null);
 
   const addNewPage = () => {
     const newPageId = `page-${pages.length + 1}`;
@@ -390,9 +395,44 @@ export const Editor = ({
       {/* Rulers */}
       {showRuler && (
         <>
-          <HorizontalRuler pageWidth={pageWidth} zoom={zoom} activePageNum={1} />
-          <VerticalRuler pageHeight={pageHeight} zoom={zoom} activePageNum={1} />
+          <HorizontalRuler 
+            pageWidth={pageWidth} 
+            zoom={zoom} 
+            activePageNum={1}
+            onDragStateChange={(isDragging, position) => {
+              setGuidelineState(isDragging ? { isDragging, position, type: 'vertical' } : null);
+            }}
+          />
+          <VerticalRuler 
+            pageHeight={pageHeight} 
+            zoom={zoom} 
+            activePageNum={1}
+            onDragStateChange={(isDragging, position) => {
+              setGuidelineState(isDragging ? { isDragging, position, type: 'horizontal' } : null);
+            }}
+          />
         </>
+      )}
+
+      {/* Document-wide guidelines */}
+      {guidelineState?.isDragging && (
+        <div className="fixed inset-0 pointer-events-none z-[100]">
+          {guidelineState.type === 'vertical' ? (
+            <div
+              className="absolute top-0 bottom-0 w-px bg-accent/60"
+              style={{
+                left: `calc(50% + ${(guidelineState.position - pageWidth / 2) * 96 * zoom}px)`,
+              }}
+            />
+          ) : (
+            <div
+              className="absolute left-0 right-0 h-px bg-accent/60"
+              style={{
+                top: `calc(50% + ${(guidelineState.position - pageHeight / 2) * 96 * zoom}px)`,
+              }}
+            />
+          )}
+        </div>
       )}
 
       <div className="h-full flex items-start justify-center bg-[hsl(var(--editor-bg))] p-8 overflow-auto">

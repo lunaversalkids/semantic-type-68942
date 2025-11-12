@@ -4,9 +4,10 @@ interface VerticalRulerProps {
   pageHeight: number; // in inches
   zoom: number;
   activePageNum: number;
+  onDragStateChange?: (isDragging: boolean, position: number, type: 'top' | 'bottom') => void;
 }
 
-export const VerticalRuler = ({ pageHeight, zoom, activePageNum }: VerticalRulerProps) => {
+export const VerticalRuler = ({ pageHeight, zoom, activePageNum, onDragStateChange }: VerticalRulerProps) => {
   const [topMargin, setTopMargin] = useState(1); // inches
   const [bottomMargin, setBottomMargin] = useState(1); // inches
   const [isDraggingTop, setIsDraggingTop] = useState(false);
@@ -34,14 +35,24 @@ export const VerticalRuler = ({ pageHeight, zoom, activePageNum }: VerticalRuler
       const inches = relativeY / (pxPerInch * zoom);
 
       if (isDraggingTop) {
-        setTopMargin(Math.max(0, Math.min(pageHeight / 2, inches)));
+        const newMargin = Math.max(0, Math.min(pageHeight / 2, inches));
+        setTopMargin(newMargin);
+        onDragStateChange?.(true, newMargin, 'top');
       }
       if (isDraggingBottom) {
-        setBottomMargin(Math.max(0, Math.min(pageHeight / 2, pageHeight - inches)));
+        const newMargin = Math.max(0, Math.min(pageHeight / 2, pageHeight - inches));
+        setBottomMargin(newMargin);
+        onDragStateChange?.(true, pageHeight - newMargin, 'bottom');
       }
     };
 
     const handleMouseUp = () => {
+      if (isDraggingTop) {
+        onDragStateChange?.(false, topMargin, 'top');
+      }
+      if (isDraggingBottom) {
+        onDragStateChange?.(false, pageHeight - bottomMargin, 'bottom');
+      }
       setIsDraggingTop(false);
       setIsDraggingBottom(false);
     };
@@ -55,7 +66,7 @@ export const VerticalRuler = ({ pageHeight, zoom, activePageNum }: VerticalRuler
       document.removeEventListener('mousemove', handleMouseMove);
       document.removeEventListener('mouseup', handleMouseUp);
     };
-  }, [isDraggingTop, isDraggingBottom, zoom, pageHeight, pxPerInch]);
+  }, [isDraggingTop, isDraggingBottom, zoom, pageHeight, pxPerInch, topMargin, bottomMargin, onDragStateChange]);
 
   const renderTicks = () => {
     const ticks = [];
@@ -119,36 +130,16 @@ export const VerticalRuler = ({ pageHeight, zoom, activePageNum }: VerticalRuler
       >
         {renderTicks()}
 
-        {/* Guideline for top margin - visible only while dragging */}
-        {isDraggingTop && (
-          <div
-            className="absolute left-0 right-0 h-px bg-accent/60 pointer-events-none"
-            style={{
-              top: `${(topMargin / pageHeight) * 100}%`,
-            }}
-          />
-        )}
-
-        {/* Guideline for bottom margin - visible only while dragging */}
-        {isDraggingBottom && (
-          <div
-            className="absolute left-0 right-0 h-px bg-accent/60 pointer-events-none"
-            style={{
-              top: `${((pageHeight - bottomMargin) / pageHeight) * 100}%`,
-            }}
-          />
-        )}
-
         {/* Top margin marker */}
         <div
-          className={`absolute left-0 w-3 h-3 rounded-full cursor-ns-resize ${
+          className={`absolute left-0 w-2.5 h-2.5 rounded-full cursor-ns-resize ${
             isDraggingTop 
               ? 'bg-accent shadow-[0_0_12px_hsl(var(--accent))]' 
-              : 'bg-accent hover:bg-accent/90 transition-all duration-200 ease-out'
+              : 'bg-accent/70 hover:bg-accent transition-all duration-200 ease-out'
           }`}
           style={{
             top: `${(topMargin / pageHeight) * 100}%`,
-            transform: `translate(-2px, -50%) ${isDraggingTop ? 'scale(1.15)' : 'scale(1)'}`,
+            transform: `translate(-2px, -50%) ${isDraggingTop ? 'scale(1.1)' : 'scale(1)'}`,
             transition: isDraggingTop ? 'none' : 'transform 0.2s ease-out, background-color 0.2s ease-out',
           }}
           onMouseDown={handleTopMarkerMouseDown}
@@ -157,14 +148,14 @@ export const VerticalRuler = ({ pageHeight, zoom, activePageNum }: VerticalRuler
 
         {/* Bottom margin marker */}
         <div
-          className={`absolute left-0 w-3 h-3 rounded-full cursor-ns-resize ${
+          className={`absolute left-0 w-2.5 h-2.5 rounded-full cursor-ns-resize ${
             isDraggingBottom 
               ? 'bg-accent shadow-[0_0_12px_hsl(var(--accent))]' 
-              : 'bg-accent hover:bg-accent/90 transition-all duration-200 ease-out'
+              : 'bg-accent/70 hover:bg-accent transition-all duration-200 ease-out'
           }`}
           style={{
             top: `${((pageHeight - bottomMargin) / pageHeight) * 100}%`,
-            transform: `translate(-2px, -50%) ${isDraggingBottom ? 'scale(1.15)' : 'scale(1)'}`,
+            transform: `translate(-2px, -50%) ${isDraggingBottom ? 'scale(1.1)' : 'scale(1)'}`,
             transition: isDraggingBottom ? 'none' : 'transform 0.2s ease-out, background-color 0.2s ease-out',
           }}
           onMouseDown={handleBottomMarkerMouseDown}

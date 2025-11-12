@@ -4,9 +4,10 @@ interface HorizontalRulerProps {
   pageWidth: number; // in inches
   zoom: number;
   activePageNum: number;
+  onDragStateChange?: (isDragging: boolean, position: number, type: 'left' | 'right') => void;
 }
 
-export const HorizontalRuler = ({ pageWidth, zoom, activePageNum }: HorizontalRulerProps) => {
+export const HorizontalRuler = ({ pageWidth, zoom, activePageNum, onDragStateChange }: HorizontalRulerProps) => {
   const [leftMargin, setLeftMargin] = useState(1); // inches
   const [rightMargin, setRightMargin] = useState(1); // inches
   const [isDraggingLeft, setIsDraggingLeft] = useState(false);
@@ -34,14 +35,24 @@ export const HorizontalRuler = ({ pageWidth, zoom, activePageNum }: HorizontalRu
       const inches = relativeX / (pxPerInch * zoom);
 
       if (isDraggingLeft) {
-        setLeftMargin(Math.max(0, Math.min(pageWidth / 2, inches)));
+        const newMargin = Math.max(0, Math.min(pageWidth / 2, inches));
+        setLeftMargin(newMargin);
+        onDragStateChange?.(true, newMargin, 'left');
       }
       if (isDraggingRight) {
-        setRightMargin(Math.max(0, Math.min(pageWidth / 2, pageWidth - inches)));
+        const newMargin = Math.max(0, Math.min(pageWidth / 2, pageWidth - inches));
+        setRightMargin(newMargin);
+        onDragStateChange?.(true, pageWidth - newMargin, 'right');
       }
     };
 
     const handleMouseUp = () => {
+      if (isDraggingLeft) {
+        onDragStateChange?.(false, leftMargin, 'left');
+      }
+      if (isDraggingRight) {
+        onDragStateChange?.(false, pageWidth - rightMargin, 'right');
+      }
       setIsDraggingLeft(false);
       setIsDraggingRight(false);
     };
@@ -55,7 +66,7 @@ export const HorizontalRuler = ({ pageWidth, zoom, activePageNum }: HorizontalRu
       document.removeEventListener('mousemove', handleMouseMove);
       document.removeEventListener('mouseup', handleMouseUp);
     };
-  }, [isDraggingLeft, isDraggingRight, zoom, pageWidth, pxPerInch]);
+  }, [isDraggingLeft, isDraggingRight, zoom, pageWidth, pxPerInch, leftMargin, rightMargin, onDragStateChange]);
 
   const renderTicks = () => {
     const ticks = [];
@@ -118,26 +129,6 @@ export const HorizontalRuler = ({ pageWidth, zoom, activePageNum }: HorizontalRu
         }}
       >
         {renderTicks()}
-
-        {/* Guideline for left margin - visible only while dragging */}
-        {isDraggingLeft && (
-          <div
-            className="absolute top-0 bottom-0 w-px bg-accent/60 pointer-events-none"
-            style={{
-              left: `${(leftMargin / pageWidth) * 100}%`,
-            }}
-          />
-        )}
-
-        {/* Guideline for right margin - visible only while dragging */}
-        {isDraggingRight && (
-          <div
-            className="absolute top-0 bottom-0 w-px bg-accent/60 pointer-events-none"
-            style={{
-              left: `${((pageWidth - rightMargin) / pageWidth) * 100}%`,
-            }}
-          />
-        )}
 
         {/* Left margin marker */}
         <div
