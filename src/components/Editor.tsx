@@ -583,6 +583,7 @@ export const Editor = ({
           </EditorContextMenu>
         </div>
       </div>
+      </div>
     </>
   );
 };
