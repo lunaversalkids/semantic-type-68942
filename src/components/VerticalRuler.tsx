@@ -119,6 +119,26 @@ export const VerticalRuler = ({ pageHeight, zoom, activePageNum }: VerticalRuler
       >
         {renderTicks()}
 
+        {/* Guideline for top margin - visible only while dragging */}
+        {isDraggingTop && (
+          <div
+            className="absolute left-0 right-0 h-px bg-accent/60 pointer-events-none"
+            style={{
+              top: `${(topMargin / pageHeight) * 100}%`,
+            }}
+          />
+        )}
+
+        {/* Guideline for bottom margin - visible only while dragging */}
+        {isDraggingBottom && (
+          <div
+            className="absolute left-0 right-0 h-px bg-accent/60 pointer-events-none"
+            style={{
+              top: `${((pageHeight - bottomMargin) / pageHeight) * 100}%`,
+            }}
+          />
+        )}
+
         {/* Top margin marker */}
         <div
           className={`absolute left-0 w-3 h-3 rounded-full cursor-ns-resize ${

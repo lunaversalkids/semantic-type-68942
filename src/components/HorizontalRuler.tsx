@@ -119,6 +119,26 @@ export const HorizontalRuler = ({ pageWidth, zoom, activePageNum }: HorizontalRu
       >
         {renderTicks()}
 
+        {/* Guideline for left margin - visible only while dragging */}
+        {isDraggingLeft && (
+          <div
+            className="absolute top-0 bottom-0 w-px bg-accent/60 pointer-events-none"
+            style={{
+              left: `${(leftMargin / pageWidth) * 100}%`,
+            }}
+          />
+        )}
+
+        {/* Guideline for right margin - visible only while dragging */}
+        {isDraggingRight && (
+          <div
+            className="absolute top-0 bottom-0 w-px bg-accent/60 pointer-events-none"
+            style={{
+              left: `${((pageWidth - rightMargin) / pageWidth) * 100}%`,
+            }}
+          />
+        )}
+
         {/* Left margin marker */}
         <div
           className={`absolute bottom-0 w-2.5 h-2.5 rounded-full cursor-ew-resize ${
