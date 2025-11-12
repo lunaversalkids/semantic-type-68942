@@ -105,9 +105,9 @@ export const HorizontalRuler = ({ pageWidth, zoom, activePageNum }: HorizontalRu
   return (
     <div
       ref={rulerRef}
-      className="fixed top-0 left-0 right-0 h-8 bg-background/95 backdrop-blur-sm border-b border-accent/20 z-40 flex items-end"
+      className="fixed top-[70px] left-[280px] right-0 h-8 bg-background/95 backdrop-blur-sm border-b border-accent/20 z-50 flex items-end"
       style={{
-        width: '100%',
+        width: 'calc(100% - 280px)',
         pointerEvents: 'auto',
       }}
     >

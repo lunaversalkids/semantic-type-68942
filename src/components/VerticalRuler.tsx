@@ -105,9 +105,9 @@ export const VerticalRuler = ({ pageHeight, zoom, activePageNum }: VerticalRuler
   return (
     <div
       ref={rulerRef}
-      className="fixed top-8 left-0 bottom-0 w-8 bg-background/95 backdrop-blur-sm border-r border-accent/20 z-40 flex items-center"
+      className="fixed top-[102px] left-[280px] bottom-0 w-8 bg-background/95 backdrop-blur-sm border-r border-accent/20 z-50 flex items-center"
       style={{
-        height: 'calc(100vh - 2rem)',
+        height: 'calc(100vh - 102px)',
         pointerEvents: 'auto',
       }}
     >
