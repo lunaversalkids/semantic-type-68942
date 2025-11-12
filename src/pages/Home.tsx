@@ -185,7 +185,7 @@ Insects are the largest group of arthropods. The evolution, their evolution, Mur
   return <div 
       className="min-h-screen flex flex-col items-center justify-center p-8 relative overflow-hidden animate-fade-in"
       style={{
-        backgroundImage: `url(${homeBackground})`,
+        backgroundImage: isCategoriesVisible ? `url(${estherWoman})` : `url(${homeBackground})`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat'
@@ -263,17 +263,6 @@ Insects are the largest group of arthropods. The evolution, their evolution, Mur
             </svg>
           </button>
         </div>
-
-        {/* Esther woman image - only shows when categories expanded */}
-        {isCategoriesVisible && (
-          <div className="absolute bottom-8 left-8 w-[400px] h-[600px] z-0 animate-fade-in">
-            <img 
-              src={estherWoman} 
-              alt="Esther" 
-              className="w-full h-full object-contain"
-            />
-          </div>
-        )}
 
         {/* Templates section or Recent documents only */}
         {isCategoriesVisible && (
