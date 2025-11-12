@@ -123,13 +123,13 @@ export const HorizontalRuler = ({ pageWidth, zoom, activePageNum }: HorizontalRu
         <div
           className={`absolute bottom-0 w-2.5 h-2.5 rounded-full cursor-ew-resize ${
             isDraggingLeft 
-              ? 'bg-accent shadow-[0_0_12px_hsl(var(--accent))] scale-110' 
-              : 'bg-accent/70 hover:bg-accent hover:scale-105 transition-all duration-200 ease-out'
+              ? 'bg-accent shadow-[0_0_12px_hsl(var(--accent))]' 
+              : 'bg-accent/70 hover:bg-accent transition-all duration-200 ease-out'
           }`}
           style={{
             left: `${(leftMargin / pageWidth) * 100}%`,
-            transform: 'translate(-50%, 1px)',
-            transition: isDraggingLeft ? 'none' : 'all 0.2s ease-out',
+            transform: `translate(-50%, 1px) ${isDraggingLeft ? 'scale(1.1)' : 'scale(1)'}`,
+            transition: isDraggingLeft ? 'none' : 'transform 0.2s ease-out, background-color 0.2s ease-out',
           }}
           onMouseDown={handleLeftMarkerMouseDown}
           title="Left Margin"
@@ -139,13 +139,13 @@ export const HorizontalRuler = ({ pageWidth, zoom, activePageNum }: HorizontalRu
         <div
           className={`absolute bottom-0 w-2.5 h-2.5 rounded-full cursor-ew-resize ${
             isDraggingRight 
-              ? 'bg-accent shadow-[0_0_12px_hsl(var(--accent))] scale-110' 
-              : 'bg-accent/70 hover:bg-accent hover:scale-105 transition-all duration-200 ease-out'
+              ? 'bg-accent shadow-[0_0_12px_hsl(var(--accent))]' 
+              : 'bg-accent/70 hover:bg-accent transition-all duration-200 ease-out'
           }`}
           style={{
             left: `${((pageWidth - rightMargin) / pageWidth) * 100}%`,
-            transform: 'translate(-50%, 1px)',
-            transition: isDraggingRight ? 'none' : 'all 0.2s ease-out',
+            transform: `translate(-50%, 1px) ${isDraggingRight ? 'scale(1.1)' : 'scale(1)'}`,
+            transition: isDraggingRight ? 'none' : 'transform 0.2s ease-out, background-color 0.2s ease-out',
           }}
           onMouseDown={handleRightMarkerMouseDown}
           title="Right Margin"

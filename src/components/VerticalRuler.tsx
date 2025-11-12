@@ -123,13 +123,13 @@ export const VerticalRuler = ({ pageHeight, zoom, activePageNum }: VerticalRuler
         <div
           className={`absolute right-0 w-2.5 h-2.5 rounded-full cursor-ns-resize ${
             isDraggingTop 
-              ? 'bg-accent shadow-[0_0_12px_hsl(var(--accent))] scale-110' 
-              : 'bg-accent/70 hover:bg-accent hover:scale-105 transition-all duration-200 ease-out'
+              ? 'bg-accent shadow-[0_0_12px_hsl(var(--accent))]' 
+              : 'bg-accent/70 hover:bg-accent transition-all duration-200 ease-out'
           }`}
           style={{
             top: `${(topMargin / pageHeight) * 100}%`,
-            transform: 'translate(1px, -50%)',
-            transition: isDraggingTop ? 'none' : 'all 0.2s ease-out',
+            transform: `translate(1px, -50%) ${isDraggingTop ? 'scale(1.1)' : 'scale(1)'}`,
+            transition: isDraggingTop ? 'none' : 'transform 0.2s ease-out, background-color 0.2s ease-out',
           }}
           onMouseDown={handleTopMarkerMouseDown}
           title="Top Margin"
@@ -139,13 +139,13 @@ export const VerticalRuler = ({ pageHeight, zoom, activePageNum }: VerticalRuler
         <div
           className={`absolute right-0 w-2.5 h-2.5 rounded-full cursor-ns-resize ${
             isDraggingBottom 
-              ? 'bg-accent shadow-[0_0_12px_hsl(var(--accent))] scale-110' 
-              : 'bg-accent/70 hover:bg-accent hover:scale-105 transition-all duration-200 ease-out'
+              ? 'bg-accent shadow-[0_0_12px_hsl(var(--accent))]' 
+              : 'bg-accent/70 hover:bg-accent transition-all duration-200 ease-out'
           }`}
           style={{
             top: `${((pageHeight - bottomMargin) / pageHeight) * 100}%`,
-            transform: 'translate(1px, -50%)',
-            transition: isDraggingBottom ? 'none' : 'all 0.2s ease-out',
+            transform: `translate(1px, -50%) ${isDraggingBottom ? 'scale(1.1)' : 'scale(1)'}`,
+            transition: isDraggingBottom ? 'none' : 'transform 0.2s ease-out, background-color 0.2s ease-out',
           }}
           onMouseDown={handleBottomMarkerMouseDown}
           title="Bottom Margin"
