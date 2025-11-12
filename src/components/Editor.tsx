@@ -422,15 +422,15 @@ export const Editor = ({
               className="absolute h-full w-px bg-accent/60"
               style={{
                 left: `calc(50% - ${(pageWidth / 2 - guidelineState.position) * 96 * zoom}px)`,
-                top: '80px', // Start below the ruler
+                top: '0',
               }}
             />
           ) : (
             <div
               className="absolute w-full h-px bg-accent/60"
               style={{
-                top: `calc(50% - ${(pageHeight / 2 - guidelineState.position) * 96 * zoom}px)`,
-                left: '20px', // Start after the ruler
+                top: `calc(50% - ${(pageHeight / 2 - guidelineState.position) * 96 * zoom}px + 100px)`,
+                left: '0',
               }}
             />
           )}
