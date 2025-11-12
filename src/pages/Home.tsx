@@ -196,11 +196,11 @@ Insects are the largest group of arthropods. The evolution, their evolution, Mur
       {/* Stars overlay - only show when categories are visible */}
       {isCategoriesVisible && (
         <div 
-          className="absolute left-0 top-[35%] w-[500px] h-[65%] pointer-events-none animate-fade-in"
+          className="absolute left-0 top-[25%] w-[700px] h-[75%] pointer-events-none animate-fade-in"
           style={{
             backgroundImage: `url(${estherStarsOverlay})`,
-            backgroundSize: 'contain',
-            backgroundPosition: 'left top',
+            backgroundSize: 'cover',
+            backgroundPosition: 'left center',
             backgroundRepeat: 'no-repeat',
             mixBlendMode: 'normal',
             zIndex: 5
