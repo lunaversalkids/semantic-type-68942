@@ -196,7 +196,7 @@ Insects are the largest group of arthropods. The evolution, their evolution, Mur
       {/* Stars overlay - only show when categories are visible */}
       {isCategoriesVisible && (
         <div 
-          className="absolute left-0 top-[5%] md:top-[8%] lg:top-[25%] w-[300px] md:w-[400px] lg:w-[700px] h-[75%] pointer-events-none animate-fade-in"
+          className="absolute left-0 top-[0%] md:top-[3%] lg:top-[25%] w-[300px] md:w-[400px] lg:w-[700px] h-[75%] pointer-events-none animate-fade-in"
           style={{
             backgroundImage: `url(${estherStarsOverlay})`,
             backgroundSize: 'cover',
