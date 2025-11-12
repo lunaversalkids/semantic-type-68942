@@ -366,15 +366,7 @@ export const TextStylePanel = ({
         >
           <div className="bg-[hsl(253,45%,85%)] text-[hsl(266,50%,35%)] font-bold text-center flex flex-col items-center justify-center w-[56px] h-[56px] rounded-md shadow-sm">
             <div className="text-[8px] tracking-[0.15em] leading-none mb-1">WORD</div>
-            {selectedWordCount > 0 ? (
-              <div className="flex flex-col items-center leading-none">
-                <div className="text-sm">{selectedWordCount}</div>
-                <div className="text-[8px]">of</div>
-                <div className="text-sm">{wordCount}</div>
-              </div>
-            ) : (
-              <div className="text-xl leading-none">{wordCount}</div>
-            )}
+            <div className="text-xl leading-none">{selectedWordCount > 0 ? selectedWordCount : wordCount}</div>
           </div>
         </div>
 
@@ -395,15 +387,7 @@ export const TextStylePanel = ({
       >
         <div className="bg-[hsl(253,45%,85%)] text-[hsl(266,50%,35%)] font-bold text-center flex flex-col items-center justify-center w-[56px] h-[56px] rounded-md shadow-sm">
           <div className="text-[8px] tracking-[0.15em] leading-none mb-1">WORD</div>
-          {selectedWordCount > 0 ? (
-            <div className="flex flex-col items-center leading-none">
-              <div className="text-sm">{selectedWordCount}</div>
-              <div className="text-[8px]">of</div>
-              <div className="text-sm">{wordCount}</div>
-            </div>
-          ) : (
-            <div className="text-xl leading-none">{wordCount}</div>
-          )}
+          <div className="text-xl leading-none">{selectedWordCount > 0 ? selectedWordCount : wordCount}</div>
         </div>
       </div>
 
