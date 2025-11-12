@@ -187,7 +187,7 @@ Insects are the largest group of arthropods. The evolution, their evolution, Mur
       style={{
         backgroundImage: isCategoriesVisible ? `url(${estherBackground})` : `url(${homeBackground})`,
         backgroundSize: 'cover',
-        backgroundPosition: isCategoriesVisible ? 'center 5%' : 'center',
+        backgroundPosition: isCategoriesVisible ? 'center top' : 'center',
         backgroundRepeat: 'no-repeat'
       }}
     >
@@ -220,7 +220,7 @@ Insects are the largest group of arthropods. The evolution, their evolution, Mur
 
           {/* App title */}
           <div className="flex flex-col items-center space-y-3 -mt-[360px]">
-            <h1 className="text-[5.5rem] font-extrabold tracking-tight leading-none" style={{
+            <h1 className="text-[4rem] font-extrabold tracking-tight leading-none" style={{
             fontFamily: 'system-ui, -apple-system, "Segoe UI", Roboto, sans-serif',
             color: '#3730a3',
             WebkitTextStroke: '3px white',
