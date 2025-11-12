@@ -55,7 +55,7 @@ export const Header = ({
   return <header className="bg-[hsl(var(--panel))] border border-[hsl(var(--stroke))] rounded-[var(--radius)] shadow-[0_10px_28px_rgba(96,48,200,.16)] p-2 grid grid-cols-[auto_1fr_auto] items-center gap-3">
       {/* Brand */}
       <div className="flex items-center gap-0.5 font-extrabold justify-start w-[340px]">
-        <button onClick={onPageViewerClick} className={`transition-all hover:opacity-80 ${pageViewerOpen ? 'shadow-lg ring-2 ring-[#8D60FF]/50 rounded-full' : ''}`}>
+        <button onClick={onPageViewerClick} className={`transition-all hover:opacity-80 ${pageViewerOpen ? 'shadow-lg ring-2 ring-primary/50 rounded-full' : ''}`}>
           <img src={newInfinityButton} alt="" className="w-10 h-10" />
         </button>
         <button onClick={onHomeClick} className="text-[hsl(var(--ink))] hover:text-[hsl(var(--accent))] transition-colors">
@@ -65,7 +65,7 @@ export const Header = ({
 
       {/* Title - Centered */}
       <div className="flex items-center justify-center w-full">
-        <button onClick={onDocumentClick} className="flex items-center gap-2.5 px-3.5 py-2 border border-[hsl(var(--stroke))] rounded-full bg-[hsla(253,100%,64%,0.12)] text-[#4E3DC9] font-bold hover:bg-[hsla(253,100%,64%,0.18)] transition-colors mx-auto" title="Save/Load Documents">
+        <button onClick={onDocumentClick} className="flex items-center gap-2.5 px-3.5 py-2 border border-[hsl(var(--stroke))] rounded-full bg-[hsla(var(--primary),0.12)] text-primary font-bold hover:bg-[hsla(var(--primary),0.18)] transition-colors mx-auto" title="Save/Load Documents">
           <span className="text-lg">∞</span>
           <span>Insects</span>
         </button>

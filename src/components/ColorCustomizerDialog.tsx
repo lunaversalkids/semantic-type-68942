@@ -238,7 +238,7 @@ export const ColorCustomizerDialog = ({ open, onOpenChange }: ColorCustomizerDia
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle className="text-xl font-bold text-[#8B7AB8]">Color Customization</DialogTitle>
+          <DialogTitle className="text-xl font-bold text-primary">Color Customization</DialogTitle>
         </DialogHeader>
 
         <div className="space-y-6 py-4">
@@ -428,7 +428,7 @@ export const ColorCustomizerDialog = ({ open, onOpenChange }: ColorCustomizerDia
             <Button onClick={handleReset} variant="outline" className="flex-1">
               Reset to Default
             </Button>
-            <Button onClick={handleApply} className="flex-1 bg-gradient-to-r from-[#8B70F7] to-[#A78BFA] hover:from-[#7C5FE6] hover:to-[#9670E6]">
+            <Button onClick={handleApply} className="flex-1 bg-gradient-to-r from-primary to-accent hover:opacity-90">
               Apply Colors
             </Button>
           </div>
