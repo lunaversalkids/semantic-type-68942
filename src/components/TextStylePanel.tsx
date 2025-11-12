@@ -364,7 +364,7 @@ export const TextStylePanel = ({
         <div 
           className="absolute top-2 left-1/2 -translate-x-1/2 z-50 pointer-events-none"
         >
-          <div className="bg-accent-3 text-primary font-bold text-center flex flex-col items-center justify-center w-[56px] h-[56px] rounded-md shadow-sm">
+          <div className="bg-[hsl(253,45%,85%)] text-[hsl(266,50%,35%)] font-bold text-center flex flex-col items-center justify-center w-[56px] h-[56px] rounded-md shadow-sm">
             <div className="text-[8px] tracking-[0.15em] leading-none mb-1">WORD</div>
             <div className="text-xl leading-none">{selectedWordCount > 0 ? selectedWordCount : wordCount}</div>
           </div>
@@ -385,7 +385,7 @@ export const TextStylePanel = ({
       <div 
         className="absolute top-2 right-2 z-50 pointer-events-none"
       >
-        <div className="bg-accent-3 text-primary font-bold text-center flex flex-col items-center justify-center w-[56px] h-[56px] rounded-md shadow-sm">
+        <div className="bg-[hsl(253,45%,85%)] text-[hsl(266,50%,35%)] font-bold text-center flex flex-col items-center justify-center w-[56px] h-[56px] rounded-md shadow-sm">
           <div className="text-[8px] tracking-[0.15em] leading-none mb-1">WORD</div>
           <div className="text-xl leading-none">{selectedWordCount > 0 ? selectedWordCount : wordCount}</div>
         </div>
@@ -396,7 +396,7 @@ export const TextStylePanel = ({
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2.5">
-          <h2 className="text-sm font-bold text-primary uppercase tracking-wide">Paragraph Mode</h2>
+          <h2 className="text-sm font-bold text-[#8B7AB8] uppercase tracking-wide">Paragraph Mode</h2>
         </div>
         <Button size="icon" variant="ghost" onClick={() => setIsCollapsed(true)} className="h-9 w-9 text-muted-foreground hover:bg-sidebar-accent">
           <ChevronRight className="w-4 h-4" />
@@ -423,13 +423,13 @@ export const TextStylePanel = ({
       <div className="space-y-2">
         <div className="flex items-center justify-between">
           <div className="flex flex-col gap-2">
-            <span className="text-sm font-semibold text-primary">Font</span>
-            <span className="text-sm font-semibold text-primary">Color</span>
+            <span className="text-sm font-semibold text-[#8B7AB8]">Font</span>
+            <span className="text-sm font-semibold text-[#8B7AB8]">Color</span>
           </div>
           <div className="flex flex-col gap-2 items-end">
             <Popover open={isFontOpen} onOpenChange={setIsFontOpen}>
               <PopoverTrigger asChild>
-                <button className="text-sm font-medium text-[hsl(var(--ink))] hover:text-primary transition-colors flex items-center gap-1" style={{
+                <button className="text-sm font-medium text-[hsl(var(--ink))] hover:text-[#8B7AB8] transition-colors flex items-center gap-1" style={{
                     fontFamily: `${fontFamily}, sans-serif`
                   }}>
                   {fontFamily}
@@ -448,7 +448,7 @@ export const TextStylePanel = ({
             </Popover>
             <Popover open={isColorPickerOpen} onOpenChange={setIsColorPickerOpen}>
               <PopoverTrigger asChild>
-                <button className="w-16 h-8 rounded-lg border-2 border-gray-300 hover:border-primary transition-colors cursor-pointer" style={{
+                <button className="w-16 h-8 rounded-lg border-2 border-gray-300 hover:border-[#8B7AB8] transition-colors cursor-pointer" style={{
                     backgroundColor: textColor
                   }} aria-label="Choose color" />
               </PopoverTrigger>
@@ -500,38 +500,38 @@ export const TextStylePanel = ({
             <DropdownMenuContent className="w-48 bg-white border border-gray-200 shadow-lg" align="start">
               <DropdownMenuItem 
                 onClick={() => handleCapitalization('None')}
-                className={`px-4 py-2 cursor-pointer hover:bg-primary/10 transition-colors ${capitalizationMode === 'None' ? 'bg-primary/20 text-primary font-medium' : 'text-[hsl(var(--ink))]'}`}
+                className={`px-4 py-2 cursor-pointer hover:bg-[#F5F0FF] transition-colors ${capitalizationMode === 'None' ? 'bg-[#E8DDFF] text-[#8B5CF6] font-medium' : 'text-[hsl(var(--ink))]'}`}
               >
-                <span className="text-primary">None</span>
-                {capitalizationMode === 'None' && <Check className="w-4 h-4 ml-auto text-primary" />}
+                <span className="text-[#8B7AB8]">None</span>
+                {capitalizationMode === 'None' && <Check className="w-4 h-4 ml-auto text-[#8B5CF6]" />}
               </DropdownMenuItem>
               <DropdownMenuItem 
                 onClick={() => handleCapitalization('All Caps')}
-                className={`px-4 py-2 cursor-pointer hover:bg-primary/10 transition-colors ${capitalizationMode === 'All Caps' ? 'bg-primary/20 text-primary font-medium' : 'text-[hsl(var(--ink))]'}`}
+                className={`px-4 py-2 cursor-pointer hover:bg-[#F5F0FF] transition-colors ${capitalizationMode === 'All Caps' ? 'bg-[#E8DDFF] text-[#8B5CF6] font-medium' : 'text-[hsl(var(--ink))]'}`}
               >
-                <span className="text-primary uppercase">All Caps</span>
-                {capitalizationMode === 'All Caps' && <Check className="w-4 h-4 ml-auto text-primary" />}
+                <span className="text-[#8B7AB8] uppercase">All Caps</span>
+                {capitalizationMode === 'All Caps' && <Check className="w-4 h-4 ml-auto text-[#8B5CF6]" />}
               </DropdownMenuItem>
               <DropdownMenuItem 
                 onClick={() => handleCapitalization('Small Caps')}
-                className={`px-4 py-2 cursor-pointer hover:bg-primary/10 transition-colors ${capitalizationMode === 'Small Caps' ? 'bg-primary/20 text-primary font-medium' : 'text-[hsl(var(--ink))]'}`}
+                className={`px-4 py-2 cursor-pointer hover:bg-[#F5F0FF] transition-colors ${capitalizationMode === 'Small Caps' ? 'bg-[#E8DDFF] text-[#8B5CF6] font-medium' : 'text-[hsl(var(--ink))]'}`}
               >
-                <span className="text-primary" style={{ fontVariantCaps: 'small-caps' }}>Small Caps</span>
-                {capitalizationMode === 'Small Caps' && <Check className="w-4 h-4 ml-auto text-primary" />}
+                <span className="text-[#8B7AB8]" style={{ fontVariantCaps: 'small-caps' }}>Small Caps</span>
+                {capitalizationMode === 'Small Caps' && <Check className="w-4 h-4 ml-auto text-[#8B5CF6]" />}
               </DropdownMenuItem>
               <DropdownMenuItem 
                 onClick={() => handleCapitalization('Title Case')}
-                className={`px-4 py-2 cursor-pointer hover:bg-primary/10 transition-colors ${capitalizationMode === 'Title Case' ? 'bg-primary/20 text-primary font-medium' : 'text-[hsl(var(--ink))]'}`}
+                className={`px-4 py-2 cursor-pointer hover:bg-[#F5F0FF] transition-colors ${capitalizationMode === 'Title Case' ? 'bg-[#E8DDFF] text-[#8B5CF6] font-medium' : 'text-[hsl(var(--ink))]'}`}
               >
-                <span className="text-primary">Title Case</span>
-                {capitalizationMode === 'Title Case' && <Check className="w-4 h-4 ml-auto text-primary" />}
+                <span className="text-[#8B7AB8]">Title Case</span>
+                {capitalizationMode === 'Title Case' && <Check className="w-4 h-4 ml-auto text-[#8B5CF6]" />}
               </DropdownMenuItem>
               <DropdownMenuItem 
                 onClick={() => handleCapitalization('Start Case')}
-                className={`px-4 py-2 cursor-pointer hover:bg-primary/10 transition-colors ${capitalizationMode === 'Start Case' ? 'bg-primary/20 text-primary font-medium' : 'text-[hsl(var(--ink))]'}`}
+                className={`px-4 py-2 cursor-pointer hover:bg-[#F5F0FF] transition-colors ${capitalizationMode === 'Start Case' ? 'bg-[#E8DDFF] text-[#8B5CF6] font-medium' : 'text-[hsl(var(--ink))]'}`}
               >
-                <span className="text-primary">Start Case</span>
-                {capitalizationMode === 'Start Case' && <Check className="w-4 h-4 ml-auto text-primary" />}
+                <span className="text-[#8B7AB8]">Start Case</span>
+                {capitalizationMode === 'Start Case' && <Check className="w-4 h-4 ml-auto text-[#8B5CF6]" />}
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -586,7 +586,7 @@ export const TextStylePanel = ({
 
       {/* Alignment Section */}
       <div className="space-y-2">
-        <h3 className="text-sm font-semibold text-primary">Alignment Section</h3>
+        <h3 className="text-sm font-semibold text-[#8B7AB8]">Alignment Section</h3>
         
         {/* None */}
         <button onClick={() => handleListType('none')} className="w-full bg-white rounded-xl px-4 py-3 flex items-center justify-between border border-gray-200 hover:bg-gray-50 transition-colors">
