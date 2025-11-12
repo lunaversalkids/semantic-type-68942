@@ -208,8 +208,8 @@ Insects are the largest group of arthropods. The evolution, their evolution, Mur
         {/* Logo and title section */}
         <div className="flex flex-col items-center space-y-2">
           {/* Infinity logo */}
-          <div className="relative w-80 h-80 flex items-center justify-center">
-            <img src={infinityLogo} alt="Doc One Infinity Logo" className="w-80 h-80 object-contain" style={{
+          <div className="relative w-[32rem] h-[32rem] flex items-center justify-center">
+            <img src={infinityLogo} alt="Doc One Infinity Logo" className="w-[32rem] h-[32rem] object-contain" style={{
             backgroundColor: 'transparent',
             mixBlendMode: 'multiply'
           }} />
