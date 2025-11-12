@@ -9,6 +9,7 @@ import { toast } from 'sonner';
 import infinityLogo from '@/assets/infinity-logo.png';
 import sparklesIcon from '@/assets/sparkles-icon.png';
 import homeBackground from '@/assets/new-home-background.jpg';
+import estherWoman from '@/assets/esther-woman.jpg';
 interface RecentDocument {
   id: string;
   title: string;
@@ -263,9 +264,20 @@ Insects are the largest group of arthropods. The evolution, their evolution, Mur
           </button>
         </div>
 
+        {/* Esther woman image - only shows when categories expanded */}
+        {isCategoriesVisible && (
+          <div className="absolute bottom-8 left-8 w-[400px] h-[600px] z-0 animate-fade-in">
+            <img 
+              src={estherWoman} 
+              alt="Esther" 
+              className="w-full h-full object-contain"
+            />
+          </div>
+        )}
+
         {/* Templates section or Recent documents only */}
         {isCategoriesVisible && (
-          <div className="w-full bg-gradient-to-br from-white/95 via-[hsl(253,100%,98%)] to-[hsl(253,80%,96%)] rounded-[28px] p-10 shadow-[0_0_40px_hsl(253,100%,64%,0.25),0_8px_32px_hsl(253,100%,64%,0.15)] border-[2px] border-[hsl(253,60%,88%)] backdrop-blur-xl animate-fade-in">
+          <div className="w-full bg-gradient-to-br from-white/95 via-[hsl(253,100%,98%)] to-[hsl(253,80%,96%)] rounded-[28px] p-10 shadow-[0_0_40px_hsl(253,100%,64%,0.25),0_8px_32px_hsl(253,100%,64%,0.15)] border-[2px] border-[hsl(253,60%,88%)] backdrop-blur-xl animate-fade-in relative z-10">
           {fromEditor ?
         // Simple recent documents view when coming from editor
         <div className="space-y-6">
