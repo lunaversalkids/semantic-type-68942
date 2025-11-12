@@ -196,7 +196,7 @@ Insects are the largest group of arthropods. The evolution, their evolution, Mur
       {/* Stars overlay - only show when categories are visible */}
       {isCategoriesVisible && (
         <div 
-          className="absolute left-0 top-[25%] w-[700px] h-[75%] pointer-events-none animate-fade-in"
+          className="absolute left-0 top-[25%] w-[400px] md:w-[500px] lg:w-[700px] h-[75%] pointer-events-none animate-fade-in"
           style={{
             backgroundImage: `url(${estherStarsOverlay})`,
             backgroundSize: 'cover',
@@ -221,12 +221,12 @@ Insects are the largest group of arthropods. The evolution, their evolution, Mur
         </div>}
 
       {/* Main content */}
-      <div className="flex flex-col items-center space-y-12 max-w-5xl w-full">
+      <div className="flex flex-col items-center space-y-8 md:space-y-12 max-w-5xl w-full">
         {/* Logo and title section */}
         <div className="flex flex-col items-center space-y-2">
           {/* Infinity logo */}
-          <div className="relative w-80 h-80 flex items-center justify-center">
-            <img src={infinityLogo} alt="Doc One Infinity Logo" className="w-80 h-80 object-contain" style={{
+          <div className="relative w-64 h-64 md:w-80 md:h-80 flex items-center justify-center">
+            <img src={infinityLogo} alt="Doc One Infinity Logo" className="w-64 h-64 md:w-80 md:h-80 object-contain" style={{
             backgroundColor: 'transparent',
             mixBlendMode: 'multiply'
           }} />
@@ -235,8 +235,8 @@ Insects are the largest group of arthropods. The evolution, their evolution, Mur
           </div>
 
           {/* App title */}
-          <div className="flex flex-col items-center space-y-3 -mt-[360px]">
-            <h1 className="text-[4rem] font-extrabold tracking-tight leading-none" style={{
+          <div className="flex flex-col items-center space-y-3 -mt-[280px] md:-mt-[360px]">
+            <h1 className="text-[3rem] md:text-[4rem] font-extrabold tracking-tight leading-none" style={{
             fontFamily: 'system-ui, -apple-system, "Segoe UI", Roboto, sans-serif',
             color: '#3730a3',
             WebkitTextStroke: '3px white',
@@ -282,12 +282,12 @@ Insects are the largest group of arthropods. The evolution, their evolution, Mur
 
         {/* Templates section or Recent documents only */}
         {isCategoriesVisible && (
-          <div className="w-full bg-[hsl(253,60%,92%)] rounded-[28px] p-10 shadow-[0_0_60px_hsl(253,100%,64%,0.4),0_12px_48px_hsl(253,100%,64%,0.3),0_0_100px_hsl(253,100%,64%,0.2)] border-[3px] border-[hsl(253,80%,85%)] backdrop-blur-xl animate-fade-in relative z-10">
+          <div className="w-full bg-[hsl(253,60%,92%)] rounded-[28px] p-6 md:p-8 lg:p-10 shadow-[0_0_60px_hsl(253,100%,64%,0.4),0_12px_48px_hsl(253,100%,64%,0.3),0_0_100px_hsl(253,100%,64%,0.2)] border-[3px] border-[hsl(253,80%,85%)] backdrop-blur-xl animate-fade-in relative z-10">
           {fromEditor ?
         // Simple recent documents view when coming from editor
         <div className="space-y-6">
               <h2 className="text-3xl font-bold text-[hsl(253,47%,18%)]">Recent & Saved Documents</h2>
-              <div className="grid grid-cols-4 gap-6">
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                 {recentDocs.map((doc, index) => <div key={index} className="group relative aspect-[3/4] rounded-[22px] overflow-hidden border-[3px] border-[hsl(253,80%,88%)] hover:border-[hsl(253,100%,64%)] transition-all duration-300 hover:scale-105 shadow-[0_0_20px_hsl(253,100%,64%,0.12)] hover:shadow-[0_0_40px_hsl(253,100%,64%,0.35),0_12px_40px_hsl(253,100%,64%,0.3)]">
                     <button onClick={() => handleOpenRecent(doc.id)} className="w-full h-full">
                       <div className="w-full h-full bg-white p-8 overflow-hidden flex flex-col">
@@ -395,7 +395,7 @@ Insects are the largest group of arthropods. The evolution, their evolution, Mur
                   <h2 className="text-3xl font-bold text-[hsl(253,47%,18%)]">{activeTab}</h2>
                 </div>
                 
-                <div className="grid grid-cols-4 gap-6">
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                   {activeTab === 'Recents' ? recentDocs.map((doc, index) => <div key={index} className="group relative aspect-[3/4] rounded-[22px] overflow-hidden border-[3px] border-[hsl(253,80%,88%)] hover:border-[hsl(253,100%,64%)] transition-all duration-300 hover:scale-105 shadow-[0_0_20px_hsl(253,100%,64%,0.12)] hover:shadow-[0_0_40px_hsl(253,100%,64%,0.35),0_12px_40px_hsl(253,100%,64%,0.3)]">
                         <button onClick={() => handleOpenRecent(doc.id)} className="w-full h-full">
                           <div className="w-full h-full bg-white p-8 overflow-hidden flex flex-col">
@@ -535,7 +535,7 @@ Insects are the largest group of arthropods. The evolution, their evolution, Mur
                   </div>
 
                   {/* Template options below See All */}
-                  {isTemplatesExpanded && <div className="grid grid-cols-4 gap-6 pt-6">
+                  {isTemplatesExpanded && <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 pt-6">
                     {bookTemplates.map((template, index) => <button key={index} onClick={() => handleStartWriting()} className="group relative aspect-[3/4] rounded-[22px] overflow-hidden border-[3px] border-[hsl(253,80%,88%)] hover:border-[hsl(253,100%,64%)] transition-all duration-300 hover:scale-105 shadow-[0_0_20px_hsl(253,100%,64%,0.12)] hover:shadow-[0_0_40px_hsl(253,100%,64%,0.35),0_12px_40px_hsl(253,100%,64%,0.3)]">
                         {template.thumbnail === 'gradient' ? <div className="w-full h-full flex items-center justify-center" style={{
                     background: template.gradient
