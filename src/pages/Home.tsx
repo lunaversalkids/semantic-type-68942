@@ -9,7 +9,7 @@ import { toast } from 'sonner';
 import infinityLogo from '@/assets/infinity-logo.png';
 import sparklesIcon from '@/assets/sparkles-icon.png';
 import homeBackground from '@/assets/new-home-background.jpg';
-import estherWoman from '@/assets/esther-woman.jpg';
+import estherBackground from '@/assets/new-esther-background.jpg';
 interface RecentDocument {
   id: string;
   title: string;
@@ -185,7 +185,7 @@ Insects are the largest group of arthropods. The evolution, their evolution, Mur
   return <div 
       className="min-h-screen flex flex-col items-center justify-center p-8 relative overflow-hidden animate-fade-in"
       style={{
-        backgroundImage: isCategoriesVisible ? `url(${estherWoman})` : `url(${homeBackground})`,
+        backgroundImage: isCategoriesVisible ? `url(${estherBackground})` : `url(${homeBackground})`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat'
