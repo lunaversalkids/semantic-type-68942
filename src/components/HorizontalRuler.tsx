@@ -121,12 +121,15 @@ export const HorizontalRuler = ({ pageWidth, zoom, activePageNum }: HorizontalRu
 
         {/* Left margin marker */}
         <div
-          className={`absolute bottom-0 w-2 h-2 rounded-sm cursor-ew-resize transition-all ${
-            isDraggingLeft ? 'bg-accent shadow-[0_0_8px_hsl(var(--accent))]' : 'bg-accent/60'
+          className={`absolute bottom-0 w-2.5 h-2.5 rounded-full cursor-ew-resize ${
+            isDraggingLeft 
+              ? 'bg-accent shadow-[0_0_12px_hsl(var(--accent))] scale-110' 
+              : 'bg-accent/70 hover:bg-accent hover:scale-105 transition-all duration-200 ease-out'
           }`}
           style={{
             left: `${(leftMargin / pageWidth) * 100}%`,
             transform: 'translate(-50%, 1px)',
+            transition: isDraggingLeft ? 'none' : 'all 0.2s ease-out',
           }}
           onMouseDown={handleLeftMarkerMouseDown}
           title="Left Margin"
@@ -134,12 +137,15 @@ export const HorizontalRuler = ({ pageWidth, zoom, activePageNum }: HorizontalRu
 
         {/* Right margin marker */}
         <div
-          className={`absolute bottom-0 w-2 h-2 rounded-sm cursor-ew-resize transition-all ${
-            isDraggingRight ? 'bg-accent shadow-[0_0_8px_hsl(var(--accent))]' : 'bg-accent/60'
+          className={`absolute bottom-0 w-2.5 h-2.5 rounded-full cursor-ew-resize ${
+            isDraggingRight 
+              ? 'bg-accent shadow-[0_0_12px_hsl(var(--accent))] scale-110' 
+              : 'bg-accent/70 hover:bg-accent hover:scale-105 transition-all duration-200 ease-out'
           }`}
           style={{
             left: `${((pageWidth - rightMargin) / pageWidth) * 100}%`,
             transform: 'translate(-50%, 1px)',
+            transition: isDraggingRight ? 'none' : 'all 0.2s ease-out',
           }}
           onMouseDown={handleRightMarkerMouseDown}
           title="Right Margin"

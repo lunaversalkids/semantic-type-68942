@@ -121,12 +121,15 @@ export const VerticalRuler = ({ pageHeight, zoom, activePageNum }: VerticalRuler
 
         {/* Top margin marker */}
         <div
-          className={`absolute right-0 w-2 h-2 rounded-sm cursor-ns-resize transition-all ${
-            isDraggingTop ? 'bg-accent shadow-[0_0_8px_hsl(var(--accent))]' : 'bg-accent/60'
+          className={`absolute right-0 w-2.5 h-2.5 rounded-full cursor-ns-resize ${
+            isDraggingTop 
+              ? 'bg-accent shadow-[0_0_12px_hsl(var(--accent))] scale-110' 
+              : 'bg-accent/70 hover:bg-accent hover:scale-105 transition-all duration-200 ease-out'
           }`}
           style={{
             top: `${(topMargin / pageHeight) * 100}%`,
             transform: 'translate(1px, -50%)',
+            transition: isDraggingTop ? 'none' : 'all 0.2s ease-out',
           }}
           onMouseDown={handleTopMarkerMouseDown}
           title="Top Margin"
@@ -134,12 +137,15 @@ export const VerticalRuler = ({ pageHeight, zoom, activePageNum }: VerticalRuler
 
         {/* Bottom margin marker */}
         <div
-          className={`absolute right-0 w-2 h-2 rounded-sm cursor-ns-resize transition-all ${
-            isDraggingBottom ? 'bg-accent shadow-[0_0_8px_hsl(var(--accent))]' : 'bg-accent/60'
+          className={`absolute right-0 w-2.5 h-2.5 rounded-full cursor-ns-resize ${
+            isDraggingBottom 
+              ? 'bg-accent shadow-[0_0_12px_hsl(var(--accent))] scale-110' 
+              : 'bg-accent/70 hover:bg-accent hover:scale-105 transition-all duration-200 ease-out'
           }`}
           style={{
             top: `${((pageHeight - bottomMargin) / pageHeight) * 100}%`,
             transform: 'translate(1px, -50%)',
+            transition: isDraggingBottom ? 'none' : 'all 0.2s ease-out',
           }}
           onMouseDown={handleBottomMarkerMouseDown}
           title="Bottom Margin"
