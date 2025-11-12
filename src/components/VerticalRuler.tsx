@@ -73,9 +73,9 @@ export const VerticalRuler = ({ pageHeight, zoom, activePageNum }: VerticalRuler
           className="absolute"
           style={{
             top: `${position}%`,
-            width: isMajor ? '12px' : isHalf ? '8px' : '5px',
+            width: isMajor ? '10px' : isHalf ? '6px' : '4px',
             height: '1px',
-            backgroundColor: 'hsl(var(--accent) / 0.6)',
+            backgroundColor: 'hsl(var(--accent) / 0.5)',
             right: 0,
           }}
         />
@@ -85,12 +85,12 @@ export const VerticalRuler = ({ pageHeight, zoom, activePageNum }: VerticalRuler
         ticks.push(
           <div
             key={`label-${i}`}
-            className="absolute text-[9px] font-medium"
+            className="absolute text-[7px] font-medium"
             style={{
               top: `${position}%`,
               transform: 'translateY(-50%)',
-              right: '14px',
-              color: 'hsl(var(--accent))',
+              right: '11px',
+              color: 'hsl(var(--accent) / 0.7)',
             }}
           >
             {Math.floor(inches)}
@@ -105,9 +105,8 @@ export const VerticalRuler = ({ pageHeight, zoom, activePageNum }: VerticalRuler
   return (
     <div
       ref={rulerRef}
-      className="fixed top-[102px] left-[280px] bottom-0 w-8 bg-background/95 backdrop-blur-sm border-r border-accent/20 z-50 flex items-center"
+      className="absolute top-0 left-0 bottom-0 w-5 bg-accent/5 backdrop-blur-sm border-r border-accent/20 z-10 flex items-center"
       style={{
-        height: 'calc(100vh - 102px)',
         pointerEvents: 'auto',
       }}
     >
@@ -122,12 +121,12 @@ export const VerticalRuler = ({ pageHeight, zoom, activePageNum }: VerticalRuler
 
         {/* Top margin marker */}
         <div
-          className={`absolute right-0 w-3 h-3 rounded-sm cursor-ns-resize transition-all ${
-            isDraggingTop ? 'bg-accent shadow-[0_0_12px_hsl(var(--accent))]' : 'bg-accent/70'
+          className={`absolute right-0 w-2 h-2 rounded-sm cursor-ns-resize transition-all ${
+            isDraggingTop ? 'bg-accent shadow-[0_0_8px_hsl(var(--accent))]' : 'bg-accent/60'
           }`}
           style={{
             top: `${(topMargin / pageHeight) * 100}%`,
-            transform: 'translate(2px, -50%)',
+            transform: 'translate(1px, -50%)',
           }}
           onMouseDown={handleTopMarkerMouseDown}
           title="Top Margin"
@@ -135,12 +134,12 @@ export const VerticalRuler = ({ pageHeight, zoom, activePageNum }: VerticalRuler
 
         {/* Bottom margin marker */}
         <div
-          className={`absolute right-0 w-3 h-3 rounded-sm cursor-ns-resize transition-all ${
-            isDraggingBottom ? 'bg-accent shadow-[0_0_12px_hsl(var(--accent))]' : 'bg-accent/70'
+          className={`absolute right-0 w-2 h-2 rounded-sm cursor-ns-resize transition-all ${
+            isDraggingBottom ? 'bg-accent shadow-[0_0_8px_hsl(var(--accent))]' : 'bg-accent/60'
           }`}
           style={{
             top: `${((pageHeight - bottomMargin) / pageHeight) * 100}%`,
-            transform: 'translate(2px, -50%)',
+            transform: 'translate(1px, -50%)',
           }}
           onMouseDown={handleBottomMarkerMouseDown}
           title="Bottom Margin"

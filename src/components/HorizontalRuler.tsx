@@ -73,9 +73,9 @@ export const HorizontalRuler = ({ pageWidth, zoom, activePageNum }: HorizontalRu
           className="absolute"
           style={{
             left: `${position}%`,
-            height: isMajor ? '12px' : isHalf ? '8px' : '5px',
+            height: isMajor ? '10px' : isHalf ? '6px' : '4px',
             width: '1px',
-            backgroundColor: 'hsl(var(--accent) / 0.6)',
+            backgroundColor: 'hsl(var(--accent) / 0.5)',
             bottom: 0,
           }}
         />
@@ -85,12 +85,12 @@ export const HorizontalRuler = ({ pageWidth, zoom, activePageNum }: HorizontalRu
         ticks.push(
           <div
             key={`label-${i}`}
-            className="absolute text-[9px] font-medium"
+            className="absolute text-[7px] font-medium"
             style={{
               left: `${position}%`,
               transform: 'translateX(-50%)',
-              bottom: '14px',
-              color: 'hsl(var(--accent))',
+              bottom: '11px',
+              color: 'hsl(var(--accent) / 0.7)',
             }}
           >
             {Math.floor(inches)}
@@ -105,9 +105,8 @@ export const HorizontalRuler = ({ pageWidth, zoom, activePageNum }: HorizontalRu
   return (
     <div
       ref={rulerRef}
-      className="fixed top-[70px] left-[280px] right-0 h-8 bg-background/95 backdrop-blur-sm border-b border-accent/20 z-50 flex items-end"
+      className="absolute top-0 left-0 right-0 h-5 bg-accent/5 backdrop-blur-sm border-b border-accent/20 z-10 flex items-end"
       style={{
-        width: 'calc(100% - 280px)',
         pointerEvents: 'auto',
       }}
     >
@@ -122,12 +121,12 @@ export const HorizontalRuler = ({ pageWidth, zoom, activePageNum }: HorizontalRu
 
         {/* Left margin marker */}
         <div
-          className={`absolute bottom-0 w-3 h-3 rounded-sm cursor-ew-resize transition-all ${
-            isDraggingLeft ? 'bg-accent shadow-[0_0_12px_hsl(var(--accent))]' : 'bg-accent/70'
+          className={`absolute bottom-0 w-2 h-2 rounded-sm cursor-ew-resize transition-all ${
+            isDraggingLeft ? 'bg-accent shadow-[0_0_8px_hsl(var(--accent))]' : 'bg-accent/60'
           }`}
           style={{
             left: `${(leftMargin / pageWidth) * 100}%`,
-            transform: 'translate(-50%, 2px)',
+            transform: 'translate(-50%, 1px)',
           }}
           onMouseDown={handleLeftMarkerMouseDown}
           title="Left Margin"
@@ -135,12 +134,12 @@ export const HorizontalRuler = ({ pageWidth, zoom, activePageNum }: HorizontalRu
 
         {/* Right margin marker */}
         <div
-          className={`absolute bottom-0 w-3 h-3 rounded-sm cursor-ew-resize transition-all ${
-            isDraggingRight ? 'bg-accent shadow-[0_0_12px_hsl(var(--accent))]' : 'bg-accent/70'
+          className={`absolute bottom-0 w-2 h-2 rounded-sm cursor-ew-resize transition-all ${
+            isDraggingRight ? 'bg-accent shadow-[0_0_8px_hsl(var(--accent))]' : 'bg-accent/60'
           }`}
           style={{
             left: `${((pageWidth - rightMargin) / pageWidth) * 100}%`,
-            transform: 'translate(-50%, 2px)',
+            transform: 'translate(-50%, 1px)',
           }}
           onMouseDown={handleRightMarkerMouseDown}
           title="Right Margin"
