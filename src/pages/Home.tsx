@@ -10,6 +10,7 @@ import infinityLogo from '@/assets/infinity-logo.png';
 import sparklesIcon from '@/assets/sparkles-icon.png';
 import homeBackground from '@/assets/new-home-background.jpg';
 import estherBackground from '@/assets/new-esther-background.jpg';
+import estherStarsOverlay from '@/assets/esther-stars-overlay.png';
 interface RecentDocument {
   id: string;
   title: string;
@@ -192,6 +193,20 @@ Insects are the largest group of arthropods. The evolution, their evolution, Mur
         backgroundAttachment: isCategoriesVisible ? 'fixed' : 'scroll'
       }}
     >
+      {/* Stars overlay - only show when categories are visible */}
+      {isCategoriesVisible && (
+        <div 
+          className="absolute left-0 bottom-0 w-[400px] h-[600px] pointer-events-none animate-fade-in"
+          style={{
+            backgroundImage: `url(${estherStarsOverlay})`,
+            backgroundSize: 'contain',
+            backgroundPosition: 'left bottom',
+            backgroundRepeat: 'no-repeat',
+            mixBlendMode: 'normal',
+            zIndex: 5
+          }}
+        />
+      )}
       {/* Back button - only show when coming from editor */}
       {fromEditor && <button onClick={() => navigate('/editor')} className="absolute top-8 left-8 flex items-center gap-2 px-4 py-2 bg-white/80 hover:bg-white border-2 border-[hsl(253,80%,85%)] rounded-full shadow-lg hover:shadow-xl transition-all duration-200 text-[hsl(253,47%,18%)] font-semibold">
           <ArrowLeft className="w-5 h-5" />
