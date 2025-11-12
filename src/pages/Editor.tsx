@@ -57,6 +57,7 @@ const Editor = () => {
   const [documentSaved, setDocumentSaved] = useState(false);
   const [bookmarkedPages, setBookmarkedPages] = useState<Set<number>>(new Set([1]));
   const [wordCount, setWordCount] = useState(0);
+  const [selectedWordCount, setSelectedWordCount] = useState(0);
   const [saveDialogOpen, setSaveDialogOpen] = useState(false);
   const [documentManagerOpen, setDocumentManagerOpen] = useState(false);
   const [findReplaceOpen, setFindReplaceOpen] = useState(false);
@@ -161,6 +162,20 @@ const Editor = () => {
     const words = text.trim().split(/\s+/).filter(word => word.length > 0);
     setWordCount(words.length);
 
+    // Track selection changes for selected word count
+    const handleSelectionUpdate = () => {
+      const { from, to } = editor.state.selection;
+      if (from !== to) {
+        const selectedText = editor.state.doc.textBetween(from, to, ' ');
+        const selectedWords = selectedText.trim().split(/\s+/).filter(word => word.length > 0);
+        setSelectedWordCount(selectedWords.length);
+      } else {
+        setSelectedWordCount(0);
+      }
+    };
+
+    editor.on('selectionUpdate', handleSelectionUpdate);
+
     const renumberFootnotes = () => {
       const html = editor.getHTML();
       
@@ -241,6 +256,7 @@ const Editor = () => {
     
     return () => {
       editor.off('update', handleUpdate);
+      editor.off('selectionUpdate', handleSelectionUpdate);
     };
   }, [editor]);
 
@@ -1013,7 +1029,7 @@ const Editor = () => {
           />
         </main>
 
-        <TextStylePanel editor={editor} wordCount={wordCount} />
+        <TextStylePanel editor={editor} wordCount={wordCount} selectedWordCount={selectedWordCount} />
       </div>
       
       <div className="relative">

@@ -10,10 +10,12 @@ import baselineSubscriptIcon from '@/assets/baseline-subscript-icon.jpg';
 interface TextStylePanelProps {
   editor?: any;
   wordCount?: number;
+  selectedWordCount?: number;
 }
 export const TextStylePanel = ({
   editor,
-  wordCount = 0
+  wordCount = 0,
+  selectedWordCount = 0
 }: TextStylePanelProps) => {
   const [fontSize, setFontSize] = useState('12');
   const [fontFamily, setFontFamily] = useState('Graphik');
@@ -364,7 +366,15 @@ export const TextStylePanel = ({
         >
           <div className="bg-[hsl(253,45%,85%)] text-[hsl(266,50%,35%)] font-bold text-center flex flex-col items-center justify-center w-[56px] h-[56px] rounded-md shadow-sm">
             <div className="text-[8px] tracking-[0.15em] leading-none mb-1">WORD</div>
-            <div className="text-xl leading-none">{wordCount}</div>
+            {selectedWordCount > 0 ? (
+              <div className="flex flex-col items-center leading-none">
+                <div className="text-sm">{selectedWordCount}</div>
+                <div className="text-[8px]">of</div>
+                <div className="text-sm">{wordCount}</div>
+              </div>
+            ) : (
+              <div className="text-xl leading-none">{wordCount}</div>
+            )}
           </div>
         </div>
 
@@ -385,7 +395,15 @@ export const TextStylePanel = ({
       >
         <div className="bg-[hsl(253,45%,85%)] text-[hsl(266,50%,35%)] font-bold text-center flex flex-col items-center justify-center w-[56px] h-[56px] rounded-md shadow-sm">
           <div className="text-[8px] tracking-[0.15em] leading-none mb-1">WORD</div>
-          <div className="text-xl leading-none">{wordCount}</div>
+          {selectedWordCount > 0 ? (
+            <div className="flex flex-col items-center leading-none">
+              <div className="text-sm">{selectedWordCount}</div>
+              <div className="text-[8px]">of</div>
+              <div className="text-sm">{wordCount}</div>
+            </div>
+          ) : (
+            <div className="text-xl leading-none">{wordCount}</div>
+          )}
         </div>
       </div>
 
