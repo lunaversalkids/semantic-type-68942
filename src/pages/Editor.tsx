@@ -23,6 +23,7 @@ import { EditableHeaderFooter } from '@/components/EditableHeaderFooter';
 import { DraggableBoundary } from '@/components/DraggableBoundary';
 import { HorizontalRuler } from '@/components/HorizontalRuler';
 import { VerticalRuler } from '@/components/VerticalRuler';
+import { ShapesIconsDrawer } from '@/components/ShapesIconsDrawer';
 import { defaultStyles } from '@/types/styles';
 import { useToast } from '@/hooks/use-toast';
 import { toast as sonnerToast } from 'sonner';
@@ -97,6 +98,7 @@ const Editor = () => {
   const [colorCustomizerOpen, setColorCustomizerOpen] = useState(false);
   const [showRuler, setShowRuler] = useState(false);
   const [activePageNum, setActivePageNum] = useState(1);
+  const [shapesIconsDrawerOpen, setShapesIconsDrawerOpen] = useState(false);
   const { toast } = useToast();
 
   // Track document access for recents
@@ -739,6 +741,17 @@ const Editor = () => {
     setColorCustomizerOpen(true);
   };
 
+  const handleShapesIcons = () => {
+    setShapesIconsDrawerOpen(true);
+  };
+
+  const handleChapterPresets = () => {
+    toast({ 
+      title: 'Chapter Presets',
+      description: 'Chapter presets feature coming soon'
+    });
+  };
+
   const handleToggleRuler = () => {
     setShowRuler(prev => !prev);
     toast({ 
@@ -898,6 +911,8 @@ const Editor = () => {
         onQuotationClick={handleQuotation}
         onTextFrameClick={handleTextFrame}
         onPaletteClick={handlePalette}
+        onShapesIconsClick={handleShapesIcons}
+        onChapterPresetsClick={handleChapterPresets}
         onExportClick={() => setExportOpen(true)}
         onImportClick={() => setImportOpen(true)}
         onPdfImportClick={() => setPdfImportOpen(true)}
@@ -1141,6 +1156,11 @@ const Editor = () => {
       <ColorCustomizerDialog
         open={colorCustomizerOpen}
         onOpenChange={setColorCustomizerOpen}
+      />
+
+      <ShapesIconsDrawer
+        open={shapesIconsDrawerOpen}
+        onOpenChange={setShapesIconsDrawerOpen}
       />
       
       <OnboardingTour />
