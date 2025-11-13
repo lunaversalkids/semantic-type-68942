@@ -93,6 +93,9 @@ export const DocumentManager = ({ open, onOpenChange, onLoadDocument }: Document
     .filter(doc => doc.name.toLowerCase().includes(searchQuery.toLowerCase()))
     .sort((a, b) => new Date(b.savedAt).getTime() - new Date(a.savedAt).getTime());
 
+  const recentDocuments = filteredDocuments.slice(0, 5);
+  const allDocuments = filteredDocuments;
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[900px] h-[80vh] flex flex-col">
@@ -122,52 +125,112 @@ export const DocumentManager = ({ open, onOpenChange, onLoadDocument }: Document
                 </p>
               </div>
             ) : (
-              <div className="space-y-2">
-                {filteredDocuments.map((doc) => (
-                  <div
-                    key={doc.id}
-                    className="flex items-center gap-3 p-3 rounded-lg border bg-card hover:bg-accent transition-colors cursor-pointer"
-                    onClick={() => handleLoadDocument(doc)}
-                  >
-                    <FileText className="h-5 w-5 text-muted-foreground flex-shrink-0" />
-                    <div className="flex-1 min-w-0">
-                      <p className="font-medium truncate">{doc.name}</p>
-                      <p className="text-xs text-muted-foreground">
-                        Saved {formatDistanceToNow(new Date(doc.savedAt), { addSuffix: true })}
-                      </p>
+              <div className="space-y-6">
+                {/* Recent Documents Section */}
+                {recentDocuments.length > 0 && (
+                  <div>
+                    <h3 className="text-sm font-semibold mb-3 text-muted-foreground">Recent Documents</h3>
+                    <div className="space-y-2">
+                      {recentDocuments.map((doc) => (
+                        <div
+                          key={doc.id}
+                          className="flex items-center gap-3 p-3 rounded-lg border bg-card hover:bg-accent transition-colors cursor-pointer"
+                          onClick={() => handleLoadDocument(doc)}
+                        >
+                          <FileText className="h-5 w-5 text-muted-foreground flex-shrink-0" />
+                          <div className="flex-1 min-w-0">
+                            <p className="font-medium truncate">{doc.name}</p>
+                            <p className="text-xs text-muted-foreground">
+                              Saved {formatDistanceToNow(new Date(doc.savedAt), { addSuffix: true })}
+                            </p>
+                          </div>
+                          <DropdownMenu>
+                            <DropdownMenuTrigger asChild onClick={(e) => e.stopPropagation()}>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                className="h-6 w-6 p-0 opacity-60 hover:opacity-100"
+                              >
+                                <MoreVertical className="h-4 w-4" />
+                              </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end" className="w-40">
+                              <DropdownMenuItem onClick={(e) => {
+                                e.stopPropagation();
+                                handleDuplicateDocument(doc);
+                              }}>
+                                <Copy className="h-4 w-4 mr-2" />
+                                Duplicate
+                              </DropdownMenuItem>
+                              <DropdownMenuItem 
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleDeleteDocument(doc.id, doc.name);
+                                }}
+                                className="text-destructive focus:text-destructive"
+                              >
+                                <Trash2 className="h-4 w-4 mr-2" />
+                                Delete
+                              </DropdownMenuItem>
+                            </DropdownMenuContent>
+                          </DropdownMenu>
+                        </div>
+                      ))}
                     </div>
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild onClick={(e) => e.stopPropagation()}>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          className="h-6 w-6 p-0 opacity-60 hover:opacity-100"
-                        >
-                          <MoreVertical className="h-4 w-4" />
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end" className="w-40">
-                        <DropdownMenuItem onClick={(e) => {
-                          e.stopPropagation();
-                          handleDuplicateDocument(doc);
-                        }}>
-                          <Copy className="h-4 w-4 mr-2" />
-                          Duplicate
-                        </DropdownMenuItem>
-                        <DropdownMenuItem 
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleDeleteDocument(doc.id, doc.name);
-                          }}
-                          className="text-destructive focus:text-destructive"
-                        >
-                          <Trash2 className="h-4 w-4 mr-2" />
-                          Delete
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
                   </div>
-                ))}
+                )}
+
+                {/* All Saved Documents Section */}
+                <div>
+                  <h3 className="text-sm font-semibold mb-3 text-muted-foreground">All Saved Documents</h3>
+                  <div className="space-y-2">
+                    {allDocuments.map((doc) => (
+                      <div
+                        key={doc.id}
+                        className="flex items-center gap-3 p-3 rounded-lg border bg-card hover:bg-accent transition-colors cursor-pointer"
+                        onClick={() => handleLoadDocument(doc)}
+                      >
+                        <FileText className="h-5 w-5 text-muted-foreground flex-shrink-0" />
+                        <div className="flex-1 min-w-0">
+                          <p className="font-medium truncate">{doc.name}</p>
+                          <p className="text-xs text-muted-foreground">
+                            Saved {formatDistanceToNow(new Date(doc.savedAt), { addSuffix: true })}
+                          </p>
+                        </div>
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild onClick={(e) => e.stopPropagation()}>
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              className="h-6 w-6 p-0 opacity-60 hover:opacity-100"
+                            >
+                              <MoreVertical className="h-4 w-4" />
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align="end" className="w-40">
+                            <DropdownMenuItem onClick={(e) => {
+                              e.stopPropagation();
+                              handleDuplicateDocument(doc);
+                            }}>
+                              <Copy className="h-4 w-4 mr-2" />
+                              Duplicate
+                            </DropdownMenuItem>
+                            <DropdownMenuItem 
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleDeleteDocument(doc.id, doc.name);
+                              }}
+                              className="text-destructive focus:text-destructive"
+                            >
+                              <Trash2 className="h-4 w-4 mr-2" />
+                              Delete
+                            </DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                      </div>
+                    ))}
+                  </div>
+                </div>
               </div>
             )}
           </ScrollArea>
