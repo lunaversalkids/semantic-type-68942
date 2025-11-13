@@ -52,7 +52,7 @@ export function ShapesIconsDrawer({ open, onOpenChange }: ShapesIconsDrawerProps
                 onClick={() => setSelectedCategory(category.id)}
                 className={`px-6 py-2.5 rounded-full font-semibold text-[15px] transition-all duration-200 ${
                   selectedCategory === category.id
-                    ? 'bg-[hsl(253,100%,64%)] text-white shadow-[0_0_20px_hsl(253,100%,64%,0.5)]'
+                    ? 'bg-[hsl(253,100%,64%)] text-white shadow-[0_4px_12px_rgba(124,58,237,0.4),0_0_20px_hsl(253,100%,64%,0.5)]'
                     : 'bg-white text-[hsl(253,100%,30%)] hover:bg-purple-100'
                 }`}
               >
