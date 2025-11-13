@@ -7,10 +7,24 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Slider } from '@/components/ui/slider';
+import egyptianAnkhsImage from '@/assets/egyptian-ankhs.jpg';
 
 export const IconNodeView = ({ node, updateAttributes, selected }: NodeViewProps) => {
   const [isEditing, setIsEditing] = useState(false);
   const { iconId, category, width, height, color } = node.attrs;
+
+  const getAnkhCropStyle = (ankhId: string, width: number, height: number) => {
+    const ankhNum = parseInt(ankhId.replace('ankh', ''));
+    const col = (ankhNum - 1) % 6; // 0-5 (column position)
+    const row = Math.floor((ankhNum - 1) / 6); // 0-1 (row position)
+    
+    return {
+      width: `${width * 6}px`,
+      height: `${height * 2}px`,
+      objectFit: 'none' as const,
+      objectPosition: `-${col * width}px -${row * height}px`,
+    };
+  };
 
   let icon;
   if (category === 'egyptian') {
@@ -19,9 +33,9 @@ export const IconNodeView = ({ node, updateAttributes, selected }: NodeViewProps
     icon = coreShapes.find((s) => s.id === iconId);
   }
   
-  if (!icon) return null;
+  if (!icon && category !== 'egyptian') return null;
 
-  const IconComponent = icon.component;
+  const IconComponent = icon?.component;
 
   const handleConfirm = () => {
     setIsEditing(false);
@@ -39,10 +53,21 @@ export const IconNodeView = ({ node, updateAttributes, selected }: NodeViewProps
             }`}
             style={{ width: `${width}px`, height: `${height}px` }}
           >
-            <IconComponent
-              style={{ color, width: '100%', height: '100%' }}
-              strokeWidth={2}
-            />
+            {category === 'egyptian' ? (
+              <img 
+                src={egyptianAnkhsImage}
+                alt={`Ankh ${iconId}`}
+                style={getAnkhCropStyle(iconId, width, height)}
+                className="pointer-events-none"
+              />
+            ) : (
+              IconComponent && (
+                <IconComponent
+                  style={{ color, width: '100%', height: '100%' }}
+                  strokeWidth={2}
+                />
+              )
+            )}
             
             {/* Resize handles - only show when selected */}
             {selected && (
