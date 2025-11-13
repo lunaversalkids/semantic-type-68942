@@ -6,7 +6,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { egyptianAnkhs } from "./icons/EgyptianAnkhs";
+import egyptianAnkhsImage from "@/assets/egyptian-ankhs.jpg";
 
 interface ShapesIconsDrawerProps {
   open: boolean;
@@ -71,23 +71,26 @@ export function ShapesIconsDrawer({ open, onOpenChange, onInsertIcon }: ShapesIc
         {/* Content Area */}
         <div className="px-8 pb-8 flex-1 overflow-y-auto">
           {selectedCategory === 'egyptian' ? (
-            <div className="grid grid-cols-6 gap-6 p-6">
-              {egyptianAnkhs.map((ankh) => {
-                const AnkhComponent = ankh.component;
-                return (
-                  <div
-                    key={ankh.id}
-                    onClick={() => handleAnkhClick(ankh.id)}
-                    className="cursor-pointer hover:scale-110 transition-all duration-200 p-2 rounded-lg hover:bg-purple-200/30"
-                    title={ankh.name}
-                  >
-                    <AnkhComponent 
-                      className="w-full h-auto"
-                      style={{ color: 'hsl(253, 100%, 64%)' }}
+            <div className="w-full h-full flex items-center justify-center p-6">
+              <div className="relative inline-block max-w-full">
+                <img 
+                  src={egyptianAnkhsImage}
+                  alt="Egyptian Ankhs"
+                  className="max-w-full max-h-[400px] object-contain"
+                />
+                
+                {/* Clickable overlay grid - 2 rows x 6 columns */}
+                <div className="absolute inset-0 grid grid-cols-6 grid-rows-2 gap-0">
+                  {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((num) => (
+                    <div
+                      key={num}
+                      onClick={() => handleAnkhClick(`ankh${num}`)}
+                      className="cursor-pointer hover:bg-purple-300/20 transition-all border border-transparent hover:border-purple-400/30 hover:scale-105"
+                      title={`Ankh ${num}`}
                     />
-                  </div>
-                );
-              })}
+                  ))}
+                </div>
+              </div>
             </div>
           ) : (
             <div className="w-full h-full flex items-center justify-center">
