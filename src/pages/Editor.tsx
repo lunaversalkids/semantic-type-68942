@@ -24,9 +24,12 @@ import { DraggableBoundary } from '@/components/DraggableBoundary';
 import { HorizontalRuler } from '@/components/HorizontalRuler';
 import { VerticalRuler } from '@/components/VerticalRuler';
 import { ShapesIconsDrawer } from '@/components/ShapesIconsDrawer';
+import { RenameDocumentDialog } from '@/components/RenameDocumentDialog';
+import { SaveAsTemplateDialog } from '@/components/SaveAsTemplateDialog';
 import { defaultStyles } from '@/types/styles';
 import { useToast } from '@/hooks/use-toast';
 import { toast as sonnerToast } from 'sonner';
+import { supabase } from '@/integrations/supabase/client';
 import purpleBookmark from '@/assets/purple-bookmark.png';
 
 const Editor = () => {
@@ -99,6 +102,9 @@ const Editor = () => {
   const [showRuler, setShowRuler] = useState(false);
   const [activePageNum, setActivePageNum] = useState(1);
   const [shapesIconsDrawerOpen, setShapesIconsDrawerOpen] = useState(false);
+  const [documentName, setDocumentName] = useState('Untitled');
+  const [renameDialogOpen, setRenameDialogOpen] = useState(false);
+  const [saveAsTemplateDialogOpen, setSaveAsTemplateDialogOpen] = useState(false);
   const { toast } = useToast();
 
   // Track document access for recents
@@ -908,6 +914,100 @@ const Editor = () => {
 
   const navigate = useNavigate();
 
+  // Load document name from localStorage or derive from content
+  useEffect(() => {
+    const stored = localStorage.getItem('recentDocuments');
+    if (stored) {
+      const recentDocs = JSON.parse(stored);
+      const currentDoc = recentDocs.find((doc: any) => doc.id === docId);
+      if (currentDoc) {
+        setDocumentName(currentDoc.title || 'Untitled');
+      }
+    }
+  }, [docId]);
+
+  // Update document name when editor content changes
+  useEffect(() => {
+    if (editor) {
+      const firstLine = editor.getText().split('\n')[0];
+      if (firstLine && firstLine.trim()) {
+        setDocumentName(firstLine.trim());
+      }
+    }
+  }, [editor?.getText()]);
+
+  const handleSaveDocument = async () => {
+    if (!editor) return;
+    
+    const content = editor.getHTML();
+    
+    // Save to localStorage
+    const stored = localStorage.getItem('savedDocuments') || '{}';
+    const savedDocs = JSON.parse(stored);
+    savedDocs[documentName] = {
+      name: documentName,
+      content,
+      lastSaved: new Date().toISOString()
+    };
+    localStorage.setItem('savedDocuments', JSON.stringify(savedDocs));
+    
+    sonnerToast.success('Document saved successfully');
+  };
+
+  const handleRenameDocument = () => {
+    setRenameDialogOpen(true);
+  };
+
+  const handleRenameConfirm = (newName: string) => {
+    const oldName = documentName;
+    setDocumentName(newName);
+
+    // Update localStorage
+    const stored = localStorage.getItem('recentDocuments');
+    if (stored) {
+      const recentDocs = JSON.parse(stored);
+      const docIndex = recentDocs.findIndex((doc: any) => doc.id === docId);
+      if (docIndex >= 0) {
+        recentDocs[docIndex].title = newName;
+        localStorage.setItem('recentDocuments', JSON.stringify(recentDocs));
+      }
+    }
+
+    // Update saved documents
+    const savedStored = localStorage.getItem('savedDocuments') || '{}';
+    const savedDocs = JSON.parse(savedStored);
+    if (savedDocs[oldName]) {
+      savedDocs[newName] = savedDocs[oldName];
+      savedDocs[newName].name = newName;
+      delete savedDocs[oldName];
+      localStorage.setItem('savedDocuments', JSON.stringify(savedDocs));
+    }
+
+    sonnerToast.success(`Renamed to "${newName}"`);
+  };
+
+  const handleSaveAsTemplate = () => {
+    setSaveAsTemplateDialogOpen(true);
+  };
+
+  const handleSaveAsTemplateConfirm = (templateName: string) => {
+    if (!editor) return;
+    
+    const content = editor.getHTML();
+    
+    // Save template to localStorage
+    const stored = localStorage.getItem('documentTemplates') || '{}';
+    const templates = JSON.parse(stored);
+    templates[templateName] = {
+      name: templateName,
+      content,
+      createdAt: new Date().toISOString()
+    };
+    localStorage.setItem('documentTemplates', JSON.stringify(templates));
+    
+    sonnerToast.success(`Template "${templateName}" saved successfully`);
+  };
+
   // Handle click outside text boxes to deselect
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -953,6 +1053,10 @@ const Editor = () => {
         pageViewerOpen={pageViewerOpen}
         onLayoutToggle={() => setIsDoublePageLayout(prev => !prev)}
         isDoublePageLayout={isDoublePageLayout}
+        documentName={documentName}
+        onSaveDocument={handleSaveDocument}
+        onRenameDocument={handleRenameDocument}
+        onSaveAsTemplate={handleSaveAsTemplate}
       />
 
       <div className="grid grid-cols-[auto_1fr_auto] gap-3 overflow-hidden relative">
@@ -1196,6 +1300,19 @@ const Editor = () => {
         open={shapesIconsDrawerOpen}
         onOpenChange={setShapesIconsDrawerOpen}
         onInsertIcon={handleInsertAnkh}
+      />
+
+      <RenameDocumentDialog
+        open={renameDialogOpen}
+        onOpenChange={setRenameDialogOpen}
+        currentName={documentName}
+        onRename={handleRenameConfirm}
+      />
+
+      <SaveAsTemplateDialog
+        open={saveAsTemplateDialogOpen}
+        onOpenChange={setSaveAsTemplateDialogOpen}
+        onSave={handleSaveAsTemplateConfirm}
       />
       
       <OnboardingTour />
