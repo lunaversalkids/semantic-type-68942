@@ -1020,6 +1020,7 @@ const Editor = () => {
           onStylesChange={setStyles}
           pageCount={totalPages}
           wordCount={wordCount}
+          initialExpanded={!!docId && docId !== 'current-document'}
         />
         <main className="overflow-hidden relative">
           {/* Text Boxes Layer */}

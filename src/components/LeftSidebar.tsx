@@ -11,14 +11,16 @@ interface LeftSidebarProps {
   onStylesChange: (styles: TextStyle[]) => void;
   pageCount?: number;
   wordCount?: number;
+  initialExpanded?: boolean;
 }
 export const LeftSidebar = ({
   styles,
   onStylesChange,
   pageCount = 0,
-  wordCount = 0
+  wordCount = 0,
+  initialExpanded = false
 }: LeftSidebarProps) => {
-  const [stylesExpanded, setStylesExpanded] = useState(false);
+  const [stylesExpanded, setStylesExpanded] = useState(initialExpanded);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [colorPickerOpen, setColorPickerOpen] = useState<string | null>(null);
   const handleAddStyle = () => {
