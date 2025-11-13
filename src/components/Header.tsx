@@ -35,6 +35,10 @@ interface HeaderProps {
   pageViewerOpen?: boolean;
   onLayoutToggle?: () => void;
   isDoublePageLayout?: boolean;
+  documentName?: string;
+  onSaveDocument?: () => void;
+  onRenameDocument?: () => void;
+  onSaveAsTemplate?: () => void;
 }
 export const Header = ({
   onHomeClick,
@@ -56,7 +60,11 @@ export const Header = ({
   onPageViewerClick,
   pageViewerOpen,
   onLayoutToggle,
-  isDoublePageLayout
+  isDoublePageLayout,
+  documentName = 'Untitled',
+  onSaveDocument,
+  onRenameDocument,
+  onSaveAsTemplate
 }: HeaderProps) => {
   return <header className="bg-[hsl(var(--panel))] border border-[hsl(var(--stroke))] rounded-[var(--radius)] shadow-[0_10px_28px_rgba(96,48,200,.16)] p-2 grid grid-cols-[auto_1fr_auto] items-center gap-3">
       {/* Brand */}
@@ -71,10 +79,25 @@ export const Header = ({
 
       {/* Title - Centered */}
       <div className="flex items-center justify-center w-full">
-        <button onClick={onDocumentClick} className="flex items-center gap-2.5 px-3.5 py-2 border border-[hsl(var(--stroke))] rounded-full bg-[hsla(253,100%,64%,0.12)] text-[#4E3DC9] font-bold hover:bg-[hsla(253,100%,64%,0.18)] transition-colors mx-auto" title="Save/Load Documents">
-          <span className="text-lg">∞</span>
-          <span>Insects</span>
-        </button>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <button className="flex items-center gap-2.5 px-3.5 py-2 border border-[hsl(var(--stroke))] rounded-full bg-[hsla(253,100%,64%,0.12)] text-[#4E3DC9] font-bold hover:bg-[hsla(253,100%,64%,0.18)] transition-colors mx-auto" title="Document Menu">
+              <span className="text-lg">∞</span>
+              <span>{documentName}</span>
+            </button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent className="w-48 bg-white dark:bg-gray-800 z-50">
+            <DropdownMenuItem onClick={onSaveDocument}>
+              Save
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={onRenameDocument}>
+              Rename
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={onSaveAsTemplate}>
+              Save As Template
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
 
       {/* Toolbar */}
