@@ -89,13 +89,13 @@ export const DocumentManager = ({ open, onOpenChange, onLoadDocument }: Document
     }
   };
 
-  const filteredDocuments = documents.filter(doc =>
-    doc.name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const filteredDocuments = documents
+    .filter(doc => doc.name.toLowerCase().includes(searchQuery.toLowerCase()))
+    .sort((a, b) => new Date(b.savedAt).getTime() - new Date(a.savedAt).getTime());
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[600px] h-[600px] flex flex-col">
+      <DialogContent className="sm:max-w-[900px] h-[80vh] flex flex-col">
         <DialogHeader>
           <DialogTitle>My Documents</DialogTitle>
           <DialogDescription>
