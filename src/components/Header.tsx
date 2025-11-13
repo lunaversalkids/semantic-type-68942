@@ -99,12 +99,12 @@ export const Header = ({
           <img src={paletteIcon} alt="" className="w-full h-full object-cover" />
         </button>
 
-        <button onClick={onChapterPresetsClick} className="h-9 w-9 border border-[hsl(var(--stroke))] rounded-[var(--r-sm)] grid place-items-center hover:bg-[hsl(var(--panel-2))] transition-colors overflow-hidden" title="Chapter Presets">
-          <img src={chapterPresetsButton} alt="" className="w-full h-full object-cover" />
-        </button>
-
         <button onClick={onShapesIconsClick} className="h-9 w-9 border border-[hsl(var(--stroke))] rounded-[var(--r-sm)] grid place-items-center hover:bg-[hsl(var(--panel-2))] transition-colors overflow-hidden" title="Shapes and Icons">
           <img src={shapesIconsButton} alt="" className="w-full h-full object-cover" />
+        </button>
+
+        <button onClick={onChapterPresetsClick} className="h-9 w-9 border border-[hsl(var(--stroke))] rounded-[var(--r-sm)] grid place-items-center hover:bg-[hsl(var(--panel-2))] transition-colors overflow-hidden" title="Chapter Presets">
+          <img src={chapterPresetsButton} alt="" className="w-full h-full object-cover" />
         </button>
 
         <button onClick={onTextFrameClick} className="h-9 w-9 border border-[hsl(var(--stroke))] rounded-[var(--r-sm)] grid place-items-center hover:bg-[hsl(var(--panel-2))] transition-colors overflow-hidden" title="Text Box">
