@@ -108,19 +108,18 @@ Insects are the largest group of arthropods. The evolution, their evolution, Mur
   const handleOpenRecent = (docId: string) => {
     navigate(`/editor?doc=${docId}`);
   };
-
   const handleRenameDocument = (docId: string) => {
     if (!newName.trim()) {
       toast.error('Please enter a name');
       return;
     }
-
     const stored = localStorage.getItem('recentDocuments');
     if (stored) {
       const docs = JSON.parse(stored) as RecentDocument[];
-      const updatedDocs = docs.map(doc => 
-        doc.id === docId ? { ...doc, title: newName.trim() } : doc
-      );
+      const updatedDocs = docs.map(doc => doc.id === docId ? {
+        ...doc,
+        title: newName.trim()
+      } : doc);
       localStorage.setItem('recentDocuments', JSON.stringify(updatedDocs));
       setRecentDocs(updatedDocs.slice(0, 4));
       toast.success('Document renamed');
@@ -129,11 +128,9 @@ Insects are the largest group of arthropods. The evolution, their evolution, Mur
     setNewName('');
     setOpenMenuId(null);
   };
-
   const handleDuplicateDocument = (doc: RecentDocument) => {
     // Close menu immediately to prevent glitching
     setOpenMenuId(null);
-    
     const stored = localStorage.getItem('recentDocuments');
     if (stored) {
       const docs = JSON.parse(stored) as RecentDocument[];
@@ -149,15 +146,13 @@ Insects are the largest group of arthropods. The evolution, their evolution, Mur
       toast.success('Document duplicated');
     }
   };
-
   const handleDeleteDocument = (docId: string, docTitle: string) => {
     // Close menu immediately to prevent glitching
     setOpenMenuId(null);
-    
+
     // Small delay to let the popover close before showing confirm dialog
     setTimeout(() => {
       if (!confirm(`Delete "${docTitle}"?`)) return;
-
       const stored = localStorage.getItem('recentDocuments');
       if (stored) {
         const docs = JSON.parse(stored) as RecentDocument[];
@@ -168,7 +163,6 @@ Insects are the largest group of arthropods. The evolution, their evolution, Mur
       }
     }, 100);
   };
-
   const templates: any[] = [];
   const bookTemplates = [{
     name: 'Simple Novel',
@@ -183,30 +177,22 @@ Insects are the largest group of arthropods. The evolution, their evolution, Mur
     thumbnail: 'blank'
   }];
   const tabs = ['Recents', 'Basic', 'Reports', 'Books', 'Study Books', 'Letters'];
-  return <div 
-      className="min-h-screen flex flex-col items-center justify-center p-4 md:p-8 relative overflow-hidden animate-fade-in"
-      style={{
-        backgroundImage: isCategoriesVisible ? `url(${estherBackground})` : `url(${homeBackground})`,
-        backgroundSize: window.innerWidth >= 1024 ? 'cover' : (isCategoriesVisible ? '100% auto' : 'cover'),
-        backgroundPosition: isCategoriesVisible ? (window.innerWidth >= 1024 ? 'center 12%' : 'center top') : 'center',
-        backgroundRepeat: 'no-repeat',
-        backgroundAttachment: isCategoriesVisible ? 'fixed' : 'scroll'
-      }}
-    >
+  return <div className="min-h-screen flex flex-col items-center justify-center p-4 md:p-8 relative overflow-hidden animate-fade-in" style={{
+    backgroundImage: isCategoriesVisible ? `url(${estherBackground})` : `url(${homeBackground})`,
+    backgroundSize: window.innerWidth >= 1024 ? 'cover' : isCategoriesVisible ? '100% auto' : 'cover',
+    backgroundPosition: isCategoriesVisible ? window.innerWidth >= 1024 ? 'center 12%' : 'center top' : 'center',
+    backgroundRepeat: 'no-repeat',
+    backgroundAttachment: isCategoriesVisible ? 'fixed' : 'scroll'
+  }}>
       {/* Stars overlay - only show when categories are visible */}
-      {isCategoriesVisible && (
-        <div 
-          className="absolute left-0 top-[-5%] md:top-[-3%] lg:top-[25%] w-[300px] md:w-[400px] lg:w-[700px] h-[80%] md:h-[85%] lg:h-[75%] pointer-events-none animate-fade-in"
-          style={{
-            backgroundImage: `url(${estherStarsOverlay})`,
-            backgroundSize: 'cover',
-            backgroundPosition: 'left center',
-            backgroundRepeat: 'no-repeat',
-            mixBlendMode: 'normal',
-            zIndex: 5
-          }}
-        />
-      )}
+      {isCategoriesVisible && <div className="absolute left-0 top-[-5%] md:top-[-3%] lg:top-[25%] w-[300px] md:w-[400px] lg:w-[700px] h-[80%] md:h-[85%] lg:h-[75%] pointer-events-none animate-fade-in" style={{
+      backgroundImage: `url(${estherStarsOverlay})`,
+      backgroundSize: 'cover',
+      backgroundPosition: 'left center',
+      backgroundRepeat: 'no-repeat',
+      mixBlendMode: 'normal',
+      zIndex: 5
+    }} />}
       {/* Back button - only show when coming from editor */}
       {fromEditor && <button onClick={() => navigate('/editor')} className="absolute top-8 left-8 flex items-center gap-2 px-4 py-2 bg-white/80 hover:bg-white border-2 border-[hsl(253,80%,85%)] rounded-full shadow-lg hover:shadow-xl transition-all duration-200 text-[hsl(253,47%,18%)] font-semibold">
           <ArrowLeft className="w-5 h-5" />
@@ -248,41 +234,30 @@ Insects are the largest group of arthropods. The evolution, their evolution, Mur
             </h1>
             
             {/* Show tagline and button only on homepage (NOT from editor) */}
-            {!fromEditor && (
-              <>
+            {!fromEditor && <>
                 {/* Tagline */}
                 <p className="text-sm md:text-base text-[hsl(253,28%,40%)] font-semibold">
                   Create. Teach. Publish. Evolve.
                 </p>
 
                 {/* Start Writing button */}
-                <button
-                  onClick={handleStartWriting}
-                  className="mt-4 px-8 md:px-12 py-3 md:py-4 bg-gradient-to-r from-[hsl(253,100%,64%)] to-[hsl(266,100%,70%)] text-white text-lg md:text-xl font-bold rounded-full shadow-[0_0_30px_hsl(253,100%,64%,0.5)] hover:shadow-[0_0_50px_hsl(253,100%,64%,0.7)] hover:scale-105 transition-all duration-300"
-                >
+                <button onClick={handleStartWriting} className="mt-4 px-8 md:px-12 py-3 md:py-4 bg-gradient-to-r from-[hsl(253,100%,64%)] to-[hsl(266,100%,70%)] text-white text-lg md:text-xl font-bold rounded-full shadow-[0_0_30px_hsl(253,100%,64%,0.5)] hover:shadow-[0_0_50px_hsl(253,100%,64%,0.7)] hover:scale-105 transition-all duration-300">
                   Start Writing
                 </button>
-              </>
-            )}
+              </>}
           </div>
 
           {/* Divider text - only show on homepage */}
           {!fromEditor && <p className="text-sm md:text-base text-[hsl(253,28%,40%)] font-semibold pt-2">Choose Your Template.</p>}
 
           {/* Chevron arrow */}
-          <button 
-            onClick={() => setIsCategoriesVisible(!isCategoriesVisible)}
-            className="focus:outline-none"
-          >
-            <svg className={`w-8 h-8 md:w-10 md:h-10 text-[hsl(253,100%,64%)] drop-shadow-[0_4px_8px_hsl(253,100%,64%,0.3)] transition-transform duration-300 ${isCategoriesVisible ? 'rotate-180' : ''} ${!isCategoriesVisible ? 'animate-bounce' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={3}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
-            </svg>
+          <button onClick={() => setIsCategoriesVisible(!isCategoriesVisible)} className="focus:outline-none">
+            
           </button>
         </div>
 
         {/* Templates section or Recent documents only */}
-        {isCategoriesVisible && (
-          <div className="w-[95%] md:w-[85%] lg:w-full max-w-4xl md:max-w-3xl lg:max-w-5xl bg-[hsl(253,60%,92%)] rounded-lg md:rounded-xl lg:rounded-[28px] p-2 md:p-3 lg:p-10 shadow-[0_0_60px_hsl(253,100%,64%,0.4),0_12px_48px_hsl(253,100%,64%,0.3),0_0_100px_hsl(253,100%,64%,0.2)] border-[3px] border-[hsl(253,80%,85%)] backdrop-blur-xl animate-fade-in relative z-10 overflow-hidden">
+        {isCategoriesVisible && <div className="w-[95%] md:w-[85%] lg:w-full max-w-4xl md:max-w-3xl lg:max-w-5xl bg-[hsl(253,60%,92%)] rounded-lg md:rounded-xl lg:rounded-[28px] p-2 md:p-3 lg:p-10 shadow-[0_0_60px_hsl(253,100%,64%,0.4),0_12px_48px_hsl(253,100%,64%,0.3),0_0_100px_hsl(253,100%,64%,0.2)] border-[3px] border-[hsl(253,80%,85%)] backdrop-blur-xl animate-fade-in relative z-10 overflow-hidden">
           {fromEditor ?
         // Simple recent documents view when coming from editor
         <div className="space-y-3 md:space-y-4 lg:space-y-6 overflow-hidden">
@@ -298,76 +273,48 @@ Insects are the largest group of arthropods. The evolution, their evolution, Mur
                     </button>
                     
                     {/* Three-dot menu */}
-                    <Popover open={openMenuId === doc.id} onOpenChange={(open) => setOpenMenuId(open ? doc.id : null)}>
+                    <Popover open={openMenuId === doc.id} onOpenChange={open => setOpenMenuId(open ? doc.id : null)}>
                       <PopoverTrigger asChild>
-                        <button 
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setOpenMenuId(openMenuId === doc.id ? null : doc.id);
-                          }}
-                          onMouseDown={(e) => e.stopPropagation()}
-                          className={`absolute bottom-3 right-3 w-10 h-10 rounded-full bg-gradient-to-br from-[hsl(253,100%,64%)] to-[hsl(266,100%,70%)] ${openMenuId === doc.id ? 'opacity-100 scale-110' : 'opacity-0 group-hover:opacity-100 hover:scale-110'} hover:shadow-[0_0_20px_hsl(253,100%,64%,0.8)] transition-all duration-200 flex items-center justify-center z-50`}
-                        >
+                        <button onClick={e => {
+                    e.stopPropagation();
+                    setOpenMenuId(openMenuId === doc.id ? null : doc.id);
+                  }} onMouseDown={e => e.stopPropagation()} className={`absolute bottom-3 right-3 w-10 h-10 rounded-full bg-gradient-to-br from-[hsl(253,100%,64%)] to-[hsl(266,100%,70%)] ${openMenuId === doc.id ? 'opacity-100 scale-110' : 'opacity-0 group-hover:opacity-100 hover:scale-110'} hover:shadow-[0_0_20px_hsl(253,100%,64%,0.8)] transition-all duration-200 flex items-center justify-center z-50`}>
                           <MoreVertical className="w-5 h-5 text-white" />
                         </button>
                       </PopoverTrigger>
-                      <PopoverContent 
-                        className="w-48 p-2 bg-[hsl(253,100%,98%)] border-2 border-[hsl(253,80%,85%)] rounded-2xl shadow-[0_8px_32px_hsl(253,100%,64%,0.25)] z-[100]"
-                        sideOffset={8}
-                        onClick={(e) => e.stopPropagation()}
-                      >
-                        {renamingId === doc.id ? (
-                          <div className="p-2 space-y-2">
-                            <Input
-                              value={newName}
-                              onChange={(e) => setNewName(e.target.value)}
-                              placeholder="New name"
-                              className="text-sm"
-                              autoFocus
-                              onKeyDown={(e) => {
-                                if (e.key === 'Enter') handleRenameDocument(doc.id);
-                                if (e.key === 'Escape') {
-                                  setRenamingId(null);
-                                  setNewName('');
-                                }
-                              }}
-                            />
+                      <PopoverContent className="w-48 p-2 bg-[hsl(253,100%,98%)] border-2 border-[hsl(253,80%,85%)] rounded-2xl shadow-[0_8px_32px_hsl(253,100%,64%,0.25)] z-[100]" sideOffset={8} onClick={e => e.stopPropagation()}>
+                        {renamingId === doc.id ? <div className="p-2 space-y-2">
+                            <Input value={newName} onChange={e => setNewName(e.target.value)} placeholder="New name" className="text-sm" autoFocus onKeyDown={e => {
+                      if (e.key === 'Enter') handleRenameDocument(doc.id);
+                      if (e.key === 'Escape') {
+                        setRenamingId(null);
+                        setNewName('');
+                      }
+                    }} />
                             <div className="flex gap-2">
                               <Button size="sm" onClick={() => handleRenameDocument(doc.id)} className="flex-1 text-xs bg-[hsl(253,100%,64%)]">Save</Button>
                               <Button size="sm" variant="outline" onClick={() => {
-                                setRenamingId(null);
-                                setNewName('');
-                              }} className="flex-1 text-xs">Cancel</Button>
+                        setRenamingId(null);
+                        setNewName('');
+                      }} className="flex-1 text-xs">Cancel</Button>
                             </div>
-                          </div>
-                        ) : (
-                          <div className="space-y-1">
-                            <button
-                              onClick={() => {
-                                setRenamingId(doc.id);
-                                setNewName(doc.title);
-                              }}
-                              className="w-full flex items-center gap-3 px-3 py-2 text-sm text-[hsl(253,47%,18%)] hover:bg-[hsl(253,100%,64%,0.15)] rounded-lg transition-colors"
-                            >
+                          </div> : <div className="space-y-1">
+                            <button onClick={() => {
+                      setRenamingId(doc.id);
+                      setNewName(doc.title);
+                    }} className="w-full flex items-center gap-3 px-3 py-2 text-sm text-[hsl(253,47%,18%)] hover:bg-[hsl(253,100%,64%,0.15)] rounded-lg transition-colors">
                               <Edit3 className="w-4 h-4" />
                               Rename
                             </button>
-                            <button
-                              onClick={() => handleDuplicateDocument(doc)}
-                              className="w-full flex items-center gap-3 px-3 py-2 text-sm text-[hsl(253,47%,18%)] hover:bg-[hsl(253,100%,64%,0.15)] rounded-lg transition-colors"
-                            >
+                            <button onClick={() => handleDuplicateDocument(doc)} className="w-full flex items-center gap-3 px-3 py-2 text-sm text-[hsl(253,47%,18%)] hover:bg-[hsl(253,100%,64%,0.15)] rounded-lg transition-colors">
                               <Copy className="w-4 h-4" />
                               Make a Duplicate Copy
                             </button>
-                            <button
-                              onClick={() => handleDeleteDocument(doc.id, doc.title)}
-                              className="w-full flex items-center gap-3 px-3 py-2 text-sm text-red-600 hover:bg-red-50 rounded-lg transition-colors"
-                            >
+                            <button onClick={() => handleDeleteDocument(doc.id, doc.title)} className="w-full flex items-center gap-3 px-3 py-2 text-sm text-red-600 hover:bg-red-50 rounded-lg transition-colors">
                               <Trash2 className="w-4 h-4" />
                               Delete
                             </button>
-                          </div>
-                        )}
+                          </div>}
                       </PopoverContent>
                     </Popover>
                     
@@ -406,76 +353,48 @@ Insects are the largest group of arthropods. The evolution, their evolution, Mur
                         </button>
                         
                         {/* Three-dot menu */}
-                        <Popover open={openMenuId === doc.id} onOpenChange={(open) => setOpenMenuId(open ? doc.id : null)}>
+                        <Popover open={openMenuId === doc.id} onOpenChange={open => setOpenMenuId(open ? doc.id : null)}>
                           <PopoverTrigger asChild>
-                            <button 
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                setOpenMenuId(openMenuId === doc.id ? null : doc.id);
-                              }}
-                              onMouseDown={(e) => e.stopPropagation()}
-                              className={`absolute bottom-3 right-3 w-10 h-10 rounded-full bg-gradient-to-br from-[hsl(253,100%,64%)] to-[hsl(266,100%,70%)] ${openMenuId === doc.id ? 'opacity-100 scale-110' : 'opacity-0 group-hover:opacity-100 hover:scale-110'} hover:shadow-[0_0_20px_hsl(253,100%,64%,0.8)] transition-all duration-200 flex items-center justify-center z-50`}
-                            >
+                            <button onClick={e => {
+                        e.stopPropagation();
+                        setOpenMenuId(openMenuId === doc.id ? null : doc.id);
+                      }} onMouseDown={e => e.stopPropagation()} className={`absolute bottom-3 right-3 w-10 h-10 rounded-full bg-gradient-to-br from-[hsl(253,100%,64%)] to-[hsl(266,100%,70%)] ${openMenuId === doc.id ? 'opacity-100 scale-110' : 'opacity-0 group-hover:opacity-100 hover:scale-110'} hover:shadow-[0_0_20px_hsl(253,100%,64%,0.8)] transition-all duration-200 flex items-center justify-center z-50`}>
                               <MoreVertical className="w-5 h-5 text-white" />
                             </button>
                           </PopoverTrigger>
-                          <PopoverContent 
-                            className="w-48 p-2 bg-[hsl(253,100%,98%)] border-2 border-[hsl(253,80%,85%)] rounded-2xl shadow-[0_8px_32px_hsl(253,100%,64%,0.25)] z-[100]"
-                            sideOffset={8}
-                            onClick={(e) => e.stopPropagation()}
-                          >
-                            {renamingId === doc.id ? (
-                              <div className="p-2 space-y-2">
-                                <Input
-                                  value={newName}
-                                  onChange={(e) => setNewName(e.target.value)}
-                                  placeholder="New name"
-                                  className="text-sm"
-                                  autoFocus
-                                  onKeyDown={(e) => {
-                                    if (e.key === 'Enter') handleRenameDocument(doc.id);
-                                    if (e.key === 'Escape') {
-                                      setRenamingId(null);
-                                      setNewName('');
-                                    }
-                                  }}
-                                />
+                          <PopoverContent className="w-48 p-2 bg-[hsl(253,100%,98%)] border-2 border-[hsl(253,80%,85%)] rounded-2xl shadow-[0_8px_32px_hsl(253,100%,64%,0.25)] z-[100]" sideOffset={8} onClick={e => e.stopPropagation()}>
+                            {renamingId === doc.id ? <div className="p-2 space-y-2">
+                                <Input value={newName} onChange={e => setNewName(e.target.value)} placeholder="New name" className="text-sm" autoFocus onKeyDown={e => {
+                          if (e.key === 'Enter') handleRenameDocument(doc.id);
+                          if (e.key === 'Escape') {
+                            setRenamingId(null);
+                            setNewName('');
+                          }
+                        }} />
                                 <div className="flex gap-2">
                                   <Button size="sm" onClick={() => handleRenameDocument(doc.id)} className="flex-1 text-xs bg-[hsl(253,100%,64%)]">Save</Button>
                                   <Button size="sm" variant="outline" onClick={() => {
-                                    setRenamingId(null);
-                                    setNewName('');
-                                  }} className="flex-1 text-xs">Cancel</Button>
+                            setRenamingId(null);
+                            setNewName('');
+                          }} className="flex-1 text-xs">Cancel</Button>
                                 </div>
-                              </div>
-                            ) : (
-                              <div className="space-y-1">
-                                <button
-                                  onClick={() => {
-                                    setRenamingId(doc.id);
-                                    setNewName(doc.title);
-                                  }}
-                                  className="w-full flex items-center gap-3 px-3 py-2 text-sm text-[hsl(253,47%,18%)] hover:bg-[hsl(253,100%,64%,0.15)] rounded-lg transition-colors"
-                                >
+                              </div> : <div className="space-y-1">
+                                <button onClick={() => {
+                          setRenamingId(doc.id);
+                          setNewName(doc.title);
+                        }} className="w-full flex items-center gap-3 px-3 py-2 text-sm text-[hsl(253,47%,18%)] hover:bg-[hsl(253,100%,64%,0.15)] rounded-lg transition-colors">
                                   <Edit3 className="w-4 h-4" />
                                   Rename
                                 </button>
-                                <button
-                                  onClick={() => handleDuplicateDocument(doc)}
-                                  className="w-full flex items-center gap-3 px-3 py-2 text-sm text-[hsl(253,47%,18%)] hover:bg-[hsl(253,100%,64%,0.15)] rounded-lg transition-colors"
-                                >
+                                <button onClick={() => handleDuplicateDocument(doc)} className="w-full flex items-center gap-3 px-3 py-2 text-sm text-[hsl(253,47%,18%)] hover:bg-[hsl(253,100%,64%,0.15)] rounded-lg transition-colors">
                                   <Copy className="w-4 h-4" />
                                   Make a Duplicate Copy
                                 </button>
-                                <button
-                                  onClick={() => handleDeleteDocument(doc.id, doc.title)}
-                                  className="w-full flex items-center gap-3 px-3 py-2 text-sm text-red-600 hover:bg-red-50 rounded-lg transition-colors"
-                                >
+                                <button onClick={() => handleDeleteDocument(doc.id, doc.title)} className="w-full flex items-center gap-3 px-3 py-2 text-sm text-red-600 hover:bg-red-50 rounded-lg transition-colors">
                                   <Trash2 className="w-4 h-4" />
                                   Delete
                                 </button>
-                              </div>
-                            )}
+                              </div>}
                           </PopoverContent>
                         </Popover>
                         
@@ -575,8 +494,7 @@ Insects are the largest group of arthropods. The evolution, their evolution, Mur
                 </>}
             </TabsContent>
           </Tabs>}
-          </div>
-        )}
+          </div>}
       </div>
     </div>;
 };
