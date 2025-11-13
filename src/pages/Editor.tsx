@@ -760,6 +760,39 @@ const Editor = () => {
     });
   };
 
+  const handleInsertAnkh = (iconId: string, category: string) => {
+    if (!editor) return;
+    
+    editor.commands.insertIcon({
+      iconId,
+      category,
+      width: 80,
+      height: 112,
+      color: 'hsl(253, 100%, 64%)',
+    });
+    
+    // Close the drawer temporarily (will reopen after confirm)
+    setShapesIconsDrawerOpen(false);
+    
+    toast({ 
+      title: 'Ankh Inserted', 
+      description: 'Resize and position the ankh, then click Confirm' 
+    });
+  };
+
+  // Listen for ankh confirmation to reopen drawer
+  useEffect(() => {
+    const handleAnkhConfirmed = () => {
+      setShapesIconsDrawerOpen(true);
+    };
+    
+    window.addEventListener('ankh-confirmed', handleAnkhConfirmed);
+    
+    return () => {
+      window.removeEventListener('ankh-confirmed', handleAnkhConfirmed);
+    };
+  }, []);
+
   // Load and apply saved color preferences on mount
   useEffect(() => {
     const saved = localStorage.getItem('docOneColorPrefs');
@@ -1161,6 +1194,7 @@ const Editor = () => {
       <ShapesIconsDrawer
         open={shapesIconsDrawerOpen}
         onOpenChange={setShapesIconsDrawerOpen}
+        onInsertIcon={handleInsertAnkh}
       />
       
       <OnboardingTour />

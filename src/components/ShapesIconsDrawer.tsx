@@ -6,10 +6,12 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { egyptianAnkhs } from "./icons/EgyptianAnkhs";
 
 interface ShapesIconsDrawerProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  onInsertIcon?: (iconId: string, category: string) => void;
 }
 
 const categories = [
@@ -21,8 +23,14 @@ const categories = [
   { id: 'christianity', name: 'Christianity' },
 ];
 
-export function ShapesIconsDrawer({ open, onOpenChange }: ShapesIconsDrawerProps) {
+export function ShapesIconsDrawer({ open, onOpenChange, onInsertIcon }: ShapesIconsDrawerProps) {
   const [selectedCategory, setSelectedCategory] = useState<string>('shapes');
+
+  const handleAnkhClick = (ankhId: string) => {
+    if (onInsertIcon) {
+      onInsertIcon(ankhId, 'egyptian');
+    }
+  };
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -36,7 +44,7 @@ export function ShapesIconsDrawer({ open, onOpenChange }: ShapesIconsDrawerProps
           </DialogTitle>
           <button 
             onClick={() => onOpenChange(false)}
-            className="absolute top-6 right-8 rounded-lg p-1.5 hover:bg-purple-200/50 transition-colors"
+            className="absolute top-4 right-6 rounded-lg p-1.5 hover:bg-purple-200/50 transition-colors"
             aria-label="Close"
           >
             <X className="h-6 w-6 text-[hsl(253,100%,64%)]" />
@@ -62,9 +70,36 @@ export function ShapesIconsDrawer({ open, onOpenChange }: ShapesIconsDrawerProps
 
         {/* Content Area */}
         <div className="px-8 pb-8 flex-1 overflow-y-auto">
-          <div className="w-full h-full bg-[hsl(270,100%,95%)] rounded-2xl">
-            {/* Content for selected category will go here */}
-          </div>
+          {selectedCategory === 'egyptian' ? (
+            <div className="grid grid-cols-6 gap-6 p-6">
+              {egyptianAnkhs.map((ankh) => {
+                const AnkhComponent = ankh.component;
+                return (
+                  <div
+                    key={ankh.id}
+                    onClick={() => handleAnkhClick(ankh.id)}
+                    className="cursor-pointer hover:scale-110 transition-all duration-200 p-2 rounded-lg hover:bg-purple-200/30"
+                    title={ankh.name}
+                  >
+                    <AnkhComponent 
+                      className="w-full h-auto"
+                      style={{ color: 'hsl(253, 100%, 64%)' }}
+                    />
+                  </div>
+                );
+              })}
+            </div>
+          ) : (
+            <div className="w-full h-full flex items-center justify-center">
+              <p className="text-[hsl(253,100%,30%)] text-lg">
+                {selectedCategory === 'shapes' && 'Shapes coming soon...'}
+                {selectedCategory === 'arrows' && 'Arrows coming soon...'}
+                {selectedCategory === 'sumerian' && 'Sumerian symbols coming soon...'}
+                {selectedCategory === 'sacred' && 'Sacred geometry coming soon...'}
+                {selectedCategory === 'christianity' && 'Christianity symbols coming soon...'}
+              </p>
+            </div>
+          )}
         </div>
       </DialogContent>
     </Dialog>

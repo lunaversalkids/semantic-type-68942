@@ -1,6 +1,7 @@
 import { NodeViewWrapper, NodeViewProps } from '@tiptap/react';
 import { useState } from 'react';
 import { coreShapes } from '../icons/CoreShapes';
+import { egyptianAnkhs } from '../icons/EgyptianAnkhs';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -11,17 +12,29 @@ export const IconNodeView = ({ node, updateAttributes, selected }: NodeViewProps
   const [isEditing, setIsEditing] = useState(false);
   const { iconId, category, width, height, color } = node.attrs;
 
-  const icon = coreShapes.find((s) => s.id === iconId);
+  let icon;
+  if (category === 'egyptian') {
+    icon = egyptianAnkhs.find((a) => a.id === iconId);
+  } else {
+    icon = coreShapes.find((s) => s.id === iconId);
+  }
+  
   if (!icon) return null;
 
   const IconComponent = icon.component;
 
+  const handleConfirm = () => {
+    setIsEditing(false);
+    // Emit event to reopen drawer
+    window.dispatchEvent(new CustomEvent('ankh-confirmed'));
+  };
+
   return (
-    <NodeViewWrapper className="inline-block relative">
+    <NodeViewWrapper className="inline-block relative group">
       <Popover open={isEditing} onOpenChange={setIsEditing}>
         <PopoverTrigger asChild>
           <div
-            className={`inline-flex items-center justify-center cursor-pointer transition-all ${
+            className={`inline-flex items-center justify-center cursor-pointer transition-all relative ${
               selected ? 'ring-2 ring-primary' : ''
             }`}
             style={{ width: `${width}px`, height: `${height}px` }}
@@ -30,6 +43,20 @@ export const IconNodeView = ({ node, updateAttributes, selected }: NodeViewProps
               style={{ color, width: '100%', height: '100%' }}
               strokeWidth={2}
             />
+            
+            {/* Resize handles - only show when selected */}
+            {selected && (
+              <>
+                <div className="absolute -top-2 -left-2 w-4 h-4 bg-gradient-to-br from-[hsl(253,100%,70%)] to-[hsl(253,100%,60%)] rounded-full cursor-nw-resize border-2 border-white shadow-lg" 
+                     style={{ boxShadow: '0 0 10px rgba(107, 91, 206, 0.6)' }} />
+                <div className="absolute -top-2 -right-2 w-4 h-4 bg-gradient-to-br from-[hsl(253,100%,70%)] to-[hsl(253,100%,60%)] rounded-full cursor-ne-resize border-2 border-white shadow-lg"
+                     style={{ boxShadow: '0 0 10px rgba(107, 91, 206, 0.6)' }} />
+                <div className="absolute -bottom-2 -left-2 w-4 h-4 bg-gradient-to-br from-[hsl(253,100%,70%)] to-[hsl(253,100%,60%)] rounded-full cursor-sw-resize border-2 border-white shadow-lg"
+                     style={{ boxShadow: '0 0 10px rgba(107, 91, 206, 0.6)' }} />
+                <div className="absolute -bottom-2 -right-2 w-4 h-4 bg-gradient-to-br from-[hsl(253,100%,70%)] to-[hsl(253,100%,60%)] rounded-full cursor-se-resize border-2 border-white shadow-lg"
+                     style={{ boxShadow: '0 0 10px rgba(107, 91, 206, 0.6)' }} />
+              </>
+            )}
           </div>
         </PopoverTrigger>
         <PopoverContent className="w-80">
@@ -76,6 +103,19 @@ export const IconNodeView = ({ node, updateAttributes, selected }: NodeViewProps
           </div>
         </PopoverContent>
       </Popover>
+      
+      {/* Confirm Button - only show when selected and category is egyptian */}
+      {selected && category === 'egyptian' && (
+        <div className="absolute -bottom-14 left-1/2 transform -translate-x-1/2 z-50">
+          <Button
+            onClick={handleConfirm}
+            className="bg-gradient-to-r from-[hsl(253,100%,64%)] to-[hsl(266,100%,70%)] hover:from-[hsl(253,100%,70%)] hover:to-[hsl(266,100%,75%)] text-white px-6 py-2 rounded-lg shadow-lg font-semibold"
+            style={{ boxShadow: '0 4px 16px rgba(107, 91, 206, 0.4)' }}
+          >
+            Confirm
+          </Button>
+        </div>
+      )}
     </NodeViewWrapper>
   );
 };
