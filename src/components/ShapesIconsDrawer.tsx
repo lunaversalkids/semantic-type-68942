@@ -58,14 +58,7 @@ export function ShapesIconsDrawer({
         {/* Content Area */}
         <div className="px-8 pb-8 flex-1 overflow-y-auto">
           {selectedCategory === 'egyptian' ? <div className="w-full h-full flex items-center justify-center p-6">
-              <div className="relative inline-block max-w-full">
-                <img src={egyptianAnkhsImage} alt="Egyptian Ankhs" className="max-w-full max-h-[400px] object-contain" />
-                
-                {/* Clickable overlay grid - 2 rows x 6 columns */}
-                <div className="absolute inset-0 grid grid-cols-6 grid-rows-2 gap-0">
-                  {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map(num => <div key={num} onClick={() => handleAnkhClick(`ankh${num}`)} className="cursor-pointer hover:bg-purple-300/20 transition-all border border-transparent hover:border-purple-400/30 hover:scale-105" title={`Ankh ${num}`} />)}
-                </div>
-              </div>
+              
             </div> : <div className="w-full h-full flex items-center justify-center">
               <p className="text-[hsl(253,100%,30%)] text-lg">
                 {selectedCategory === 'shapes' && 'Shapes coming soon...'}
