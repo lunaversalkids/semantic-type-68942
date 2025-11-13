@@ -11,6 +11,8 @@ import doublePageIcon from '@/assets/double-page-icon.png';
 import importExportIcon from '@/assets/import-export-icon.png';
 import pageSizerIcon from '@/assets/page-sizer-icon.png';
 import headerFooterIcon from '@/assets/header-footer-icon.png';
+import shapesIconsButton from '@/assets/shapes-icons-button.png';
+import chapterPresetsButton from '@/assets/chapter-presets-button.png';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 interface HeaderProps {
   onHomeClick?: () => void;
@@ -23,6 +25,8 @@ interface HeaderProps {
   onHeaderFooterClick?: () => void;
   onQuotationClick?: () => void;
   onTextFrameClick?: () => void;
+  onShapesIconsClick?: () => void;
+  onChapterPresetsClick?: () => void;
   onPaletteClick?: () => void;
   onExportClick?: () => void;
   onImportClick?: () => void;
@@ -43,6 +47,8 @@ export const Header = ({
   onHeaderFooterClick,
   onQuotationClick,
   onTextFrameClick,
+  onShapesIconsClick,
+  onChapterPresetsClick,
   onPaletteClick,
   onExportClick,
   onImportClick,
@@ -91,6 +97,14 @@ export const Header = ({
 
         <button onClick={onPaletteClick} className="h-9 w-9 border border-[hsl(var(--stroke))] rounded-[var(--r-sm)] grid place-items-center hover:bg-[hsl(var(--panel-2))] transition-colors overflow-hidden" title="Interface Color Palette">
           <img src={paletteIcon} alt="" className="w-full h-full object-cover" />
+        </button>
+
+        <button onClick={onChapterPresetsClick} className="h-9 w-9 border border-[hsl(var(--stroke))] rounded-[var(--r-sm)] grid place-items-center hover:bg-[hsl(var(--panel-2))] transition-colors overflow-hidden" title="Chapter Presets">
+          <img src={chapterPresetsButton} alt="" className="w-full h-full object-cover" />
+        </button>
+
+        <button onClick={onShapesIconsClick} className="h-9 w-9 border border-[hsl(var(--stroke))] rounded-[var(--r-sm)] grid place-items-center hover:bg-[hsl(var(--panel-2))] transition-colors overflow-hidden" title="Shapes and Icons">
+          <img src={shapesIconsButton} alt="" className="w-full h-full object-cover" />
         </button>
 
         <button onClick={onTextFrameClick} className="h-9 w-9 border border-[hsl(var(--stroke))] rounded-[var(--r-sm)] grid place-items-center hover:bg-[hsl(var(--panel-2))] transition-colors overflow-hidden" title="Text Box">
