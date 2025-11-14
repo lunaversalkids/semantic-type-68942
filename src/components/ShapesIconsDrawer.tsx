@@ -58,28 +58,8 @@ export function ShapesIconsDrawer({
     // Get the ankh number from the id (e.g., 'ankh-1' -> 1)
     const ankhNum = parseInt(ankhId.replace('ankh-', ''));
     
-    // If in edit mode, just select the ankh
-    if (isEditMode) {
-      setSelectedAnkhIndex(ankhNum);
-      return;
-    }
-    
-    // If not in edit mode, insert the icon
-    if (onInsertIcon) {
-      const cropData = iconCrops[ankhNum];
-      
-      // Pass crop data if available
-      if (cropData) {
-        onInsertIcon(ankhId, 'egyptian', {
-          cropX: cropData.x,
-          cropY: cropData.y,
-          cropWidth: cropData.width,
-          cropHeight: cropData.height,
-        });
-      } else {
-        onInsertIcon(ankhId, 'egyptian');
-      }
-    }
+    // Clicking always just selects the icon
+    setSelectedAnkhIndex(ankhNum);
   };
 
   const handleSaveCrop = (iconIndex: number, crop: PixelCrop) => {
@@ -184,8 +164,6 @@ export function ShapesIconsDrawer({
                       className={`w-full h-full border-2 transition-all cursor-pointer ${
                         isSelected 
                           ? 'border-[hsl(253,100%,64%)] bg-purple-200/50' 
-                          : hasCrop
-                          ? 'border-green-400/50 hover:border-[hsl(253,100%,64%)] hover:bg-purple-200/30'
                           : 'border-transparent hover:border-[hsl(253,100%,64%)] hover:bg-purple-200/30'
                       }`}
                       style={{ aspectRatio: '1 / 1.3' }}

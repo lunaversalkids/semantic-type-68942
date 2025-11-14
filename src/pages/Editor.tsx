@@ -797,27 +797,12 @@ const Editor = () => {
       }),
     });
     
-    // Close the drawer temporarily (will reopen after confirm)
-    setShapesIconsDrawerOpen(false);
-    
     toast({ 
       title: 'Ankh Inserted', 
       description: cropData ? 'Custom cropped ankh inserted!' : 'Resize and position the ankh, then click Confirm' 
     });
   };
 
-  // Listen for ankh confirmation to reopen drawer
-  useEffect(() => {
-    const handleAnkhConfirmed = () => {
-      setShapesIconsDrawerOpen(true);
-    };
-    
-    window.addEventListener('ankh-confirmed', handleAnkhConfirmed);
-    
-    return () => {
-      window.removeEventListener('ankh-confirmed', handleAnkhConfirmed);
-    };
-  }, []);
 
   // Listen for icon crop requests
   useEffect(() => {
