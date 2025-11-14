@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Search, Plus, Edit, ArrowLeft } from "lucide-react";
+import { Search, Plus, Edit, ArrowLeft, ChevronLeft, ChevronRight } from "lucide-react";
 import { IconCropEditor } from "./IconCropEditor";
 import egyptianAnkhsGrid from "@/assets/egyptian-ankhs-grid.png";
 import { PixelCrop } from "react-image-crop";
@@ -50,6 +50,18 @@ export function ShapesIconsDrawer({
   const [iconCrops, setIconCrops] = useState<Record<number, PixelCrop>>({});
   const [selectedAnkhIndex, setSelectedAnkhIndex] = useState<number | null>(null);
   const [previousCategory, setPreviousCategory] = useState<string>('animals');
+
+  const handleNextCategory = () => {
+    const currentIndex = categories.findIndex(cat => cat.id === selectedCategory);
+    const nextIndex = (currentIndex + 1) % categories.length;
+    setSelectedCategory(categories[nextIndex].id);
+  };
+
+  const handlePrevCategory = () => {
+    const currentIndex = categories.findIndex(cat => cat.id === selectedCategory);
+    const prevIndex = currentIndex === 0 ? categories.length - 1 : currentIndex - 1;
+    setSelectedCategory(categories[prevIndex].id);
+  };
 
   // Load saved crops from localStorage on mount
   useEffect(() => {
@@ -138,13 +150,31 @@ export function ShapesIconsDrawer({
               </div>
               
                {/* Category Tabs with Plus Icon - scrollable horizontally */}
-              <div className="w-full border-t border-[hsl(253,60%,88%)]">
+               <div className="w-full border-t border-[hsl(253,60%,88%)]">
                 <div className="relative overflow-x-auto overflow-y-hidden pt-3 pb-1 scrollbar-hide">
                   <div className="flex gap-3 items-center px-2 min-w-min">
+                    {/* Left Arrow */}
+                    <button
+                      onClick={handlePrevCategory}
+                      className="flex-shrink-0 w-5 h-5 flex items-center justify-center bg-white border border-[hsl(253,100%,30%)]/30 rounded-[3px] hover:bg-[hsl(253,100%,64%)]/20 hover:border-[hsl(253,100%,64%)] transition-all duration-200"
+                      aria-label="Previous category"
+                    >
+                      <ChevronLeft className="w-3 h-3 text-[hsl(253,100%,30%)]" strokeWidth={2.5} />
+                    </button>
+                    
                     {/* Plus Icon Box */}
                     <div className="flex-shrink-0 w-5 h-5 flex items-center justify-center bg-white border border-[hsl(253,100%,30%)]/30 rounded-[3px]">
                       <Plus className="w-3 h-3 text-[hsl(253,100%,30%)]/50" strokeWidth={2.5} />
                     </div>
+                    
+                    {/* Right Arrow */}
+                    <button
+                      onClick={handleNextCategory}
+                      className="flex-shrink-0 w-5 h-5 flex items-center justify-center bg-white border border-[hsl(253,100%,30%)]/30 rounded-[3px] hover:bg-[hsl(253,100%,64%)]/20 hover:border-[hsl(253,100%,64%)] transition-all duration-200"
+                      aria-label="Next category"
+                    >
+                      <ChevronRight className="w-3 h-3 text-[hsl(253,100%,30%)]" strokeWidth={2.5} />
+                    </button>
                     
                     {/* Category Tabs */}
                     {categories.map(category => (
