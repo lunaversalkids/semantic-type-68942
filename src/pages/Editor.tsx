@@ -1360,9 +1360,9 @@ const Editor = () => {
         open={iconCropDialogOpen}
         onOpenChange={setIconCropDialogOpen}
         currentCrop={
-          currentIconCropData?.cropX !== null
+          currentIconCropData && currentIconCropData.cropX !== null
             ? {
-                cropX: currentIconCropData.cropX!,
+                cropX: currentIconCropData.cropX,
                 cropY: currentIconCropData.cropY!,
                 cropWidth: currentIconCropData.cropWidth!,
                 cropHeight: currentIconCropData.cropHeight!,
