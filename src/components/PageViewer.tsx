@@ -246,11 +246,11 @@ export const PageViewer = ({ isOpen, onClose, totalPages, onPageClick, onAddPage
                       transformOrigin: 'top left',
                       width: '1000%',
                       height: '1000%',
-                      fontSize: '14px',
+                      fontSize: '180px',
                       lineHeight: '1.6',
                       fontFamily: 'system-ui, -apple-system, sans-serif',
                       color: '#000',
-                      padding: '40px'
+                      padding: '400px'
                     }}
                     dangerouslySetInnerHTML={{ 
                       __html: pageContents[pageNum - 1] || '<p style="color: #999;">Empty page</p>' 
