@@ -153,13 +153,24 @@ export function ShapesIconsDrawer({
                   const isSelected = selectedAnkhIndex === ankhNum;
                   const hasCrop = iconCrops[ankhNum] !== undefined;
                   return (
-                    <button
+                  <button
                       key={index}
                       onClick={() => handleAnkhClick(`ankh-${ankhNum}`)}
                       draggable
                       onDragStart={(e) => {
                         e.dataTransfer.setData('iconId', `ankh-${ankhNum}`);
                         e.dataTransfer.setData('category', 'egyptian');
+                        
+                        // Include crop data if it exists
+                        const cropData = iconCrops[ankhNum];
+                        if (cropData) {
+                          e.dataTransfer.setData('cropData', JSON.stringify({
+                            cropX: cropData.x,
+                            cropY: cropData.y,
+                            cropWidth: cropData.width,
+                            cropHeight: cropData.height,
+                          }));
+                        }
                       }}
                       className={`w-full h-full border-2 transition-all cursor-pointer ${
                         isSelected 
