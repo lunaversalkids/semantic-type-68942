@@ -160,6 +160,30 @@ export function ShapesIconsDrawer({
                       onClick={() => handleAnkhClick(`ankh-${ankhNum}`)}
                       draggable
                       onDragStart={(e) => {
+                        // Create a custom drag preview
+                        const dragPreview = document.createElement('div');
+                        dragPreview.style.position = 'absolute';
+                        dragPreview.style.top = '-1000px';
+                        dragPreview.style.width = '100px';
+                        dragPreview.style.height = '130px';
+                        dragPreview.style.opacity = '0.7';
+                        dragPreview.style.pointerEvents = 'none';
+                        
+                        if (cropData) {
+                          dragPreview.style.backgroundImage = `url(${egyptianAnkhsGrid})`;
+                          dragPreview.style.backgroundPosition = `-${cropData.x}px -${cropData.y}px`;
+                          dragPreview.style.backgroundSize = `${cropData.width > 0 ? (100 * 100) / cropData.width : 100}% auto`;
+                          dragPreview.style.backgroundRepeat = 'no-repeat';
+                        }
+                        
+                        document.body.appendChild(dragPreview);
+                        e.dataTransfer.setDragImage(dragPreview, 50, 65);
+                        
+                        // Clean up the preview element after drag starts
+                        setTimeout(() => {
+                          document.body.removeChild(dragPreview);
+                        }, 0);
+                        
                         e.dataTransfer.setData('iconId', `ankh-${ankhNum}`);
                         e.dataTransfer.setData('category', 'egyptian');
                         
@@ -173,8 +197,8 @@ export function ShapesIconsDrawer({
                           }));
                         }
                         
-                        // Close the drawer so user can see the document
-                        onOpenChange(false);
+                        // Close the drawer after a brief delay so drag preview is set
+                        setTimeout(() => onOpenChange(false), 50);
                       }}
                       className={`relative w-full h-full border-2 transition-all cursor-pointer overflow-hidden ${
                         isSelected 
