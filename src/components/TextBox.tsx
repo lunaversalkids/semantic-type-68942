@@ -163,10 +163,10 @@ export const TextBox = ({
       enableResizing={
         !isLocked && isSelected
           ? {
-              top: false,
-              right: false,
-              bottom: false,
-              left: false,
+              top: true,
+              right: true,
+              bottom: true,
+              left: true,
               topRight: true,
               bottomRight: true,
               bottomLeft: true,
@@ -177,6 +177,10 @@ export const TextBox = ({
       resizeHandleComponent={
         isSelected && !isLocked
           ? {
+              top: <div className="w-full h-2 cursor-ns-resize hover:bg-purple-400/30 transition-colors" />,
+              right: <div className="w-2 h-full cursor-ew-resize hover:bg-purple-400/30 transition-colors" />,
+              bottom: <div className="w-full h-2 cursor-ns-resize hover:bg-purple-400/30 transition-colors" />,
+              left: <div className="w-2 h-full cursor-ew-resize hover:bg-purple-400/30 transition-colors" />,
               topRight: <CornerHandle corner="topRight" />,
               bottomRight: <CornerHandle corner="bottomRight" />,
               bottomLeft: <CornerHandle corner="bottomLeft" />,
@@ -185,6 +189,10 @@ export const TextBox = ({
           : undefined
       }
       resizeHandleStyles={{
+        top: { zIndex: 1001 },
+        right: { zIndex: 1001 },
+        bottom: { zIndex: 1001 },
+        left: { zIndex: 1001 },
         topRight: { zIndex: 1001 },
         bottomRight: { zIndex: 1001 },
         bottomLeft: { zIndex: 1001 },
@@ -203,7 +211,7 @@ export const TextBox = ({
           isSelected ? 'shadow-lg' : 'shadow-sm'
         }`}
         style={{
-          backgroundColor: backgroundColor || 'rgba(255, 255, 255, 0.95)',
+          backgroundColor: backgroundColor || 'transparent',
           borderWidth: isSelected ? '3px' : '0',
           borderStyle: isSelected ? 'dashed' : 'none',
           borderColor: isSelected ? (isLocked ? '#F87171' : '#A78BFA') : 'transparent',
