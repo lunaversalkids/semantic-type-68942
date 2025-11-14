@@ -17,7 +17,7 @@ const Switch = React.forwardRef<
   >
     <span 
       className={cn(
-        "absolute inset-0 flex items-center justify-center text-[10px] font-bold text-white transition-opacity",
+        "absolute right-1 top-1/2 -translate-y-1/2 text-[9px] font-bold text-white transition-opacity",
         "data-[state=checked]:opacity-100 data-[state=unchecked]:opacity-0 pointer-events-none"
       )}
       data-state={props.checked ? "checked" : "unchecked"}
@@ -26,7 +26,7 @@ const Switch = React.forwardRef<
     </span>
     <span 
       className={cn(
-        "absolute inset-0 flex items-center justify-center text-[10px] font-bold text-gray-600 transition-opacity",
+        "absolute left-1 top-1/2 -translate-y-1/2 text-[9px] font-bold text-gray-700 transition-opacity",
         "data-[state=checked]:opacity-0 data-[state=unchecked]:opacity-100 pointer-events-none"
       )}
       data-state={props.checked ? "checked" : "unchecked"}
