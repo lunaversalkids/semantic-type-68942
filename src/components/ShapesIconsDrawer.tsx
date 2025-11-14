@@ -63,9 +63,9 @@ export function ShapesIconsDrawer({
   };
 
   const handleSaveCrop = (iconIndex: number, crop: PixelCrop) => {
-    setIconCrops(prev => ({ ...prev, [iconIndex]: crop }));
-    // Store in localStorage so it persists
-    localStorage.setItem('egyptian-ankh-crops', JSON.stringify({ ...iconCrops, [iconIndex]: crop }));
+    const newCrops = { ...iconCrops, [iconIndex]: crop };
+    setIconCrops(newCrops);
+    localStorage.setItem('egyptian-ankh-crops', JSON.stringify(newCrops));
   };
 
   const handleCloseEditor = () => {
