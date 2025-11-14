@@ -254,7 +254,7 @@ Insects are the largest group of arthropods. The evolution, their evolution, Mur
           {!fromEditor && (
             <button 
               onClick={() => setIsCategoriesVisible(!isCategoriesVisible)} 
-              className="mt-4 p-3 rounded-full bg-gradient-to-br from-[hsl(253,100%,64%)] to-[hsl(266,100%,70%)] shadow-[0_0_20px_hsl(253,100%,64%,0.4)] hover:shadow-[0_0_40px_hsl(253,100%,64%,0.6)] transition-all duration-300 focus:outline-none animate-bounce"
+              className="mt-8 p-3 rounded-full bg-gradient-to-br from-[hsl(253,100%,64%)] to-[hsl(266,100%,70%)] shadow-[0_0_20px_hsl(253,100%,64%,0.4)] hover:shadow-[0_0_40px_hsl(253,100%,64%,0.6)] transition-all duration-300 focus:outline-none animate-bounce"
               aria-label={isCategoriesVisible ? "Hide templates" : "Show templates"}
             >
               <svg 
