@@ -39,6 +39,8 @@ interface HeaderProps {
   onSaveDocument?: () => void;
   onRenameDocument?: () => void;
   onSaveAsTemplate?: () => void;
+  onLayoutAssistantToggle?: () => void;
+  layoutAssistantActive?: boolean;
 }
 export const Header = ({
   onHomeClick,
@@ -64,7 +66,9 @@ export const Header = ({
   documentName = 'Untitled',
   onSaveDocument,
   onRenameDocument,
-  onSaveAsTemplate
+  onSaveAsTemplate,
+  onLayoutAssistantToggle,
+  layoutAssistantActive
 }: HeaderProps) => {
   return <header className="bg-[hsl(var(--panel))] border border-[hsl(var(--stroke))] rounded-[var(--radius)] shadow-[0_10px_28px_rgba(96,48,200,.16)] p-2 grid grid-cols-[auto_1fr_auto] items-center gap-3">
       {/* Brand */}
@@ -140,6 +144,14 @@ export const Header = ({
 
         <button onClick={onHeaderFooterClick} className="h-9 w-9 border border-[hsl(var(--stroke))] rounded-[var(--r-sm)] grid place-items-center hover:bg-[hsl(var(--panel-2))] transition-colors overflow-hidden" title="Header & Footer">
           <img src={headerFooterIcon} alt="" className="w-full h-full object-cover" />
+        </button>
+
+        <button 
+          onClick={onLayoutAssistantToggle} 
+          className={`h-9 w-9 border border-[hsl(var(--stroke))] rounded-[var(--r-sm)] grid place-items-center hover:bg-[hsl(var(--panel-2))] transition-colors ${layoutAssistantActive ? 'bg-[hsl(253,100%,64%)] text-white' : ''}`}
+          title="Layout Assistant"
+        >
+          <Navigation className="w-5 h-5" />
         </button>
 
         <button onClick={onPageSizerClick} className="h-9 w-9 border border-[hsl(var(--stroke))] rounded-[var(--r-sm)] grid place-items-center hover:bg-[hsl(var(--panel-2))] transition-colors overflow-hidden" title="Page Sizer">
