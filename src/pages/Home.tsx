@@ -180,8 +180,8 @@ Insects are the largest group of arthropods. The evolution, their evolution, Mur
   const tabs = ['Recents', 'Basic', 'Reports', 'Books', 'Study Books', 'Letters'];
   return <div className="min-h-screen flex flex-col items-center justify-center p-4 md:p-8 relative overflow-hidden animate-fade-in" style={{
     backgroundImage: isCategoriesVisible ? `url(${estherBackground})` : `url(${homeBackground})`,
-    backgroundSize: window.innerWidth >= 1024 ? 'contain' : isCategoriesVisible ? '100% auto' : 'cover',
-    backgroundPosition: isCategoriesVisible ? window.innerWidth >= 1024 ? 'center 12%' : 'center top' : 'center',
+    backgroundSize: window.innerWidth >= 1024 ? '100% 100%' : isCategoriesVisible ? '100% auto' : 'cover',
+    backgroundPosition: isCategoriesVisible ? window.innerWidth >= 1024 ? 'left center' : 'center top' : 'center',
     backgroundRepeat: 'no-repeat',
     backgroundAttachment: isCategoriesVisible ? 'fixed' : 'scroll'
   }}>
@@ -271,7 +271,7 @@ Insects are the largest group of arthropods. The evolution, their evolution, Mur
         </div>
 
         {/* Templates section or Recent documents only */}
-        {(isCategoriesVisible || fromEditor) && <div className="w-[95%] md:w-[85%] lg:w-full max-w-4xl md:max-w-3xl lg:max-w-5xl bg-[hsl(253,60%,92%)] rounded-lg md:rounded-xl lg:rounded-[28px] p-2 md:p-3 lg:p-10 shadow-[0_0_60px_hsl(253,100%,64%,0.4),0_12px_48px_hsl(253,100%,64%,0.3),0_0_100px_hsl(253,100%,64%,0.2)] border-[3px] border-[hsl(253,80%,85%)] backdrop-blur-xl animate-fade-in relative z-10 overflow-hidden">
+        {(isCategoriesVisible || fromEditor) && <div className="w-[95%] md:w-[85%] lg:w-full max-w-4xl md:max-w-3xl lg:max-w-5xl bg-[hsl(253,60%,92%)] rounded-lg md:rounded-xl lg:rounded-[28px] p-2 md:p-3 lg:p-10 shadow-[0_0_60px_hsl(253,100%,64%,0.4),0_12px_48px_hsl(253,100%,64%,0.3),0_0_100px_hsl(253,100%,64%,0.2)] border-[3px] border-[hsl(253,80%,85%)] backdrop-blur-xl animate-fade-in relative z-10 overflow-visible">
           {fromEditor ?
         // Simple recent documents view when coming from editor
         <div className="space-y-3 md:space-y-4 lg:space-y-6 overflow-hidden">
@@ -301,7 +301,7 @@ Insects are the largest group of arthropods. The evolution, their evolution, Mur
                 </button>
               </div>
 
-              <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4 lg:gap-6 overflow-hidden">
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4 lg:gap-6 p-4 overflow-visible">
                 {recentDocs.map((doc, index) => <div key={index} className="group relative aspect-[3/4] rounded-[22px] overflow-hidden border-[3px] border-[hsl(253,80%,88%)] hover:border-[hsl(253,100%,64%)] transition-all duration-300 hover:scale-105 shadow-[0_0_20px_hsl(253,100%,64%,0.12)] hover:shadow-[0_0_40px_hsl(253,100%,64%,0.35),0_12px_40px_hsl(253,100%,64%,0.3)]">
                     <button onClick={() => handleOpenRecent(doc.id)} className="w-full h-full">
                       <div className="w-full h-full bg-white p-3 md:p-4 lg:p-8 overflow-hidden flex flex-col">
