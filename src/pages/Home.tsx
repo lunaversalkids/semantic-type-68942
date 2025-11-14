@@ -180,7 +180,7 @@ Insects are the largest group of arthropods. The evolution, their evolution, Mur
   return <div className="min-h-screen flex flex-col items-center justify-center p-4 md:p-8 relative overflow-hidden animate-fade-in" style={{
     backgroundImage: isCategoriesVisible ? `url(${estherBackground})` : `url(${homeBackground})`,
     backgroundSize: window.innerWidth >= 1024 ? 'cover' : isCategoriesVisible ? '100% auto' : 'cover',
-    backgroundPosition: isCategoriesVisible ? window.innerWidth >= 1024 ? 'center 12%' : 'center top' : 'center',
+    backgroundPosition: isCategoriesVisible ? window.innerWidth >= 1024 ? '40% 12%' : 'center top' : 'center',
     backgroundRepeat: 'no-repeat',
     backgroundAttachment: isCategoriesVisible ? 'fixed' : 'scroll'
   }}>
