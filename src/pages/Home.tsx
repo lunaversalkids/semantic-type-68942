@@ -302,14 +302,15 @@ Insects are the largest group of arthropods. The evolution, their evolution, Mur
               </div>
 
               <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8 lg:gap-10">
-                {recentDocs.map((doc, index) => <div key={index} className="group relative aspect-[3/4] rounded-[22px] overflow-hidden border-[3px] border-[hsl(253,80%,88%)] hover:border-[hsl(253,100%,64%)] transition-all duration-300 hover:scale-105 shadow-[0_4px_12px_hsl(253,100%,64%,0.2)] hover:shadow-[0_8px_30px_hsl(253,100%,64%,0.4),0_4px_20px_hsl(253,100%,64%,0.3)]">
-                    <button onClick={() => handleOpenRecent(doc.id)} className="w-full h-full">
-                      <div className="w-full h-full bg-white p-3 md:p-4 lg:p-8 overflow-hidden flex flex-col">
-                        <div className="text-left text-xs md:text-sm lg:text-[15px] leading-relaxed text-[hsl(253,47%,18%)] whitespace-pre-line font-serif line-clamp-[12] md:line-clamp-[16] lg:line-clamp-[20]">
-                          {doc.thumbnail}
+                {recentDocs.map((doc, index) => <div key={index} className="p-2 transition-transform duration-300 hover:scale-105">
+                    <div className="group relative aspect-[3/4] rounded-[22px] overflow-hidden border-[3px] border-[hsl(253,80%,88%)] hover:border-[hsl(253,100%,64%)] transition-all duration-300 shadow-[0_8px_24px_hsl(253,100%,64%,0.35),0_4px_16px_hsl(253,100%,64%,0.25)] hover:shadow-[0_12px_48px_hsl(253,100%,64%,0.6),0_8px_36px_hsl(253,100%,64%,0.45)]">
+                      <button onClick={() => handleOpenRecent(doc.id)} className="w-full h-full">
+                        <div className="w-full h-full bg-white p-3 md:p-4 lg:p-8 overflow-hidden flex flex-col">
+                          <div className="text-left text-xs md:text-sm lg:text-[15px] leading-relaxed text-[hsl(253,47%,18%)] whitespace-pre-line font-serif line-clamp-[12] md:line-clamp-[16] lg:line-clamp-[20]">
+                            {doc.thumbnail}
+                          </div>
                         </div>
-                      </div>
-                    </button>
+                      </button>
                     
                     {/* Three-dot menu */}
                     <Popover open={openMenuId === doc.id} onOpenChange={open => setOpenMenuId(open ? doc.id : null)}>
@@ -363,6 +364,7 @@ Insects are the largest group of arthropods. The evolution, their evolution, Mur
                         {doc.title}
                       </p>
                     </div>
+                    </div>
                   </div>)}
               </div>
             </div> :
@@ -382,7 +384,8 @@ Insects are the largest group of arthropods. The evolution, their evolution, Mur
                 </div>
                 
                 <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8 lg:gap-10">
-                  {activeTab === 'Recents' ? recentDocs.map((doc, index) => <div key={index} className="group relative aspect-[3/4] rounded-[22px] overflow-hidden border-[3px] border-[hsl(253,80%,88%)] hover:border-[hsl(253,100%,64%)] transition-all duration-300 hover:scale-105 shadow-[0_4px_12px_hsl(253,100%,64%,0.2)] hover:shadow-[0_8px_30px_hsl(253,100%,64%,0.4),0_4px_20px_hsl(253,100%,64%,0.3)]">
+                  {activeTab === 'Recents' ? recentDocs.map((doc, index) => <div key={index} className="p-2 transition-transform duration-300 hover:scale-105">
+                      <div className="group relative aspect-[3/4] rounded-[22px] overflow-hidden border-[3px] border-[hsl(253,80%,88%)] hover:border-[hsl(253,100%,64%)] transition-all duration-300 shadow-[0_8px_24px_hsl(253,100%,64%,0.35),0_4px_16px_hsl(253,100%,64%,0.25)] hover:shadow-[0_12px_48px_hsl(253,100%,64%,0.6),0_8px_36px_hsl(253,100%,64%,0.45)]">
                         <button onClick={() => handleOpenRecent(doc.id)} className="w-full h-full">
                           <div className="w-full h-full bg-white p-3 md:p-4 lg:p-8 overflow-hidden flex flex-col">
                             <div className="text-left text-xs md:text-sm lg:text-[15px] leading-relaxed text-[hsl(253,47%,18%)] whitespace-pre-line font-serif overflow-y-auto overflow-x-hidden h-full pr-2 pb-2">
@@ -442,6 +445,7 @@ Insects are the largest group of arthropods. The evolution, their evolution, Mur
                           <p className="text-white text-sm font-bold text-center truncate drop-shadow-md">
                             {doc.title}
                           </p>
+                        </div>
                         </div>
                       </div>) : bookTemplates.map((template, index) => <button key={index} onClick={() => handleStartWriting()} className="group relative aspect-[3/4] rounded-[22px] overflow-hidden border-[3px] border-[hsl(253,80%,88%)] hover:border-[hsl(253,100%,64%)] transition-all duration-300 hover:scale-105 shadow-[0_0_20px_hsl(253,100%,64%,0.12)] hover:shadow-[0_0_40px_hsl(253,100%,64%,0.35),0_12px_40px_hsl(253,100%,64%,0.3)]">
                         {template.thumbnail === 'gradient' ? <div className="w-full h-full flex items-center justify-center" style={{
