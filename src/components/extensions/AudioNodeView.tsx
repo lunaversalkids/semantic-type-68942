@@ -11,7 +11,7 @@ interface AudioNodeViewProps {
 }
 
 export const AudioNodeView = ({ node, updateAttributes, selected }: AudioNodeViewProps) => {
-  const { src, width, height } = node.attrs;
+  const { src, width, height, diamondSize } = node.attrs;
   const [isExpanded, setIsExpanded] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
@@ -119,30 +119,67 @@ export const AudioNodeView = ({ node, updateAttributes, selected }: AudioNodeVie
           
           {!isExpanded ? (
             // Purple diamond collapsed state
-            <div
-              onClick={() => setIsExpanded(true)}
-              className="cursor-pointer inline-block"
-              style={{
-                width: '60px',
-                height: '60px',
-                background: 'linear-gradient(135deg, hsl(280, 100%, 50%), hsl(280, 100%, 65%))',
-                transform: 'rotate(45deg)',
-                borderRadius: '8px',
-                boxShadow: '0 4px 12px rgba(168, 85, 247, 0.4)',
-              }}
-            >
+            <div className="relative inline-block">
               <div
+                onClick={() => setIsExpanded(true)}
+                className="cursor-pointer inline-block"
                 style={{
-                  transform: 'rotate(-45deg)',
-                  width: '100%',
-                  height: '100%',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
+                  width: `${diamondSize}px`,
+                  height: `${diamondSize}px`,
+                  transform: 'rotate(45deg)',
+                  background: 'linear-gradient(135deg, #a855f7, #9333ea)',
+                  borderRadius: '8px',
+                  boxShadow: '0 4px 12px rgba(168, 85, 247, 0.4)',
                 }}
               >
-                <Play className="w-6 h-6 text-white" />
+                <div
+                  style={{
+                    transform: 'rotate(-45deg)',
+                    width: '100%',
+                    height: '100%',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                >
+                  <Play className="w-6 h-6 text-white" />
+                </div>
               </div>
+              
+              {/* Resize Handle for Diamond */}
+              {selected && (
+                <div
+                  className="absolute w-3 h-3 bg-primary rounded cursor-se-resize"
+                  style={{
+                    bottom: '-6px',
+                    right: '-6px',
+                  }}
+                  onMouseDown={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    const startX = e.clientX;
+                    const startY = e.clientY;
+                    const startSize = diamondSize;
+
+                    const handleMouseMove = (e: MouseEvent) => {
+                      const deltaX = e.clientX - startX;
+                      const deltaY = e.clientY - startY;
+                      const delta = Math.max(deltaX, deltaY);
+                      updateAttributes({
+                        diamondSize: Math.max(40, startSize + delta),
+                      });
+                    };
+
+                    const handleMouseUp = () => {
+                      document.removeEventListener('mousemove', handleMouseMove);
+                      document.removeEventListener('mouseup', handleMouseUp);
+                    };
+
+                    document.addEventListener('mousemove', handleMouseMove);
+                    document.addEventListener('mouseup', handleMouseUp);
+                  }}
+                />
+              )}
             </div>
           ) : (
             // Expanded audio player
