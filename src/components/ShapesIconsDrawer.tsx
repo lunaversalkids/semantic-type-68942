@@ -74,39 +74,9 @@ export function ShapesIconsDrawer({
   };
 
   const handleSaveCrop = (iconIndex: number, crop: PixelCrop) => {
-    const newCrops = { ...iconCrops, [iconIndex]: crop };
-    setIconCrops(newCrops);
-    localStorage.setItem('egyptian-ankh-crops', JSON.stringify(newCrops));
-  };
-
-  const getAnkhDisplayStyle = (ankhNum: number, cropData?: PixelCrop) => {
-    const gridImageWidth = 1024;
-    const gridImageHeight = 1024;
-    
-    if (cropData) {
-      // Calculate how much to scale the 1024x1024 grid so the crop fills the container
-      const scale = 1024 / Math.max(cropData.width, cropData.height);
-      
-      return {
-        backgroundImage: `url(${egyptianAnkhsGrid})`,
-        backgroundSize: `${1024 * scale}px ${1024 * scale}px`,
-        backgroundPosition: `-${cropData.x * scale}px -${cropData.y * scale}px`,
-        backgroundRepeat: 'no-repeat' as const,
-      };
-    } else {
-      // Fallback to grid positioning
-      const col = (ankhNum - 1) % 4;
-      const row = Math.floor((ankhNum - 1) / 4);
-      const percentX = (col * 100) / 3;
-      const percentY = (row * 100) / 3;
-      
-      return {
-        backgroundImage: `url(${egyptianAnkhsGrid})`,
-        backgroundSize: '400% 400%',
-        backgroundPosition: `${percentX}% ${percentY}%`,
-        backgroundRepeat: 'no-repeat' as const,
-      };
-    }
+    setIconCrops(prev => ({ ...prev, [iconIndex]: crop }));
+    // Store in localStorage so it persists
+    localStorage.setItem('egyptian-ankh-crops', JSON.stringify({ ...iconCrops, [iconIndex]: crop }));
   };
 
   const handleCloseEditor = () => {
@@ -175,46 +145,27 @@ export function ShapesIconsDrawer({
                 onClose={handleCloseEditor}
               />
             ) : (
-              <div className="grid grid-cols-4 gap-4 p-4 max-w-3xl mx-auto">
+              <div className="relative max-w-3xl mx-auto">
+              <img src={egyptianAnkhsGrid} alt="Egyptian Ankhs Grid" className="w-full h-auto block" />
+              <div className="absolute inset-0 grid grid-cols-4 grid-rows-4" style={{ padding: '2% 8%' }}>
                 {Array.from({ length: 16 }).map((_, index) => {
-                  const ankhNum = index + 1;
-                  const cropData = iconCrops[ankhNum];
-                  const hasCrop = !!cropData;
-                  
                   return (
-                    <div
-                      key={ankhNum}
-                      className="relative"
-                    >
-                      <div
-                        style={{
-                          ...getAnkhDisplayStyle(ankhNum, cropData),
-                          aspectRatio: cropData ? `${cropData.width} / ${cropData.height}` : '1 / 1.3',
-                        }}
-                        className="w-full cursor-pointer hover:ring-4 ring-[hsl(253,100%,64%)] hover:bg-purple-200/20 transition-all rounded-lg"
-                        onClick={() => handleAnkhClick(`ankh-${ankhNum}`)}
-                        draggable
-                        onDragStart={(e) => {
-                          e.dataTransfer.setData('iconId', `ankh-${ankhNum}`);
-                          e.dataTransfer.setData('category', 'egyptian');
-                          if (cropData) {
-                            e.dataTransfer.setData('cropData', JSON.stringify({
-                              cropX: cropData.x,
-                              cropY: cropData.y,
-                              cropWidth: cropData.width,
-                              cropHeight: cropData.height,
-                            }));
-                          }
-                        }}
-                        title={`Ankh ${ankhNum}${hasCrop ? ' (Cropped)' : ''}`}
-                      />
-                      {hasCrop && (
-                        <div className="absolute top-1 right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-white shadow-lg" title="Custom crop applied" />
-                      )}
-                    </div>
+                    <button
+                      key={index}
+                      onClick={() => handleAnkhClick(`ankh-${index + 1}`)}
+                      draggable
+                      onDragStart={(e) => {
+                        e.dataTransfer.setData('iconId', `ankh-${index + 1}`);
+                        e.dataTransfer.setData('category', 'egyptian');
+                      }}
+                      className="w-full h-full border-2 border-transparent hover:border-[hsl(253,100%,64%)] hover:bg-purple-200/30 transition-all cursor-pointer"
+                      style={{ aspectRatio: '1 / 1.3' }}
+                      title={`Ankh ${index + 1}`}
+                    />
                   );
                 })}
               </div>
+            </div>
             )
           ) : <div className="w-full h-full flex items-center justify-center">
               <p className="text-[hsl(253,100%,30%)] text-lg">
