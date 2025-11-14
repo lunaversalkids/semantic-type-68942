@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { ChevronDown, ChevronLeft, AlignLeft, AlignCenter, AlignRight, AlignJustify, ChevronRight, Indent, Outdent, Check, Info } from 'lucide-react';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Button } from '@/components/ui/button';
@@ -29,6 +29,43 @@ export const TextStylePanel = ({
   const [capitalizationMode, setCapitalizationMode] = useState('None');
   const formattingModes = ['Normal', 'Single Spacing', '1.15 Spacing', '1.5 Spacing', '2.5 Spacing', 'Hanging Indent'];
   const availableFonts = ['Graphik', 'Arial', 'Times New Roman', 'Georgia', 'Helvetica', 'Courier New', 'Verdana', 'Garamond', 'Palatino', 'Bookman', 'Comic Sans MS', 'Trebuchet MS', 'Impact', 'Lucida Console', 'Tahoma', 'Lucida Sans', 'Monaco', 'Gill Sans', 'Century Gothic', 'Franklin Gothic Medium', 'Cambria', 'Calibri', 'Consolas', 'Didot', 'Futura', 'Optima', 'Baskerville'];
+  
+  // Update formattingMode based on current editor attributes
+  useEffect(() => {
+    if (!editor) return;
+
+    const updateFormattingMode = () => {
+      const attrs = editor.getAttributes('paragraph');
+      const lineHeight = attrs.lineHeight || '1.15';
+      const textIndent = attrs.textIndent || '0px';
+      const marginBottom = attrs.marginBottom || '0px';
+      
+      // Detect the current formatting mode based on attributes
+      if (textIndent === '30px' && marginBottom === '0px') {
+        setFormattingMode('Hanging Indent');
+      } else if (lineHeight === '1') {
+        setFormattingMode('Single Spacing');
+      } else if (lineHeight === '1.15') {
+        setFormattingMode('1.15 Spacing');
+      } else if (lineHeight === '1.5') {
+        setFormattingMode('1.5 Spacing');
+      } else if (lineHeight === '2.5') {
+        setFormattingMode('2.5 Spacing');
+      } else {
+        setFormattingMode('Normal');
+      }
+    };
+
+    // Update on selection change
+    editor.on('selectionUpdate', updateFormattingMode);
+    editor.on('transaction', updateFormattingMode);
+
+    return () => {
+      editor.off('selectionUpdate', updateFormattingMode);
+      editor.off('transaction', updateFormattingMode);
+    };
+  }, [editor]);
+
   const handleFontChange = (font: string) => {
     setFontFamily(font);
     setIsFontOpen(false);
