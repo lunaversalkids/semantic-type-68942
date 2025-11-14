@@ -31,10 +31,11 @@ export function ShapesIconsDrawer({
   onOpenChange,
   onInsertIcon
 }: ShapesIconsDrawerProps) {
-  const [selectedCategory, setSelectedCategory] = useState<string>('egyptian');
+  const [selectedCategory, setSelectedCategory] = useState<string>('animals');
   const [isEditMode, setIsEditMode] = useState(false);
   const [iconCrops, setIconCrops] = useState<Record<number, PixelCrop>>({});
   const [selectedAnkhIndex, setSelectedAnkhIndex] = useState<number | null>(null);
+  const [previousCategory, setPreviousCategory] = useState<string>('animals');
 
   // Load saved crops from localStorage on mount
   useEffect(() => {
@@ -64,9 +65,12 @@ export function ShapesIconsDrawer({
   const handleCloseEditor = () => {
     setIsEditMode(false);
     setSelectedAnkhIndex(null);
+    setSelectedCategory(previousCategory);
   };
 
   const handleOpenEditor = () => {
+    setPreviousCategory(selectedCategory);
+    setSelectedCategory('egyptian');
     setIsEditMode(true);
     // Auto-select the first ankh if none selected
     if (selectedAnkhIndex === null) {
@@ -85,8 +89,8 @@ export function ShapesIconsDrawer({
           ? 'max-w-7xl w-[1400px] h-[900px]' 
           : 'max-w-[950px] w-[950px] h-[650px]'
       }`}>
-        {/* Edit button - aligned with X button */}
-        {selectedCategory === 'egyptian' && !isEditMode && (
+        {/* Edit button - always visible in non-edit mode */}
+        {!isEditMode && (
           <button
             onClick={handleOpenEditor}
             className="absolute top-4 left-6 z-10 transition-transform hover:scale-105"
@@ -119,13 +123,13 @@ export function ShapesIconsDrawer({
                 />
               </div>
               
-              {/* Category Tabs with Plus Icon - scrollable horizontally */}
+               {/* Category Tabs with Plus Icon - scrollable horizontally */}
               <div className="w-full border-t border-[hsl(253,60%,88%)]">
-                <div className="overflow-x-auto overflow-y-hidden [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden pt-3">
-                  <div className="flex gap-3 items-center px-2">
+                <div className="relative overflow-x-auto overflow-y-hidden pt-3 pb-1 scrollbar-hide">
+                  <div className="flex gap-3 items-center px-2 min-w-min">
                     {/* Plus Icon Box */}
-                    <div className="flex-shrink-0 w-6 h-6 flex items-center justify-center bg-white border border-[hsl(253,100%,30%)]/40 rounded-sm">
-                      <Plus className="w-3.5 h-3.5 text-[hsl(253,100%,30%)]/60" />
+                    <div className="flex-shrink-0 w-5 h-5 flex items-center justify-center bg-white border border-[hsl(253,100%,30%)]/30 rounded-[3px]">
+                      <Plus className="w-3 h-3 text-[hsl(253,100%,30%)]/50" strokeWidth={2.5} />
                     </div>
                     
                     {/* Category Tabs */}
@@ -146,8 +150,8 @@ export function ShapesIconsDrawer({
                 </div>
                 
                 {/* Purple Scroll Indicator */}
-                <div className="w-full flex justify-center pt-2 pb-2">
-                  <div className="w-64 h-1.5 bg-[hsl(253,100%,64%)] rounded-full opacity-80" />
+                <div className="w-full flex justify-start pt-2 pb-2 px-2">
+                  <div className="w-72 h-1.5 bg-[hsl(253,100%,64%)] rounded-full opacity-70" />
                 </div>
               </div>
             </>
