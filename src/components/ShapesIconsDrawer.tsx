@@ -70,24 +70,25 @@ export function ShapesIconsDrawer({
           </div>
         </DialogHeader>
 
+        {/* Edit button - aligned with X button */}
+        {selectedCategory === 'egyptian' && !isEditMode && (
+          <button
+            onClick={() => setIsEditMode(true)}
+            className="absolute top-4 left-6 z-10 transition-transform hover:scale-105"
+            style={{
+              filter: 'drop-shadow(0 0 15px rgba(82, 0, 255, 0.8)) drop-shadow(0 0 30px rgba(82, 0, 255, 0.4))'
+            }}
+          >
+            <img 
+              src={new URL('../assets/edit-button.png', import.meta.url).href} 
+              alt="Edit" 
+              className="w-16 h-auto"
+            />
+          </button>
+        )}
+
         {/* Content Area */}
         <div className="flex-1 overflow-hidden flex relative">
-          {selectedCategory === 'egyptian' && !isEditMode && (
-            <button
-              onClick={() => setIsEditMode(true)}
-              className="absolute top-4 left-6 z-10 transition-transform hover:scale-105"
-              style={{
-                filter: 'drop-shadow(0 0 15px rgba(82, 0, 255, 0.8)) drop-shadow(0 0 30px rgba(82, 0, 255, 0.4))'
-              }}
-            >
-              <img 
-                src={new URL('../assets/edit-button.png', import.meta.url).href} 
-                alt="Edit" 
-                className="w-16 h-auto"
-              />
-            </button>
-          )}
-          
           <div className="flex-1 overflow-y-auto px-8 pb-8">
           {selectedCategory === 'egyptian' ? (
             isEditMode ? (
