@@ -57,9 +57,9 @@ export function ShapesIconsDrawer({
 
         {/* Content Area */}
         <div className="px-8 pb-8 flex-1 overflow-y-auto">
-          {selectedCategory === 'egyptian' ? <div className="relative">
+          {selectedCategory === 'egyptian' ? <div className="relative max-w-3xl mx-auto">
               <img src={egyptianAnkhsGrid} alt="Egyptian Ankhs Grid" className="w-full h-auto block" />
-              <div className="absolute inset-0 grid grid-cols-4 grid-rows-4">
+              <div className="absolute inset-0 grid grid-cols-4 grid-rows-4" style={{ padding: '2% 8%' }}>
                 {Array.from({ length: 16 }).map((_, index) => {
                   return (
                     <button
@@ -71,6 +71,7 @@ export function ShapesIconsDrawer({
                         e.dataTransfer.setData('category', 'egyptian');
                       }}
                       className="w-full h-full border-2 border-transparent hover:border-[hsl(253,100%,64%)] hover:bg-purple-200/30 transition-all cursor-pointer"
+                      style={{ aspectRatio: '1 / 1.3' }}
                       title={`Ankh ${index + 1}`}
                     />
                   );
