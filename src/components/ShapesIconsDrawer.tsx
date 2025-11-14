@@ -75,9 +75,9 @@ export function ShapesIconsDrawer({
           {selectedCategory === 'egyptian' && !isEditMode && (
             <button
               onClick={() => setIsEditMode(true)}
-              className="absolute top-0 left-0 z-10 transition-transform hover:scale-105"
+              className="absolute top-4 left-6 z-10 transition-transform hover:scale-105"
               style={{
-                filter: 'drop-shadow(0 0 15px rgba(168, 85, 247, 0.8)) drop-shadow(0 0 30px rgba(168, 85, 247, 0.4))'
+                filter: 'drop-shadow(0 0 15px rgba(82, 0, 255, 0.8)) drop-shadow(0 0 30px rgba(82, 0, 255, 0.4))'
               }}
             >
               <img 
