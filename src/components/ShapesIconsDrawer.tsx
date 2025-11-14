@@ -16,73 +16,16 @@ interface ShapesIconsDrawerProps {
     cropHeight: number;
   }) => void;
 }
-const categories = [{
-  id: 'animals',
-  name: 'Animals'
-}, {
-  id: 'objects',
-  name: 'Objects'
-}, {
-  id: 'nature',
-  name: 'Nature'
-}, {
-  id: 'food',
-  name: 'Food'
-}, {
-  id: 'symbols',
-  name: 'Symbols'
-}, {
-  id: 'educational',
-  name: 'Educational'
-}, {
-  id: 'artful',
-  name: 'Artful'
-}, {
-  id: 'scientific',
-  name: 'Scientific'
-}, {
-  id: 'people',
-  name: 'People'
-}, {
-  id: 'earth',
-  name: 'Earth'
-}, {
-  id: 'sports',
-  name: 'Sports'
-}, {
-  id: 'vehicles',
-  name: 'Vehicles'
-}, {
-  id: 'professions',
-  name: 'Professions'
-}, {
-  id: 'ornaments',
-  name: 'Ornaments'
-}, {
-  id: 'shapes',
-  name: 'Shapes'
-}, {
-  id: 'arrows',
-  name: 'Arrows'
-}, {
-  id: 'samarian',
-  name: 'Samarian'
-}, {
-  id: 'egyptian',
-  name: 'Egyptian'
-}, {
-  id: 'christianity',
-  name: 'Christianity'
-}, {
-  id: 'indigenous',
-  name: 'Indigenous'
-}, {
-  id: 'sacred',
-  name: 'Sacred Geometry'
-}, {
-  id: 'quantum',
-  name: 'Quantum Physics'
-}];
+const categories = [
+  { id: 'animals', name: 'Animals' },
+  { id: 'objects', name: 'Objects' },
+  { id: 'nature', name: 'Nature' },
+  { id: 'food', name: 'Food' },
+  { id: 'symbols', name: 'Symbols' },
+  { id: 'educational', name: 'Educational' },
+  { id: 'artful', name: 'Artful' },
+  { id: 'scientific', name: 'Scientific' },
+];
 export function ShapesIconsDrawer({
   open,
   onOpenChange,
@@ -138,9 +81,9 @@ export function ShapesIconsDrawer({
       onOpenChange(newOpen);
     }}>
       <DialogContent className={`p-0 bg-[hsl(270,100%,95%)] border-[6px] border-[hsl(253,100%,64%)] rounded-[32px] shadow-[0_0_80px_20px_hsl(253,100%,64%,0.6),0_0_120px_30px_hsl(253,100%,64%,0.4),0_0_160px_40px_hsl(253,100%,64%,0.2)] transition-all duration-300 ${
-        isEditMode 
+        isEditMode
           ? 'max-w-7xl w-[1400px] h-[900px]' 
-          : 'max-w-4xl w-[900px] h-[600px]'
+          : 'max-w-[950px] w-[950px] h-[650px]'
       }`}>
         {/* Edit button - aligned with X button */}
         {selectedCategory === 'egyptian' && !isEditMode && (
@@ -181,9 +124,9 @@ export function ShapesIconsDrawer({
                 <div className="overflow-x-auto overflow-y-hidden [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden pt-3">
                   <div className="flex gap-3 items-center px-2">
                     {/* Plus Icon Box */}
-                    <button className="flex-shrink-0 w-10 h-10 flex items-center justify-center bg-white/80 border-2 border-[hsl(253,100%,64%)]/30 rounded-lg hover:bg-white transition-colors shadow-sm">
-                      <Plus className="w-5 h-5 text-[hsl(253,100%,30%)]" />
-                    </button>
+                    <div className="flex-shrink-0 w-6 h-6 flex items-center justify-center bg-white border border-[hsl(253,100%,30%)]/40 rounded-sm">
+                      <Plus className="w-3.5 h-3.5 text-[hsl(253,100%,30%)]/60" />
+                    </div>
                     
                     {/* Category Tabs */}
                     {categories.map(category => (
@@ -326,7 +269,8 @@ export function ShapesIconsDrawer({
               </div>
             </div>
             )
-          ) : <div className="w-full h-full flex items-center justify-center">
+          ) : (
+            <div className="w-full h-full flex items-center justify-center">
               <p className="text-[hsl(253,100%,30%)] text-lg">
                 {selectedCategory === 'animals' && 'Animals coming soon...'}
                 {selectedCategory === 'objects' && 'Objects coming soon...'}
@@ -336,21 +280,9 @@ export function ShapesIconsDrawer({
                 {selectedCategory === 'educational' && 'Educational coming soon...'}
                 {selectedCategory === 'artful' && 'Artful coming soon...'}
                 {selectedCategory === 'scientific' && 'Scientific coming soon...'}
-                {selectedCategory === 'people' && 'People coming soon...'}
-                {selectedCategory === 'earth' && 'Earth coming soon...'}
-                {selectedCategory === 'sports' && 'Sports coming soon...'}
-                {selectedCategory === 'vehicles' && 'Vehicles coming soon...'}
-                {selectedCategory === 'professions' && 'Professions coming soon...'}
-                {selectedCategory === 'ornaments' && 'Ornaments coming soon...'}
-                {selectedCategory === 'shapes' && 'Shapes coming soon...'}
-                {selectedCategory === 'arrows' && 'Arrows coming soon...'}
-                {selectedCategory === 'samarian' && 'Samarian symbols coming soon...'}
-                {selectedCategory === 'christianity' && 'Christianity symbols coming soon...'}
-                {selectedCategory === 'indigenous' && 'Indigenous symbols coming soon...'}
-                {selectedCategory === 'sacred' && 'Sacred Geometry coming soon...'}
-                {selectedCategory === 'quantum' && 'Quantum Physics coming soon...'}
               </p>
-            </div>}
+            </div>
+          )}
           </div>
         </div>
       </DialogContent>
