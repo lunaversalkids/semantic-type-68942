@@ -168,46 +168,49 @@ export function ShapesIconsDrawer({
               
                {/* Category Tabs with Plus Icon - scrollable horizontally */}
                <div className="w-full border-t border-[hsl(253,60%,88%)]">
-                <div ref={scrollContainerRef} className="relative overflow-x-auto overflow-y-hidden pt-3 pb-1 scrollbar-hide">
-                  <div className="flex gap-3 items-center px-2 min-w-min">
-                    {/* Left Arrow */}
-                    <button
-                      onClick={handlePrevCategory}
-                      className="flex-shrink-0 w-5 h-5 flex items-center justify-center bg-white border border-[hsl(253,100%,30%)]/30 rounded-[3px] hover:bg-[hsl(253,100%,64%)]/20 hover:border-[hsl(253,100%,64%)] transition-all duration-200"
-                      aria-label="Previous category"
-                    >
-                      <ChevronLeft className="w-3 h-3 text-[hsl(253,100%,30%)]" strokeWidth={2.5} />
-                    </button>
-                    
-                    {/* Plus Icon Box */}
-                    <div className="flex-shrink-0 w-5 h-5 flex items-center justify-center bg-white border border-[hsl(253,100%,30%)]/30 rounded-[3px]">
-                      <Plus className="w-3 h-3 text-[hsl(253,100%,30%)]/50" strokeWidth={2.5} />
+                <div className="relative pt-3 pb-1">
+                  {/* Left Arrow - Fixed */}
+                  <button
+                    onClick={handlePrevCategory}
+                    className="absolute left-2 top-1/2 -translate-y-1/2 z-10 flex-shrink-0 w-5 h-5 flex items-center justify-center bg-white border border-[hsl(253,100%,30%)]/30 rounded-[3px] hover:bg-[hsl(253,100%,64%)]/20 hover:border-[hsl(253,100%,64%)] transition-all duration-200 shadow-sm"
+                    aria-label="Previous category"
+                  >
+                    <ChevronLeft className="w-3 h-3 text-[hsl(253,100%,30%)]" strokeWidth={2.5} />
+                  </button>
+                  
+                  {/* Right Arrow - Fixed */}
+                  <button
+                    onClick={handleNextCategory}
+                    className="absolute right-2 top-1/2 -translate-y-1/2 z-10 flex-shrink-0 w-5 h-5 flex items-center justify-center bg-white border border-[hsl(253,100%,30%)]/30 rounded-[3px] hover:bg-[hsl(253,100%,64%)]/20 hover:border-[hsl(253,100%,64%)] transition-all duration-200 shadow-sm"
+                    aria-label="Next category"
+                  >
+                    <ChevronRight className="w-3 h-3 text-[hsl(253,100%,30%)]" strokeWidth={2.5} />
+                  </button>
+                  
+                  {/* Scrollable Container */}
+                  <div ref={scrollContainerRef} className="overflow-x-auto overflow-y-hidden scrollbar-hide mx-9">
+                    <div className="flex gap-3 items-center px-2 min-w-min">
+                      {/* Plus Icon Box */}
+                      <div className="flex-shrink-0 w-5 h-5 flex items-center justify-center bg-white border border-[hsl(253,100%,30%)]/30 rounded-[3px]">
+                        <Plus className="w-3 h-3 text-[hsl(253,100%,30%)]/50" strokeWidth={2.5} />
+                      </div>
+                      
+                      {/* Category Tabs */}
+                      {categories.map(category => (
+                        <button
+                          key={category.id}
+                          ref={el => categoryRefs.current[category.id] = el}
+                          onClick={() => setSelectedCategory(category.id)}
+                          className={`px-4 py-1.5 font-semibold text-[15px] transition-all duration-200 rounded-md whitespace-nowrap flex-shrink-0 ${
+                            selectedCategory === category.id
+                              ? 'bg-white text-[hsl(253,100%,30%)] shadow-[0_2px_12px_rgba(82,0,255,0.25),0_4px_20px_rgba(82,0,255,0.15)] border-2 border-[hsl(253,100%,64%)]/40'
+                              : 'bg-transparent text-[hsl(253,100%,30%)] hover:bg-white/40'
+                          }`}
+                        >
+                          {category.name}
+                        </button>
+                      ))}
                     </div>
-                    
-                    {/* Right Arrow */}
-                    <button
-                      onClick={handleNextCategory}
-                      className="flex-shrink-0 w-5 h-5 flex items-center justify-center bg-white border border-[hsl(253,100%,30%)]/30 rounded-[3px] hover:bg-[hsl(253,100%,64%)]/20 hover:border-[hsl(253,100%,64%)] transition-all duration-200"
-                      aria-label="Next category"
-                    >
-                      <ChevronRight className="w-3 h-3 text-[hsl(253,100%,30%)]" strokeWidth={2.5} />
-                    </button>
-                    
-                    {/* Category Tabs */}
-                    {categories.map(category => (
-                      <button
-                        key={category.id}
-                        ref={el => categoryRefs.current[category.id] = el}
-                        onClick={() => setSelectedCategory(category.id)}
-                        className={`px-4 py-1.5 font-semibold text-[15px] transition-all duration-200 rounded-md whitespace-nowrap flex-shrink-0 ${
-                          selectedCategory === category.id
-                            ? 'bg-white text-[hsl(253,100%,30%)] shadow-[0_2px_12px_rgba(82,0,255,0.25),0_4px_20px_rgba(82,0,255,0.15)] border-2 border-[hsl(253,100%,64%)]/40'
-                            : 'bg-transparent text-[hsl(253,100%,30%)] hover:bg-white/40'
-                        }`}
-                      >
-                        {category.name}
-                      </button>
-                    ))}
                   </div>
                 </div>
                 
