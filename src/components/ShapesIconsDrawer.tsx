@@ -151,8 +151,7 @@ export function ShapesIconsDrawer({
                 {Array.from({ length: 16 }).map((_, index) => {
                   const ankhNum = index + 1;
                   const isSelected = selectedAnkhIndex === ankhNum;
-                  const savedCrop = iconCrops[ankhNum];
-                  
+                  const hasCrop = iconCrops[ankhNum] !== undefined;
                   return (
                     <button
                       key={index}
@@ -162,30 +161,14 @@ export function ShapesIconsDrawer({
                         e.dataTransfer.setData('iconId', `ankh-${ankhNum}`);
                         e.dataTransfer.setData('category', 'egyptian');
                       }}
-                      className={`relative w-full h-full border-2 transition-all cursor-pointer overflow-hidden ${
+                      className={`w-full h-full border-2 transition-all cursor-pointer ${
                         isSelected 
                           ? 'border-[hsl(253,100%,64%)] bg-purple-200/50' 
                           : 'border-transparent hover:border-[hsl(253,100%,64%)] hover:bg-purple-200/30'
                       }`}
                       style={{ aspectRatio: '1 / 1.3' }}
-                      title={`Ankh ${ankhNum}${savedCrop ? ' (cropped)' : ''}`}
-                    >
-                      {savedCrop && (
-                        <div className="absolute inset-0 flex items-center justify-center bg-white">
-                          <img
-                            src={egyptianAnkhsGrid}
-                            alt={`Ankh ${ankhNum}`}
-                            className="object-contain max-w-full max-h-full"
-                            style={{
-                              clipPath: `inset(${savedCrop.y}px ${savedCrop.x + savedCrop.width}px ${savedCrop.y + savedCrop.height}px ${savedCrop.x}px)`,
-                              transform: `translate(-${savedCrop.x}px, -${savedCrop.y}px)`,
-                              width: 'auto',
-                              height: 'auto'
-                            }}
-                          />
-                        </div>
-                      )}
-                    </button>
+                      title={`Ankh ${ankhNum}${hasCrop ? ' (cropped)' : ''}`}
+                    />
                   );
                 })}
               </div>
