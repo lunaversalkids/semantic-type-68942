@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Search } from "lucide-react";
 import { IconCropEditor } from "./IconCropEditor";
 import egyptianAnkhsGrid from "@/assets/egyptian-ankhs-grid.png";
 import { PixelCrop } from "react-image-crop";
@@ -158,10 +160,20 @@ export function ShapesIconsDrawer({
         )}
         
         {/* Header */}
-        <DialogHeader className="px-8 pt-6 pb-4 border-b border-[hsl(253,60%,88%)]">
-          <DialogTitle className="text-3xl font-bold text-[hsl(253,100%,30%)] text-center mb-4">
+        <DialogHeader className="px-8 pt-6 pb-0">
+          <DialogTitle className="text-3xl font-bold text-[hsl(253,100%,30%)] text-center mb-3">
             Shapes & Icons
           </DialogTitle>
+          
+          {/* Search Bar */}
+          <div className="relative mb-4">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[hsl(253,100%,30%)]/60" />
+            <Input
+              placeholder="Search shapes and icons..."
+              className="pl-10 bg-white/80 border-[hsl(253,100%,64%)]/30 text-[hsl(253,100%,30%)] placeholder:text-[hsl(253,100%,30%)]/50 focus:border-[hsl(253,100%,64%)] focus:ring-[hsl(253,100%,64%)]"
+            />
+          </div>
+          
           {isEditMode && (
             <button 
               onClick={() => setIsEditMode(false)} 
@@ -173,8 +185,8 @@ export function ShapesIconsDrawer({
           )}
           
           {/* Category Tabs - scrollable horizontally */}
-          <div className="w-full overflow-x-auto overflow-y-hidden [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-            <div className="flex gap-4 items-center pb-1">
+          <div className="w-full overflow-x-auto overflow-y-hidden [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden border-t border-[hsl(253,60%,88%)] pt-3 -mx-8 px-8">
+            <div className="flex gap-4 items-center pb-3">
               {categories.map(category => <button key={category.id} onClick={() => setSelectedCategory(category.id)} className={`px-4 py-1.5 font-semibold text-[15px] transition-all duration-200 rounded-md whitespace-nowrap flex-shrink-0 ${selectedCategory === category.id ? 'bg-white text-[hsl(253,100%,30%)] shadow-[0_2px_8px_rgba(0,0,0,0.15)]' : 'bg-transparent text-[hsl(253,100%,30%)] hover:bg-white/40'}`}>
                   {category.name}
                 </button>)}
