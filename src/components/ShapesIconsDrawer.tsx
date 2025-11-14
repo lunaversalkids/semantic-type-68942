@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -50,17 +50,34 @@ export function ShapesIconsDrawer({
   const [iconCrops, setIconCrops] = useState<Record<number, PixelCrop>>({});
   const [selectedAnkhIndex, setSelectedAnkhIndex] = useState<number | null>(null);
   const [previousCategory, setPreviousCategory] = useState<string>('animals');
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const categoryRefs = useRef<{ [key: string]: HTMLButtonElement | null }>({});
+
+  const scrollToCategory = (categoryId: string) => {
+    const categoryButton = categoryRefs.current[categoryId];
+    if (categoryButton && scrollContainerRef.current) {
+      categoryButton.scrollIntoView({
+        behavior: 'smooth',
+        block: 'nearest',
+        inline: 'center'
+      });
+    }
+  };
 
   const handleNextCategory = () => {
     const currentIndex = categories.findIndex(cat => cat.id === selectedCategory);
     const nextIndex = (currentIndex + 1) % categories.length;
-    setSelectedCategory(categories[nextIndex].id);
+    const nextCategory = categories[nextIndex].id;
+    setSelectedCategory(nextCategory);
+    setTimeout(() => scrollToCategory(nextCategory), 50);
   };
 
   const handlePrevCategory = () => {
     const currentIndex = categories.findIndex(cat => cat.id === selectedCategory);
     const prevIndex = currentIndex === 0 ? categories.length - 1 : currentIndex - 1;
-    setSelectedCategory(categories[prevIndex].id);
+    const prevCategory = categories[prevIndex].id;
+    setSelectedCategory(prevCategory);
+    setTimeout(() => scrollToCategory(prevCategory), 50);
   };
 
   // Load saved crops from localStorage on mount
@@ -151,7 +168,7 @@ export function ShapesIconsDrawer({
               
                {/* Category Tabs with Plus Icon - scrollable horizontally */}
                <div className="w-full border-t border-[hsl(253,60%,88%)]">
-                <div className="relative overflow-x-auto overflow-y-hidden pt-3 pb-1 scrollbar-hide">
+                <div ref={scrollContainerRef} className="relative overflow-x-auto overflow-y-hidden pt-3 pb-1 scrollbar-hide">
                   <div className="flex gap-3 items-center px-2 min-w-min">
                     {/* Left Arrow */}
                     <button
@@ -180,6 +197,7 @@ export function ShapesIconsDrawer({
                     {categories.map(category => (
                       <button
                         key={category.id}
+                        ref={el => categoryRefs.current[category.id] = el}
                         onClick={() => setSelectedCategory(category.id)}
                         className={`px-4 py-1.5 font-semibold text-[15px] transition-all duration-200 rounded-md whitespace-nowrap flex-shrink-0 ${
                           selectedCategory === category.id
