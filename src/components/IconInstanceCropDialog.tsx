@@ -91,7 +91,7 @@ export function IconInstanceCropDialog({
               onClick={handleSave}
               className="bg-gradient-to-r from-[hsl(253,100%,64%)] to-[hsl(266,100%,70%)] hover:from-[hsl(253,100%,70%)] hover:to-[hsl(266,100%,75%)] text-white px-6"
             >
-              Save Crop
+              Done
             </Button>
           </div>
         </div>

@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { IconCropEditor } from "./IconCropEditor";
+import { IconInstanceCropDialog } from "./IconInstanceCropDialog";
+import { Pencil } from "lucide-react";
 import egyptianAnkhsGrid from "@/assets/egyptian-ankhs-grid.png";
 import { PixelCrop } from "react-image-crop";
 interface ShapesIconsDrawerProps {
@@ -41,6 +43,8 @@ export function ShapesIconsDrawer({
   const [selectedCategory, setSelectedCategory] = useState<string>('shapes');
   const [isEditMode, setIsEditMode] = useState(false);
   const [iconCrops, setIconCrops] = useState<Record<number, PixelCrop>>({});
+  const [editingAnkhIndex, setEditingAnkhIndex] = useState<number | null>(null);
+  const [ankhCropDialogOpen, setAnkhCropDialogOpen] = useState(false);
 
   // Load saved crops from localStorage on mount
   useEffect(() => {
@@ -81,6 +85,53 @@ export function ShapesIconsDrawer({
 
   const handleCloseEditor = () => {
     setIsEditMode(false);
+  };
+
+  const getAnkhDisplayStyle = (ankhIndex: number, cropData?: PixelCrop) => {
+    if (cropData) {
+      // Use custom crop
+      return {
+        backgroundImage: `url(${egyptianAnkhsGrid})`,
+        backgroundPosition: `-${cropData.x}px -${cropData.y}px`,
+        backgroundSize: 'auto',
+        backgroundRepeat: 'no-repeat',
+        width: `${cropData.width}px`,
+        height: `${cropData.height}px`,
+      };
+    } else {
+      // Use default grid position
+      const col = (ankhIndex - 1) % 4;
+      const row = Math.floor((ankhIndex - 1) / 4);
+      return {
+        backgroundImage: `url(${egyptianAnkhsGrid})`,
+        backgroundPosition: `${-col * 25}% ${-row * 25}%`,
+        backgroundSize: '400% 400%',
+        backgroundRepeat: 'no-repeat',
+        width: '80px',
+        height: '104px',
+      };
+    }
+  };
+
+  const handleSaveIndividualCrop = (cropData: { cropX: number; cropY: number; cropWidth: number; cropHeight: number }) => {
+    if (editingAnkhIndex === null) return;
+
+    const pixelCrop: PixelCrop = {
+      x: cropData.cropX,
+      y: cropData.cropY,
+      width: cropData.cropWidth,
+      height: cropData.cropHeight,
+      unit: 'px',
+    };
+
+    setIconCrops(prev => {
+      const updated = { ...prev, [editingAnkhIndex]: pixelCrop };
+      localStorage.setItem('egyptian-ankh-crops', JSON.stringify(updated));
+      return updated;
+    });
+
+    setAnkhCropDialogOpen(false);
+    setEditingAnkhIndex(null);
   };
   return <Dialog open={open} onOpenChange={(newOpen) => {
       // Prevent accidental closing during edit mode (only allow explicit X button click)
@@ -145,27 +196,60 @@ export function ShapesIconsDrawer({
                 onClose={handleCloseEditor}
               />
             ) : (
-              <div className="relative max-w-3xl mx-auto">
-              <img src={egyptianAnkhsGrid} alt="Egyptian Ankhs Grid" className="w-full h-auto block" />
-              <div className="absolute inset-0 grid grid-cols-4 grid-rows-4" style={{ padding: '2% 8%' }}>
+              <div className="grid grid-cols-4 gap-6 max-w-3xl mx-auto p-4">
                 {Array.from({ length: 16 }).map((_, index) => {
+                  const ankhId = index + 1;
+                  const cropData = iconCrops[ankhId];
+                  
                   return (
-                    <button
-                      key={index}
-                      onClick={() => handleAnkhClick(`ankh-${index + 1}`)}
-                      draggable
-                      onDragStart={(e) => {
-                        e.dataTransfer.setData('iconId', `ankh-${index + 1}`);
-                        e.dataTransfer.setData('category', 'egyptian');
-                      }}
-                      className="w-full h-full border-2 border-transparent hover:border-[hsl(253,100%,64%)] hover:bg-purple-200/30 transition-all cursor-pointer"
-                      style={{ aspectRatio: '1 / 1.3' }}
-                      title={`Ankh ${index + 1}`}
-                    />
+                    <div 
+                      key={ankhId} 
+                      className="relative group flex items-center justify-center p-4 rounded-lg hover:bg-purple-100/30 transition-all"
+                    >
+                      {/* Ankh display with crop applied */}
+                      <div
+                        onClick={() => handleAnkhClick(`ankh-${ankhId}`)}
+                        draggable
+                        onDragStart={(e) => {
+                          e.dataTransfer.setData('iconId', `ankh-${ankhId}`);
+                          e.dataTransfer.setData('category', 'egyptian');
+                          if (cropData) {
+                            e.dataTransfer.setData('cropData', JSON.stringify({
+                              cropX: cropData.x,
+                              cropY: cropData.y,
+                              cropWidth: cropData.width,
+                              cropHeight: cropData.height,
+                            }));
+                          }
+                        }}
+                        style={getAnkhDisplayStyle(ankhId, cropData)}
+                        className="cursor-pointer hover:ring-2 hover:ring-[hsl(253,100%,64%)] rounded transition-all"
+                        title={`Ankh ${ankhId}${cropData ? ' (Custom Crop)' : ''}`}
+                      />
+                      
+                      {/* Edit button (appears on hover) */}
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setEditingAnkhIndex(ankhId);
+                          setAnkhCropDialogOpen(true);
+                        }}
+                        className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity bg-[hsl(253,100%,64%)] text-white p-2 rounded-full hover:bg-[hsl(253,100%,54%)] shadow-lg"
+                        title="Edit Crop"
+                      >
+                        <Pencil className="w-4 h-4" />
+                      </button>
+
+                      {/* Custom crop indicator */}
+                      {cropData && (
+                        <div className="absolute bottom-2 left-2 bg-[hsl(253,100%,64%)] text-white text-xs px-2 py-0.5 rounded-full">
+                          Custom
+                        </div>
+                      )}
+                    </div>
                   );
                 })}
               </div>
-            </div>
             )
           ) : <div className="w-full h-full flex items-center justify-center">
               <p className="text-[hsl(253,100%,30%)] text-lg">
@@ -179,5 +263,27 @@ export function ShapesIconsDrawer({
           </div>
         </div>
       </DialogContent>
+
+      {/* Individual Ankh Crop Dialog */}
+      {editingAnkhIndex !== null && (
+        <IconInstanceCropDialog
+          open={ankhCropDialogOpen}
+          onOpenChange={(open) => {
+            setAnkhCropDialogOpen(open);
+            if (!open) setEditingAnkhIndex(null);
+          }}
+          currentCrop={
+            iconCrops[editingAnkhIndex]
+              ? {
+                  cropX: iconCrops[editingAnkhIndex].x,
+                  cropY: iconCrops[editingAnkhIndex].y,
+                  cropWidth: iconCrops[editingAnkhIndex].width,
+                  cropHeight: iconCrops[editingAnkhIndex].height,
+                }
+              : undefined
+          }
+          onSave={handleSaveIndividualCrop}
+        />
+      )}
     </Dialog>;
 }
