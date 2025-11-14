@@ -34,10 +34,10 @@ export const IconNode = Node.create({
         default: 'core',
       },
       width: {
-        default: 100,
+        default: 150,
       },
       height: {
-        default: 100,
+        default: 150,
       },
       color: {
         default: '#000000',

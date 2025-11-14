@@ -48,7 +48,7 @@ export const IconNodeView = ({ node, updateAttributes, selected }: NodeViewProps
       <Popover open={isEditing} onOpenChange={setIsEditing}>
         <PopoverTrigger asChild>
           <div
-            className={`inline-flex items-center justify-center cursor-pointer transition-all relative ${
+            className={`inline-flex items-center justify-center cursor-pointer transition-all relative overflow-hidden ${
               selected ? 'ring-2 ring-primary' : ''
             }`}
             style={{ width: `${width}px`, height: `${height}px` }}
@@ -58,7 +58,7 @@ export const IconNodeView = ({ node, updateAttributes, selected }: NodeViewProps
                 src={egyptianAnkhsImage}
                 alt={`Ankh ${iconId}`}
                 style={getAnkhCropStyle(iconId, width, height)}
-                className="pointer-events-none"
+                className="pointer-events-none block"
               />
             ) : (
               IconComponent && (
