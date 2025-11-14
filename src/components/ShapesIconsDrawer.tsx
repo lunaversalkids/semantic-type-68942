@@ -174,6 +174,17 @@ export function ShapesIconsDrawer({
                           dragPreview.style.backgroundPosition = `-${cropData.x}px -${cropData.y}px`;
                           dragPreview.style.backgroundSize = `${cropData.width > 0 ? (100 * 100) / cropData.width : 100}% auto`;
                           dragPreview.style.backgroundRepeat = 'no-repeat';
+                        } else {
+                          // Fallback to grid-based positioning for uncropped icons
+                          const col = (ankhNum - 1) % 4;
+                          const row = Math.floor((ankhNum - 1) / 4);
+                          const percentX = (col * 100) / 3;
+                          const percentY = (row * 100) / 3;
+                          
+                          dragPreview.style.backgroundImage = `url(${egyptianAnkhsGrid})`;
+                          dragPreview.style.backgroundSize = '400% 400%';
+                          dragPreview.style.backgroundPosition = `${percentX}% ${percentY}%`;
+                          dragPreview.style.backgroundRepeat = 'no-repeat';
                         }
                         
                         document.body.appendChild(dragPreview);
