@@ -24,10 +24,10 @@ export const TextStylePanel = ({
   const [isFontOpen, setIsFontOpen] = useState(false);
   const [textColor, setTextColor] = useState('#000000');
   const [isColorPickerOpen, setIsColorPickerOpen] = useState(false);
-  const [formattingMode, setFormattingMode] = useState('Normal');
+  const [formattingMode, setFormattingMode] = useState('Normal - 1.15');
   const [baselineMode, setBaselineMode] = useState<'superscript' | 'subscript' | 'normal'>('normal');
   const [capitalizationMode, setCapitalizationMode] = useState('None');
-  const formattingModes = ['Normal', 'Single Spacing', '1.15 Spacing', '1.5 Spacing', '2.5 Spacing', 'Hanging Indent'];
+  const formattingModes = ['Normal - 1.15', 'Single Spacing', '1.5 Spacing', '2.5 Spacing', 'Hanging Indent'];
   const availableFonts = ['Graphik', 'Arial', 'Times New Roman', 'Georgia', 'Helvetica', 'Courier New', 'Verdana', 'Garamond', 'Palatino', 'Bookman', 'Comic Sans MS', 'Trebuchet MS', 'Impact', 'Lucida Console', 'Tahoma', 'Lucida Sans', 'Monaco', 'Gill Sans', 'Century Gothic', 'Franklin Gothic Medium', 'Cambria', 'Calibri', 'Consolas', 'Didot', 'Futura', 'Optima', 'Baskerville'];
   
   // Update formattingMode based on current editor attributes
@@ -50,8 +50,8 @@ export const TextStylePanel = ({
       } else if (lineHeight === '2.5') {
         setFormattingMode('2.5 Spacing');
       } else {
-        // Default to Normal for 1.15 or unset
-        setFormattingMode('Normal');
+        // Default to Normal - 1.15 for 1.15 or unset
+        setFormattingMode('Normal - 1.15');
       }
     };
 
@@ -236,7 +236,7 @@ export const TextStylePanel = ({
     if (!editor) return;
     setFormattingMode(mode);
     switch (mode) {
-      case 'Normal':
+      case 'Normal - 1.15':
         // Default 1.15 spacing with regular paragraph settings
         editor.chain().focus().setParagraphAttributes({
           textIndent: '0px',
