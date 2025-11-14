@@ -531,6 +531,50 @@ const Editor = () => {
     });
   };
 
+  const handleInsertImage = () => {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'image/*';
+    input.onchange = (e) => {
+      const file = (e.target as HTMLInputElement).files?.[0];
+      if (file && editor) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const src = e.target?.result as string;
+          editor.chain().focus().setImage({ src }).run();
+        };
+        reader.readAsDataURL(file);
+      }
+    };
+    input.click();
+  };
+
+  const handleInsertVideo = () => {
+    const url = prompt('Enter video URL (YouTube, Vimeo, etc.):');
+    if (url && editor) {
+      editor.chain().focus().insertContent(`<div class="video-container"><iframe src="${url}" frameborder="0" allowfullscreen></iframe></div>`).run();
+      toast({ title: 'Video Inserted', description: 'Video embedded in document' });
+    }
+  };
+
+  const handleInsertAudio = () => {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'audio/*';
+    input.onchange = (e) => {
+      const file = (e.target as HTMLInputElement).files?.[0];
+      if (file && editor) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const src = e.target?.result as string;
+          editor.chain().focus().insertAudio({ src }).run();
+        };
+        reader.readAsDataURL(file);
+      }
+    };
+    input.click();
+  };
+
   const handleHighlight = () => {
     if (!editor) return;
     editor.chain().focus().toggleHighlight({ color: '#fef08a' }).run();
@@ -1436,6 +1480,9 @@ const Editor = () => {
             onHighlight={handleHighlight}
             onTranslate={handleTranslate}
             onFind={handleFind}
+            onInsertImage={handleInsertImage}
+            onInsertVideo={handleInsertVideo}
+            onInsertAudio={handleInsertAudio}
             pageNumbersVisibility={pageNumbersVisibility}
             pageNumberSettings={pageNumberSettings}
             totalPages={totalPages}
