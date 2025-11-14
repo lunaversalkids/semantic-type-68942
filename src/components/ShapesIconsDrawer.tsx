@@ -51,15 +51,31 @@ export function ShapesIconsDrawer({
   const handleCloseEditor = () => {
     setIsEditMode(false);
   };
-  return <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-4xl w-[900px] h-[600px] p-0 bg-[hsl(270,100%,95%)] border-[6px] border-[hsl(253,100%,64%)] rounded-[32px] shadow-[0_0_80px_20px_hsl(253,100%,64%,0.6),0_0_120px_30px_hsl(253,100%,64%,0.4),0_0_160px_40px_hsl(253,100%,64%,0.2)]">
+  return <Dialog open={open} onOpenChange={(newOpen) => {
+      // Prevent accidental closing during edit mode (only allow explicit X button click)
+      if (isEditMode && !newOpen) {
+        return;
+      }
+      onOpenChange(newOpen);
+    }}>
+      <DialogContent className={`p-0 bg-[hsl(270,100%,95%)] border-[6px] border-[hsl(253,100%,64%)] rounded-[32px] shadow-[0_0_80px_20px_hsl(253,100%,64%,0.6),0_0_120px_30px_hsl(253,100%,64%,0.4),0_0_160px_40px_hsl(253,100%,64%,0.2)] transition-all duration-300 ${
+        isEditMode 
+          ? 'max-w-7xl w-[1400px] h-[900px]' 
+          : 'max-w-4xl w-[900px] h-[600px]'
+      }`}>
         {/* Header */}
         <DialogHeader className="relative px-8 pt-6 pb-2">
           <DialogTitle className="text-3xl font-bold text-[hsl(253,100%,30%)] text-center mb-4">
             Shapes & Icons
           </DialogTitle>
-          <button onClick={() => onOpenChange(false)} className="absolute top-4 right-6 rounded-lg p-1.5 hover:bg-purple-200/50 transition-colors" aria-label="Close">
-            
+          <button onClick={() => {
+            if (isEditMode) {
+              setIsEditMode(false);
+            } else {
+              onOpenChange(false);
+            }
+          }} className="absolute top-4 right-6 rounded-lg p-1.5 hover:bg-purple-200/50 transition-colors" aria-label="Close">
+            ✕
           </button>
           
           {/* Category Tabs - positioned right under title */}
