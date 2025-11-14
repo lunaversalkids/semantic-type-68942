@@ -1,6 +1,9 @@
 import { useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { IconCropEditor } from "./IconCropEditor";
 import egyptianAnkhsGrid from "@/assets/egyptian-ankhs-grid.png";
+import { PixelCrop } from "react-image-crop";
 interface ShapesIconsDrawerProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
@@ -31,10 +34,22 @@ export function ShapesIconsDrawer({
   onInsertIcon
 }: ShapesIconsDrawerProps) {
   const [selectedCategory, setSelectedCategory] = useState<string>('shapes');
+  const [isEditMode, setIsEditMode] = useState(false);
+  const [iconCrops, setIconCrops] = useState<Record<number, PixelCrop>>({});
   const handleAnkhClick = (ankhId: string) => {
     if (onInsertIcon) {
       onInsertIcon(ankhId, 'egyptian');
     }
+  };
+
+  const handleSaveCrop = (iconIndex: number, crop: PixelCrop) => {
+    setIconCrops(prev => ({ ...prev, [iconIndex]: crop }));
+    // Store in localStorage so it persists
+    localStorage.setItem('egyptian-ankh-crops', JSON.stringify({ ...iconCrops, [iconIndex]: crop }));
+  };
+
+  const handleCloseEditor = () => {
+    setIsEditMode(false);
   };
   return <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-4xl w-[900px] h-[600px] p-0 bg-[hsl(270,100%,95%)] border-[6px] border-[hsl(253,100%,64%)] rounded-[32px] shadow-[0_0_80px_20px_hsl(253,100%,64%,0.6),0_0_120px_30px_hsl(253,100%,64%,0.4),0_0_160px_40px_hsl(253,100%,64%,0.2)]">
@@ -56,8 +71,31 @@ export function ShapesIconsDrawer({
         </DialogHeader>
 
         {/* Content Area */}
-        <div className="px-8 pb-8 flex-1 overflow-y-auto">
-          {selectedCategory === 'egyptian' ? <div className="relative max-w-3xl mx-auto">
+        <div className="flex-1 overflow-hidden flex">
+          {selectedCategory === 'egyptian' && !isEditMode && (
+            <div className="w-16 bg-[hsl(270,100%,98%)] border-r border-[hsl(253,100%,64%)]/20 flex flex-col gap-2 p-2">
+              <Button
+                onClick={() => setIsEditMode(true)}
+                size="sm"
+                variant="outline"
+                className="h-12 text-xs flex flex-col gap-1 bg-white hover:bg-purple-100"
+              >
+                <span>✏️</span>
+                <span>Edit</span>
+              </Button>
+            </div>
+          )}
+          
+          <div className="flex-1 overflow-y-auto px-8 pb-8">
+          {selectedCategory === 'egyptian' ? (
+            isEditMode ? (
+              <IconCropEditor
+                imageSrc={egyptianAnkhsGrid}
+                onSaveCrop={handleSaveCrop}
+                onClose={handleCloseEditor}
+              />
+            ) : (
+              <div className="relative max-w-3xl mx-auto">
               <img src={egyptianAnkhsGrid} alt="Egyptian Ankhs Grid" className="w-full h-auto block" />
               <div className="absolute inset-0 grid grid-cols-4 grid-rows-4" style={{ padding: '2% 8%' }}>
                 {Array.from({ length: 16 }).map((_, index) => {
@@ -77,7 +115,9 @@ export function ShapesIconsDrawer({
                   );
                 })}
               </div>
-            </div> : <div className="w-full h-full flex items-center justify-center">
+            </div>
+            )
+          ) : <div className="w-full h-full flex items-center justify-center">
               <p className="text-[hsl(253,100%,30%)] text-lg">
                 {selectedCategory === 'shapes' && 'Shapes coming soon...'}
                 {selectedCategory === 'arrows' && 'Arrows coming soon...'}
@@ -86,6 +126,7 @@ export function ShapesIconsDrawer({
                 {selectedCategory === 'christianity' && 'Christianity symbols coming soon...'}
               </p>
             </div>}
+          </div>
         </div>
       </DialogContent>
     </Dialog>;
