@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import ReactCrop, { Crop, PixelCrop } from "react-image-crop";
 import "react-image-crop/dist/ReactCrop.css";
 import { Button } from "@/components/ui/button";
@@ -10,15 +10,34 @@ interface IconCropEditorProps {
   imageSrc: string;
   onSaveCrop: (iconIndex: number, crop: PixelCrop) => void;
   onClose: () => void;
+  initialSelectedIcon?: number;
+  existingCrops?: Record<number, PixelCrop>;
 }
 
-export function IconCropEditor({ imageSrc, onSaveCrop, onClose }: IconCropEditorProps) {
-  const [crop, setCrop] = useState<Crop>();
-  const [selectedIcon, setSelectedIcon] = useState(1);
+export function IconCropEditor({ imageSrc, onSaveCrop, onClose, initialSelectedIcon = 1, existingCrops = {} }: IconCropEditorProps) {
+  const [crop, setCrop] = useState<Crop>(() => {
+    // Initialize with existing crop if available
+    const existingCrop = existingCrops[initialSelectedIcon];
+    if (existingCrop) {
+      return existingCrop;
+    }
+    return undefined;
+  });
+  const [selectedIcon, setSelectedIcon] = useState(initialSelectedIcon);
   const [isInstructionsVisible, setIsInstructionsVisible] = useState(true);
   const [detectedRegions, setDetectedRegions] = useState<PixelCrop[]>([]);
   const [currentRegionIndex, setCurrentRegionIndex] = useState(0);
   const imageRef = useRef<HTMLImageElement>(null);
+
+  // Update crop when selectedIcon changes
+  useEffect(() => {
+    const existingCrop = existingCrops[selectedIcon];
+    if (existingCrop) {
+      setCrop(existingCrop);
+    } else {
+      setCrop(undefined);
+    }
+  }, [selectedIcon, existingCrops]);
 
   const handleSave = () => {
     if (crop && crop.width && crop.height) {

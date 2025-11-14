@@ -41,6 +41,7 @@ export function ShapesIconsDrawer({
   const [selectedCategory, setSelectedCategory] = useState<string>('shapes');
   const [isEditMode, setIsEditMode] = useState(false);
   const [iconCrops, setIconCrops] = useState<Record<number, PixelCrop>>({});
+  const [selectedAnkhIndex, setSelectedAnkhIndex] = useState<number | null>(null);
 
   // Load saved crops from localStorage on mount
   useEffect(() => {
@@ -54,9 +55,17 @@ export function ShapesIconsDrawer({
     }
   }, []);
   const handleAnkhClick = (ankhId: string) => {
+    // Get the ankh number from the id (e.g., 'ankh-1' -> 1)
+    const ankhNum = parseInt(ankhId.replace('ankh-', ''));
+    
+    // If in edit mode, just select the ankh
+    if (isEditMode) {
+      setSelectedAnkhIndex(ankhNum);
+      return;
+    }
+    
+    // If not in edit mode, insert the icon
     if (onInsertIcon) {
-      // Get the ankh number from the id (e.g., 'ankh-1' -> 1)
-      const ankhNum = parseInt(ankhId.replace('ankh-', ''));
       const cropData = iconCrops[ankhNum];
       
       // Pass crop data if available
@@ -81,6 +90,15 @@ export function ShapesIconsDrawer({
 
   const handleCloseEditor = () => {
     setIsEditMode(false);
+    setSelectedAnkhIndex(null);
+  };
+
+  const handleOpenEditor = () => {
+    setIsEditMode(true);
+    // Auto-select the first ankh if none selected
+    if (selectedAnkhIndex === null) {
+      setSelectedAnkhIndex(1);
+    }
   };
   return <Dialog open={open} onOpenChange={(newOpen) => {
       // Prevent accidental closing during edit mode (only allow explicit X button click)
@@ -120,7 +138,7 @@ export function ShapesIconsDrawer({
         {/* Edit button - aligned with X button */}
         {selectedCategory === 'egyptian' && !isEditMode && (
           <button
-            onClick={() => setIsEditMode(true)}
+            onClick={handleOpenEditor}
             className="absolute top-4 left-6 z-10 transition-transform hover:scale-105"
             style={{
               filter: 'drop-shadow(0 0 15px rgba(82, 0, 255, 0.8)) drop-shadow(0 0 30px rgba(82, 0, 255, 0.4))'
@@ -143,24 +161,35 @@ export function ShapesIconsDrawer({
                 imageSrc={egyptianAnkhsGrid}
                 onSaveCrop={handleSaveCrop}
                 onClose={handleCloseEditor}
+                initialSelectedIcon={selectedAnkhIndex || 1}
+                existingCrops={iconCrops}
               />
             ) : (
               <div className="relative max-w-3xl mx-auto">
               <img src={egyptianAnkhsGrid} alt="Egyptian Ankhs Grid" className="w-full h-auto block" />
               <div className="absolute inset-0 grid grid-cols-4 grid-rows-4" style={{ padding: '2% 8%' }}>
                 {Array.from({ length: 16 }).map((_, index) => {
+                  const ankhNum = index + 1;
+                  const isSelected = selectedAnkhIndex === ankhNum;
+                  const hasCrop = iconCrops[ankhNum] !== undefined;
                   return (
                     <button
                       key={index}
-                      onClick={() => handleAnkhClick(`ankh-${index + 1}`)}
+                      onClick={() => handleAnkhClick(`ankh-${ankhNum}`)}
                       draggable
                       onDragStart={(e) => {
-                        e.dataTransfer.setData('iconId', `ankh-${index + 1}`);
+                        e.dataTransfer.setData('iconId', `ankh-${ankhNum}`);
                         e.dataTransfer.setData('category', 'egyptian');
                       }}
-                      className="w-full h-full border-2 border-transparent hover:border-[hsl(253,100%,64%)] hover:bg-purple-200/30 transition-all cursor-pointer"
+                      className={`w-full h-full border-2 transition-all cursor-pointer ${
+                        isSelected 
+                          ? 'border-[hsl(253,100%,64%)] bg-purple-200/50' 
+                          : hasCrop
+                          ? 'border-green-400/50 hover:border-[hsl(253,100%,64%)] hover:bg-purple-200/30'
+                          : 'border-transparent hover:border-[hsl(253,100%,64%)] hover:bg-purple-200/30'
+                      }`}
                       style={{ aspectRatio: '1 / 1.3' }}
-                      title={`Ankh ${index + 1}`}
+                      title={`Ankh ${ankhNum}${hasCrop ? ' (cropped)' : ''}`}
                     />
                   );
                 })}
