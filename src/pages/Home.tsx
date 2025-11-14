@@ -22,12 +22,13 @@ const Home = () => {
   const [searchParams] = useSearchParams();
   const fromEditor = searchParams.get('from') === 'editor';
   const [recentDocs, setRecentDocs] = useState<RecentDocument[]>([]);
-  const [activeTab, setActiveTab] = useState('Recents');
+  const [activeTab, setActiveTab] = useState('Recent');
   const [isTemplatesExpanded, setIsTemplatesExpanded] = useState(false);
   const [isCategoriesVisible, setIsCategoriesVisible] = useState(false);
   const [openMenuId, setOpenMenuId] = useState<string | null>(null);
   const [renamingId, setRenamingId] = useState<string | null>(null);
   const [newName, setNewName] = useState('');
+  const [docView, setDocView] = useState<'Recent' | 'Saved'>('Recent');
   useEffect(() => {
     // Load recent documents from localStorage
     const stored = localStorage.getItem('recentDocuments');
@@ -180,7 +181,7 @@ Insects are the largest group of arthropods. The evolution, their evolution, Mur
   return <div className="min-h-screen flex flex-col items-center justify-center p-4 md:p-8 relative overflow-hidden animate-fade-in" style={{
     backgroundImage: isCategoriesVisible ? `url(${estherBackground})` : `url(${homeBackground})`,
     backgroundSize: window.innerWidth >= 1024 ? 'cover' : isCategoriesVisible ? '100% auto' : 'cover',
-    backgroundPosition: isCategoriesVisible ? window.innerWidth >= 1024 ? '25% 12%' : 'center top' : 'center',
+    backgroundPosition: isCategoriesVisible ? window.innerWidth >= 1024 ? 'left 12%' : 'center top' : 'center',
     backgroundRepeat: 'no-repeat',
     backgroundAttachment: isCategoriesVisible ? 'fixed' : 'scroll'
   }}>
@@ -275,6 +276,31 @@ Insects are the largest group of arthropods. The evolution, their evolution, Mur
         // Simple recent documents view when coming from editor
         <div className="space-y-3 md:space-y-4 lg:space-y-6 overflow-hidden">
               <h2 className="text-xl md:text-2xl lg:text-3xl font-bold text-[hsl(253,47%,18%)] break-words">Recent & Saved Documents</h2>
+              
+              {/* Toggle buttons for Recent/Saved */}
+              <div className="flex gap-3 justify-center">
+                <button
+                  onClick={() => setDocView('Recent')}
+                  className={`px-6 py-2 rounded-full font-semibold transition-all duration-300 ${
+                    docView === 'Recent'
+                      ? 'bg-gradient-to-r from-[hsl(253,100%,64%)] to-[hsl(266,100%,70%)] text-white shadow-[0_0_20px_hsl(253,100%,64%,0.4)]'
+                      : 'bg-white text-[hsl(253,47%,18%)] border-2 border-[hsl(253,80%,85%)] hover:border-[hsl(253,100%,64%)]'
+                  }`}
+                >
+                  Recent
+                </button>
+                <button
+                  onClick={() => setDocView('Saved')}
+                  className={`px-6 py-2 rounded-full font-semibold transition-all duration-300 ${
+                    docView === 'Saved'
+                      ? 'bg-gradient-to-r from-[hsl(253,100%,64%)] to-[hsl(266,100%,70%)] text-white shadow-[0_0_20px_hsl(253,100%,64%,0.4)]'
+                      : 'bg-white text-[hsl(253,47%,18%)] border-2 border-[hsl(253,80%,85%)] hover:border-[hsl(253,100%,64%)]'
+                  }`}
+                >
+                  Saved
+                </button>
+              </div>
+
               <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4 lg:gap-6 overflow-hidden">
                 {recentDocs.map((doc, index) => <div key={index} className="group relative aspect-[3/4] rounded-[22px] overflow-hidden border-[3px] border-[hsl(253,80%,88%)] hover:border-[hsl(253,100%,64%)] transition-all duration-300 hover:scale-105 shadow-[0_0_20px_hsl(253,100%,64%,0.12)] hover:shadow-[0_0_40px_hsl(253,100%,64%,0.35),0_12px_40px_hsl(253,100%,64%,0.3)]">
                     <button onClick={() => handleOpenRecent(doc.id)} className="w-full h-full">
