@@ -766,7 +766,12 @@ const Editor = () => {
     });
   };
 
-  const handleInsertAnkh = (iconId: string, category: string) => {
+  const handleInsertAnkh = (iconId: string, category: string, cropData?: {
+    cropX: number;
+    cropY: number;
+    cropWidth: number;
+    cropHeight: number;
+  }) => {
     if (!editor) return;
     
     editor.commands.insertIcon({
@@ -775,6 +780,12 @@ const Editor = () => {
       width: 80,
       height: 112,
       color: 'hsl(253, 100%, 64%)',
+      ...(cropData && {
+        cropX: cropData.cropX,
+        cropY: cropData.cropY,
+        cropWidth: cropData.cropWidth,
+        cropHeight: cropData.cropHeight,
+      }),
     });
     
     // Close the drawer temporarily (will reopen after confirm)
@@ -782,7 +793,7 @@ const Editor = () => {
     
     toast({ 
       title: 'Ankh Inserted', 
-      description: 'Resize and position the ankh, then click Confirm' 
+      description: cropData ? 'Custom cropped ankh inserted!' : 'Resize and position the ankh, then click Confirm' 
     });
   };
 

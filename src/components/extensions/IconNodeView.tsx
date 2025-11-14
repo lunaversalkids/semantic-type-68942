@@ -11,9 +11,32 @@ import egyptianAnkhsImage from '@/assets/egyptian-ankhs-grid.png';
 
 export const IconNodeView = ({ node, updateAttributes, selected }: NodeViewProps) => {
   const [isEditing, setIsEditing] = useState(false);
-  const { iconId, category, width, height, color } = node.attrs;
+  const { iconId, category, width, height, color, cropX, cropY, cropWidth, cropHeight } = node.attrs;
 
   const getAnkhCropStyle = (ankhId: string, width: number, height: number) => {
+    // If custom crop data exists, use it
+    if (cropX !== null && cropY !== null && cropWidth !== null && cropHeight !== null) {
+      // Original image dimensions (assuming square grid image)
+      const gridImageWidth = 1024; // Adjust based on your actual image
+      const gridImageHeight = 1024;
+      
+      // Calculate background-size to scale the image so the crop area fits
+      const scaleX = (gridImageWidth / cropWidth) * 100;
+      const scaleY = (gridImageHeight / cropHeight) * 100;
+      
+      // Calculate background-position to offset the crop
+      const posX = -(cropX / cropWidth) * 100;
+      const posY = -(cropY / cropHeight) * 100;
+      
+      return {
+        backgroundImage: `url(${egyptianAnkhsImage})`,
+        backgroundSize: `${scaleX}% ${scaleY}%`,
+        backgroundPosition: `${posX}% ${posY}%`,
+        backgroundRepeat: 'no-repeat',
+      };
+    }
+    
+    // Fallback to grid-based positioning
     const ankhNum = parseInt(ankhId.replace('ankh-', ''));
     const col = (ankhNum - 1) % 4; // 0-3 (column position)
     const row = Math.floor((ankhNum - 1) / 4); // 0-3 (row position)
