@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { egyptianAnkhs } from "@/components/icons/EgyptianAnkhs";
 import egyptianAnkhsImage from "@/assets/egyptian-ankhs.jpg";
 interface ShapesIconsDrawerProps {
   open: boolean;
@@ -57,8 +58,20 @@ export function ShapesIconsDrawer({
 
         {/* Content Area */}
         <div className="px-8 pb-8 flex-1 overflow-y-auto">
-          {selectedCategory === 'egyptian' ? <div className="w-full h-full flex items-center justify-center p-6">
-              
+          {selectedCategory === 'egyptian' ? <div className="grid grid-cols-4 gap-6 p-6">
+              {egyptianAnkhs.map((ankh) => {
+                const AnkhComponent = ankh.component;
+                return (
+                  <button
+                    key={ankh.id}
+                    onClick={() => handleAnkhClick(ankh.id)}
+                    className="aspect-square flex items-center justify-center bg-white/50 hover:bg-white rounded-lg transition-all hover:shadow-lg hover:scale-105 p-4 border-2 border-transparent hover:border-[hsl(253,100%,64%)]"
+                    title={ankh.name}
+                  >
+                    <AnkhComponent className="w-full h-full" />
+                  </button>
+                );
+              })}
             </div> : <div className="w-full h-full flex items-center justify-center">
               <p className="text-[hsl(253,100%,30%)] text-lg">
                 {selectedCategory === 'shapes' && 'Shapes coming soon...'}
