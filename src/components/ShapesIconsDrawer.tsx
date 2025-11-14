@@ -28,7 +28,7 @@ const categories = [{
   name: 'Egyptian'
 }, {
   id: 'sacred',
-  name: 'Sacred'
+  name: 'Sacred Geometry'
 }, {
   id: 'christianity',
   name: 'Christianity'
