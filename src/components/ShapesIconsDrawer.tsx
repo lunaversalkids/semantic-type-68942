@@ -25,8 +25,20 @@ const categories = [
   { id: 'educational', name: 'Educational' },
   { id: 'artful', name: 'Artful' },
   { id: 'scientific', name: 'Scientific' },
+  { id: 'people', name: 'People' },
+  { id: 'earth', name: 'Earth' },
+  { id: 'sports', name: 'Sports' },
+  { id: 'vehicles', name: 'Vehicles' },
+  { id: 'professions', name: 'Professions' },
+  { id: 'ornaments', name: 'Ornaments' },
+  { id: 'shapes', name: 'Shapes' },
+  { id: 'arrows', name: 'Arrows' },
+  { id: 'samarian', name: 'Samarian' },
   { id: 'egyptian', name: 'Egyptian' },
-  { id: 'sumerian', name: 'Sumerian' },
+  { id: 'christianity', name: 'Christianity' },
+  { id: 'indigenous', name: 'Indigenous' },
+  { id: 'sacred-geometry', name: 'Sacred geometry' },
+  { id: 'quantum-physics', name: 'Quantum physics' },
 ];
 export function ShapesIconsDrawer({
   open,
@@ -286,7 +298,19 @@ export function ShapesIconsDrawer({
                 {selectedCategory === 'educational' && 'Educational coming soon...'}
                 {selectedCategory === 'artful' && 'Artful coming soon...'}
                 {selectedCategory === 'scientific' && 'Scientific coming soon...'}
-                {selectedCategory === 'sumerian' && 'Sumerian coming soon...'}
+                {selectedCategory === 'people' && 'People coming soon...'}
+                {selectedCategory === 'earth' && 'Earth coming soon...'}
+                {selectedCategory === 'sports' && 'Sports coming soon...'}
+                {selectedCategory === 'vehicles' && 'Vehicles coming soon...'}
+                {selectedCategory === 'professions' && 'Professions coming soon...'}
+                {selectedCategory === 'ornaments' && 'Ornaments coming soon...'}
+                {selectedCategory === 'shapes' && 'Shapes coming soon...'}
+                {selectedCategory === 'arrows' && 'Arrows coming soon...'}
+                {selectedCategory === 'samarian' && 'Samarian coming soon...'}
+                {selectedCategory === 'christianity' && 'Christianity coming soon...'}
+                {selectedCategory === 'indigenous' && 'Indigenous coming soon...'}
+                {selectedCategory === 'sacred-geometry' && 'Sacred geometry coming soon...'}
+                {selectedCategory === 'quantum-physics' && 'Quantum physics coming soon...'}
               </p>
             </div>
           )}
