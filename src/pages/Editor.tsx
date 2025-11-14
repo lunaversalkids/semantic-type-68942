@@ -1008,9 +1008,29 @@ const Editor = () => {
     
     const content = editor.getHTML();
     
-    // Save to localStorage as array
-    const stored = localStorage.getItem('savedDocuments') || '[]';
-    const savedDocs = JSON.parse(stored);
+    // Ensure savedDocuments is always an array
+    const stored = localStorage.getItem('savedDocuments');
+    let savedDocs = [];
+    
+    try {
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        // Convert object to array if it's in old format
+        if (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) {
+          savedDocs = Object.entries(parsed).map(([key, value]: [string, any]) => ({
+            id: crypto.randomUUID(),
+            name: value.name || key,
+            content: value.content || '',
+            savedAt: value.lastSaved || value.savedAt || new Date().toISOString()
+          }));
+        } else if (Array.isArray(parsed)) {
+          savedDocs = parsed;
+        }
+      }
+    } catch (error) {
+      console.error('Error parsing savedDocuments:', error);
+      savedDocs = [];
+    }
     
     // Check if document already exists
     const existingIndex = savedDocs.findIndex((doc: any) => doc.id === docId);
@@ -1080,12 +1100,31 @@ const Editor = () => {
     }
 
     // Update saved documents array
-    const savedStored = localStorage.getItem('savedDocuments') || '[]';
-    const savedDocs = JSON.parse(savedStored);
-    const savedIndex = savedDocs.findIndex((doc: any) => doc.id === docId);
-    if (savedIndex >= 0) {
-      savedDocs[savedIndex].name = newName;
-      localStorage.setItem('savedDocuments', JSON.stringify(savedDocs));
+    const savedStored = localStorage.getItem('savedDocuments');
+    if (savedStored) {
+      try {
+        let savedDocs = JSON.parse(savedStored);
+        
+        // Convert object to array if it's in old format
+        if (savedDocs && typeof savedDocs === 'object' && !Array.isArray(savedDocs)) {
+          savedDocs = Object.entries(savedDocs).map(([key, value]: [string, any]) => ({
+            id: crypto.randomUUID(),
+            name: value.name || key,
+            content: value.content || '',
+            savedAt: value.lastSaved || value.savedAt || new Date().toISOString()
+          }));
+        }
+        
+        if (Array.isArray(savedDocs)) {
+          const savedIndex = savedDocs.findIndex((doc: any) => doc.id === docId);
+          if (savedIndex >= 0) {
+            savedDocs[savedIndex].name = newName;
+            localStorage.setItem('savedDocuments', JSON.stringify(savedDocs));
+          }
+        }
+      } catch (error) {
+        console.error('Error updating saved documents:', error);
+      }
     }
 
     sonnerToast.success(`Renamed to "${newName}"`);
@@ -1123,9 +1162,29 @@ const Editor = () => {
     const content = editor.getHTML();
     const newDocId = crypto.randomUUID();
     
-    // Save to localStorage with new name and ID
-    const stored = localStorage.getItem('savedDocuments') || '[]';
-    const savedDocs = JSON.parse(stored);
+    // Ensure savedDocuments is always an array
+    const stored = localStorage.getItem('savedDocuments');
+    let savedDocs = [];
+    
+    try {
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        // Convert object to array if it's in old format
+        if (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) {
+          savedDocs = Object.entries(parsed).map(([key, value]: [string, any]) => ({
+            id: crypto.randomUUID(),
+            name: value.name || key,
+            content: value.content || '',
+            savedAt: value.lastSaved || value.savedAt || new Date().toISOString()
+          }));
+        } else if (Array.isArray(parsed)) {
+          savedDocs = parsed;
+        }
+      }
+    } catch (error) {
+      console.error('Error parsing savedDocuments:', error);
+      savedDocs = [];
+    }
     
     savedDocs.push({
       id: newDocId,
