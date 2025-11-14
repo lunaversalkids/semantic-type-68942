@@ -86,7 +86,7 @@ export function ShapesIconsDrawer({
   onOpenChange,
   onInsertIcon
 }: ShapesIconsDrawerProps) {
-  const [selectedCategory, setSelectedCategory] = useState<string>('animals');
+  const [selectedCategory, setSelectedCategory] = useState<string>('egyptian');
   const [isEditMode, setIsEditMode] = useState(false);
   const [iconCrops, setIconCrops] = useState<Record<number, PixelCrop>>({});
   const [selectedAnkhIndex, setSelectedAnkhIndex] = useState<number | null>(null);
