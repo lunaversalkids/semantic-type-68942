@@ -24,6 +24,7 @@ import { DraggableBoundary } from '@/components/DraggableBoundary';
 import { HorizontalRuler } from '@/components/HorizontalRuler';
 import { VerticalRuler } from '@/components/VerticalRuler';
 import { ShapesIconsDrawer } from '@/components/ShapesIconsDrawer';
+import { IconInstanceCropDialog } from '@/components/IconInstanceCropDialog';
 import { RenameDocumentDialog } from '@/components/RenameDocumentDialog';
 import { SaveAsTemplateDialog } from '@/components/SaveAsTemplateDialog';
 import { defaultStyles } from '@/types/styles';
@@ -105,6 +106,14 @@ const Editor = () => {
   const [documentName, setDocumentName] = useState('Untitled');
   const [renameDialogOpen, setRenameDialogOpen] = useState(false);
   const [saveAsTemplateDialogOpen, setSaveAsTemplateDialogOpen] = useState(false);
+  const [iconCropDialogOpen, setIconCropDialogOpen] = useState(false);
+  const [currentIconCropData, setCurrentIconCropData] = useState<{
+    cropX: number | null;
+    cropY: number | null;
+    cropWidth: number | null;
+    cropHeight: number | null;
+    updateAttributes: (attrs: any) => void;
+  } | null>(null);
   const { toast } = useToast();
 
   // Track document access for recents
@@ -810,6 +819,27 @@ const Editor = () => {
     };
   }, []);
 
+  // Listen for icon crop requests
+  useEffect(() => {
+    const handleCropRequest = (e: any) => {
+      const { cropX, cropY, cropWidth, cropHeight, updateAttributes } = e.detail;
+      setCurrentIconCropData({
+        cropX,
+        cropY,
+        cropWidth,
+        cropHeight,
+        updateAttributes,
+      });
+      setIconCropDialogOpen(true);
+    };
+    
+    window.addEventListener('icon-crop-requested', handleCropRequest);
+    
+    return () => {
+      window.removeEventListener('icon-crop-requested', handleCropRequest);
+    };
+  }, []);
+
   // Load and apply saved color preferences on mount
   useEffect(() => {
     const saved = localStorage.getItem('docOneColorPrefs');
@@ -1324,6 +1354,35 @@ const Editor = () => {
         open={saveAsTemplateDialogOpen}
         onOpenChange={setSaveAsTemplateDialogOpen}
         onSave={handleSaveAsTemplateConfirm}
+      />
+
+      <IconInstanceCropDialog
+        open={iconCropDialogOpen}
+        onOpenChange={setIconCropDialogOpen}
+        currentCrop={
+          currentIconCropData?.cropX !== null
+            ? {
+                cropX: currentIconCropData.cropX!,
+                cropY: currentIconCropData.cropY!,
+                cropWidth: currentIconCropData.cropWidth!,
+                cropHeight: currentIconCropData.cropHeight!,
+              }
+            : undefined
+        }
+        onSave={(cropData) => {
+          if (currentIconCropData?.updateAttributes) {
+            currentIconCropData.updateAttributes({
+              cropX: cropData.cropX,
+              cropY: cropData.cropY,
+              cropWidth: cropData.cropWidth,
+              cropHeight: cropData.cropHeight,
+            });
+            toast({
+              title: 'Crop Applied',
+              description: 'Icon has been cropped successfully',
+            });
+          }
+        }}
       />
       
       <OnboardingTour />
