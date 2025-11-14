@@ -206,7 +206,7 @@ export function IconCropEditor({ imageSrc, onSaveCrop, onClose, initialSelectedI
             </div>
           )}
           <Button onClick={handleSave} size="sm">
-            Save Crop
+            Replace
           </Button>
           <Button onClick={onClose} variant="outline" size="sm">
             Done
