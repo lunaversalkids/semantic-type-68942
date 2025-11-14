@@ -938,3 +938,15 @@ button[data-active="true"] {
 .animate-slide-up {
   animation: slide-up 0.4s ease-out;
 }
+
+/* Hide scrollbar utility */
+@layer utilities {
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+}
