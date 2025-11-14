@@ -84,16 +84,13 @@ export function ShapesIconsDrawer({
     const gridImageHeight = 1024;
     
     if (cropData) {
-      // Use custom crop data
-      const scaleX = (gridImageWidth / cropData.width) * 100;
-      const scaleY = (gridImageHeight / cropData.height) * 100;
-      const posX = -(cropData.x / cropData.width) * 100;
-      const posY = -(cropData.y / cropData.height) * 100;
+      // Calculate how much to scale the 1024x1024 grid so the crop fills the container
+      const scale = 1024 / Math.max(cropData.width, cropData.height);
       
       return {
         backgroundImage: `url(${egyptianAnkhsGrid})`,
-        backgroundSize: `${scaleX}% ${scaleY}%`,
-        backgroundPosition: `${posX}% ${posY}%`,
+        backgroundSize: `${1024 * scale}px ${1024 * scale}px`,
+        backgroundPosition: `-${cropData.x * scale}px -${cropData.y * scale}px`,
         backgroundRepeat: 'no-repeat' as const,
       };
     } else {
@@ -192,7 +189,7 @@ export function ShapesIconsDrawer({
                       <div
                         style={{
                           ...getAnkhDisplayStyle(ankhNum, cropData),
-                          aspectRatio: '1 / 1.3',
+                          aspectRatio: cropData ? `${cropData.width} / ${cropData.height}` : '1 / 1.3',
                         }}
                         className="w-full cursor-pointer hover:ring-4 ring-[hsl(253,100%,64%)] hover:bg-purple-200/20 transition-all rounded-lg"
                         onClick={() => handleAnkhClick(`ankh-${ankhNum}`)}
