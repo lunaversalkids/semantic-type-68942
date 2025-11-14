@@ -161,18 +161,54 @@ export function ShapesIconsDrawer({
         
         {/* Header */}
         <DialogHeader className="px-8 pt-6 pb-3 bg-gradient-to-b from-[hsl(253,60%,96%)] to-white">
-          <DialogTitle className="text-3xl font-bold text-[hsl(253,100%,30%)] text-center mb-3">
-            Shapes & Icons
-          </DialogTitle>
-          
-          {/* Search Bar */}
-          <div className="relative mb-4 max-w-sm mx-auto">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[hsl(253,100%,30%)]/60" />
-            <Input
-              placeholder="Search shapes and icons..."
-              className="pl-10 bg-white/80 border-[hsl(253,100%,64%)]/30 text-[hsl(253,100%,30%)] placeholder:text-[hsl(253,100%,30%)]/50 focus:border-[hsl(253,100%,64%)] focus:ring-[hsl(253,100%,64%)]"
-            />
-          </div>
+          {!isEditMode && (
+            <>
+              <DialogTitle className="text-3xl font-bold text-[hsl(253,100%,30%)] text-center mb-3">
+                Shapes & Icons
+              </DialogTitle>
+              
+              {/* Search Bar */}
+              <div className="relative mb-4 max-w-sm mx-auto">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[hsl(253,100%,30%)]/60" />
+                <Input
+                  placeholder="Search shapes and icons..."
+                  className="pl-10 bg-white/80 border-[hsl(253,100%,64%)]/30 text-[hsl(253,100%,30%)] placeholder:text-[hsl(253,100%,30%)]/50 focus:border-[hsl(253,100%,64%)] focus:ring-[hsl(253,100%,64%)]"
+                />
+              </div>
+              
+              {/* Category Tabs with Plus Icon - scrollable horizontally */}
+              <div className="w-full border-t border-[hsl(253,60%,88%)]">
+                <div className="overflow-x-auto overflow-y-hidden [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden pt-3">
+                  <div className="flex gap-3 items-center px-2">
+                    {/* Plus Icon Box */}
+                    <button className="flex-shrink-0 w-10 h-10 flex items-center justify-center bg-white/80 border-2 border-[hsl(253,100%,64%)]/30 rounded-lg hover:bg-white transition-colors shadow-sm">
+                      <Plus className="w-5 h-5 text-[hsl(253,100%,30%)]" />
+                    </button>
+                    
+                    {/* Category Tabs */}
+                    {categories.map(category => (
+                      <button
+                        key={category.id}
+                        onClick={() => setSelectedCategory(category.id)}
+                        className={`px-4 py-1.5 font-semibold text-[15px] transition-all duration-200 rounded-md whitespace-nowrap flex-shrink-0 ${
+                          selectedCategory === category.id
+                            ? 'bg-white text-[hsl(253,100%,30%)] shadow-[0_2px_8px_rgba(0,0,0,0.15)]'
+                            : 'bg-transparent text-[hsl(253,100%,30%)] hover:bg-white/40'
+                        }`}
+                      >
+                        {category.name}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+                
+                {/* Purple Scroll Indicator */}
+                <div className="w-full flex justify-center pt-2 pb-2">
+                  <div className="w-64 h-1.5 bg-[hsl(253,100%,64%)] rounded-full opacity-80" />
+                </div>
+              </div>
+            </>
+          )}
           
           {isEditMode && (
             <button 
@@ -180,41 +216,10 @@ export function ShapesIconsDrawer({
               className="absolute top-4 right-6 rounded-lg px-3 py-1.5 hover:bg-purple-200/50 transition-colors flex items-center gap-2 text-[hsl(253,100%,30%)] font-semibold" 
               aria-label="Back"
             >
-              ← Back
+              <ArrowLeft className="w-4 h-4" />
+              Back
             </button>
           )}
-          
-          {/* Category Tabs with Plus Icon - scrollable horizontally */}
-          <div className="w-full border-t border-[hsl(253,60%,88%)]">
-            <div className="overflow-x-auto overflow-y-hidden [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden pt-3">
-              <div className="flex gap-3 items-center px-2">
-                {/* Plus Icon Box */}
-                <button className="flex-shrink-0 w-10 h-10 flex items-center justify-center bg-white/80 border-2 border-[hsl(253,100%,64%)]/30 rounded-lg hover:bg-white transition-colors shadow-sm">
-                  <Plus className="w-5 h-5 text-[hsl(253,100%,30%)]" />
-                </button>
-                
-                {/* Category Tabs */}
-                {categories.map(category => (
-                  <button
-                    key={category.id}
-                    onClick={() => setSelectedCategory(category.id)}
-                    className={`px-4 py-1.5 font-semibold text-[15px] transition-all duration-200 rounded-md whitespace-nowrap flex-shrink-0 ${
-                      selectedCategory === category.id
-                        ? 'bg-white text-[hsl(253,100%,30%)] shadow-[0_2px_8px_rgba(0,0,0,0.15)]'
-                        : 'bg-transparent text-[hsl(253,100%,30%)] hover:bg-white/40'
-                    }`}
-                  >
-                    {category.name}
-                  </button>
-                ))}
-              </div>
-            </div>
-            
-            {/* Purple Scroll Indicator */}
-            <div className="w-full flex justify-center pt-2 pb-2">
-              <div className="w-64 h-1.5 bg-[hsl(253,100%,64%)] rounded-full opacity-80" />
-            </div>
-          </div>
         </DialogHeader>
 
         {/* Content Area */}
