@@ -63,10 +63,17 @@ export const IconNodeView = ({ node, updateAttributes, selected }: NodeViewProps
 
   const IconComponent = icon?.component;
 
-  const handleConfirm = () => {
-    setIsEditing(false);
-    // Emit event to reopen drawer
-    window.dispatchEvent(new CustomEvent('ankh-confirmed'));
+  const handleCrop = () => {
+    // Emit event with current crop data for editor to handle
+    window.dispatchEvent(new CustomEvent('icon-crop-requested', {
+      detail: {
+        cropX,
+        cropY,
+        cropWidth,
+        cropHeight,
+        updateAttributes,
+      }
+    }));
   };
 
   return (
@@ -157,15 +164,15 @@ export const IconNodeView = ({ node, updateAttributes, selected }: NodeViewProps
         </PopoverContent>
       </Popover>
       
-      {/* Confirm Button - only show when selected and category is egyptian */}
+      {/* Crop Button - only show when selected and category is egyptian */}
       {selected && category === 'egyptian' && (
         <div className="absolute -bottom-14 left-1/2 transform -translate-x-1/2 z-50">
           <Button
-            onClick={handleConfirm}
+            onClick={handleCrop}
             className="bg-gradient-to-r from-[hsl(253,100%,64%)] to-[hsl(266,100%,70%)] hover:from-[hsl(253,100%,70%)] hover:to-[hsl(266,100%,75%)] text-white px-6 py-2 rounded-lg shadow-lg font-semibold"
             style={{ boxShadow: '0 4px 16px rgba(107, 91, 206, 0.4)' }}
           >
-            Confirm
+            Crop Icon
           </Button>
         </div>
       )}
