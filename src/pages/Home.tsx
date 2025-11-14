@@ -281,20 +281,20 @@ Insects are the largest group of arthropods. The evolution, their evolution, Mur
               <div className="flex gap-3 justify-start">
                 <button
                   onClick={() => setDocView('Recent')}
-                  className={`px-6 py-2 rounded-full font-semibold transition-all duration-300 ${
+                  className={`px-4 md:px-6 lg:px-7 py-2 md:py-2.5 lg:py-3 text-xs md:text-sm lg:text-base rounded-[16px] font-semibold transition-all duration-200 ${
                     docView === 'Recent'
-                      ? 'bg-gradient-to-r from-[hsl(253,100%,64%)] to-[hsl(266,100%,70%)] text-white shadow-[0_0_30px_hsl(253,100%,64%,0.6),0_0_60px_hsl(253,100%,64%,0.3)]'
-                      : 'bg-white text-[hsl(253,47%,18%)] border-2 border-[hsl(253,80%,85%)] hover:border-[hsl(253,100%,64%)] hover:shadow-[0_0_20px_hsl(253,100%,64%,0.3)]'
+                      ? 'text-[hsl(253,100%,64%)] bg-white shadow-[0_4px_20px_hsl(253,100%,64%,0.3),inset_0_1px_0_white] border-2 border-[hsl(253,100%,64%)]'
+                      : 'text-[hsl(253,28%,40%)] border-2 border-transparent hover:text-[hsl(253,100%,64%)]'
                   }`}
                 >
                   Recent
                 </button>
                 <button
                   onClick={() => setDocView('Saved')}
-                  className={`px-6 py-2 rounded-full font-semibold transition-all duration-300 ${
+                  className={`px-4 md:px-6 lg:px-7 py-2 md:py-2.5 lg:py-3 text-xs md:text-sm lg:text-base rounded-[16px] font-semibold transition-all duration-200 ${
                     docView === 'Saved'
-                      ? 'bg-gradient-to-r from-[hsl(253,100%,64%)] to-[hsl(266,100%,70%)] text-white shadow-[0_0_30px_hsl(253,100%,64%,0.6),0_0_60px_hsl(253,100%,64%,0.3)]'
-                      : 'bg-white text-[hsl(253,47%,18%)] border-2 border-[hsl(253,80%,85%)] hover:border-[hsl(253,100%,64%)] hover:shadow-[0_0_20px_hsl(253,100%,64%,0.3)]'
+                      ? 'text-[hsl(253,100%,64%)] bg-white shadow-[0_4px_20px_hsl(253,100%,64%,0.3),inset_0_1px_0_white] border-2 border-[hsl(253,100%,64%)]'
+                      : 'text-[hsl(253,28%,40%)] border-2 border-transparent hover:text-[hsl(253,100%,64%)]'
                   }`}
                 >
                   Saved
