@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Search } from "lucide-react";
+import { Search, Plus, Edit, ArrowLeft } from "lucide-react";
 import { IconCropEditor } from "./IconCropEditor";
 import egyptianAnkhsGrid from "@/assets/egyptian-ankhs-grid.png";
 import { PixelCrop } from "react-image-crop";
@@ -160,7 +160,7 @@ export function ShapesIconsDrawer({
         )}
         
         {/* Header */}
-        <DialogHeader className="px-8 pt-6 pb-0">
+        <DialogHeader className="px-8 pt-6 pb-3 bg-gradient-to-b from-[hsl(253,60%,96%)] to-white">
           <DialogTitle className="text-3xl font-bold text-[hsl(253,100%,30%)] text-center mb-3">
             Shapes & Icons
           </DialogTitle>
@@ -184,12 +184,35 @@ export function ShapesIconsDrawer({
             </button>
           )}
           
-          {/* Category Tabs - scrollable horizontally */}
-          <div className="w-full overflow-x-auto overflow-y-hidden [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden border-t border-[hsl(253,60%,88%)] pt-3 pb-3">
-            <div className="flex gap-4 items-center">
-              {categories.map(category => <button key={category.id} onClick={() => setSelectedCategory(category.id)} className={`px-4 py-1.5 font-semibold text-[15px] transition-all duration-200 rounded-md whitespace-nowrap flex-shrink-0 ${selectedCategory === category.id ? 'bg-white text-[hsl(253,100%,30%)] shadow-[0_2px_8px_rgba(0,0,0,0.15)]' : 'bg-transparent text-[hsl(253,100%,30%)] hover:bg-white/40'}`}>
-                  {category.name}
-                </button>)}
+          {/* Category Tabs with Plus Icon - scrollable horizontally */}
+          <div className="w-full border-t border-[hsl(253,60%,88%)]">
+            <div className="overflow-x-auto overflow-y-hidden [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden pt-3">
+              <div className="flex gap-3 items-center px-2">
+                {/* Plus Icon Box */}
+                <button className="flex-shrink-0 w-10 h-10 flex items-center justify-center bg-white/80 border-2 border-[hsl(253,100%,64%)]/30 rounded-lg hover:bg-white transition-colors shadow-sm">
+                  <Plus className="w-5 h-5 text-[hsl(253,100%,30%)]" />
+                </button>
+                
+                {/* Category Tabs */}
+                {categories.map(category => (
+                  <button
+                    key={category.id}
+                    onClick={() => setSelectedCategory(category.id)}
+                    className={`px-4 py-1.5 font-semibold text-[15px] transition-all duration-200 rounded-md whitespace-nowrap flex-shrink-0 ${
+                      selectedCategory === category.id
+                        ? 'bg-white text-[hsl(253,100%,30%)] shadow-[0_2px_8px_rgba(0,0,0,0.15)]'
+                        : 'bg-transparent text-[hsl(253,100%,30%)] hover:bg-white/40'
+                    }`}
+                  >
+                    {category.name}
+                  </button>
+                ))}
+              </div>
+            </div>
+            
+            {/* Purple Scroll Indicator */}
+            <div className="w-full flex justify-center pt-2 pb-2">
+              <div className="w-64 h-1.5 bg-[hsl(253,100%,64%)] rounded-full opacity-80" />
             </div>
           </div>
         </DialogHeader>
