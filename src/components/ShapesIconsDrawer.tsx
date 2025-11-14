@@ -15,30 +15,78 @@ interface ShapesIconsDrawerProps {
   }) => void;
 }
 const categories = [{
+  id: 'animals',
+  name: 'Animals'
+}, {
+  id: 'objects',
+  name: 'Objects'
+}, {
+  id: 'nature',
+  name: 'Nature'
+}, {
+  id: 'food',
+  name: 'Food'
+}, {
+  id: 'symbols',
+  name: 'Symbols'
+}, {
+  id: 'educational',
+  name: 'Educational'
+}, {
+  id: 'artful',
+  name: 'Artful'
+}, {
+  id: 'scientific',
+  name: 'Scientific'
+}, {
+  id: 'people',
+  name: 'People'
+}, {
+  id: 'earth',
+  name: 'Earth'
+}, {
+  id: 'sports',
+  name: 'Sports'
+}, {
+  id: 'vehicles',
+  name: 'Vehicles'
+}, {
+  id: 'professions',
+  name: 'Professions'
+}, {
+  id: 'ornaments',
+  name: 'Ornaments'
+}, {
   id: 'shapes',
   name: 'Shapes'
 }, {
   id: 'arrows',
   name: 'Arrows'
 }, {
-  id: 'sumerian',
-  name: 'Sumerian'
+  id: 'samarian',
+  name: 'Samarian'
 }, {
   id: 'egyptian',
   name: 'Egyptian'
 }, {
+  id: 'christianity',
+  name: 'Christianity'
+}, {
+  id: 'indigenous',
+  name: 'Indigenous'
+}, {
   id: 'sacred',
   name: 'Sacred Geometry'
 }, {
-  id: 'christianity',
-  name: 'Christianity'
+  id: 'quantum',
+  name: 'Quantum Physics'
 }];
 export function ShapesIconsDrawer({
   open,
   onOpenChange,
   onInsertIcon
 }: ShapesIconsDrawerProps) {
-  const [selectedCategory, setSelectedCategory] = useState<string>('shapes');
+  const [selectedCategory, setSelectedCategory] = useState<string>('animals');
   const [isEditMode, setIsEditMode] = useState(false);
   const [iconCrops, setIconCrops] = useState<Record<number, PixelCrop>>({});
   const [selectedAnkhIndex, setSelectedAnkhIndex] = useState<number | null>(null);
@@ -108,10 +156,12 @@ export function ShapesIconsDrawer({
           )}
           
           {/* Category Tabs - positioned right under title */}
-          <div className="flex gap-4 justify-center items-center">
-            {categories.map(category => <button key={category.id} onClick={() => setSelectedCategory(category.id)} className={`px-4 py-1.5 font-semibold text-[15px] transition-all duration-200 rounded-md ${selectedCategory === category.id ? 'bg-white text-[hsl(253,100%,30%)] shadow-[0_2px_8px_rgba(0,0,0,0.15)]' : 'bg-transparent text-[hsl(253,100%,30%)] hover:bg-white/40'}`}>
-                {category.name}
-              </button>)}
+          <div className="overflow-x-auto scrollbar-hide">
+            <div className="flex gap-4 items-center min-w-max px-4">
+              {categories.map(category => <button key={category.id} onClick={() => setSelectedCategory(category.id)} className={`px-4 py-1.5 font-semibold text-[15px] transition-all duration-200 rounded-md whitespace-nowrap ${selectedCategory === category.id ? 'bg-white text-[hsl(253,100%,30%)] shadow-[0_2px_8px_rgba(0,0,0,0.15)]' : 'bg-transparent text-[hsl(253,100%,30%)] hover:bg-white/40'}`}>
+                  {category.name}
+                </button>)}
+            </div>
           </div>
         </DialogHeader>
 
@@ -238,11 +288,27 @@ export function ShapesIconsDrawer({
             )
           ) : <div className="w-full h-full flex items-center justify-center">
               <p className="text-[hsl(253,100%,30%)] text-lg">
+                {selectedCategory === 'animals' && 'Animals coming soon...'}
+                {selectedCategory === 'objects' && 'Objects coming soon...'}
+                {selectedCategory === 'nature' && 'Nature coming soon...'}
+                {selectedCategory === 'food' && 'Food coming soon...'}
+                {selectedCategory === 'symbols' && 'Symbols coming soon...'}
+                {selectedCategory === 'educational' && 'Educational coming soon...'}
+                {selectedCategory === 'artful' && 'Artful coming soon...'}
+                {selectedCategory === 'scientific' && 'Scientific coming soon...'}
+                {selectedCategory === 'people' && 'People coming soon...'}
+                {selectedCategory === 'earth' && 'Earth coming soon...'}
+                {selectedCategory === 'sports' && 'Sports coming soon...'}
+                {selectedCategory === 'vehicles' && 'Vehicles coming soon...'}
+                {selectedCategory === 'professions' && 'Professions coming soon...'}
+                {selectedCategory === 'ornaments' && 'Ornaments coming soon...'}
                 {selectedCategory === 'shapes' && 'Shapes coming soon...'}
                 {selectedCategory === 'arrows' && 'Arrows coming soon...'}
-                {selectedCategory === 'sumerian' && 'Sumerian symbols coming soon...'}
-                {selectedCategory === 'sacred' && 'Sacred geometry coming soon...'}
+                {selectedCategory === 'samarian' && 'Samarian symbols coming soon...'}
                 {selectedCategory === 'christianity' && 'Christianity symbols coming soon...'}
+                {selectedCategory === 'indigenous' && 'Indigenous symbols coming soon...'}
+                {selectedCategory === 'sacred' && 'Sacred Geometry coming soon...'}
+                {selectedCategory === 'quantum' && 'Quantum Physics coming soon...'}
               </p>
             </div>}
           </div>
