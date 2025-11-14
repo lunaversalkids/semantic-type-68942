@@ -270,7 +270,7 @@ Insects are the largest group of arthropods. The evolution, their evolution, Mur
         </div>
 
         {/* Templates section or Recent documents only */}
-        {isCategoriesVisible && <div className="w-[95%] md:w-[85%] lg:w-full max-w-4xl md:max-w-3xl lg:max-w-5xl bg-[hsl(253,60%,92%)] rounded-lg md:rounded-xl lg:rounded-[28px] p-2 md:p-3 lg:p-10 shadow-[0_0_60px_hsl(253,100%,64%,0.4),0_12px_48px_hsl(253,100%,64%,0.3),0_0_100px_hsl(253,100%,64%,0.2)] border-[3px] border-[hsl(253,80%,85%)] backdrop-blur-xl animate-fade-in relative z-10 overflow-hidden">
+        {(isCategoriesVisible || fromEditor) && <div className="w-[95%] md:w-[85%] lg:w-full max-w-4xl md:max-w-3xl lg:max-w-5xl bg-[hsl(253,60%,92%)] rounded-lg md:rounded-xl lg:rounded-[28px] p-2 md:p-3 lg:p-10 shadow-[0_0_60px_hsl(253,100%,64%,0.4),0_12px_48px_hsl(253,100%,64%,0.3),0_0_100px_hsl(253,100%,64%,0.2)] border-[3px] border-[hsl(253,80%,85%)] backdrop-blur-xl animate-fade-in relative z-10 overflow-hidden">
           {fromEditor ?
         // Simple recent documents view when coming from editor
         <div className="space-y-3 md:space-y-4 lg:space-y-6 overflow-hidden">
