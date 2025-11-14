@@ -250,10 +250,23 @@ Insects are the largest group of arthropods. The evolution, their evolution, Mur
           {/* Divider text - only show on homepage */}
           {!fromEditor && <p className="text-sm md:text-base text-[hsl(253,28%,40%)] font-semibold pt-2">Choose Your Template.</p>}
 
-          {/* Chevron arrow */}
-          <button onClick={() => setIsCategoriesVisible(!isCategoriesVisible)} className="focus:outline-none">
-            
-          </button>
+          {/* Chevron arrow with bounce animation */}
+          {!fromEditor && (
+            <button 
+              onClick={() => setIsCategoriesVisible(!isCategoriesVisible)} 
+              className="mt-4 p-3 rounded-full bg-gradient-to-br from-[hsl(253,100%,64%)] to-[hsl(266,100%,70%)] shadow-[0_0_20px_hsl(253,100%,64%,0.4)] hover:shadow-[0_0_40px_hsl(253,100%,64%,0.6)] transition-all duration-300 focus:outline-none animate-bounce"
+              aria-label={isCategoriesVisible ? "Hide templates" : "Show templates"}
+            >
+              <svg 
+                className={`w-6 h-6 text-white transition-transform duration-300 ${isCategoriesVisible ? 'rotate-180' : ''}`} 
+                fill="none" 
+                stroke="currentColor" 
+                viewBox="0 0 24 24"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
+          )}
         </div>
 
         {/* Templates section or Recent documents only */}
