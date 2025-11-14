@@ -47,21 +47,24 @@ export function IconCropEditor({ imageSrc, onSaveCrop, onClose }: IconCropEditor
         </div>
       </div>
 
-      <div className="flex-1 overflow-auto p-4 bg-gray-100">
+      <div className="flex-1 overflow-auto p-4 bg-[repeating-conic-gradient(#e5e7eb_0%_25%,white_0%_50%)] bg-[length:20px_20px]">
         <ReactCrop
           crop={crop}
           onChange={(c) => setCrop(c)}
           aspect={1}
+          ruleOfThirds
         >
-          <img src={imageSrc} alt="Crop editor" className="max-w-full" />
+          <img src={imageSrc} alt="Crop editor" className="max-w-full" style={{ imageRendering: 'crisp-edges' }} />
         </ReactCrop>
       </div>
 
       <div className="p-4 bg-gray-50 text-sm text-gray-600">
+        <p><strong>Instructions:</strong></p>
         <p>1. Select icon slot from dropdown</p>
-        <p>2. Draw a crop box around the icon</p>
+        <p>2. Draw a crop box around the icon (drag from corners OR sides)</p>
         <p>3. Click "Save Crop" to store it</p>
         <p>4. Repeat for all 16 icons</p>
+        <p className="mt-2 text-xs italic">Checkered background indicates transparency</p>
       </div>
     </div>
   );
