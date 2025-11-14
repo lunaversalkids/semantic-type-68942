@@ -213,7 +213,7 @@ export const PageViewer = ({ isOpen, onClose, totalPages, onPageClick, onAddPage
                       handlePageSelect(pageNum);
                     } else {
                       onPageClick?.(pageNum);
-                      onClose();
+                      // Don't close the page viewer when clicking a page
                     }
                   }}
                   style={{ transform: `rotate(${pageRotations.get(pageNum) || 0}deg)` }}
