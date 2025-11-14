@@ -294,6 +294,44 @@ export const Editor = ({
       attributes: {
         class: 'prose prose-sm sm:prose lg:prose-lg xl:prose-xl focus:outline-none max-w-none editor-content',
       },
+      handleDrop: (view, event, slice, moved) => {
+        // Handle icon drops with crop data
+        const iconId = event.dataTransfer?.getData('iconId');
+        const category = event.dataTransfer?.getData('category');
+        const cropDataStr = event.dataTransfer?.getData('cropData');
+        
+        if (iconId && category) {
+          event.preventDefault();
+          
+          const cropData = cropDataStr ? JSON.parse(cropDataStr) : undefined;
+          
+          const { schema } = view.state;
+          const coordinates = view.posAtCoords({ left: event.clientX, top: event.clientY });
+          
+          if (coordinates) {
+            const node = schema.nodes.iconNode.create({
+              iconId,
+              category,
+              width: 80,
+              height: 112,
+              color: 'hsl(253, 100%, 64%)',
+              ...(cropData && {
+                cropX: cropData.cropX,
+                cropY: cropData.cropY,
+                cropWidth: cropData.cropWidth,
+                cropHeight: cropData.cropHeight,
+              }),
+            });
+            
+            const transaction = view.state.tr.insert(coordinates.pos, node);
+            view.dispatch(transaction);
+          }
+          
+          return true; // Handled
+        }
+        
+        return false; // Let TipTap handle other drops
+      },
     },
     onSelectionUpdate: ({ editor }) => {
       const { from, to } = editor.state.selection;
