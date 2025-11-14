@@ -215,7 +215,31 @@ export const Toolbar = ({
   };
 
   const handleInsertFrom = () => {
-    toast.info('Insert from external sources coming soon!');
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'image/*,video/*,audio/*';
+    input.onchange = (e) => {
+      const file = (e.target as HTMLInputElement).files?.[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          const url = event.target?.result as string;
+          if (file.type.startsWith('image/')) {
+            editor.chain().focus().setImage({ src: url }).run();
+            toast.success('Image inserted from storage!');
+          } else if (file.type.startsWith('video/')) {
+            const videoHtml = `<video controls src="${url}" style="max-width: 100%;"></video>`;
+            editor.chain().focus().insertContent(videoHtml).run();
+            toast.success('Video inserted from storage!');
+          } else if (file.type.startsWith('audio/')) {
+            editor.commands.insertAudio({ src: url, width: 300, height: 300 });
+            toast.success('Audio inserted from storage!');
+          }
+        };
+        reader.readAsDataURL(file);
+      }
+    };
+    input.click();
   };
 
   const handleFootnoteInsert = (content: string) => {
