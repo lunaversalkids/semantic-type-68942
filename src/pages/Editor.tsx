@@ -973,14 +973,31 @@ const Editor = () => {
     
     const content = editor.getHTML();
     
-    // Save to localStorage
-    const stored = localStorage.getItem('savedDocuments') || '{}';
+    // Save to localStorage as array
+    const stored = localStorage.getItem('savedDocuments') || '[]';
     const savedDocs = JSON.parse(stored);
-    savedDocs[documentName] = {
-      name: documentName,
-      content,
-      lastSaved: new Date().toISOString()
-    };
+    
+    // Check if document already exists
+    const existingIndex = savedDocs.findIndex((doc: any) => doc.id === docId);
+    
+    if (existingIndex >= 0) {
+      // Update existing document
+      savedDocs[existingIndex] = {
+        ...savedDocs[existingIndex],
+        name: documentName,
+        content,
+        savedAt: new Date().toISOString()
+      };
+    } else {
+      // Add new document
+      savedDocs.push({
+        id: docId,
+        name: documentName,
+        content,
+        savedAt: new Date().toISOString()
+      });
+    }
+    
     localStorage.setItem('savedDocuments', JSON.stringify(savedDocs));
     
     sonnerToast.success('Document saved successfully');
@@ -1005,13 +1022,12 @@ const Editor = () => {
       }
     }
 
-    // Update saved documents
-    const savedStored = localStorage.getItem('savedDocuments') || '{}';
+    // Update saved documents array
+    const savedStored = localStorage.getItem('savedDocuments') || '[]';
     const savedDocs = JSON.parse(savedStored);
-    if (savedDocs[oldName]) {
-      savedDocs[newName] = savedDocs[oldName];
-      savedDocs[newName].name = newName;
-      delete savedDocs[oldName];
+    const savedIndex = savedDocs.findIndex((doc: any) => doc.id === docId);
+    if (savedIndex >= 0) {
+      savedDocs[savedIndex].name = newName;
       localStorage.setItem('savedDocuments', JSON.stringify(savedDocs));
     }
 
@@ -1048,19 +1064,26 @@ const Editor = () => {
     if (!editor) return;
     
     const content = editor.getHTML();
+    const newDocId = crypto.randomUUID();
     
-    // Save to localStorage with new name
-    const stored = localStorage.getItem('savedDocuments') || '{}';
+    // Save to localStorage with new name and ID
+    const stored = localStorage.getItem('savedDocuments') || '[]';
     const savedDocs = JSON.parse(stored);
-    savedDocs[newName] = {
+    
+    savedDocs.push({
+      id: newDocId,
       name: newName,
       content,
-      lastModified: new Date().toISOString()
-    };
+      savedAt: new Date().toISOString()
+    });
+    
     localStorage.setItem('savedDocuments', JSON.stringify(savedDocs));
     
     // Update current document name
     setDocumentName(newName);
+    
+    // Navigate to new document ID
+    navigate(`/editor?doc=${newDocId}`);
     
     sonnerToast.success(`Document saved as "${newName}"`);
   };
