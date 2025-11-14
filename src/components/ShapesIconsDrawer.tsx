@@ -42,7 +42,6 @@ export function ShapesIconsDrawer({
   const [isEditMode, setIsEditMode] = useState(false);
   const [iconCrops, setIconCrops] = useState<Record<number, PixelCrop>>({});
   const [selectedAnkhIndex, setSelectedAnkhIndex] = useState<number | null>(null);
-  const [isDragging, setIsDragging] = useState(false);
 
   // Load saved crops from localStorage on mount
   useEffect(() => {
@@ -82,8 +81,8 @@ export function ShapesIconsDrawer({
     }
   };
   return <Dialog open={open} onOpenChange={(newOpen) => {
-      // Prevent closing during edit mode or drag operation
-      if ((isEditMode || isDragging) && !newOpen) {
+      // Prevent accidental closing during edit mode
+      if (isEditMode && !newOpen) {
         return;
       }
       onOpenChange(newOpen);
@@ -161,7 +160,6 @@ export function ShapesIconsDrawer({
                       onClick={() => handleAnkhClick(`ankh-${ankhNum}`)}
                       draggable
                       onDragStart={(e) => {
-                        setIsDragging(true);
                         e.dataTransfer.setData('iconId', `ankh-${ankhNum}`);
                         e.dataTransfer.setData('category', 'egyptian');
                         
@@ -174,8 +172,10 @@ export function ShapesIconsDrawer({
                             cropHeight: cropData.height,
                           }));
                         }
+                        
+                        // Close the drawer so user can see the document
+                        onOpenChange(false);
                       }}
-                      onDragEnd={() => setIsDragging(false)}
                       className={`relative w-full h-full border-2 transition-all cursor-pointer overflow-hidden ${
                         isSelected 
                           ? 'border-[hsl(253,100%,64%)] bg-purple-200/50' 
