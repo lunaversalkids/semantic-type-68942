@@ -68,15 +68,15 @@ export function ShapesIconsDrawer({
           <DialogTitle className="text-3xl font-bold text-[hsl(253,100%,30%)] text-center mb-4">
             Shapes & Icons
           </DialogTitle>
-          <button onClick={() => {
-            if (isEditMode) {
-              setIsEditMode(false);
-            } else {
-              onOpenChange(false);
-            }
-          }} className="absolute top-4 right-6 rounded-lg p-1.5 hover:bg-purple-200/50 transition-colors" aria-label="Close">
-            ✕
-          </button>
+          {isEditMode && (
+            <button 
+              onClick={() => setIsEditMode(false)} 
+              className="absolute top-4 right-6 rounded-lg px-3 py-1.5 hover:bg-purple-200/50 transition-colors flex items-center gap-2 text-[hsl(253,100%,30%)] font-semibold" 
+              aria-label="Back"
+            >
+              ← Back
+            </button>
+          )}
           
           {/* Category Tabs - positioned right under title */}
           <div className="flex gap-4 justify-center items-center">
