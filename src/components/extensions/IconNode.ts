@@ -42,6 +42,18 @@ export const IconNode = Node.create({
       color: {
         default: '#000000',
       },
+      cropX: {
+        default: null,
+      },
+      cropY: {
+        default: null,
+      },
+      cropWidth: {
+        default: null,
+      },
+      cropHeight: {
+        default: null,
+      },
     };
   },
 

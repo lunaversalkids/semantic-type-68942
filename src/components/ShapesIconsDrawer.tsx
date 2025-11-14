@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { IconCropEditor } from "./IconCropEditor";
@@ -7,7 +7,12 @@ import { PixelCrop } from "react-image-crop";
 interface ShapesIconsDrawerProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onInsertIcon?: (iconId: string, category: string) => void;
+  onInsertIcon?: (iconId: string, category: string, cropData?: {
+    cropX: number;
+    cropY: number;
+    cropWidth: number;
+    cropHeight: number;
+  }) => void;
 }
 const categories = [{
   id: 'shapes',
@@ -36,9 +41,35 @@ export function ShapesIconsDrawer({
   const [selectedCategory, setSelectedCategory] = useState<string>('shapes');
   const [isEditMode, setIsEditMode] = useState(false);
   const [iconCrops, setIconCrops] = useState<Record<number, PixelCrop>>({});
+
+  // Load saved crops from localStorage on mount
+  useEffect(() => {
+    const saved = localStorage.getItem('egyptian-ankh-crops');
+    if (saved) {
+      try {
+        setIconCrops(JSON.parse(saved));
+      } catch (e) {
+        console.error('Failed to load saved crops:', e);
+      }
+    }
+  }, []);
   const handleAnkhClick = (ankhId: string) => {
     if (onInsertIcon) {
-      onInsertIcon(ankhId, 'egyptian');
+      // Get the ankh number from the id (e.g., 'ankh-1' -> 1)
+      const ankhNum = parseInt(ankhId.replace('ankh-', ''));
+      const cropData = iconCrops[ankhNum];
+      
+      // Pass crop data if available
+      if (cropData) {
+        onInsertIcon(ankhId, 'egyptian', {
+          cropX: cropData.x,
+          cropY: cropData.y,
+          cropWidth: cropData.width,
+          cropHeight: cropData.height,
+        });
+      } else {
+        onInsertIcon(ankhId, 'egyptian');
+      }
     }
   };
 
