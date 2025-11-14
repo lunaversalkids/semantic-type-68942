@@ -37,6 +37,7 @@ interface HeaderProps {
   isDoublePageLayout?: boolean;
   documentName?: string;
   onSaveDocument?: () => void;
+  onSaveAsDocument?: () => void;
   onRenameDocument?: () => void;
   onSaveAsTemplate?: () => void;
   onLayoutAssistantToggle?: () => void;
@@ -65,6 +66,7 @@ export const Header = ({
   isDoublePageLayout,
   documentName = 'Untitled',
   onSaveDocument,
+  onSaveAsDocument,
   onRenameDocument,
   onSaveAsTemplate,
   onLayoutAssistantToggle,
@@ -93,6 +95,9 @@ export const Header = ({
           <DropdownMenuContent className="w-48 bg-white dark:bg-gray-800 z-50">
             <DropdownMenuItem onClick={onSaveDocument}>
               Save
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={onSaveAsDocument}>
+              Save As
             </DropdownMenuItem>
             <DropdownMenuItem onClick={onRenameDocument}>
               Rename

@@ -27,6 +27,7 @@ import { ShapesIconsDrawer } from '@/components/ShapesIconsDrawer';
 import { IconInstanceCropDialog } from '@/components/IconInstanceCropDialog';
 import { RenameDocumentDialog } from '@/components/RenameDocumentDialog';
 import { SaveAsTemplateDialog } from '@/components/SaveAsTemplateDialog';
+import { SaveAsDocumentDialog } from '@/components/SaveAsDocumentDialog';
 import { LayoutAssistant } from '@/components/LayoutAssistant';
 import { defaultStyles } from '@/types/styles';
 import { useToast } from '@/hooks/use-toast';
@@ -107,6 +108,7 @@ const Editor = () => {
   const [documentName, setDocumentName] = useState('Untitled');
   const [renameDialogOpen, setRenameDialogOpen] = useState(false);
   const [saveAsTemplateDialogOpen, setSaveAsTemplateDialogOpen] = useState(false);
+  const [saveAsDialogOpen, setSaveAsDialogOpen] = useState(false);
   const [iconCropDialogOpen, setIconCropDialogOpen] = useState(false);
   const [currentIconCropData, setCurrentIconCropData] = useState<{
     cropX: number | null;
@@ -1037,6 +1039,31 @@ const Editor = () => {
     sonnerToast.success(`Template "${templateName}" saved successfully`);
   };
 
+  const handleSaveAsDocument = () => {
+    setSaveAsDialogOpen(true);
+  };
+
+  const handleSaveAsConfirm = async (newName: string) => {
+    if (!editor) return;
+    
+    const content = editor.getHTML();
+    
+    // Save to localStorage with new name
+    const stored = localStorage.getItem('savedDocuments') || '{}';
+    const savedDocs = JSON.parse(stored);
+    savedDocs[newName] = {
+      name: newName,
+      content,
+      lastModified: new Date().toISOString()
+    };
+    localStorage.setItem('savedDocuments', JSON.stringify(savedDocs));
+    
+    // Update current document name
+    setDocumentName(newName);
+    
+    sonnerToast.success(`Document saved as "${newName}"`);
+  };
+
   // Handle click outside text boxes to deselect
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -1084,6 +1111,7 @@ const Editor = () => {
         isDoublePageLayout={isDoublePageLayout}
         documentName={documentName}
         onSaveDocument={handleSaveDocument}
+        onSaveAsDocument={handleSaveAsDocument}
         onRenameDocument={handleRenameDocument}
         onSaveAsTemplate={handleSaveAsTemplate}
         onLayoutAssistantToggle={() => setLayoutAssistantActive(prev => !prev)}
@@ -1344,6 +1372,13 @@ const Editor = () => {
         open={saveAsTemplateDialogOpen}
         onOpenChange={setSaveAsTemplateDialogOpen}
         onSave={handleSaveAsTemplateConfirm}
+      />
+
+      <SaveAsDocumentDialog
+        open={saveAsDialogOpen}
+        onOpenChange={setSaveAsDialogOpen}
+        currentName={documentName}
+        onSave={handleSaveAsConfirm}
       />
 
       <IconInstanceCropDialog
