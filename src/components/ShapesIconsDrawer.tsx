@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { egyptianAnkhs } from "@/components/icons/EgyptianAnkhs";
-import egyptianAnkhsImage from "@/assets/egyptian-ankhs.jpg";
+import egyptianAnkhsGrid from "@/assets/egyptian-ankhs-grid.png";
 interface ShapesIconsDrawerProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
@@ -58,20 +57,27 @@ export function ShapesIconsDrawer({
 
         {/* Content Area */}
         <div className="px-8 pb-8 flex-1 overflow-y-auto">
-          {selectedCategory === 'egyptian' ? <div className="grid grid-cols-4 gap-6 p-6">
-              {egyptianAnkhs.map((ankh) => {
-                const AnkhComponent = ankh.component;
-                return (
-                  <button
-                    key={ankh.id}
-                    onClick={() => handleAnkhClick(ankh.id)}
-                    className="aspect-square flex items-center justify-center bg-white/50 hover:bg-white rounded-lg transition-all hover:shadow-lg hover:scale-105 p-4 border-2 border-transparent hover:border-[hsl(253,100%,64%)]"
-                    title={ankh.name}
-                  >
-                    <AnkhComponent className="w-full h-full" />
-                  </button>
-                );
-              })}
+          {selectedCategory === 'egyptian' ? <div className="relative p-6">
+              <img src={egyptianAnkhsGrid} alt="Egyptian Ankhs Grid" className="w-full" />
+              <div className="absolute inset-0 grid grid-cols-4 grid-rows-4 gap-0 p-6">
+                {Array.from({ length: 16 }).map((_, index) => {
+                  const row = Math.floor(index / 4);
+                  const col = index % 4;
+                  return (
+                    <button
+                      key={index}
+                      onClick={() => handleAnkhClick(`ankh-${index + 1}`)}
+                      draggable
+                      onDragStart={(e) => {
+                        e.dataTransfer.setData('iconId', `ankh-${index + 1}`);
+                        e.dataTransfer.setData('category', 'egyptian');
+                      }}
+                      className="border-2 border-transparent hover:border-[hsl(253,100%,64%)] hover:bg-white/20 transition-all cursor-pointer"
+                      title={`Ankh ${index + 1}`}
+                    />
+                  );
+                })}
+              </div>
             </div> : <div className="w-full h-full flex items-center justify-center">
               <p className="text-[hsl(253,100%,30%)] text-lg">
                 {selectedCategory === 'shapes' && 'Shapes coming soon...'}
