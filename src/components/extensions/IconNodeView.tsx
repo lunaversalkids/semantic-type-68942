@@ -18,11 +18,14 @@ export const IconNodeView = ({ node, updateAttributes, selected }: NodeViewProps
     const col = (ankhNum - 1) % 4; // 0-3 (column position)
     const row = Math.floor((ankhNum - 1) / 4); // 0-3 (row position)
     
+    const percentX = (col * 100) / 3; // Convert to percentage (0%, 33.33%, 66.66%, 100%)
+    const percentY = (row * 100) / 3; // Convert to percentage (0%, 33.33%, 66.66%, 100%)
+    
     return {
-      width: `${width * 4}px`,
-      height: `${height * 4}px`,
-      objectFit: 'none' as const,
-      objectPosition: `-${col * width}px -${row * height}px`,
+      backgroundImage: `url(${egyptianAnkhsImage})`,
+      backgroundSize: '400% 400%', // 4x4 grid means 400% in each direction
+      backgroundPosition: `${percentX}% ${percentY}%`,
+      backgroundRepeat: 'no-repeat',
     };
   };
 
@@ -54,11 +57,13 @@ export const IconNodeView = ({ node, updateAttributes, selected }: NodeViewProps
             style={{ width: `${width}px`, height: `${height}px` }}
           >
             {category === 'egyptian' ? (
-              <img 
-                src={egyptianAnkhsImage}
-                alt={`Ankh ${iconId}`}
-                style={getAnkhCropStyle(iconId, width, height)}
-                className="pointer-events-none block"
+              <div 
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  ...getAnkhCropStyle(iconId, width, height)
+                }}
+                className="pointer-events-none"
               />
             ) : (
               IconComponent && (
