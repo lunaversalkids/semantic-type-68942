@@ -77,13 +77,13 @@ export function ShapesIconsDrawer({
               onClick={() => setIsEditMode(true)}
               className="absolute top-4 left-4 z-10 transition-transform hover:scale-105"
               style={{
-                filter: 'drop-shadow(0 0 20px rgba(168, 85, 247, 0.8)) drop-shadow(0 0 40px rgba(168, 85, 247, 0.4))'
+                filter: 'drop-shadow(0 0 15px rgba(168, 85, 247, 0.8)) drop-shadow(0 0 30px rgba(168, 85, 247, 0.4))'
               }}
             >
               <img 
                 src={new URL('../assets/edit-button.png', import.meta.url).href} 
                 alt="Edit" 
-                className="w-32 h-auto"
+                className="w-16 h-auto"
               />
             </button>
           )}
