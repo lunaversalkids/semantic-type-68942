@@ -13,7 +13,10 @@ import pageSizerIcon from '@/assets/page-sizer-icon.png';
 import headerFooterIcon from '@/assets/header-footer-icon.png';
 import shapesIconsButton from '@/assets/shapes-icons-button.png';
 import chapterPresetsButton from '@/assets/chapter-presets-button.png';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator } from '@/components/ui/dropdown-menu';
+import { Switch } from '@/components/ui/switch';
+import { Label } from '@/components/ui/label';
+
 interface HeaderProps {
   onHomeClick?: () => void;
   onFindClick?: () => void;
@@ -42,6 +45,10 @@ interface HeaderProps {
   onSaveAsTemplate?: () => void;
   onLayoutAssistantToggle?: () => void;
   layoutAssistantActive?: boolean;
+  onNewDocument?: () => void;
+  onQuitDocument?: () => void;
+  autosaveEnabled?: boolean;
+  onAutosaveToggle?: (enabled: boolean) => void;
 }
 export const Header = ({
   onHomeClick,
@@ -70,7 +77,11 @@ export const Header = ({
   onRenameDocument,
   onSaveAsTemplate,
   onLayoutAssistantToggle,
-  layoutAssistantActive
+  layoutAssistantActive,
+  onNewDocument,
+  onQuitDocument,
+  autosaveEnabled = false,
+  onAutosaveToggle
 }: HeaderProps) => {
   return <header className="bg-[hsl(var(--panel))] border border-[hsl(var(--stroke))] rounded-[var(--radius)] shadow-[0_10px_28px_rgba(96,48,200,.16)] p-2 grid grid-cols-[auto_1fr_auto] items-center gap-3">
       {/* Brand */}
@@ -92,7 +103,11 @@ export const Header = ({
               <span>{documentName}</span>
             </button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent className="w-48 bg-white dark:bg-gray-800 z-50">
+          <DropdownMenuContent className="w-56 bg-white dark:bg-gray-800 z-50">
+            <DropdownMenuItem onClick={onNewDocument}>
+              New Document
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
             <DropdownMenuItem onClick={onSaveDocument}>
               Save
             </DropdownMenuItem>
@@ -104,6 +119,22 @@ export const Header = ({
             </DropdownMenuItem>
             <DropdownMenuItem onClick={onSaveAsTemplate}>
               Save As Template
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <div className="px-2 py-3 flex items-center justify-between gap-3">
+              <Label htmlFor="autosave-toggle" className="text-sm font-medium cursor-pointer">
+                Autosave
+              </Label>
+              <Switch
+                id="autosave-toggle"
+                checked={autosaveEnabled}
+                onCheckedChange={onAutosaveToggle}
+                className="data-[state=checked]:bg-[hsl(var(--primary))]"
+              />
+            </div>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem onClick={onQuitDocument}>
+              Quit Document
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

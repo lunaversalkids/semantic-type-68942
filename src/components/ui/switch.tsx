@@ -9,15 +9,33 @@ const Switch = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <SwitchPrimitives.Root
     className={cn(
-      "peer inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors data-[state=checked]:bg-primary data-[state=unchecked]:bg-input focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50",
+      "peer relative inline-flex h-8 w-16 shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-all data-[state=checked]:bg-[hsl(var(--primary))] data-[state=unchecked]:bg-gray-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50",
       className,
     )}
     {...props}
     ref={ref}
   >
+    <span 
+      className={cn(
+        "absolute inset-0 flex items-center justify-center text-xs font-bold text-white transition-opacity",
+        "data-[state=checked]:opacity-100 data-[state=unchecked]:opacity-0 pointer-events-none"
+      )}
+      data-state={props.checked ? "checked" : "unchecked"}
+    >
+      ON
+    </span>
+    <span 
+      className={cn(
+        "absolute inset-0 flex items-center justify-center text-xs font-bold text-gray-600 transition-opacity",
+        "data-[state=checked]:opacity-0 data-[state=unchecked]:opacity-100 pointer-events-none"
+      )}
+      data-state={props.checked ? "checked" : "unchecked"}
+    >
+      OFF
+    </span>
     <SwitchPrimitives.Thumb
       className={cn(
-        "pointer-events-none block h-5 w-5 rounded-full bg-background shadow-lg ring-0 transition-transform data-[state=checked]:translate-x-5 data-[state=unchecked]:translate-x-0",
+        "pointer-events-none block h-7 w-7 rounded-full bg-white shadow-lg ring-0 transition-transform data-[state=checked]:translate-x-8 data-[state=unchecked]:translate-x-0",
       )}
     />
   </SwitchPrimitives.Root>
