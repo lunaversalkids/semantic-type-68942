@@ -318,8 +318,8 @@ Insects are the largest group of arthropods. The evolution, their evolution, Mur
                         <button onClick={e => {
                     e.stopPropagation();
                     setOpenMenuId(openMenuId === doc.id ? null : doc.id);
-                  }} onMouseDown={e => e.stopPropagation()} className={`absolute bottom-3 right-3 w-10 h-10 rounded-full bg-gradient-to-br from-[hsl(253,100%,64%)] to-[hsl(266,100%,70%)] ${openMenuId === doc.id ? 'opacity-100 scale-110' : 'opacity-0 group-hover:opacity-100 hover:scale-110'} hover:shadow-[0_0_20px_hsl(253,100%,64%,0.8)] transition-all duration-200 flex items-center justify-center z-50`}>
-                          <MoreVertical className="w-5 h-5 text-white" />
+                  }} onMouseDown={e => e.stopPropagation()} className={`absolute bottom-2 right-2 w-8 h-8 rounded-full bg-gradient-to-br from-[hsl(253,100%,64%)] to-[hsl(266,100%,70%)] ${openMenuId === doc.id ? 'opacity-100 scale-110' : 'opacity-0 group-hover:opacity-100 hover:scale-110'} hover:shadow-[0_0_20px_hsl(253,100%,64%,0.8)] transition-all duration-200 flex items-center justify-center z-50`}>
+                          <MoreVertical className="w-4 h-4 text-white" />
                         </button>
                       </PopoverTrigger>
                       <PopoverContent className="w-48 p-2 bg-[hsl(253,100%,98%)] border-2 border-[hsl(253,80%,85%)] rounded-2xl shadow-[0_8px_32px_hsl(253,100%,64%,0.25)] z-[100]" sideOffset={8} onClick={e => e.stopPropagation()}>
