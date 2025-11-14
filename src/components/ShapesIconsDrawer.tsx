@@ -25,6 +25,8 @@ const categories = [
   { id: 'educational', name: 'Educational' },
   { id: 'artful', name: 'Artful' },
   { id: 'scientific', name: 'Scientific' },
+  { id: 'egyptian', name: 'Egyptian' },
+  { id: 'sumerian', name: 'Sumerian' },
 ];
 export function ShapesIconsDrawer({
   open,
@@ -107,7 +109,7 @@ export function ShapesIconsDrawer({
         )}
         
         {/* Header */}
-        <DialogHeader className="px-8 pt-6 pb-3 bg-gradient-to-b from-[hsl(253,60%,96%)] to-white">
+        <DialogHeader className="px-8 pt-6 pb-3 bg-[hsl(270,100%,95%)] rounded-t-[26px] overflow-hidden">
           {!isEditMode && (
             <>
               <DialogTitle className="text-3xl font-bold text-[hsl(253,100%,30%)] text-center mb-3">
@@ -139,7 +141,7 @@ export function ShapesIconsDrawer({
                         onClick={() => setSelectedCategory(category.id)}
                         className={`px-4 py-1.5 font-semibold text-[15px] transition-all duration-200 rounded-md whitespace-nowrap flex-shrink-0 ${
                           selectedCategory === category.id
-                            ? 'bg-white text-[hsl(253,100%,30%)] shadow-[0_2px_8px_rgba(0,0,0,0.15)]'
+                            ? 'bg-white text-[hsl(253,100%,30%)] shadow-[0_2px_12px_rgba(82,0,255,0.25),0_4px_20px_rgba(82,0,255,0.15)] border-2 border-[hsl(253,100%,64%)]/40'
                             : 'bg-transparent text-[hsl(253,100%,30%)] hover:bg-white/40'
                         }`}
                       >
@@ -284,6 +286,7 @@ export function ShapesIconsDrawer({
                 {selectedCategory === 'educational' && 'Educational coming soon...'}
                 {selectedCategory === 'artful' && 'Artful coming soon...'}
                 {selectedCategory === 'scientific' && 'Scientific coming soon...'}
+                {selectedCategory === 'sumerian' && 'Sumerian coming soon...'}
               </p>
             </div>
           )}
