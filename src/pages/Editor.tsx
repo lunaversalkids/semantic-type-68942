@@ -587,9 +587,37 @@ const Editor = () => {
     }
   };
 
-  const handleLoadDocument = (content: string, name: string) => {
+  const handleLoadDocument = (id: string, content: string, name: string) => {
     if (editor) {
       editor.commands.setContent(content);
+      setDocumentName(name);
+      
+      // Update recent documents
+      const recentStored = localStorage.getItem('recentDocuments') || '[]';
+      const recentDocs = JSON.parse(recentStored);
+      const recentIndex = recentDocs.findIndex((doc: any) => doc.id === id);
+      
+      if (recentIndex >= 0) {
+        // Move to top if already exists
+        const [existingDoc] = recentDocs.splice(recentIndex, 1);
+        recentDocs.unshift({
+          ...existingDoc,
+          lastOpened: new Date().toISOString()
+        });
+      } else {
+        // Add new entry
+        recentDocs.unshift({
+          id,
+          title: name,
+          lastOpened: new Date().toISOString()
+        });
+      }
+      
+      localStorage.setItem('recentDocuments', JSON.stringify(recentDocs.slice(0, 10)));
+      
+      // Navigate to the document
+      navigate(`/editor?doc=${id}`);
+      
       sonnerToast.success(`Loaded "${name}"`);
     }
   };
@@ -946,7 +974,7 @@ const Editor = () => {
 
   const navigate = useNavigate();
 
-  // Load document name from localStorage or derive from content
+  // Load document name from localStorage and track as recent
   useEffect(() => {
     const stored = localStorage.getItem('recentDocuments');
     if (stored) {
@@ -954,6 +982,13 @@ const Editor = () => {
       const currentDoc = recentDocs.find((doc: any) => doc.id === docId);
       if (currentDoc) {
         setDocumentName(currentDoc.title || 'Untitled');
+        
+        // Update last opened time
+        const index = recentDocs.findIndex((doc: any) => doc.id === docId);
+        if (index >= 0) {
+          recentDocs[index].lastOpened = new Date().toISOString();
+          localStorage.setItem('recentDocuments', JSON.stringify(recentDocs));
+        }
       }
     }
   }, [docId]);
@@ -999,6 +1034,28 @@ const Editor = () => {
     }
     
     localStorage.setItem('savedDocuments', JSON.stringify(savedDocs));
+    
+    // Also update recent documents
+    const recentStored = localStorage.getItem('recentDocuments') || '[]';
+    const recentDocs = JSON.parse(recentStored);
+    const recentIndex = recentDocs.findIndex((doc: any) => doc.id === docId);
+    
+    if (recentIndex >= 0) {
+      recentDocs[recentIndex] = {
+        id: docId,
+        title: documentName,
+        lastOpened: new Date().toISOString()
+      };
+    } else {
+      recentDocs.unshift({
+        id: docId,
+        title: documentName,
+        lastOpened: new Date().toISOString()
+      });
+    }
+    
+    // Keep only last 10 recent documents
+    localStorage.setItem('recentDocuments', JSON.stringify(recentDocs.slice(0, 10)));
     
     sonnerToast.success('Document saved successfully');
   };
@@ -1079,6 +1136,16 @@ const Editor = () => {
     
     localStorage.setItem('savedDocuments', JSON.stringify(savedDocs));
     
+    // Add to recent documents
+    const recentStored = localStorage.getItem('recentDocuments') || '[]';
+    const recentDocs = JSON.parse(recentStored);
+    recentDocs.unshift({
+      id: newDocId,
+      title: newName,
+      lastOpened: new Date().toISOString()
+    });
+    localStorage.setItem('recentDocuments', JSON.stringify(recentDocs.slice(0, 10)));
+    
     // Update current document name
     setDocumentName(newName);
     
@@ -1092,6 +1159,22 @@ const Editor = () => {
     if (autosaveEnabled && editor) {
       await handleSaveDocument();
     }
+    
+    // Create new document with unique ID
+    const newDocId = crypto.randomUUID();
+    
+    // Add to recent documents
+    const recentStored = localStorage.getItem('recentDocuments') || '[]';
+    const recentDocs = JSON.parse(recentStored);
+    recentDocs.unshift({
+      id: newDocId,
+      title: 'Untitled',
+      lastOpened: new Date().toISOString()
+    });
+    localStorage.setItem('recentDocuments', JSON.stringify(recentDocs.slice(0, 10)));
+    
+    // Navigate to new document
+    navigate(`/editor?doc=${newDocId}`);
     
     // Reset editor to empty state
     if (editor) {

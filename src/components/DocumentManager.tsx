@@ -18,7 +18,7 @@ interface Document {
 interface DocumentManagerProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onLoadDocument?: (content: string, name: string) => void;
+  onLoadDocument?: (id: string, content: string, name: string) => void;
 }
 
 export const DocumentManager = ({ open, onOpenChange, onLoadDocument }: DocumentManagerProps) => {
@@ -27,11 +27,36 @@ export const DocumentManager = ({ open, onOpenChange, onLoadDocument }: Document
 
   const fetchDocuments = () => {
     try {
+      // Get saved documents
       const savedDocs = localStorage.getItem('savedDocuments');
-      if (savedDocs) {
-        const docs = JSON.parse(savedDocs);
-        setDocuments(docs);
-      }
+      const saved = savedDocs ? JSON.parse(savedDocs) : [];
+      
+      // Get recent documents
+      const recentDocs = localStorage.getItem('recentDocuments');
+      const recent = recentDocs ? JSON.parse(recentDocs) : [];
+      
+      // Merge recent with saved, prioritizing saved documents
+      const savedIds = new Set(saved.map((doc: Document) => doc.id));
+      const recentWithSaved = recent.map((recentDoc: any) => {
+        const savedDoc = saved.find((d: Document) => d.id === recentDoc.id);
+        if (savedDoc) {
+          return savedDoc;
+        }
+        return {
+          id: recentDoc.id,
+          name: recentDoc.title,
+          content: '',
+          savedAt: recentDoc.lastOpened
+        };
+      });
+      
+      // Add saved documents that aren't in recent
+      const allDocs = [
+        ...recentWithSaved,
+        ...saved.filter((doc: Document) => !recent.some((r: any) => r.id === doc.id))
+      ];
+      
+      setDocuments(allDocs);
     } catch (error: any) {
       toast.error('Failed to load documents');
     }
@@ -62,7 +87,7 @@ export const DocumentManager = ({ open, onOpenChange, onLoadDocument }: Document
 
   const handleLoadDocument = (doc: Document) => {
     if (onLoadDocument) {
-      onLoadDocument(doc.content, doc.name);
+      onLoadDocument(doc.id, doc.content, doc.name);
       onOpenChange(false);
       toast.success(`Loaded "${doc.name}"`);
     }
