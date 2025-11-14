@@ -71,16 +71,6 @@ export function ShapesIconsDrawer({
   const handleCloseEditor = () => {
     setIsEditMode(false);
     setSelectedAnkhIndex(null);
-    
-    // Reload crops from localStorage to ensure latest changes are displayed
-    const saved = localStorage.getItem('egyptian-ankh-crops');
-    if (saved) {
-      try {
-        setIconCrops(JSON.parse(saved));
-      } catch (e) {
-        console.error('Failed to reload saved crops:', e);
-      }
-    }
   };
 
   const handleOpenEditor = () => {
@@ -193,12 +183,12 @@ export function ShapesIconsDrawer({
                     >
                       {hasCrop && (
                         <div 
-                          className="absolute inset-0 bg-white"
+                          className="absolute inset-0 bg-center bg-no-repeat"
                           style={{
                             backgroundImage: `url(${egyptianAnkhsGrid})`,
                             backgroundPosition: `-${cropData.x}px -${cropData.y}px`,
-                            backgroundSize: 'auto',
-                            backgroundRepeat: 'no-repeat',
+                            backgroundSize: `${cropData.width > 0 ? (100 * 100) / cropData.width : 100}% auto`,
+                            transform: 'scale(1.2)',
                           }}
                         />
                       )}
