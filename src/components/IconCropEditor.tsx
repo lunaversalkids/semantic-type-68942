@@ -3,7 +3,7 @@ import ReactCrop, { Crop, PixelCrop } from "react-image-crop";
 import "react-image-crop/dist/ReactCrop.css";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import { Wand2 } from "lucide-react";
+import { Wand2, Lock, Unlock } from "lucide-react";
 import { toast } from "sonner";
 
 interface IconCropEditorProps {
@@ -15,6 +15,7 @@ interface IconCropEditorProps {
 export function IconCropEditor({ imageSrc, onSaveCrop, onClose }: IconCropEditorProps) {
   const [crop, setCrop] = useState<Crop>();
   const [selectedIcon, setSelectedIcon] = useState(1);
+  const [isSquareMode, setIsSquareMode] = useState(true);
   const imageRef = useRef<HTMLImageElement>(null);
 
   const handleSave = () => {
@@ -128,7 +129,15 @@ export function IconCropEditor({ imageSrc, onSaveCrop, onClose }: IconCropEditor
             ))}
           </select>
         </div>
-        <div className="flex gap-2">
+        <div className="flex gap-2 items-center">
+          <Button 
+            onClick={() => setIsSquareMode(!isSquareMode)} 
+            variant={isSquareMode ? "default" : "outline"} 
+            size="sm"
+          >
+            {isSquareMode ? <Lock className="w-4 h-4 mr-1" /> : <Unlock className="w-4 h-4 mr-1" />}
+            {isSquareMode ? "Square" : "Free"}
+          </Button>
           <Button onClick={handleAutoCrop} variant="secondary" size="sm">
             <Wand2 className="w-4 h-4 mr-1" />
             Auto-Crop
@@ -143,10 +152,15 @@ export function IconCropEditor({ imageSrc, onSaveCrop, onClose }: IconCropEditor
       </div>
 
       <div className="flex-1 overflow-auto p-4 bg-[repeating-conic-gradient(#e5e7eb_0%_25%,white_0%_50%)] bg-[length:20px_20px]">
+        <div className="mb-2 text-sm text-muted-foreground">
+          {crop?.width && crop?.height && (
+            <span>Crop size: {Math.round(crop.width)} × {Math.round(crop.height)}px</span>
+          )}
+        </div>
         <ReactCrop
           crop={crop}
           onChange={(c) => setCrop(c)}
-          aspect={1}
+          aspect={isSquareMode ? 1 : undefined}
           ruleOfThirds
           minWidth={10}
           minHeight={10}
@@ -164,10 +178,11 @@ export function IconCropEditor({ imageSrc, onSaveCrop, onClose }: IconCropEditor
       <div className="p-4 bg-gray-50 text-sm text-gray-600">
         <p><strong>Instructions:</strong></p>
         <p>1. Select icon slot from dropdown</p>
-        <p>2. Click "Auto-Crop" to detect edges automatically, or draw manually</p>
-        <p>3. Adjust crop box by dragging corners or sides</p>
-        <p>4. Click "Save Crop" to store it</p>
-        <p>5. Repeat for all 16 icons</p>
+        <p>2. Toggle <strong>Square/Free</strong> mode for aspect ratio control</p>
+        <p>3. Click "Auto-Crop" to detect edges automatically, or draw manually</p>
+        <p>4. Adjust crop box by dragging corners or sides</p>
+        <p>5. Click "Save Crop" to store it</p>
+        <p>6. Repeat for all 16 icons</p>
         <p className="mt-2 text-xs italic">Checkered background indicates transparency</p>
       </div>
     </div>
