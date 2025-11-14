@@ -50,6 +50,7 @@ export function ShapesIconsDrawer({
   const [iconCrops, setIconCrops] = useState<Record<number, PixelCrop>>({});
   const [selectedAnkhIndex, setSelectedAnkhIndex] = useState<number | null>(null);
   const [previousCategory, setPreviousCategory] = useState<string>('animals');
+  const [searchQuery, setSearchQuery] = useState<string>('');
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const categoryRefs = useRef<{ [key: string]: HTMLButtonElement | null }>({});
 
@@ -78,6 +79,37 @@ export function ShapesIconsDrawer({
     const prevCategory = categories[prevIndex].id;
     setSelectedCategory(prevCategory);
     setTimeout(() => scrollToCategory(prevCategory), 50);
+  };
+
+  const handleSearch = (query: string) => {
+    setSearchQuery(query);
+    
+    if (!query.trim()) {
+      return;
+    }
+    
+    const lowerQuery = query.toLowerCase();
+    
+    // Search for matching category
+    const matchingCategory = categories.find(cat => 
+      cat.name.toLowerCase().includes(lowerQuery) || 
+      cat.id.toLowerCase().includes(lowerQuery)
+    );
+    
+    if (matchingCategory) {
+      setSelectedCategory(matchingCategory.id);
+      setTimeout(() => scrollToCategory(matchingCategory.id), 50);
+    }
+    
+    // Search for specific Egyptian ankh icon (e.g., "ankh-1", "1", etc.)
+    if (lowerQuery.includes('ankh') || lowerQuery.includes('egyptian')) {
+      setSelectedCategory('egyptian');
+      
+      const ankhNumber = parseInt(lowerQuery.replace(/\D/g, ''));
+      if (!isNaN(ankhNumber) && ankhNumber >= 1 && ankhNumber <= 16) {
+        setSelectedAnkhIndex(ankhNumber);
+      }
+    }
   };
 
   // Load saved crops from localStorage on mount
@@ -161,7 +193,9 @@ export function ShapesIconsDrawer({
               <div className="relative mb-4 max-w-sm mx-auto">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[hsl(253,100%,30%)]/60" />
                 <Input
-                  placeholder="Search shapes and icons..."
+                  placeholder="Search categories or icons..."
+                  value={searchQuery}
+                  onChange={(e) => handleSearch(e.target.value)}
                   className="pl-10 bg-white/80 border-[hsl(253,100%,64%)]/30 text-[hsl(253,100%,30%)] placeholder:text-[hsl(253,100%,30%)]/50 focus:border-[hsl(253,100%,64%)] focus:ring-[hsl(253,100%,64%)]"
                 />
               </div>
