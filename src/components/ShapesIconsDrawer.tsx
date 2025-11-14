@@ -135,11 +135,28 @@ export function ShapesIconsDrawer({
       }
       onOpenChange(newOpen);
     }}>
-      <DialogContent className={`relative p-0 bg-[hsl(270,100%,95%)] border-[6px] border-[hsl(253,100%,64%)] rounded-[32px] shadow-[0_0_80px_20px_hsl(253,100%,64%,0.6),0_0_120px_30px_hsl(253,100%,64%,0.4),0_0_160px_40px_hsl(253,100%,64%,0.2)] transition-all duration-300 ${
+      <DialogContent className={`p-0 bg-[hsl(270,100%,95%)] border-[6px] border-[hsl(253,100%,64%)] rounded-[32px] shadow-[0_0_80px_20px_hsl(253,100%,64%,0.6),0_0_120px_30px_hsl(253,100%,64%,0.4),0_0_160px_40px_hsl(253,100%,64%,0.2)] transition-all duration-300 ${
         isEditMode 
           ? 'max-w-7xl w-[1400px] h-[900px]' 
           : 'max-w-4xl w-[900px] h-[600px]'
       }`}>
+        {/* Edit button - aligned with X button */}
+        {selectedCategory === 'egyptian' && !isEditMode && (
+          <button
+            onClick={handleOpenEditor}
+            className="absolute top-4 left-6 z-10 transition-transform hover:scale-105"
+            style={{
+              filter: 'drop-shadow(0 0 15px rgba(82, 0, 255, 0.8)) drop-shadow(0 0 30px rgba(82, 0, 255, 0.4))'
+            }}
+          >
+            <img 
+              src={new URL('../assets/edit-button.png', import.meta.url).href} 
+              alt="Edit" 
+              className="w-16 h-auto"
+            />
+          </button>
+        )}
+        
         {/* Header */}
         <DialogHeader className="relative px-8 pt-6 pb-2">
           <DialogTitle className="text-3xl font-bold text-[hsl(253,100%,30%)] text-center mb-4">
@@ -164,23 +181,6 @@ export function ShapesIconsDrawer({
             </div>
           </div>
         </DialogHeader>
-
-        {/* Edit button - aligned with X button */}
-        {selectedCategory === 'egyptian' && !isEditMode && (
-          <button
-            onClick={handleOpenEditor}
-            className="absolute top-4 left-6 z-10 transition-transform hover:scale-105"
-            style={{
-              filter: 'drop-shadow(0 0 15px rgba(82, 0, 255, 0.8)) drop-shadow(0 0 30px rgba(82, 0, 255, 0.4))'
-            }}
-          >
-            <img 
-              src={new URL('../assets/edit-button.png', import.meta.url).href} 
-              alt="Edit" 
-              className="w-16 h-auto"
-            />
-          </button>
-        )}
 
         {/* Content Area */}
         <div className="flex-1 overflow-hidden flex relative">
