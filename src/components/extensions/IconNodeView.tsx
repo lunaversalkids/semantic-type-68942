@@ -7,20 +7,20 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Slider } from '@/components/ui/slider';
-import egyptianAnkhsImage from '@/assets/egyptian-ankhs.jpg';
+import egyptianAnkhsImage from '@/assets/egyptian-ankhs-grid.png';
 
 export const IconNodeView = ({ node, updateAttributes, selected }: NodeViewProps) => {
   const [isEditing, setIsEditing] = useState(false);
   const { iconId, category, width, height, color } = node.attrs;
 
   const getAnkhCropStyle = (ankhId: string, width: number, height: number) => {
-    const ankhNum = parseInt(ankhId.replace('ankh', ''));
-    const col = (ankhNum - 1) % 6; // 0-5 (column position)
-    const row = Math.floor((ankhNum - 1) / 6); // 0-1 (row position)
+    const ankhNum = parseInt(ankhId.replace('ankh-', ''));
+    const col = (ankhNum - 1) % 4; // 0-3 (column position)
+    const row = Math.floor((ankhNum - 1) / 4); // 0-3 (row position)
     
     return {
-      width: `${width * 6}px`,
-      height: `${height * 2}px`,
+      width: `${width * 4}px`,
+      height: `${height * 4}px`,
       objectFit: 'none' as const,
       objectPosition: `-${col * width}px -${row * height}px`,
     };
