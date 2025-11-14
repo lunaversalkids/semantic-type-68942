@@ -55,6 +55,9 @@ interface EditorProps {
   onHighlight?: () => void;
   onTranslate?: (language: string) => void;
   onFind?: () => void;
+  onInsertImage?: () => void;
+  onInsertVideo?: () => void;
+  onInsertAudio?: () => void;
   pageNumbersVisibility?: Record<number, boolean>;
   pageNumberSettings?: {
     position: 'left' | 'center' | 'right';
@@ -77,7 +80,10 @@ interface EditorProps {
 export const Editor = ({ 
   onSelectionChange, 
   onEditorReady, 
-  onApplyToAll, 
+  onApplyToAll,
+  onInsertImage,
+  onInsertVideo,
+  onInsertAudio,
   onAIAssist, 
   onInsertFootnote,
   onInsertTab,
@@ -505,6 +511,9 @@ export const Editor = ({
             onHighlight={onHighlight}
             onTranslate={onTranslate}
             onFind={onFind}
+            onInsertImage={onInsertImage}
+            onInsertVideo={onInsertVideo}
+            onInsertAudio={onInsertAudio}
             onTogglePageNumber={() => onTogglePageNumber?.(1)}
             showPageNumber={pageNumbersVisibility[1] ?? true}
             pageNumber={1}

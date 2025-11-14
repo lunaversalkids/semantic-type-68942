@@ -31,6 +31,9 @@ interface EditorContextMenuProps {
   onHighlight?: () => void;
   onTranslate?: (language: string) => void;
   onFind?: () => void;
+  onInsertImage?: () => void;
+  onInsertVideo?: () => void;
+  onInsertAudio?: () => void;
   showPageNumber?: boolean;
   pageNumber?: number;
   onToggleRuler?: () => void;
@@ -57,6 +60,9 @@ export const EditorContextMenu = ({
   onHighlight,
   onTranslate,
   onFind,
+  onInsertImage,
+  onInsertVideo,
+  onInsertAudio,
   showPageNumber = true,
   pageNumber = 1,
   onToggleRuler,
@@ -116,6 +122,16 @@ export const EditorContextMenu = ({
             <ContextMenuItem onClick={onFind}>
               <Search className="w-4 h-4 mr-2" />
               Find & Replace...
+            </ContextMenuItem>
+            <ContextMenuSeparator />
+            <ContextMenuItem onClick={onInsertImage}>
+              Image from...
+            </ContextMenuItem>
+            <ContextMenuItem onClick={onInsertVideo}>
+              Video from...
+            </ContextMenuItem>
+            <ContextMenuItem onClick={onInsertAudio}>
+              Audio from...
             </ContextMenuItem>
             <ContextMenuSeparator />
             <ContextMenuItem onClick={onInsertTab}>
