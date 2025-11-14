@@ -166,7 +166,7 @@ export function ShapesIconsDrawer({
           </DialogTitle>
           
           {/* Search Bar */}
-          <div className="relative mb-4">
+          <div className="relative mb-4 max-w-sm mx-auto">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[hsl(253,100%,30%)]/60" />
             <Input
               placeholder="Search shapes and icons..."
@@ -185,8 +185,8 @@ export function ShapesIconsDrawer({
           )}
           
           {/* Category Tabs - scrollable horizontally */}
-          <div className="w-full overflow-x-auto overflow-y-hidden [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden border-t border-[hsl(253,60%,88%)] pt-3 -mx-8 px-8">
-            <div className="flex gap-4 items-center pb-3">
+          <div className="w-full overflow-x-auto overflow-y-hidden [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden border-t border-[hsl(253,60%,88%)] pt-3 pb-3">
+            <div className="flex gap-4 items-center">
               {categories.map(category => <button key={category.id} onClick={() => setSelectedCategory(category.id)} className={`px-4 py-1.5 font-semibold text-[15px] transition-all duration-200 rounded-md whitespace-nowrap flex-shrink-0 ${selectedCategory === category.id ? 'bg-white text-[hsl(253,100%,30%)] shadow-[0_2px_8px_rgba(0,0,0,0.15)]' : 'bg-transparent text-[hsl(253,100%,30%)] hover:bg-white/40'}`}>
                   {category.name}
                 </button>)}
