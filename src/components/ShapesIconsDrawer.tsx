@@ -158,7 +158,7 @@ export function ShapesIconsDrawer({
         )}
         
         {/* Header */}
-        <DialogHeader className="relative px-8 pt-6 pb-2">
+        <DialogHeader className="px-8 pt-6 pb-4 border-b border-[hsl(253,60%,88%)]">
           <DialogTitle className="text-3xl font-bold text-[hsl(253,100%,30%)] text-center mb-4">
             Shapes & Icons
           </DialogTitle>
@@ -172,9 +172,9 @@ export function ShapesIconsDrawer({
             </button>
           )}
           
-          {/* Category Tabs - positioned right under title */}
-          <div className="w-full overflow-x-auto overflow-y-hidden [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-            <div className="flex gap-4 items-center px-4 pb-2">
+          {/* Category Tabs - scrollable horizontally */}
+          <div className="w-full overflow-x-auto overflow-y-hidden [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden -mx-8 px-8">
+            <div className="flex gap-4 items-center">
               {categories.map(category => <button key={category.id} onClick={() => setSelectedCategory(category.id)} className={`px-4 py-1.5 font-semibold text-[15px] transition-all duration-200 rounded-md whitespace-nowrap flex-shrink-0 ${selectedCategory === category.id ? 'bg-white text-[hsl(253,100%,30%)] shadow-[0_2px_8px_rgba(0,0,0,0.15)]' : 'bg-transparent text-[hsl(253,100%,30%)] hover:bg-white/40'}`}>
                   {category.name}
                 </button>)}
