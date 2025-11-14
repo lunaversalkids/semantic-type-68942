@@ -19,6 +19,7 @@ import { FontWeight } from './extensions/FontWeight';
 import { SmallCaps } from './extensions/SmallCaps';
 import { AllCaps } from './extensions/AllCaps';
 import { IconNode } from './extensions/IconNode';
+import { AudioNode } from './extensions/AudioNode';
 import { Table } from '@tiptap/extension-table';
 import { TableRow } from '@tiptap/extension-table-row';
 import { TableCell } from '@tiptap/extension-table-cell';
@@ -262,6 +263,7 @@ export const Editor = ({
       SmallCaps,
       AllCaps,
       IconNode,
+      AudioNode,
       Image,
       Footnote,
       Chapter,
