@@ -110,6 +110,7 @@ const Editor = () => {
   const [saveAsTemplateDialogOpen, setSaveAsTemplateDialogOpen] = useState(false);
   const [saveAsDialogOpen, setSaveAsDialogOpen] = useState(false);
   const [iconCropDialogOpen, setIconCropDialogOpen] = useState(false);
+  const [autosaveEnabled, setAutosaveEnabled] = useState(false);
   const [currentIconCropData, setCurrentIconCropData] = useState<{
     cropX: number | null;
     cropY: number | null;
@@ -1064,6 +1065,52 @@ const Editor = () => {
     sonnerToast.success(`Document saved as "${newName}"`);
   };
 
+  const handleNewDocument = async () => {
+    if (autosaveEnabled && editor) {
+      await handleSaveDocument();
+    }
+    
+    // Reset editor to empty state
+    if (editor) {
+      editor.commands.setContent('<p></p>');
+    }
+    setDocumentName('Untitled');
+    setDocumentSaved(false);
+    sonnerToast.success('New document created');
+  };
+
+  const handleQuitDocument = async () => {
+    if (autosaveEnabled && editor) {
+      await handleSaveDocument();
+    }
+    navigate('/home');
+  };
+
+  const handleAutosaveToggle = (enabled: boolean) => {
+    setAutosaveEnabled(enabled);
+    localStorage.setItem('autosaveEnabled', JSON.stringify(enabled));
+    sonnerToast.success(`Autosave ${enabled ? 'enabled' : 'disabled'}`);
+  };
+
+  // Load autosave preference
+  useEffect(() => {
+    const saved = localStorage.getItem('autosaveEnabled');
+    if (saved) {
+      setAutosaveEnabled(JSON.parse(saved));
+    }
+  }, []);
+
+  // Autosave functionality
+  useEffect(() => {
+    if (!autosaveEnabled || !editor) return;
+
+    const autosaveInterval = setInterval(() => {
+      handleSaveDocument();
+    }, 60000); // Autosave every 60 seconds
+
+    return () => clearInterval(autosaveInterval);
+  }, [autosaveEnabled, editor, documentName]);
+
   // Handle click outside text boxes to deselect
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -1116,6 +1163,10 @@ const Editor = () => {
         onSaveAsTemplate={handleSaveAsTemplate}
         onLayoutAssistantToggle={() => setLayoutAssistantActive(prev => !prev)}
         layoutAssistantActive={layoutAssistantActive}
+        onNewDocument={handleNewDocument}
+        onQuitDocument={handleQuitDocument}
+        autosaveEnabled={autosaveEnabled}
+        onAutosaveToggle={handleAutosaveToggle}
       />
 
       <div className="grid grid-cols-[auto_1fr_auto] gap-3 overflow-hidden relative">
