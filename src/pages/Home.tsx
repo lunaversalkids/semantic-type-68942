@@ -302,8 +302,8 @@ Insects are the largest group of arthropods. The evolution, their evolution, Mur
               </div>
 
               <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8 lg:gap-10">
-                {recentDocs.map((doc, index) => <div key={index} className="p-2 transition-transform duration-300 hover:scale-105">
-                    <div className="group relative aspect-[3/4] rounded-[22px] overflow-hidden border-[3px] border-[hsl(253,80%,88%)] hover:border-[hsl(253,100%,64%)] transition-all duration-300 shadow-[0_0_20px_4px_hsl(253,100%,64%,0.2)] hover:shadow-[0_0_40px_8px_hsl(253,100%,64%,0.4)]">
+                {recentDocs.map((doc, index) => <div key={index} className="p-2 transition-transform duration-300 hover:scale-105 rounded-[22px] shadow-[0_0_20px_4px_hsl(253,100%,64%,0.2)] hover:shadow-[0_0_40px_8px_hsl(253,100%,64%,0.4)]">
+                    <div className="group relative aspect-[3/4] rounded-[22px] overflow-hidden border-[3px] border-[hsl(253,80%,88%)] hover:border-[hsl(253,100%,64%)] transition-all duration-300">
                       <button onClick={() => handleOpenRecent(doc.id)} className="w-full h-full">
                         <div className="w-full h-full bg-white p-3 md:p-4 lg:p-8 overflow-hidden flex flex-col">
                           <div className="text-left text-xs md:text-sm lg:text-[15px] leading-relaxed text-[hsl(253,47%,18%)] whitespace-pre-line font-serif line-clamp-[12] md:line-clamp-[16] lg:line-clamp-[20]">
@@ -384,8 +384,8 @@ Insects are the largest group of arthropods. The evolution, their evolution, Mur
                 </div>
                 
                 <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8 lg:gap-10">
-                  {activeTab === 'Recents' ? recentDocs.map((doc, index) => <div key={index} className="p-2 transition-transform duration-300 hover:scale-105">
-                      <div className="group relative aspect-[3/4] rounded-[22px] overflow-hidden border-[3px] border-[hsl(253,80%,88%)] hover:border-[hsl(253,100%,64%)] transition-all duration-300 shadow-[0_0_20px_4px_hsl(253,100%,64%,0.2)] hover:shadow-[0_0_40px_8px_hsl(253,100%,64%,0.4)]">
+                  {activeTab === 'Recents' ? recentDocs.map((doc, index) => <div key={index} className="p-2 transition-transform duration-300 hover:scale-105 rounded-[22px] shadow-[0_0_20px_4px_hsl(253,100%,64%,0.2)] hover:shadow-[0_0_40px_8px_hsl(253,100%,64%,0.4)]">
+                      <div className="group relative aspect-[3/4] rounded-[22px] overflow-hidden border-[3px] border-[hsl(253,80%,88%)] hover:border-[hsl(253,100%,64%)] transition-all duration-300">
                         <button onClick={() => handleOpenRecent(doc.id)} className="w-full h-full">
                           <div className="w-full h-full bg-white p-3 md:p-4 lg:p-8 overflow-hidden flex flex-col">
                             <div className="text-left text-xs md:text-sm lg:text-[15px] leading-relaxed text-[hsl(253,47%,18%)] whitespace-pre-line font-serif overflow-y-auto overflow-x-hidden h-full pr-2 pb-2">
