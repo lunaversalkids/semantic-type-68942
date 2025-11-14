@@ -180,8 +180,8 @@ Insects are the largest group of arthropods. The evolution, their evolution, Mur
   const tabs = ['Recents', 'Basic', 'Reports', 'Books', 'Study Books', 'Letters'];
   return <div className="min-h-screen flex flex-col items-center justify-center p-4 md:p-8 relative overflow-hidden animate-fade-in" style={{
     backgroundImage: isCategoriesVisible ? `url(${estherBackground})` : `url(${homeBackground})`,
-    backgroundSize: window.innerWidth >= 1024 ? 'cover' : isCategoriesVisible ? '100% auto' : 'cover',
-    backgroundPosition: isCategoriesVisible ? window.innerWidth >= 1024 ? 'left 12%' : 'center top' : 'center',
+    backgroundSize: window.innerWidth >= 1024 ? 'contain' : isCategoriesVisible ? '100% auto' : 'cover',
+    backgroundPosition: isCategoriesVisible ? window.innerWidth >= 1024 ? 'center 12%' : 'center top' : 'center',
     backgroundRepeat: 'no-repeat',
     backgroundAttachment: isCategoriesVisible ? 'fixed' : 'scroll'
   }}>
@@ -278,7 +278,7 @@ Insects are the largest group of arthropods. The evolution, their evolution, Mur
               <h2 className="text-xl md:text-2xl lg:text-3xl font-bold text-[hsl(253,47%,18%)] break-words">Recent & Saved Documents</h2>
               
               {/* Toggle buttons for Recent/Saved */}
-              <div className="flex gap-3 justify-center">
+              <div className="flex gap-3 justify-start">
                 <button
                   onClick={() => setDocView('Recent')}
                   className={`px-6 py-2 rounded-full font-semibold transition-all duration-300 ${
