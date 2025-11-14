@@ -71,19 +71,21 @@ export function ShapesIconsDrawer({
         </DialogHeader>
 
         {/* Content Area */}
-        <div className="flex-1 overflow-hidden flex">
+        <div className="flex-1 overflow-hidden flex relative">
           {selectedCategory === 'egyptian' && !isEditMode && (
-            <div className="w-16 bg-[hsl(270,100%,98%)] border-r border-[hsl(253,100%,64%)]/20 flex flex-col gap-2 p-2">
-              <Button
-                onClick={() => setIsEditMode(true)}
-                size="sm"
-                variant="outline"
-                className="h-12 text-xs flex flex-col gap-1 bg-white hover:bg-purple-100"
-              >
-                <span>✏️</span>
-                <span>Edit</span>
-              </Button>
-            </div>
+            <button
+              onClick={() => setIsEditMode(true)}
+              className="absolute top-4 left-4 z-10 transition-transform hover:scale-105"
+              style={{
+                filter: 'drop-shadow(0 0 20px rgba(168, 85, 247, 0.8)) drop-shadow(0 0 40px rgba(168, 85, 247, 0.4))'
+              }}
+            >
+              <img 
+                src={new URL('../assets/edit-button.png', import.meta.url).href} 
+                alt="Edit" 
+                className="w-32 h-auto"
+              />
+            </button>
           )}
           
           <div className="flex-1 overflow-y-auto px-8 pb-8">
