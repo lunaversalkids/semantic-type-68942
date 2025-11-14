@@ -152,7 +152,6 @@ export function IconCropEditor({ imageSrc, onSaveCrop, onClose }: IconCropEditor
         <ReactCrop
           crop={crop}
           onChange={(c) => setCrop(c)}
-          aspect={1}
           ruleOfThirds
           minWidth={10}
           minHeight={10}
