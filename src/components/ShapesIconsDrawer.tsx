@@ -14,36 +14,31 @@ interface ShapesIconsDrawerProps {
     cropHeight: number;
   }) => void;
 }
-const categories = [
-  { id: 'animals', name: 'Animals' },
-  { id: 'nature-environment', name: 'Nature & Environment' },
-  { id: 'food-drink', name: 'Food & Drink' },
-  { id: 'people-characters', name: 'People & Characters' },
-  { id: 'professions-occupations', name: 'Professions & Occupations' },
-  { id: 'sports-fitness', name: 'Sports & Fitness' },
-  { id: 'vehicles-transport', name: 'Vehicles & Transport' },
-  { id: 'objects-tools', name: 'Objects & Tools' },
-  { id: 'education', name: 'Education' },
-  { id: 'science-technology', name: 'Science & Technology' },
-  { id: 'world-planet', name: 'World & Planet' },
-  { id: 'shapes-geometry', name: 'Shapes & Geometry' },
-  { id: 'arrows', name: 'Arrows' },
-  { id: 'ornaments-decorative', name: 'Ornaments & Decorative' },
-  { id: 'general-symbols', name: 'General Symbols' },
-  { id: 'art-design', name: 'Art & Design' },
-  { id: 'sumerian', name: 'Sumerian' },
-  { id: 'egyptian', name: 'Egyptian' },
-  { id: 'indigenous-cultures', name: 'Indigenous Cultures' },
-  { id: 'christian-biblical', name: 'Christian & Biblical' },
-  { id: 'sacred-geometry', name: 'Sacred Geometry' },
-  { id: 'quantum-metaphysics', name: 'Quantum & Metaphysics' }
-];
+const categories = [{
+  id: 'shapes',
+  name: 'Shapes'
+}, {
+  id: 'arrows',
+  name: 'Arrows'
+}, {
+  id: 'sumerian',
+  name: 'Sumerian'
+}, {
+  id: 'egyptian',
+  name: 'Egyptian'
+}, {
+  id: 'sacred',
+  name: 'Sacred'
+}, {
+  id: 'christianity',
+  name: 'Christianity'
+}];
 export function ShapesIconsDrawer({
   open,
   onOpenChange,
   onInsertIcon
 }: ShapesIconsDrawerProps) {
-  const [selectedCategory, setSelectedCategory] = useState<string>('animals');
+  const [selectedCategory, setSelectedCategory] = useState<string>('shapes');
   const [isEditMode, setIsEditMode] = useState(false);
   const [iconCrops, setIconCrops] = useState<Record<number, PixelCrop>>({});
   const [selectedAnkhIndex, setSelectedAnkhIndex] = useState<number | null>(null);
@@ -241,13 +236,15 @@ export function ShapesIconsDrawer({
               </div>
             </div>
             )
-          ) : (
-            <div className="w-full h-full flex items-center justify-center">
+          ) : <div className="w-full h-full flex items-center justify-center">
               <p className="text-[hsl(253,100%,30%)] text-lg">
-                Content coming soon...
+                {selectedCategory === 'shapes' && 'Shapes coming soon...'}
+                {selectedCategory === 'arrows' && 'Arrows coming soon...'}
+                {selectedCategory === 'sumerian' && 'Sumerian symbols coming soon...'}
+                {selectedCategory === 'sacred' && 'Sacred geometry coming soon...'}
+                {selectedCategory === 'christianity' && 'Christianity symbols coming soon...'}
               </p>
-            </div>
-          )}
+            </div>}
           </div>
         </div>
       </DialogContent>
