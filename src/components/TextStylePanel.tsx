@@ -45,13 +45,12 @@ export const TextStylePanel = ({
         setFormattingMode('Hanging Indent');
       } else if (lineHeight === '1') {
         setFormattingMode('Single Spacing');
-      } else if (lineHeight === '1.15') {
-        setFormattingMode('1.15 Spacing');
       } else if (lineHeight === '1.5') {
         setFormattingMode('1.5 Spacing');
       } else if (lineHeight === '2.5') {
         setFormattingMode('2.5 Spacing');
       } else {
+        // Default to Normal for 1.15 or unset
         setFormattingMode('Normal');
       }
     };
