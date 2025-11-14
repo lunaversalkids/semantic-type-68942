@@ -534,15 +534,15 @@ export const Toolbar = ({
             </DropdownMenuItem>
             <DropdownMenuItem onClick={handleInsertImage}>
               <Image className="w-4 h-4 mr-2" />
-              Photo or Video
+              Image from...
             </DropdownMenuItem>
             <DropdownMenuItem onClick={() => setWebVideoOpen(true)}>
               <Video className="w-4 h-4 mr-2" />
-              Web Video
+              Video from...
             </DropdownMenuItem>
             <DropdownMenuItem onClick={handleInsertFrom}>
               <FolderOpen className="w-4 h-4 mr-2" />
-              Insert from...
+              Audio from...
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

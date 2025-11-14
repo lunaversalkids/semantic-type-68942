@@ -6,6 +6,7 @@ export interface AudioNodeAttributes {
   src: string;
   width: number;
   height: number;
+  diamondSize: number;
 }
 
 declare module '@tiptap/core' {
@@ -33,6 +34,9 @@ export const AudioNode = Node.create({
       },
       height: {
         default: 300,
+      },
+      diamondSize: {
+        default: 60,
       },
     };
   },
