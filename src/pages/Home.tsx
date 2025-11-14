@@ -22,7 +22,7 @@ const Home = () => {
   const [searchParams] = useSearchParams();
   const fromEditor = searchParams.get('from') === 'editor';
   const [recentDocs, setRecentDocs] = useState<RecentDocument[]>([]);
-  const [activeTab, setActiveTab] = useState('Recent');
+  const [activeTab, setActiveTab] = useState('Recents');
   const [isTemplatesExpanded, setIsTemplatesExpanded] = useState(false);
   const [isCategoriesVisible, setIsCategoriesVisible] = useState(false);
   const [openMenuId, setOpenMenuId] = useState<string | null>(null);
