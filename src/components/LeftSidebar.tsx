@@ -96,7 +96,7 @@ export const LeftSidebar = ({
           </div>
 
           {/* Card List */}
-          <div className="overflow-auto flex flex-col gap-2.5 pr-1 flex-1">
+          <div className="overflow-auto flex flex-col gap-2.5 pr-1 flex-1 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
             {styles.map(style => <div key={style.id} className="p-3 bg-background border border-border rounded-xl">
                 {editingId === style.id ? <div className="space-y-3">
                     <div className="flex items-center justify-between">
