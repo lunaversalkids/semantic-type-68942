@@ -1625,20 +1625,20 @@ const Editor = () => {
             pageWidth={pageWidth}
             pageHeight={pageHeight}
           />
+          
+          {recordingActive && (
+            <RecordingControls
+              recordingState={recordingState}
+              recordingTime={recordingTime}
+              onToggleRecording={handleToggleRecording}
+              onStop={handleStopRecording}
+              interimTranscript={interimTranscript}
+            />
+          )}
         </main>
 
         <TextStylePanel editor={editor} wordCount={wordCount} selectedWordCount={selectedWordCount} />
       </div>
-      
-      {recordingActive && (
-        <RecordingControls
-          recordingState={recordingState}
-          recordingTime={recordingTime}
-          onToggleRecording={handleToggleRecording}
-          onStop={handleStopRecording}
-          interimTranscript={interimTranscript}
-        />
-      )}
       
       <div className="relative">
         <PermanentFindReplaceBar />
