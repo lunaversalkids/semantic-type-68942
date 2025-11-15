@@ -1,3 +1,4 @@
+import { useState, useRef } from 'react';
 import { Pen, Search, Cloud, FileDown, FileUp, File, BookOpen } from 'lucide-react';
 import newInfinityButton from '@/assets/new-infinity-button.png';
 import penIcon from '@/assets/pen-icon.png';
@@ -86,6 +87,40 @@ export const Header = ({
   autosaveEnabled = false,
   onAutosaveToggle
 }: HeaderProps) => {
+  const [showLibraryMenu, setShowLibraryMenu] = useState(false);
+  const holdTimerRef = useRef<number | null>(null);
+
+  const handleNoteButtonMouseDown = () => {
+    holdTimerRef.current = window.setTimeout(() => {
+      setShowLibraryMenu(true);
+    }, 500);
+  };
+
+  const handleNoteButtonMouseUp = () => {
+    if (holdTimerRef.current) {
+      window.clearTimeout(holdTimerRef.current);
+      holdTimerRef.current = null;
+    }
+    
+    if (!showLibraryMenu && onVoiceRecordingClick) {
+      onVoiceRecordingClick();
+    }
+  };
+
+  const handleNoteButtonMouseLeave = () => {
+    if (holdTimerRef.current) {
+      window.clearTimeout(holdTimerRef.current);
+      holdTimerRef.current = null;
+    }
+  };
+
+  const handleLibraryClick = () => {
+    setShowLibraryMenu(false);
+    if (onAudioLibraryClick) {
+      onAudioLibraryClick();
+    }
+  };
+
   return <header className="bg-[hsl(var(--panel))] border border-[hsl(var(--stroke))] rounded-[var(--radius)] shadow-[0_10px_28px_rgba(96,48,200,.16)] p-2 grid grid-cols-[auto_1fr_auto] items-center gap-3">
       {/* Brand */}
       <div className="flex items-center gap-0.5 font-extrabold justify-start w-[340px] h-full">
@@ -169,30 +204,33 @@ export const Header = ({
           <img src={shapesIconsButton} alt="" className="w-7 h-7 object-contain" />
         </button>
 
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <button 
-              className={`h-8 w-8 border rounded-[var(--r-sm)] grid place-items-center hover:bg-[hsl(var(--panel-2))] transition-all ${
-                recordingActive 
-                  ? 'border-purple-500 bg-purple-500/10 shadow-[0_0_20px_rgba(168,85,247,0.4)]' 
-                  : 'border-[hsl(var(--stroke))]'
-              }`}
-              title="Note Taking"
-            >
-              <img src={noteTakingIcon} alt="" className="w-7 h-7 object-contain" />
-            </button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="bg-background z-50">
-            <DropdownMenuItem onClick={onVoiceRecordingClick}>
-              <BookOpen className="w-4 h-4 mr-2" />
-              Start Recording
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={onAudioLibraryClick}>
-              <FileDown className="w-4 h-4 mr-2" />
-              Audio Note Library
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <div className="relative">
+          <button 
+            onMouseDown={handleNoteButtonMouseDown}
+            onMouseUp={handleNoteButtonMouseUp}
+            onMouseLeave={handleNoteButtonMouseLeave}
+            className={`h-8 w-8 border rounded-[var(--r-sm)] grid place-items-center hover:bg-[hsl(var(--panel-2))] transition-all ${
+              recordingActive 
+                ? 'border-purple-500 bg-purple-500/10 shadow-[0_0_20px_rgba(168,85,247,0.4)]' 
+                : 'border-[hsl(var(--stroke))]'
+            }`}
+            title="Note Taking"
+          >
+            <img src={noteTakingIcon} alt="" className="w-7 h-7 object-contain" />
+          </button>
+          
+          {showLibraryMenu && (
+            <div className="absolute top-full right-0 mt-1 bg-background border border-[hsl(var(--stroke))] rounded-[var(--r-sm)] shadow-lg z-50 min-w-[180px]">
+              <button
+                onClick={handleLibraryClick}
+                className="w-full px-4 py-2 text-left hover:bg-[hsl(var(--panel-2))] transition-colors flex items-center gap-2"
+              >
+                <FileDown className="w-4 h-4" />
+                Audio Note Library
+              </button>
+            </div>
+          )}
+        </div>
 
         <button onClick={onChapterPresetsClick} className="h-8 w-8 border border-[hsl(var(--stroke))] rounded-[var(--r-sm)] grid place-items-center hover:bg-[hsl(var(--panel-2))] transition-colors" title="Chapter Presets">
           <img src={chapterPresetsButton} alt="" className="w-7 h-7 object-contain" />
