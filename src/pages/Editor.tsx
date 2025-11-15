@@ -987,11 +987,15 @@ const Editor = () => {
   };
 
   const handleDeleteRecording = (id: string) => {
-    setRecordings(prev => prev.filter(rec => rec.id !== id));
-    toast({
-      title: 'Recording Deleted',
-      description: 'Recording has been removed from library',
-    });
+    const recording = recordings.find(rec => rec.id === id);
+    if (recording) {
+      setTrashedRecordings(prev => [...prev, recording]);
+      setRecordings(prev => prev.filter(rec => rec.id !== id));
+      toast({
+        title: 'Recording Moved to Trash',
+        description: 'Recording has been moved to trash',
+      });
+    }
   };
 
   const handleDeleteFromTrash = (ids: string[]) => {
