@@ -8,6 +8,7 @@ interface RecordingControlsProps {
   recordingTime: number;
   onToggleRecording: () => void;
   onStop: () => void;
+  interimTranscript?: string;
 }
 
 export const RecordingControls = ({
@@ -15,6 +16,7 @@ export const RecordingControls = ({
   recordingTime,
   onToggleRecording,
   onStop,
+  interimTranscript = '',
 }: RecordingControlsProps) => {
   const [showStop, setShowStop] = useState(false);
   const holdTimerRef = useRef<number | null>(null);
@@ -68,6 +70,15 @@ export const RecordingControls = ({
           <Square className="w-4 h-4 fill-current text-red-500" />
           <span className="text-sm font-medium">STOP</span>
         </button>
+      )}
+
+      {/* Interim transcript display */}
+      {interimTranscript && recordingState === 'recording' && (
+        <div className="max-w-md px-4 py-2 bg-[hsl(var(--panel))] border border-purple-500/30 rounded-lg shadow-lg">
+          <p className="text-sm text-muted-foreground italic">
+            {interimTranscript}
+          </p>
+        </div>
       )}
 
       {/* Timer display */}
