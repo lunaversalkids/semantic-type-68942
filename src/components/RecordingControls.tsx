@@ -23,6 +23,9 @@ export const RecordingControls = ({
   const isHoldingRef = useRef(false);
 
   const handleMouseDown = () => {
+    // Prevent any interaction when stop button is visible
+    if (showStop) return;
+    
     isHoldingRef.current = true;
     holdTimerRef.current = window.setTimeout(() => {
       if (isHoldingRef.current) {
@@ -32,17 +35,17 @@ export const RecordingControls = ({
   };
 
   const handleMouseUp = () => {
+    // Prevent any interaction when stop button is visible
+    if (showStop) return;
+    
     isHoldingRef.current = false;
     if (holdTimerRef.current) {
       clearTimeout(holdTimerRef.current);
       holdTimerRef.current = null;
     }
     
-    // If stop button is not showing, this is a tap - toggle recording
-    if (!showStop) {
-      onToggleRecording();
-    }
-    // If stop button is showing, keep it visible (don't hide it)
+    // This is a tap - toggle recording
+    onToggleRecording();
   };
 
   const handleStopClick = (e: React.MouseEvent) => {
