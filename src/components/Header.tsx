@@ -143,56 +143,56 @@ export const Header = ({
       <div className="flex justify-end gap-2 w-[450px]">
         <button 
           onClick={onLayoutToggle} 
-          className="h-9 w-9 border border-[hsl(var(--stroke))] rounded-[var(--r-sm)] grid place-items-center hover:bg-[hsl(var(--panel-2))] transition-colors" 
+          className="h-9 w-9 border border-[hsl(var(--stroke))] rounded-[var(--r-sm)] grid place-items-center hover:bg-[hsl(var(--panel-2))] transition-colors overflow-hidden" 
           title={isDoublePageLayout ? "Switch to Single Page" : "Switch to Double Page"}
         >
           <img 
             src={isDoublePageLayout ? doublePageIcon : singlePageIcon} 
             alt="" 
-            className="w-7 h-7 object-contain" 
+            className="w-full h-full object-cover" 
           />
         </button>
 
-        <button onClick={onFindClick} className="h-9 w-9 border border-[hsl(var(--stroke))] rounded-[var(--r-sm)] grid place-items-center hover:bg-[hsl(var(--panel-2))] transition-colors" title="Find & Replace">
-          <img src={searchIcon} alt="" className="w-7 h-7 object-contain" />
+        <button onClick={onFindClick} className="h-9 w-9 border border-[hsl(var(--stroke))] rounded-[var(--r-sm)] grid place-items-center hover:bg-[hsl(var(--panel-2))] transition-colors overflow-hidden" title="Find & Replace">
+          <img src={searchIcon} alt="" className="w-full h-full object-cover" />
         </button>
 
-        <button onClick={onPaletteClick} className="h-9 w-9 border border-[hsl(var(--stroke))] rounded-[var(--r-sm)] grid place-items-center hover:bg-[hsl(var(--panel-2))] transition-colors" title="Interface Color Palette">
-          <img src={paletteIcon} alt="" className="w-7 h-7 object-contain" />
+        <button onClick={onPaletteClick} className="h-9 w-9 border border-[hsl(var(--stroke))] rounded-[var(--r-sm)] grid place-items-center hover:bg-[hsl(var(--panel-2))] transition-colors overflow-hidden" title="Interface Color Palette">
+          <img src={paletteIcon} alt="" className="w-full h-full object-cover" />
         </button>
 
-        <button onClick={onShapesIconsClick} className="h-9 w-9 border border-[hsl(var(--stroke))] rounded-[var(--r-sm)] grid place-items-center hover:bg-[hsl(var(--panel-2))] transition-colors" title="Shapes and Icons">
-          <img src={shapesIconsButton} alt="" className="w-7 h-7 object-contain" />
+        <button onClick={onShapesIconsClick} className="h-9 w-9 border border-[hsl(var(--stroke))] rounded-[var(--r-sm)] grid place-items-center hover:bg-[hsl(var(--panel-2))] transition-colors overflow-hidden" title="Shapes and Icons">
+          <img src={shapesIconsButton} alt="" className="w-full h-full object-cover" />
         </button>
 
-        <button onClick={onVoiceRecordingClick} className="h-9 w-9 border border-[hsl(var(--stroke))] rounded-[var(--r-sm)] grid place-items-center hover:bg-[hsl(var(--panel-2))] transition-colors" title="Voice Recording">
-          <img src={voiceRecordingIcon} alt="" className="w-7 h-7 object-contain" />
+        <button onClick={onVoiceRecordingClick} className="h-9 w-9 border border-[hsl(var(--stroke))] rounded-[var(--r-sm)] grid place-items-center hover:bg-[hsl(var(--panel-2))] transition-colors overflow-hidden" title="Voice Recording">
+          <img src={voiceRecordingIcon} alt="" className="w-full h-full object-cover" />
         </button>
 
-        <button onClick={onChapterPresetsClick} className="h-9 w-9 border border-[hsl(var(--stroke))] rounded-[var(--r-sm)] grid place-items-center hover:bg-[hsl(var(--panel-2))] transition-colors" title="Chapter Presets">
-          <img src={chapterPresetsButton} alt="" className="w-7 h-7 object-contain" />
+        <button onClick={onChapterPresetsClick} className="h-9 w-9 border border-[hsl(var(--stroke))] rounded-[var(--r-sm)] grid place-items-center hover:bg-[hsl(var(--panel-2))] transition-colors overflow-hidden" title="Chapter Presets">
+          <img src={chapterPresetsButton} alt="" className="w-full h-full object-cover" />
         </button>
 
-        <button onClick={onTextFrameClick} className="h-9 w-9 border border-[hsl(var(--stroke))] rounded-[var(--r-sm)] grid place-items-center hover:bg-[hsl(var(--panel-2))] transition-colors" title="Text Box">
-          <img src={textFrameIcon} alt="" className="w-7 h-7 object-contain" />
+        <button onClick={onTextFrameClick} className="h-9 w-9 border border-[hsl(var(--stroke))] rounded-[var(--r-sm)] grid place-items-center hover:bg-[hsl(var(--panel-2))] transition-colors overflow-hidden" title="Text Box">
+          <img src={textFrameIcon} alt="" className="w-full h-full object-cover" />
         </button>
 
-        <button onClick={onQuotationClick} className="h-9 w-9 border border-[hsl(var(--stroke))] rounded-[var(--r-sm)] grid place-items-center hover:bg-[hsl(var(--panel-2))] transition-colors" title="Quotation">
-          <img src={quotationIcon} alt="" className="w-7 h-7 object-contain" />
+        <button onClick={onQuotationClick} className="h-9 w-9 border border-[hsl(var(--stroke))] rounded-[var(--r-sm)] grid place-items-center hover:bg-[hsl(var(--panel-2))] transition-colors overflow-hidden" title="Quotation">
+          <img src={quotationIcon} alt="" className="w-full h-full object-cover" />
         </button>
 
-        <button onClick={onHeaderFooterClick} className="h-9 w-9 border border-[hsl(var(--stroke))] rounded-[var(--r-sm)] grid place-items-center hover:bg-[hsl(var(--panel-2))] transition-colors" title="Header & Footer">
-          <img src={headerFooterIcon} alt="" className="w-7 h-7 object-contain" />
+        <button onClick={onHeaderFooterClick} className="h-9 w-9 border border-[hsl(var(--stroke))] rounded-[var(--r-sm)] grid place-items-center hover:bg-[hsl(var(--panel-2))] transition-colors overflow-hidden" title="Header & Footer">
+          <img src={headerFooterIcon} alt="" className="w-full h-full object-cover" />
         </button>
 
-        <button onClick={onPageSizerClick} className="h-9 w-9 border border-[hsl(var(--stroke))] rounded-[var(--r-sm)] grid place-items-center hover:bg-[hsl(var(--panel-2))] transition-colors" title="Page Sizer">
-          <img src={pageSizerIcon} alt="" className="w-7 h-7 object-contain" />
+        <button onClick={onPageSizerClick} className="h-9 w-9 border border-[hsl(var(--stroke))] rounded-[var(--r-sm)] grid place-items-center hover:bg-[hsl(var(--panel-2))] transition-colors overflow-hidden" title="Page Sizer">
+          <img src={pageSizerIcon} alt="" className="w-full h-full object-cover" />
         </button>
 
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <button className="h-9 w-9 border border-[hsl(var(--stroke))] rounded-[var(--r-sm)] grid place-items-center hover:bg-[hsl(var(--panel-2))] transition-colors" title="Pen & Stylus">
-              <img src={penIcon} alt="" className="w-7 h-7 object-contain" />
+            <button className="h-9 w-9 border border-[hsl(var(--stroke))] rounded-[var(--r-sm)] grid place-items-center hover:bg-[hsl(var(--panel-2))] transition-colors overflow-hidden" title="Pen & Stylus">
+              <img src={penIcon} alt="" className="w-full h-full object-cover" />
             </button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="bg-background z-50">
@@ -209,8 +209,8 @@ export const Header = ({
 
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <button className="h-9 w-9 border border-[hsl(var(--stroke))] rounded-[var(--r-sm)] grid place-items-center hover:bg-[hsl(var(--panel-2))] transition-colors" title="Import/Export">
-              <img src={importExportIcon} alt="" className="w-7 h-7 object-contain" />
+            <button className="h-9 w-9 border border-[hsl(var(--stroke))] rounded-[var(--r-sm)] grid place-items-center hover:bg-[hsl(var(--panel-2))] transition-colors overflow-hidden" title="Import/Export">
+              <img src={importExportIcon} alt="" className="w-full h-full object-cover" />
             </button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="bg-background z-50">
