@@ -8,6 +8,7 @@ interface RecordingControlsProps {
   recordingTime: number;
   onToggleRecording: () => void;
   onStop: () => void;
+  onCancel: () => void;
   interimTranscript?: string;
 }
 
@@ -16,6 +17,7 @@ export const RecordingControls = ({
   recordingTime,
   onToggleRecording,
   onStop,
+  onCancel,
   interimTranscript = '',
 }: RecordingControlsProps) => {
   const [showStop, setShowStop] = useState(false);
@@ -61,6 +63,7 @@ export const RecordingControls = ({
 
   const handleCancelClick = (e: React.MouseEvent) => {
     e.stopPropagation();
+    onCancel();
     setShowStop(false);
   };
 
