@@ -4,6 +4,7 @@ import { Input } from '@/components/ui/input';
 import { Download, Edit2, Trash2, Mic, Check } from 'lucide-react';
 import { useState } from 'react';
 import { formatTime } from '@/utils/audioUtils';
+import { useToast } from '@/hooks/use-toast';
 
 export interface Recording {
   id: string;
@@ -32,6 +33,7 @@ export const RecordingsLibraryDialog = ({
 }: RecordingsLibraryDialogProps) => {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editName, setEditName] = useState('');
+  const { toast } = useToast();
 
   const getDialogWidth = () => {
     if (recordings.length <= 2) return "max-w-2xl";
@@ -64,6 +66,10 @@ export const RecordingsLibraryDialog = ({
   const saveEdit = (id: string) => {
     if (editName.trim()) {
       onRename(id, editName.trim());
+      toast({
+        title: "Saved confirmed",
+        description: "Recording name has been updated successfully.",
+      });
     }
     setEditingId(null);
     setEditName('');
@@ -107,7 +113,6 @@ export const RecordingsLibraryDialog = ({
                     <Input
                       value={editName}
                       onChange={(e) => setEditName(e.target.value)}
-                      onBlur={() => saveEdit(recording.id)}
                       onKeyDown={(e) => {
                         if (e.key === 'Enter') saveEdit(recording.id);
                         if (e.key === 'Escape') {
@@ -132,7 +137,15 @@ export const RecordingsLibraryDialog = ({
                   <Button
                     variant="ghost"
                     size="icon"
-                    onClick={() => editingId === recording.id ? saveEdit(recording.id) : startEdit(recording)}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      if (editingId === recording.id) {
+                        saveEdit(recording.id);
+                      } else {
+                        startEdit(recording);
+                      }
+                    }}
                     title={editingId === recording.id ? "Save" : "Rename"}
                   >
                     {editingId === recording.id ? (
