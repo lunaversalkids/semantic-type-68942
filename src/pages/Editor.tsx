@@ -950,6 +950,12 @@ const Editor = () => {
     resetRecording();
   };
 
+  const handleCancelRecording = () => {
+    resetRecording();
+    stopListening();
+    setRecordingActive(false);
+  };
+
   const handleRenameRecording = (id: string, newName: string) => {
     setRecordings(prev => prev.map(rec => 
       rec.id === id ? { ...rec, name: newName } : rec
@@ -1632,6 +1638,7 @@ const Editor = () => {
               recordingTime={recordingTime}
               onToggleRecording={handleToggleRecording}
               onStop={handleStopRecording}
+              onCancel={handleCancelRecording}
               interimTranscript={interimTranscript}
             />
           )}
