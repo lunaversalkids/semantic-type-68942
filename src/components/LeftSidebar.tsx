@@ -71,7 +71,7 @@ export const LeftSidebar = ({
         <Button size="icon" variant="ghost" className="h-8 w-8 text-muted-foreground hover:bg-sidebar-accent mb-4" onClick={toggleStyles}>
           {stylesExpanded ? <ChevronLeft className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}
         </Button>
-        {!stylesExpanded && <div className="writing-mode-vertical text-sm font-medium text-muted-foreground uppercase tracking-wide mt-14" style={{
+        {!stylesExpanded && <div className="writing-mode-vertical text-sm font-medium text-muted-foreground uppercase tracking-wide mt-2" style={{
         writingMode: 'vertical-rl'
       }}>
           Smart Styling

@@ -409,7 +409,7 @@ export const TextStylePanel = ({
         <Button size="icon" variant="ghost" className="h-8 w-8 text-muted-foreground hover:bg-sidebar-accent mb-4 mt-14" onClick={() => setIsCollapsed(false)}>
           <ChevronLeft className="w-4 h-4" />
         </Button>
-        <div className="writing-mode-vertical text-sm font-medium text-muted-foreground uppercase tracking-wide mt-14" style={{
+        <div className="writing-mode-vertical text-sm font-medium text-muted-foreground uppercase tracking-wide mt-2" style={{
         writingMode: 'vertical-rl'
       }}>
           Paragraph Mode
