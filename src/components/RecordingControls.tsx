@@ -61,6 +61,7 @@ export const RecordingControls = ({
 
   const handleCancelClick = (e: React.MouseEvent) => {
     e.stopPropagation();
+    onStop();
     setShowStop(false);
   };
 
