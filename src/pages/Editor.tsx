@@ -889,6 +889,10 @@ const Editor = () => {
   };
 
   const handleVoiceRecording = () => {
+    setRecordingActive(true);
+  };
+
+  const handleAudioLibrary = () => {
     setShowRecordingsLibrary(true);
   };
 
@@ -1476,6 +1480,7 @@ const Editor = () => {
         onPaletteClick={handlePalette}
         onShapesIconsClick={handleShapesIcons}
         onVoiceRecordingClick={handleVoiceRecording}
+        onAudioLibraryClick={handleAudioLibrary}
         recordingActive={recordingActive}
         onChapterPresetsClick={handleChapterPresets}
         onExportClick={() => setExportOpen(true)}
