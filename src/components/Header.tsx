@@ -165,7 +165,7 @@ export const Header = ({
           <img src={shapesIconsButton} alt="" className="w-7 h-7 object-contain" />
         </button>
 
-        <button onClick={onVoiceRecordingClick} className="h-8 w-8 border border-[hsl(var(--stroke))] rounded-[var(--r-sm)] grid place-items-center hover:bg-[hsl(var(--panel-2))] transition-colors" title="Voice Recording">
+        <button onClick={onVoiceRecordingClick} className="h-8 w-8 border border-[hsl(var(--stroke))] rounded-[var(--r-sm)] grid place-items-center hover:bg-[hsl(var(--panel-2))] transition-colors bg-white" title="Note Taking">
           <img src={voiceRecordingIcon} alt="" className="w-7 h-7 object-contain" />
         </button>
 
