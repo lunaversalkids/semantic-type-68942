@@ -104,52 +104,50 @@ export const RecordingControls = ({
       )}
 
       {/* Main recording button */}
-      <div className="relative flex items-center gap-4">
-        <div className="relative">
-          {/* Pulse animation ring */}
-          {recordingState === 'recording' && (
-            <div className="absolute inset-0 rounded-full bg-purple-500/30 animate-pulse-ring" />
+      <div className="relative">
+        {/* Pulse animation ring */}
+        {recordingState === 'recording' && (
+          <div className="absolute inset-0 rounded-full bg-purple-500/30 animate-pulse-ring" />
+        )}
+        
+        <button
+          onMouseDown={handleMouseDown}
+          onMouseUp={handleMouseUp}
+          onTouchStart={handleMouseDown}
+          onTouchEnd={handleMouseUp}
+          className={`relative w-16 h-16 rounded-full border-2 grid place-items-center transition-all duration-200 shadow-[0_10px_28px_rgba(96,48,200,.16)] ${
+            recordingState === 'recording'
+              ? 'bg-purple-500/10 border-purple-500'
+              : recordingState === 'paused'
+              ? 'bg-purple-600/15 border-purple-600'
+              : 'bg-[hsl(var(--panel))] border-[hsl(var(--stroke))]'
+          }`}
+          title={
+            recordingState === 'idle'
+              ? 'Start Recording'
+              : recordingState === 'recording'
+              ? 'Pause Recording'
+              : 'Resume Recording'
+          }
+        >
+          {recordingState === 'paused' ? (
+            <Pause className="w-6 h-6 text-purple-600" />
+          ) : (
+            <Mic 
+              className={`w-6 h-6 transition-colors ${
+                recordingState === 'recording'
+                  ? 'text-purple-500'
+                  : 'text-foreground'
+              }`}
+            />
           )}
-          
-          <button
-            onMouseDown={handleMouseDown}
-            onMouseUp={handleMouseUp}
-            onTouchStart={handleMouseDown}
-            onTouchEnd={handleMouseUp}
-            className={`relative w-16 h-16 rounded-full border-2 grid place-items-center transition-all duration-200 shadow-[0_10px_28px_rgba(96,48,200,.16)] ${
-              recordingState === 'recording'
-                ? 'bg-purple-500/10 border-purple-500'
-                : recordingState === 'paused'
-                ? 'bg-purple-600/15 border-purple-600'
-                : 'bg-[hsl(var(--panel))] border-[hsl(var(--stroke))]'
-            }`}
-            title={
-              recordingState === 'idle'
-                ? 'Start Recording'
-                : recordingState === 'recording'
-                ? 'Pause Recording'
-                : 'Resume Recording'
-            }
-          >
-            {recordingState === 'paused' ? (
-              <Pause className="w-6 h-6 text-purple-600" />
-            ) : (
-              <Mic 
-                className={`w-6 h-6 transition-colors ${
-                  recordingState === 'recording'
-                    ? 'text-purple-500'
-                    : 'text-foreground'
-                }`}
-              />
-            )}
-          </button>
-        </div>
+        </button>
 
-        {/* Cancel button - appears to the right when stop is showing */}
+        {/* Cancel button - appears slightly below and to the right of microphone */}
         {showStop && (
           <button
             onClick={handleCancelClick}
-            className="w-8 h-8 rounded-full bg-[hsl(var(--panel))] border border-[hsl(var(--stroke))] grid place-items-center shadow-[0_10px_28px_rgba(96,48,200,.16)] animate-in fade-in slide-in-from-left-2 duration-200 hover:bg-muted"
+            className="absolute top-12 -right-10 w-8 h-8 rounded-full bg-[hsl(var(--panel))] border border-[hsl(var(--stroke))] grid place-items-center shadow-[0_10px_28px_rgba(96,48,200,.16)] animate-in fade-in scale-in duration-200 hover:bg-muted"
             title="Cancel"
           >
             <X className="w-4 h-4" />
