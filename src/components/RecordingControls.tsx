@@ -118,11 +118,11 @@ export const RecordingControls = ({
           onMouseUp={handleMouseUp}
           onTouchStart={handleMouseDown}
           onTouchEnd={handleMouseUp}
-          className={`relative w-16 h-16 rounded-full border-2 flex items-center justify-center transition-all duration-200 shadow-[0_10px_28px_rgba(96,48,200,.16)] ${
+          className={`relative w-16 h-16 rounded-full border-2 grid place-items-center transition-all duration-200 shadow-[0_10px_28px_rgba(96,48,200,.16)] ${
             recordingState === 'recording'
               ? 'bg-red-500/10 border-red-500'
               : recordingState === 'paused'
-              ? 'bg-yellow-500/10 border-yellow-500'
+              ? 'bg-purple-600/15 border-purple-600'
               : 'bg-[hsl(var(--panel))] border-[hsl(var(--stroke))]'
           }`}
           title={
@@ -134,7 +134,7 @@ export const RecordingControls = ({
           }
         >
           {recordingState === 'paused' ? (
-            <Pause className="w-6 h-6 text-yellow-500" />
+            <Pause className="w-6 h-6 text-purple-600" />
           ) : (
             <Mic 
               className={`w-6 h-6 transition-colors ${
