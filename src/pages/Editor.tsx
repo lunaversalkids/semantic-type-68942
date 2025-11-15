@@ -1002,6 +1002,18 @@ const Editor = () => {
     });
   };
 
+  const handleRestoreRecording = (id: string) => {
+    const recording = trashedRecordings.find(r => r.id === id);
+    if (recording) {
+      setRecordings(prev => [...prev, recording]);
+      setTrashedRecordings(prev => prev.filter(r => r.id !== id));
+      toast({
+        title: 'Recording Restored',
+        description: 'Recording moved back to saved recordings',
+      });
+    }
+  };
+
   // Recordings are now saved to library instead of auto-inserted
   // Users can manually insert from the library if needed
 
@@ -1853,6 +1865,7 @@ const Editor = () => {
         onRename={handleRenameRecording}
         onDelete={handleDeleteRecording}
         onDeleteFromTrash={handleDeleteFromTrash}
+        onRestore={handleRestoreRecording}
         onStartNewRecording={handleStartNewRecording}
       />
       

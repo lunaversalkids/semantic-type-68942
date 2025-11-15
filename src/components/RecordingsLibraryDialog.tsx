@@ -2,7 +2,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/u
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Checkbox } from '@/components/ui/checkbox';
-import { Download, Edit2, Trash2, Mic, Check, Archive } from 'lucide-react';
+import { Download, Edit2, Trash2, Mic, Check, Archive, RotateCcw } from 'lucide-react';
 import { useState } from 'react';
 import { formatTime } from '@/utils/audioUtils';
 import { useToast } from '@/hooks/use-toast';
@@ -24,6 +24,7 @@ interface RecordingsLibraryDialogProps {
   onRename: (id: string, newName: string) => void;
   onDelete: (id: string) => void;
   onDeleteFromTrash: (ids: string[]) => void;
+  onRestore: (id: string) => void;
   onStartNewRecording: () => void;
 }
 
@@ -35,6 +36,7 @@ export const RecordingsLibraryDialog = ({
   onRename,
   onDelete,
   onDeleteFromTrash,
+  onRestore,
   onStartNewRecording
 }: RecordingsLibraryDialogProps) => {
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -242,46 +244,57 @@ export const RecordingsLibraryDialog = ({
                   )}
                 </div>
 
-                {viewMode === 'saved' && (
                 <div className="flex gap-1">
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                      if (editingId === recording.id) {
-                        saveEdit(recording.id);
-                      } else {
-                        startEdit(recording);
-                      }
-                    }}
-                    title={editingId === recording.id ? "Save" : "Rename"}
-                  >
-                    {editingId === recording.id ? (
-                      <Check className="w-4 h-4 text-green-500" />
-                    ) : (
-                      <Edit2 className="w-4 h-4" />
-                    )}
-                  </Button>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={() => handleDownload(recording)}
-                    title="Download"
-                  >
-                    <Download className="w-4 h-4" />
-                  </Button>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={() => onDelete(recording.id)}
-                    title="Delete"
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </Button>
+                  {viewMode === 'saved' ? (
+                    <>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          if (editingId === recording.id) {
+                            saveEdit(recording.id);
+                          } else {
+                            startEdit(recording);
+                          }
+                        }}
+                        title={editingId === recording.id ? "Save" : "Rename"}
+                      >
+                        {editingId === recording.id ? (
+                          <Check className="w-4 h-4 text-green-500" />
+                        ) : (
+                          <Edit2 className="w-4 h-4" />
+                        )}
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => handleDownload(recording)}
+                        title="Download"
+                      >
+                        <Download className="w-4 h-4" />
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => onDelete(recording.id)}
+                        title="Delete"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </Button>
+                    </>
+                  ) : (
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => onRestore(recording.id)}
+                      title="Restore"
+                    >
+                      <RotateCcw className="w-4 h-4" />
+                    </Button>
+                  )}
                 </div>
-                )}
               </div>
               ))}
             </div>
