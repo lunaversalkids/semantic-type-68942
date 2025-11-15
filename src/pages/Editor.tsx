@@ -28,7 +28,7 @@ import { IconInstanceCropDialog } from '@/components/IconInstanceCropDialog';
 import { RenameDocumentDialog } from '@/components/RenameDocumentDialog';
 import { SaveAsTemplateDialog } from '@/components/SaveAsTemplateDialog';
 import { SaveAsDocumentDialog } from '@/components/SaveAsDocumentDialog';
-import { LayoutAssistant } from '@/components/LayoutAssistant';
+
 import { defaultStyles } from '@/types/styles';
 import { useToast } from '@/hooks/use-toast';
 import { toast as sonnerToast } from 'sonner';
@@ -118,7 +118,7 @@ const Editor = () => {
     cropHeight: number | null;
     updateAttributes: (attrs: any) => void;
   } | null>(null);
-  const [layoutAssistantActive, setLayoutAssistantActive] = useState(false);
+  
   const [editorElement, setEditorElement] = useState<HTMLElement | null>(null);
   const { toast } = useToast();
 
@@ -1370,8 +1370,6 @@ const Editor = () => {
         onSaveAsDocument={handleSaveAsDocument}
         onRenameDocument={handleRenameDocument}
         onSaveAsTemplate={handleSaveAsTemplate}
-        onLayoutAssistantToggle={() => setLayoutAssistantActive(prev => !prev)}
-        layoutAssistantActive={layoutAssistantActive}
         onNewDocument={handleNewDocument}
         onQuitDocument={handleQuitDocument}
         autosaveEnabled={autosaveEnabled}
@@ -1675,12 +1673,6 @@ const Editor = () => {
       
       <OnboardingTour />
       <HelpMode isActive={helpModeActive} onClose={() => setHelpModeActive(false)} />
-      
-      <LayoutAssistant
-        isActive={layoutAssistantActive}
-        onClose={() => setLayoutAssistantActive(false)}
-        editorElement={document.querySelector('.ProseMirror') as HTMLElement}
-      />
     </div>
   );
 };
