@@ -34,6 +34,9 @@ import { useToast } from '@/hooks/use-toast';
 import { toast as sonnerToast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
 import purpleBookmark from '@/assets/purple-bookmark.png';
+import { RecordingControls } from '@/components/RecordingControls';
+import { useAudioRecorder } from '@/hooks/useAudioRecorder';
+import { createAudioURL } from '@/utils/audioUtils';
 
 const Editor = () => {
   const [searchParams] = useSearchParams();
@@ -120,6 +123,19 @@ const Editor = () => {
   } | null>(null);
   
   const [editorElement, setEditorElement] = useState<HTMLElement | null>(null);
+  const [recordingActive, setRecordingActive] = useState(false);
+  
+  const {
+    recordingState,
+    recordingTime,
+    audioBlob,
+    startRecording,
+    pauseRecording,
+    resumeRecording,
+    stopRecording,
+    reset: resetRecording,
+  } = useAudioRecorder();
+  
   const { toast } = useToast();
 
   // Track document access for recents
@@ -845,6 +861,54 @@ const Editor = () => {
     });
   };
 
+  const handleVoiceRecording = () => {
+    if (!recordingActive) {
+      // Activate recording mode
+      setRecordingActive(true);
+      startRecording().catch(() => {
+        setRecordingActive(false);
+      });
+    } else {
+      // Deactivate recording mode
+      stopRecording();
+      resetRecording();
+      setRecordingActive(false);
+    }
+  };
+
+  const handleToggleRecording = () => {
+    if (recordingState === 'idle') {
+      startRecording();
+    } else if (recordingState === 'recording') {
+      pauseRecording();
+    } else if (recordingState === 'paused') {
+      resumeRecording();
+    }
+  };
+
+  const handleStopRecording = () => {
+    stopRecording();
+  };
+
+  // Insert audio when recording stops
+  useEffect(() => {
+    if (audioBlob && !recordingActive && editor) {
+      const audioUrl = createAudioURL(audioBlob);
+      editor.commands.insertAudio({
+        src: audioUrl,
+        width: 300,
+        height: 300,
+      });
+      
+      toast({
+        title: 'Audio Inserted',
+        description: 'Your recording has been added to the document',
+      });
+      
+      resetRecording();
+    }
+  }, [audioBlob, recordingActive, editor, toast, resetRecording]);
+
   const handleToggleRuler = () => {
     setShowRuler(prev => !prev);
     toast({ 
@@ -1357,7 +1421,8 @@ const Editor = () => {
         onTextFrameClick={handleTextFrame}
         onPaletteClick={handlePalette}
         onShapesIconsClick={handleShapesIcons}
-        onVoiceRecordingClick={() => console.log('Voice recording clicked')}
+        onVoiceRecordingClick={handleVoiceRecording}
+        recordingActive={recordingActive}
         onChapterPresetsClick={handleChapterPresets}
         onExportClick={() => setExportOpen(true)}
         onImportClick={() => setImportOpen(true)}
@@ -1674,6 +1739,15 @@ const Editor = () => {
       
       <OnboardingTour />
       <HelpMode isActive={helpModeActive} onClose={() => setHelpModeActive(false)} />
+      
+      {recordingActive && (
+        <RecordingControls
+          recordingState={recordingState}
+          recordingTime={recordingTime}
+          onToggleRecording={handleToggleRecording}
+          onStop={handleStopRecording}
+        />
+      )}
     </div>
   );
 };
