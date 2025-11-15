@@ -1,7 +1,7 @@
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Download, Edit2, Trash2, Mic } from 'lucide-react';
+import { Download, Edit2, Trash2, Mic, Check } from 'lucide-react';
 import { useState } from 'react';
 import { formatTime } from '@/utils/audioUtils';
 
@@ -132,10 +132,14 @@ export const RecordingsLibraryDialog = ({
                   <Button
                     variant="ghost"
                     size="icon"
-                    onClick={() => startEdit(recording)}
-                    title="Rename"
+                    onClick={() => editingId === recording.id ? saveEdit(recording.id) : startEdit(recording)}
+                    title={editingId === recording.id ? "Save" : "Rename"}
                   >
-                    <Edit2 className="w-4 h-4" />
+                    {editingId === recording.id ? (
+                      <Check className="w-4 h-4 text-green-500" />
+                    ) : (
+                      <Edit2 className="w-4 h-4" />
+                    )}
                   </Button>
                   <Button
                     variant="ghost"
