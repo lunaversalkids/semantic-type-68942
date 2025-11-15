@@ -136,9 +136,9 @@ export const Header = ({
       <div className="flex items-center justify-center w-full h-full">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <button className="flex items-center justify-center gap-2.5 px-3.5 py-1.5 border border-[hsl(var(--stroke))] rounded-full bg-[hsla(253,100%,64%,0.12)] text-[#4E3DC9] font-bold hover:bg-[hsla(253,100%,64%,0.18)] transition-colors mx-auto" title="Document Menu">
-              <span className="text-lg leading-none">∞</span>
-              <span className="leading-none">{documentName}</span>
+            <button className="flex items-center gap-2.5 px-3.5 py-1.5 border border-[hsl(var(--stroke))] rounded-full bg-[hsla(253,100%,64%,0.12)] text-[#4E3DC9] font-bold hover:bg-[hsla(253,100%,64%,0.18)] transition-colors mx-auto" title="Document Menu">
+              <span className="text-lg">∞</span>
+              <span>{documentName}</span>
             </button>
           </DropdownMenuTrigger>
           <DropdownMenuContent className="w-56 bg-white dark:bg-gray-800 z-50">
