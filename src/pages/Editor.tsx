@@ -954,6 +954,11 @@ const Editor = () => {
     resetRecording();
     stopListening();
     // Keep recordingActive true so microphone stays visible
+    
+    toast({
+      title: 'Recording Discarded',
+      description: 'Recording has been sent to trash',
+    });
   };
 
   const handleRenameRecording = (id: string, newName: string) => {
