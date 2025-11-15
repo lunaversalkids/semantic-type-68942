@@ -427,7 +427,7 @@ export const TextStylePanel = ({
         </div>
       </div>
 
-      <ScrollArea className="flex-1 p-2.5 pt-[72px] [&_[data-radix-scroll-area-scrollbar]]:!hidden">
+      <ScrollArea className="flex-1 p-2.5 pt-[72px] [&_[data-radix-scroll-area-scrollbar]]:!hidden [&::-webkit-scrollbar]:hidden [scrollbar-width:none] [-ms-overflow-style:none]">
         <div className="flex flex-col gap-2">
       {/* Header */}
       <div className="flex items-center justify-between">
