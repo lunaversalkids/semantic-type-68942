@@ -37,6 +37,7 @@ import purpleBookmark from '@/assets/purple-bookmark.png';
 import { RecordingControls } from '@/components/RecordingControls';
 import { useAudioRecorder } from '@/hooks/useAudioRecorder';
 import { createAudioURL } from '@/utils/audioUtils';
+import { useSpeechRecognition } from '@/hooks/useSpeechRecognition';
 
 const Editor = () => {
   const [searchParams] = useSearchParams();
@@ -135,6 +136,23 @@ const Editor = () => {
     stopRecording,
     reset: resetRecording,
   } = useAudioRecorder();
+  
+  const [interimTranscript, setInterimTranscript] = useState('');
+  
+  const handleTranscript = (text: string, isFinal: boolean) => {
+    if (!editor) return;
+    
+    if (isFinal) {
+      // Insert final transcript into editor
+      editor.commands.insertContent(text + ' ');
+      setInterimTranscript('');
+    } else {
+      // Store interim transcript for display
+      setInterimTranscript(text);
+    }
+  };
+  
+  const { isSupported: isSpeechSupported, startListening, stopListening } = useSpeechRecognition(handleTranscript);
   
   const { toast } = useToast();
 
@@ -863,14 +881,21 @@ const Editor = () => {
 
   const handleVoiceRecording = () => {
     if (!recordingActive) {
-      // Activate recording mode
+      // Activate recording mode - just show controls, don't start recording yet
       setRecordingActive(true);
-      startRecording().catch(() => {
-        setRecordingActive(false);
-      });
+      
+      // Show warning if speech recognition is not supported
+      if (!isSpeechSupported) {
+        toast({
+          title: 'Speech Recognition Unavailable',
+          description: 'Your browser does not support real-time transcription. Audio will still be recorded.',
+          variant: 'destructive',
+        });
+      }
     } else {
       // Deactivate recording mode
       stopRecording();
+      stopListening();
       resetRecording();
       setRecordingActive(false);
     }
@@ -879,15 +904,23 @@ const Editor = () => {
   const handleToggleRecording = () => {
     if (recordingState === 'idle') {
       startRecording();
+      if (isSpeechSupported) {
+        startListening();
+      }
     } else if (recordingState === 'recording') {
       pauseRecording();
+      stopListening();
     } else if (recordingState === 'paused') {
       resumeRecording();
+      if (isSpeechSupported) {
+        startListening();
+      }
     }
   };
 
   const handleStopRecording = () => {
     stopRecording();
+    stopListening();
   };
 
   // Insert audio when recording stops
@@ -1573,6 +1606,7 @@ const Editor = () => {
               recordingTime={recordingTime}
               onToggleRecording={handleToggleRecording}
               onStop={handleStopRecording}
+              interimTranscript={interimTranscript}
             />
           )}
         </main>
