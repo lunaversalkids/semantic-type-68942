@@ -84,7 +84,7 @@ export const Header = ({
 }: HeaderProps) => {
   return <header className="bg-[hsl(var(--panel))] border border-[hsl(var(--stroke))] rounded-[var(--radius)] shadow-[0_10px_28px_rgba(96,48,200,.16)] p-2 grid grid-cols-[auto_1fr_auto] items-center gap-3">
       {/* Brand */}
-      <div className="flex items-center gap-0.5 font-extrabold justify-start w-[340px]">
+      <div className="flex items-center gap-0.5 font-extrabold justify-start w-[340px] h-full">
         <button onClick={onPageViewerClick} className={`transition-all hover:opacity-80 ${pageViewerOpen ? 'shadow-lg ring-2 ring-[#8D60FF]/50 rounded-full' : ''}`}>
           <img src={newInfinityButton} alt="" className="w-10 h-10" />
         </button>
@@ -94,7 +94,7 @@ export const Header = ({
       </div>
 
       {/* Title - Centered */}
-      <div className="flex items-center justify-center w-full">
+      <div className="flex items-center justify-center w-full h-full">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <button className="flex items-center gap-2.5 px-3.5 py-2 border border-[hsl(var(--stroke))] rounded-full bg-[hsla(253,100%,64%,0.12)] text-[#4E3DC9] font-bold hover:bg-[hsla(253,100%,64%,0.18)] transition-colors mx-auto" title="Document Menu">
@@ -140,7 +140,7 @@ export const Header = ({
       </div>
 
       {/* Toolbar */}
-      <div className="flex items-center justify-end gap-1 w-[450px]">
+      <div className="flex items-center justify-end gap-1 w-[450px] h-full">
         <button 
           onClick={onLayoutToggle} 
           className="h-8 w-8 border border-[hsl(var(--stroke))] rounded-[var(--r-sm)] grid place-items-center hover:bg-[hsl(var(--panel-2))] transition-colors" 
