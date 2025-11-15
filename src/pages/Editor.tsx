@@ -38,6 +38,7 @@ import { RecordingControls } from '@/components/RecordingControls';
 import { useAudioRecorder } from '@/hooks/useAudioRecorder';
 import { createAudioURL } from '@/utils/audioUtils';
 import { useSpeechRecognition } from '@/hooks/useSpeechRecognition';
+import { RecordingsLibraryDialog } from '@/components/RecordingsLibraryDialog';
 
 const Editor = () => {
   const [searchParams] = useSearchParams();
@@ -125,6 +126,14 @@ const Editor = () => {
   
   const [editorElement, setEditorElement] = useState<HTMLElement | null>(null);
   const [recordingActive, setRecordingActive] = useState(false);
+  const [showRecordingsLibrary, setShowRecordingsLibrary] = useState(false);
+  const [recordings, setRecordings] = useState<Array<{
+    id: string;
+    name: string;
+    audioBlob: Blob;
+    duration: number;
+    timestamp: Date;
+  }>>([]);
   
   const {
     recordingState,
@@ -880,25 +889,20 @@ const Editor = () => {
   };
 
   const handleVoiceRecording = () => {
-    if (!recordingActive) {
-      // Activate recording mode - just show controls, don't start recording yet
-      setRecordingActive(true);
-      
-      // Show warning if speech recognition is not supported
-      if (!isSpeechSupported) {
-        toast({
-          title: 'Speech Recognition Unavailable',
-          description: 'Your browser does not support real-time transcription. Audio will still be recorded.',
-          variant: 'destructive',
-        });
-      }
-    } else {
-      // Deactivate recording mode
-      stopRecording();
-      stopListening();
-      resetRecording();
-      setRecordingActive(false);
+    setShowRecordingsLibrary(true);
+  };
+
+  const handleStartNewRecording = () => {
+    if (!isSpeechSupported) {
+      toast({
+        title: "Speech Recognition Not Supported",
+        description: "Your browser doesn't support speech recognition. Try using Chrome or Edge.",
+        variant: "destructive"
+      });
+      return;
     }
+    setShowRecordingsLibrary(false);
+    setRecordingActive(true);
   };
 
   const handleToggleRecording = () => {
@@ -921,26 +925,43 @@ const Editor = () => {
   const handleStopRecording = () => {
     stopRecording();
     stopListening();
-  };
-
-  // Insert audio when recording stops
-  useEffect(() => {
-    if (audioBlob && !recordingActive && editor) {
-      const audioUrl = createAudioURL(audioBlob);
-      editor.commands.insertAudio({
-        src: audioUrl,
-        width: 300,
-        height: 300,
-      });
+    
+    if (audioBlob) {
+      const newRecording = {
+        id: `recording-${Date.now()}`,
+        name: `Recording ${new Date().toLocaleString()}`,
+        audioBlob: audioBlob,
+        duration: recordingTime,
+        timestamp: new Date()
+      };
+      setRecordings(prev => [newRecording, ...prev]);
       
       toast({
-        title: 'Audio Inserted',
-        description: 'Your recording has been added to the document',
+        title: 'Recording Saved',
+        description: 'Your recording has been saved to the library',
       });
-      
-      resetRecording();
     }
-  }, [audioBlob, recordingActive, editor, toast, resetRecording]);
+    
+    setRecordingActive(false);
+    resetRecording();
+  };
+
+  const handleRenameRecording = (id: string, newName: string) => {
+    setRecordings(prev => prev.map(rec => 
+      rec.id === id ? { ...rec, name: newName } : rec
+    ));
+  };
+
+  const handleDeleteRecording = (id: string) => {
+    setRecordings(prev => prev.filter(rec => rec.id !== id));
+    toast({
+      title: 'Recording Deleted',
+      description: 'Recording has been removed from library',
+    });
+  };
+
+  // Recordings are now saved to library instead of auto-inserted
+  // Users can manually insert from the library if needed
 
   const handleToggleRuler = () => {
     setShowRuler(prev => !prev);
@@ -1778,6 +1799,15 @@ const Editor = () => {
             });
           }
         }}
+      />
+      
+      <RecordingsLibraryDialog
+        open={showRecordingsLibrary}
+        onOpenChange={setShowRecordingsLibrary}
+        recordings={recordings}
+        onRename={handleRenameRecording}
+        onDelete={handleDeleteRecording}
+        onStartNewRecording={handleStartNewRecording}
       />
       
       <OnboardingTour />
