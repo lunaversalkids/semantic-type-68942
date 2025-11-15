@@ -889,7 +889,7 @@ const Editor = () => {
   };
 
   const handleVoiceRecording = () => {
-    setRecordingActive(true);
+    setRecordingActive(prev => !prev);
   };
 
   const handleAudioLibrary = () => {
