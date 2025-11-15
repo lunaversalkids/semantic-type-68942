@@ -939,6 +939,26 @@ button[data-active="true"] {
   animation: slide-up 0.4s ease-out;
 }
 
+/* Pulse ring animation for recording */
+@keyframes pulse-ring {
+  0% {
+    transform: scale(0.95);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 0.7;
+  }
+  100% {
+    transform: scale(0.95);
+    opacity: 1;
+  }
+}
+
+.animate-pulse-ring {
+  animation: pulse-ring 1.5s ease-in-out infinite;
+}
+
 /* Hide scrollbar utility */
 @layer utilities {
   .scrollbar-hide {
