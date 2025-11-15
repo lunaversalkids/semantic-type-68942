@@ -149,50 +149,50 @@ export const Header = ({
           <img 
             src={isDoublePageLayout ? doublePageIcon : singlePageIcon} 
             alt="" 
-            className="w-6 h-6 object-contain"
+            className="w-7 h-7 object-contain"
           />
         </button>
 
         <button onClick={onFindClick} className="h-8 w-8 border border-[hsl(var(--stroke))] rounded-[var(--r-sm)] grid place-items-center hover:bg-[hsl(var(--panel-2))] transition-colors" title="Find & Replace">
-          <img src={searchIcon} alt="" className="w-6 h-6 object-contain" />
+          <img src={searchIcon} alt="" className="w-7 h-7 object-contain" />
         </button>
 
         <button onClick={onPaletteClick} className="h-8 w-8 border border-[hsl(var(--stroke))] rounded-[var(--r-sm)] grid place-items-center hover:bg-[hsl(var(--panel-2))] transition-colors" title="Interface Color Palette">
-          <img src={paletteIcon} alt="" className="w-6 h-6 object-contain" />
+          <img src={paletteIcon} alt="" className="w-7 h-7 object-contain" />
         </button>
 
         <button onClick={onShapesIconsClick} className="h-8 w-8 border border-[hsl(var(--stroke))] rounded-[var(--r-sm)] grid place-items-center hover:bg-[hsl(var(--panel-2))] transition-colors" title="Shapes and Icons">
-          <img src={shapesIconsButton} alt="" className="w-6 h-6 object-contain" />
+          <img src={shapesIconsButton} alt="" className="w-7 h-7 object-contain" />
         </button>
 
         <button onClick={onVoiceRecordingClick} className="h-8 w-8 border border-[hsl(var(--stroke))] rounded-[var(--r-sm)] grid place-items-center hover:bg-[hsl(var(--panel-2))] transition-colors" title="Voice Recording">
-          <img src={voiceRecordingIcon} alt="" className="w-6 h-6 object-contain" />
+          <img src={voiceRecordingIcon} alt="" className="w-7 h-7 object-contain" />
         </button>
 
         <button onClick={onChapterPresetsClick} className="h-8 w-8 border border-[hsl(var(--stroke))] rounded-[var(--r-sm)] grid place-items-center hover:bg-[hsl(var(--panel-2))] transition-colors" title="Chapter Presets">
-          <img src={chapterPresetsButton} alt="" className="w-6 h-6 object-contain" />
+          <img src={chapterPresetsButton} alt="" className="w-7 h-7 object-contain" />
         </button>
 
         <button onClick={onTextFrameClick} className="h-8 w-8 border border-[hsl(var(--stroke))] rounded-[var(--r-sm)] grid place-items-center hover:bg-[hsl(var(--panel-2))] transition-colors" title="Text Box">
-          <img src={textFrameIcon} alt="" className="w-6 h-6 object-contain" />
+          <img src={textFrameIcon} alt="" className="w-7 h-7 object-contain" />
         </button>
 
         <button onClick={onQuotationClick} className="h-8 w-8 border border-[hsl(var(--stroke))] rounded-[var(--r-sm)] grid place-items-center hover:bg-[hsl(var(--panel-2))] transition-colors" title="Quotation">
-          <img src={quotationIcon} alt="" className="w-6 h-6 object-contain" />
+          <img src={quotationIcon} alt="" className="w-7 h-7 object-contain" />
         </button>
 
         <button onClick={onHeaderFooterClick} className="h-8 w-8 border border-[hsl(var(--stroke))] rounded-[var(--r-sm)] grid place-items-center hover:bg-[hsl(var(--panel-2))] transition-colors" title="Header & Footer">
-          <img src={headerFooterIcon} alt="" className="w-6 h-6 object-contain" />
+          <img src={headerFooterIcon} alt="" className="w-7 h-7 object-contain" />
         </button>
 
         <button onClick={onPageSizerClick} className="h-8 w-8 border border-[hsl(var(--stroke))] rounded-[var(--r-sm)] grid place-items-center hover:bg-[hsl(var(--panel-2))] transition-colors" title="Page Sizer">
-          <img src={pageSizerIcon} alt="" className="w-6 h-6 object-contain" />
+          <img src={pageSizerIcon} alt="" className="w-7 h-7 object-contain" />
         </button>
 
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <button className="h-8 w-8 border border-[hsl(var(--stroke))] rounded-[var(--r-sm)] grid place-items-center hover:bg-[hsl(var(--panel-2))] transition-colors" title="Pen & Stylus">
-              <img src={penIcon} alt="" className="w-6 h-6 object-contain" />
+              <img src={penIcon} alt="" className="w-7 h-7 object-contain" />
             </button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="bg-background z-50">
@@ -210,7 +210,7 @@ export const Header = ({
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <button className="h-8 w-8 border border-[hsl(var(--stroke))] rounded-[var(--r-sm)] grid place-items-center hover:bg-[hsl(var(--panel-2))] transition-colors" title="Import/Export">
-              <img src={importExportIcon} alt="" className="w-6 h-6 object-contain" />
+              <img src={importExportIcon} alt="" className="w-7 h-7 object-contain" />
             </button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="bg-background z-50">
@@ -230,7 +230,7 @@ export const Header = ({
         </DropdownMenu>
 
         <button onClick={onCloudClick} className="h-8 w-8 border border-[hsl(var(--stroke))] rounded-[var(--r-sm)] grid place-items-center hover:bg-[hsl(var(--panel-2))] transition-colors" title="My Documents">
-          <img src={cloudIcon} alt="" className="w-6 h-6 object-contain" />
+          <img src={cloudIcon} alt="" className="w-7 h-7 object-contain" />
         </button>
       </div>
     </header>;
