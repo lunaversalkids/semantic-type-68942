@@ -892,6 +892,10 @@ const Editor = () => {
     setShowRecordingsLibrary(true);
   };
 
+  const handleNewRecording = () => {
+    setRecordingActive(true);
+  };
+
   const handleStartNewRecording = () => {
     if (!isSpeechSupported) {
       toast({
