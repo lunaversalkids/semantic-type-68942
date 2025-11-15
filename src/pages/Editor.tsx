@@ -1566,6 +1566,15 @@ const Editor = () => {
             pageWidth={pageWidth}
             pageHeight={pageHeight}
           />
+          
+          {recordingActive && (
+            <RecordingControls
+              recordingState={recordingState}
+              recordingTime={recordingTime}
+              onToggleRecording={handleToggleRecording}
+              onStop={handleStopRecording}
+            />
+          )}
         </main>
 
         <TextStylePanel editor={editor} wordCount={wordCount} selectedWordCount={selectedWordCount} />
@@ -1739,15 +1748,6 @@ const Editor = () => {
       
       <OnboardingTour />
       <HelpMode isActive={helpModeActive} onClose={() => setHelpModeActive(false)} />
-      
-      {recordingActive && (
-        <RecordingControls
-          recordingState={recordingState}
-          recordingTime={recordingTime}
-          onToggleRecording={handleToggleRecording}
-          onStop={handleStopRecording}
-        />
-      )}
     </div>
   );
 };
