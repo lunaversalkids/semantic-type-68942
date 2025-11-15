@@ -7,11 +7,19 @@ const ScrollArea = React.forwardRef<
   React.ElementRef<typeof ScrollAreaPrimitive.Root>,
   React.ComponentPropsWithoutRef<typeof ScrollAreaPrimitive.Root> & {
     showScrollbar?: boolean;
+    hideNativeScrollbar?: boolean;
   }
->(({ className, children, showScrollbar = true, ...props }, ref) => (
+>(({ className, children, showScrollbar = true, hideNativeScrollbar = false, ...props }, ref) => (
   <ScrollAreaPrimitive.Root ref={ref} className={cn("relative overflow-hidden", className)} {...props}>
-    <ScrollAreaPrimitive.Viewport className="h-full w-full rounded-[inherit]">{children}</ScrollAreaPrimitive.Viewport>
-    {showScrollbar && <ScrollBar />}
+    <ScrollAreaPrimitive.Viewport 
+      className={cn(
+        "h-full w-full rounded-[inherit]",
+        hideNativeScrollbar && "[&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
+      )}
+    >
+      {children}
+    </ScrollAreaPrimitive.Viewport>
+    {showScrollbar && <ScrollBar className={hideNativeScrollbar ? "opacity-0 pointer-events-none" : ""} />}
     <ScrollAreaPrimitive.Corner />
   </ScrollAreaPrimitive.Root>
 ));
