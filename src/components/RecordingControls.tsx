@@ -68,7 +68,7 @@ export const RecordingControls = ({
   }, []);
 
   return (
-    <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-50 flex flex-col items-center gap-4">
+    <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 flex flex-col items-center gap-4">
       {/* Stop button - appears above mic when holding */}
       {showStop && (
         <button
