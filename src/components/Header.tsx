@@ -223,9 +223,9 @@ export const Header = ({
             <div className="absolute top-full right-0 mt-1 bg-background border border-[hsl(var(--stroke))] rounded-[var(--r-sm)] shadow-lg z-50 min-w-[180px]">
               <button
                 onClick={handleLibraryClick}
-                className="w-full px-4 py-2 text-left hover:bg-[hsl(var(--panel-2))] transition-colors flex items-center gap-2"
+                className="w-full px-3 py-1.5 text-sm text-left hover:bg-[hsl(var(--panel-2))] transition-colors flex items-center gap-2"
               >
-                <FileDown className="w-4 h-4" />
+                <FileDown className="w-3.5 h-3.5" />
                 Audio Note Library
               </button>
             </div>
