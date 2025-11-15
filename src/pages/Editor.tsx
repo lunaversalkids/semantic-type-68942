@@ -134,6 +134,13 @@ const Editor = () => {
     duration: number;
     timestamp: Date;
   }>>([]);
+  const [trashedRecordings, setTrashedRecordings] = useState<Array<{
+    id: string;
+    name: string;
+    audioBlob: Blob;
+    duration: number;
+    timestamp: Date;
+  }>>([]);
   
   const {
     recordingState,
@@ -951,6 +958,18 @@ const Editor = () => {
   };
 
   const handleCancelRecording = () => {
+    // Save current recording to trash before resetting
+    if (audioBlob && recordingTime > 0) {
+      const trashedRecording = {
+        id: Date.now().toString(),
+        name: `Canceled Recording ${new Date().toLocaleTimeString()}`,
+        audioBlob: audioBlob,
+        duration: recordingTime,
+        timestamp: new Date(),
+      };
+      setTrashedRecordings(prev => [...prev, trashedRecording]);
+    }
+    
     resetRecording();
     stopListening();
     // Keep recordingActive true so microphone stays visible
@@ -972,6 +991,14 @@ const Editor = () => {
     toast({
       title: 'Recording Deleted',
       description: 'Recording has been removed from library',
+    });
+  };
+
+  const handleDeleteFromTrash = (ids: string[]) => {
+    setTrashedRecordings(prev => prev.filter(rec => !ids.includes(rec.id)));
+    toast({
+      title: 'Permanently Deleted',
+      description: `${ids.length} recording(s) permanently deleted from trash`,
     });
   };
 
@@ -1822,8 +1849,10 @@ const Editor = () => {
         open={showRecordingsLibrary}
         onOpenChange={setShowRecordingsLibrary}
         recordings={recordings}
+        trashedRecordings={trashedRecordings}
         onRename={handleRenameRecording}
         onDelete={handleDeleteRecording}
+        onDeleteFromTrash={handleDeleteFromTrash}
         onStartNewRecording={handleStartNewRecording}
       />
       

@@ -1,10 +1,12 @@
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Download, Edit2, Trash2, Mic, Check } from 'lucide-react';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Download, Edit2, Trash2, Mic, Check, Archive } from 'lucide-react';
 import { useState } from 'react';
 import { formatTime } from '@/utils/audioUtils';
 import { useToast } from '@/hooks/use-toast';
+import { Badge } from '@/components/ui/badge';
 
 export interface Recording {
   id: string;
@@ -18,8 +20,10 @@ interface RecordingsLibraryDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   recordings: Recording[];
+  trashedRecordings: Recording[];
   onRename: (id: string, newName: string) => void;
   onDelete: (id: string) => void;
+  onDeleteFromTrash: (ids: string[]) => void;
   onStartNewRecording: () => void;
 }
 
@@ -27,23 +31,32 @@ export const RecordingsLibraryDialog = ({
   open,
   onOpenChange,
   recordings,
+  trashedRecordings,
   onRename,
   onDelete,
+  onDeleteFromTrash,
   onStartNewRecording
 }: RecordingsLibraryDialogProps) => {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editName, setEditName] = useState('');
+  const [viewMode, setViewMode] = useState<'saved' | 'trash'>('saved');
+  const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const { toast } = useToast();
+  
+  const currentRecordings = viewMode === 'saved' ? recordings : trashedRecordings;
+  const isAllSelected = selectedIds.length === currentRecordings.length && currentRecordings.length > 0;
 
   const getDialogWidth = () => {
-    if (recordings.length <= 2) return "max-w-2xl";
-    if (recordings.length <= 4) return "max-w-4xl";
+    const count = currentRecordings.length;
+    if (count <= 2) return "max-w-2xl";
+    if (count <= 4) return "max-w-4xl";
     return "max-w-6xl";
   };
 
   const getGridCols = () => {
-    if (recordings.length <= 2) return "grid-cols-1";
-    if (recordings.length <= 4) return "grid-cols-2";
+    const count = currentRecordings.length;
+    if (count <= 2) return "grid-cols-1";
+    if (count <= 4) return "grid-cols-2";
     return "grid-cols-3";
   };
 
@@ -75,12 +88,70 @@ export const RecordingsLibraryDialog = ({
     setEditName('');
   };
 
+  const toggleSelection = (id: string) => {
+    setSelectedIds(prev => 
+      prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]
+    );
+  };
+
+  const toggleSelectAll = () => {
+    if (isAllSelected) {
+      setSelectedIds([]);
+    } else {
+      setSelectedIds(currentRecordings.map(r => r.id));
+    }
+  };
+
+  const handleDeleteSelected = () => {
+    if (selectedIds.length > 0) {
+      onDeleteFromTrash(selectedIds);
+      setSelectedIds([]);
+    }
+  };
+
+  const switchToTrash = () => {
+    setViewMode('trash');
+    setSelectedIds([]);
+    setEditingId(null);
+  };
+
+  const switchToSaved = () => {
+    setViewMode('saved');
+    setSelectedIds([]);
+    setEditingId(null);
+  };
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className={`${getDialogWidth()} max-h-[80vh]`}>
         <DialogHeader>
           <DialogTitle className="flex items-center justify-between">
-            <span>Note Recordings</span>
+            <div className="flex items-center gap-2">
+              <span>Note Recordings</span>
+              <div className="flex gap-1">
+                <Button 
+                  onClick={switchToSaved} 
+                  variant={viewMode === 'saved' ? 'default' : 'outline'}
+                  size="sm"
+                >
+                  Saved
+                </Button>
+                <Button 
+                  onClick={switchToTrash} 
+                  variant={viewMode === 'trash' ? 'default' : 'outline'}
+                  size="sm"
+                  className="relative"
+                >
+                  <Archive className="w-4 h-4 mr-2" />
+                  Trash
+                  {trashedRecordings.length > 0 && (
+                    <Badge variant="destructive" className="ml-2 h-5 px-1.5">
+                      {trashedRecordings.length}
+                    </Badge>
+                  )}
+                </Button>
+              </div>
+            </div>
             <Button onClick={onStartNewRecording} size="sm">
               <Mic className="w-4 h-4 mr-2" />
               New Recording
@@ -89,19 +160,57 @@ export const RecordingsLibraryDialog = ({
         </DialogHeader>
         
         <div className="overflow-y-auto pr-2">
-          {recordings.length === 0 ? (
+          {viewMode === 'trash' && trashedRecordings.length > 0 && (
+            <div className="flex items-center justify-between mb-3 p-2 bg-muted/30 rounded-md">
+              <div className="flex items-center gap-2">
+                <Checkbox 
+                  checked={isAllSelected}
+                  onCheckedChange={toggleSelectAll}
+                />
+                <span className="text-sm font-medium">Select All</span>
+              </div>
+              {selectedIds.length > 0 && (
+                <Button 
+                  variant="destructive" 
+                  size="sm"
+                  onClick={handleDeleteSelected}
+                >
+                  <Trash2 className="w-4 h-4 mr-2" />
+                  Delete Selected ({selectedIds.length})
+                </Button>
+              )}
+            </div>
+          )}
+          
+          {currentRecordings.length === 0 ? (
             <div className="text-center py-12 text-muted-foreground">
-              <Mic className="w-12 h-12 mx-auto mb-3 opacity-50" />
-              <p>No recordings yet</p>
-              <p className="text-sm mt-1">Click "New Recording" to start</p>
+              {viewMode === 'saved' ? (
+                <>
+                  <Mic className="w-12 h-12 mx-auto mb-3 opacity-50" />
+                  <p>No recordings yet</p>
+                  <p className="text-sm mt-1">Click "New Recording" to start</p>
+                </>
+              ) : (
+                <>
+                  <Archive className="w-12 h-12 mx-auto mb-3 opacity-50" />
+                  <p>Trash is empty</p>
+                  <p className="text-sm mt-1">Canceled recordings will appear here</p>
+                </>
+              )}
             </div>
           ) : (
             <div className={`grid ${getGridCols()} gap-3`}>
-              {recordings.map((recording) => (
+              {currentRecordings.map((recording) => (
               <div
                 key={recording.id}
                 className="flex items-center gap-3 p-3 border border-border rounded-lg bg-card hover:bg-accent/5 transition-colors"
               >
+                {viewMode === 'trash' && (
+                  <Checkbox 
+                    checked={selectedIds.includes(recording.id)}
+                    onCheckedChange={() => toggleSelection(recording.id)}
+                  />
+                )}
                 <audio
                   src={URL.createObjectURL(recording.audioBlob)}
                   controls
@@ -133,6 +242,7 @@ export const RecordingsLibraryDialog = ({
                   )}
                 </div>
 
+                {viewMode === 'saved' && (
                 <div className="flex gap-1">
                   <Button
                     variant="ghost"
@@ -171,6 +281,7 @@ export const RecordingsLibraryDialog = ({
                     <Trash2 className="w-4 h-4" />
                   </Button>
                 </div>
+                )}
               </div>
               ))}
             </div>
