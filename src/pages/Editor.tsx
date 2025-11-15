@@ -953,7 +953,7 @@ const Editor = () => {
   const handleCancelRecording = () => {
     resetRecording();
     stopListening();
-    setRecordingActive(false);
+    // Keep recordingActive true so microphone stays visible
   };
 
   const handleRenameRecording = (id: string, newName: string) => {
