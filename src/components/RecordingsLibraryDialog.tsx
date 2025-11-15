@@ -33,6 +33,18 @@ export const RecordingsLibraryDialog = ({
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editName, setEditName] = useState('');
 
+  const getDialogWidth = () => {
+    if (recordings.length <= 2) return "max-w-2xl";
+    if (recordings.length <= 4) return "max-w-4xl";
+    return "max-w-6xl";
+  };
+
+  const getGridCols = () => {
+    if (recordings.length <= 2) return "grid-cols-1";
+    if (recordings.length <= 4) return "grid-cols-2";
+    return "grid-cols-3";
+  };
+
   const handleDownload = (recording: Recording) => {
     const url = URL.createObjectURL(recording.audioBlob);
     const a = document.createElement('a');
@@ -59,7 +71,7 @@ export const RecordingsLibraryDialog = ({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-2xl max-h-[80vh]">
+      <DialogContent className={`${getDialogWidth()} max-h-[80vh]`}>
         <DialogHeader>
           <DialogTitle className="flex items-center justify-between">
             <span>Note Recordings</span>
@@ -70,7 +82,7 @@ export const RecordingsLibraryDialog = ({
           </DialogTitle>
         </DialogHeader>
         
-        <div className="overflow-y-auto space-y-3 pr-2">
+        <div className="overflow-y-auto pr-2">
           {recordings.length === 0 ? (
             <div className="text-center py-12 text-muted-foreground">
               <Mic className="w-12 h-12 mx-auto mb-3 opacity-50" />
@@ -78,7 +90,8 @@ export const RecordingsLibraryDialog = ({
               <p className="text-sm mt-1">Click "New Recording" to start</p>
             </div>
           ) : (
-            recordings.map((recording) => (
+            <div className={`grid ${getGridCols()} gap-3`}>
+              {recordings.map((recording) => (
               <div
                 key={recording.id}
                 className="flex items-center gap-3 p-3 border border-border rounded-lg bg-card hover:bg-accent/5 transition-colors"
@@ -142,7 +155,8 @@ export const RecordingsLibraryDialog = ({
                   </Button>
                 </div>
               </div>
-            ))
+              ))}
+            </div>
           )}
         </div>
       </DialogContent>
