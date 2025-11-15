@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { Mic, Square } from 'lucide-react';
+import { Mic, Square, Pause } from 'lucide-react';
 import { RecordingState } from '@/hooks/useAudioRecorder';
 import { formatTime } from '@/utils/audioUtils';
 
@@ -38,11 +38,13 @@ export const RecordingControls = ({
       holdTimerRef.current = null;
     }
     
-    // If stop button is not showing, this is a tap - toggle recording
-    if (!showStop) {
+    // If stop button is showing, this tap hides it (cancel stop)
+    if (showStop) {
+      setShowStop(false);
+    } else {
+      // If stop button is not showing, this is a tap - toggle recording
       onToggleRecording();
     }
-    // If stop button is showing, keep it visible (don't hide it)
   };
 
   const handleStopClick = (e: React.MouseEvent) => {
@@ -106,7 +108,7 @@ export const RecordingControls = ({
             recordingState === 'recording'
               ? 'bg-purple-500/20 border-purple-500'
               : recordingState === 'paused'
-              ? 'bg-yellow-500/20 border-yellow-500'
+              ? 'bg-purple-700/30 border-purple-700'
               : 'bg-[hsl(var(--panel))] border-[hsl(var(--stroke))]'
           }`}
           title={
@@ -117,15 +119,17 @@ export const RecordingControls = ({
               : 'Resume Recording'
           }
         >
-          <Mic 
-            className={`w-6 h-6 transition-colors ${
-              recordingState === 'recording'
-                ? 'text-purple-500'
-                : recordingState === 'paused'
-                ? 'text-yellow-500'
-                : 'text-foreground'
-            }`}
-          />
+          {recordingState === 'paused' ? (
+            <Pause className="w-6 h-6 text-purple-700" />
+          ) : (
+            <Mic 
+              className={`w-6 h-6 transition-colors ${
+                recordingState === 'recording'
+                  ? 'text-purple-500'
+                  : 'text-foreground'
+              }`}
+            />
+          )}
         </button>
       </div>
     </div>
