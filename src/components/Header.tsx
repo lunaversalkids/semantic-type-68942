@@ -140,7 +140,7 @@ export const Header = ({
       </div>
 
       {/* Toolbar */}
-      <div className="flex justify-end gap-2 w-[450px]">
+      <div className="flex justify-end gap-1.5 w-[450px]">
         <button 
           onClick={onLayoutToggle} 
           className="h-9 w-9 border border-[hsl(var(--stroke))] rounded-[var(--r-sm)] grid place-items-center hover:bg-[hsl(var(--panel-2))] transition-colors" 
