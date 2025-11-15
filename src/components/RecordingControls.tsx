@@ -114,7 +114,7 @@ export const RecordingControls = ({
             recordingState === 'recording'
               ? 'bg-purple-500/10 border-purple-500'
               : recordingState === 'paused'
-              ? 'bg-purple-700/30 border-purple-700'
+              ? 'bg-purple-600/15 border-purple-600'
               : 'bg-[hsl(var(--panel))] border-[hsl(var(--stroke))]'
           }`}
           title={
@@ -126,7 +126,7 @@ export const RecordingControls = ({
           }
         >
           {recordingState === 'paused' ? (
-            <Pause className="w-6 h-6 text-purple-700" />
+            <Pause className="w-6 h-6 text-purple-600" />
           ) : (
             <Mic 
               className={`w-6 h-6 transition-colors ${
