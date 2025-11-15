@@ -1,4 +1,4 @@
-import { Pen, Navigation, Search, Cloud, FileDown, FileUp, File, BookOpen } from 'lucide-react';
+import { Pen, Search, Cloud, FileDown, FileUp, File, BookOpen } from 'lucide-react';
 import newInfinityButton from '@/assets/new-infinity-button.png';
 import penIcon from '@/assets/pen-icon.png';
 import quotationIcon from '@/assets/quotation-icon.png';
@@ -43,8 +43,6 @@ interface HeaderProps {
   onSaveAsDocument?: () => void;
   onRenameDocument?: () => void;
   onSaveAsTemplate?: () => void;
-  onLayoutAssistantToggle?: () => void;
-  layoutAssistantActive?: boolean;
   onNewDocument?: () => void;
   onQuitDocument?: () => void;
   autosaveEnabled?: boolean;
@@ -76,8 +74,6 @@ export const Header = ({
   onSaveAsDocument,
   onRenameDocument,
   onSaveAsTemplate,
-  onLayoutAssistantToggle,
-  layoutAssistantActive,
   onNewDocument,
   onQuitDocument,
   autosaveEnabled = false,
@@ -182,14 +178,6 @@ export const Header = ({
           <img src={headerFooterIcon} alt="" className="w-full h-full object-cover" />
         </button>
 
-        <button 
-          onClick={onLayoutAssistantToggle} 
-          className={`h-9 w-9 border border-[hsl(var(--stroke))] rounded-[var(--r-sm)] grid place-items-center hover:bg-[hsl(var(--panel-2))] transition-colors ${layoutAssistantActive ? 'bg-[hsl(253,100%,64%)] text-white' : ''}`}
-          title="Layout Assistant"
-        >
-          <Navigation className="w-5 h-5" />
-        </button>
-
         <button onClick={onPageSizerClick} className="h-9 w-9 border border-[hsl(var(--stroke))] rounded-[var(--r-sm)] grid place-items-center hover:bg-[hsl(var(--panel-2))] transition-colors overflow-hidden" title="Page Sizer">
           <img src={pageSizerIcon} alt="" className="w-full h-full object-cover" />
         </button>
@@ -206,7 +194,7 @@ export const Header = ({
               Pen / Insert Mode
             </DropdownMenuItem>
             <DropdownMenuItem onClick={onStylusModeClick}>
-              <Navigation className="w-4 h-4 mr-2" />
+              <Pen className="w-4 h-4 mr-2" />
               Stylus Mode
             </DropdownMenuItem>
           </DropdownMenuContent>
