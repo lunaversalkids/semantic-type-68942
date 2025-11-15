@@ -13,7 +13,7 @@ import pageSizerIcon from '@/assets/page-sizer-icon.png';
 import headerFooterIcon from '@/assets/header-footer-icon.png';
 import shapesIconsButton from '@/assets/shapes-icons-button.png';
 import chapterPresetsButton from '@/assets/chapter-presets-button.png';
-import voiceRecordingIcon from '@/assets/voice-recording-icon.png';
+import noteTakingIcon from '@/assets/note-taking-icon.png';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator } from '@/components/ui/dropdown-menu';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
@@ -165,8 +165,8 @@ export const Header = ({
           <img src={shapesIconsButton} alt="" className="w-7 h-7 object-contain" />
         </button>
 
-        <button onClick={onVoiceRecordingClick} className="h-8 w-8 border border-[hsl(var(--stroke))] rounded-[var(--r-sm)] grid place-items-center hover:bg-[hsl(var(--panel-2))] transition-colors bg-white" title="Note Taking">
-          <img src={voiceRecordingIcon} alt="" className="w-7 h-7 object-contain" />
+        <button onClick={onVoiceRecordingClick} className="h-8 w-8 border border-[hsl(var(--stroke))] rounded-[var(--r-sm)] grid place-items-center hover:bg-[hsl(var(--panel-2))] transition-colors" title="Note Taking">
+          <img src={noteTakingIcon} alt="" className="w-7 h-7 object-contain" />
         </button>
 
         <button onClick={onChapterPresetsClick} className="h-8 w-8 border border-[hsl(var(--stroke))] rounded-[var(--r-sm)] grid place-items-center hover:bg-[hsl(var(--panel-2))] transition-colors" title="Chapter Presets">
