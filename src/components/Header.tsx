@@ -13,6 +13,7 @@ import pageSizerIcon from '@/assets/page-sizer-icon.png';
 import headerFooterIcon from '@/assets/header-footer-icon.png';
 import shapesIconsButton from '@/assets/shapes-icons-button.png';
 import chapterPresetsButton from '@/assets/chapter-presets-button.png';
+import voiceRecordingIcon from '@/assets/voice-recording-icon.png';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator } from '@/components/ui/dropdown-menu';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
@@ -29,6 +30,7 @@ interface HeaderProps {
   onQuotationClick?: () => void;
   onTextFrameClick?: () => void;
   onShapesIconsClick?: () => void;
+  onVoiceRecordingClick?: () => void;
   onChapterPresetsClick?: () => void;
   onPaletteClick?: () => void;
   onExportClick?: () => void;
@@ -60,6 +62,7 @@ export const Header = ({
   onQuotationClick,
   onTextFrameClick,
   onShapesIconsClick,
+  onVoiceRecordingClick,
   onChapterPresetsClick,
   onPaletteClick,
   onExportClick,
@@ -160,6 +163,10 @@ export const Header = ({
 
         <button onClick={onShapesIconsClick} className="h-9 w-9 border border-[hsl(var(--stroke))] rounded-[var(--r-sm)] grid place-items-center hover:bg-[hsl(var(--panel-2))] transition-colors overflow-hidden" title="Shapes and Icons">
           <img src={shapesIconsButton} alt="" className="w-full h-full object-cover" />
+        </button>
+
+        <button onClick={onVoiceRecordingClick} className="h-9 w-9 border border-[hsl(var(--stroke))] rounded-[var(--r-sm)] grid place-items-center hover:bg-[hsl(var(--panel-2))] transition-colors overflow-hidden" title="Voice Recording">
+          <img src={voiceRecordingIcon} alt="" className="w-full h-full object-cover" />
         </button>
 
         <button onClick={onChapterPresetsClick} className="h-9 w-9 border border-[hsl(var(--stroke))] rounded-[var(--r-sm)] grid place-items-center hover:bg-[hsl(var(--panel-2))] transition-colors overflow-hidden" title="Chapter Presets">

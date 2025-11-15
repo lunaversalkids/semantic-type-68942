@@ -1357,6 +1357,7 @@ const Editor = () => {
         onTextFrameClick={handleTextFrame}
         onPaletteClick={handlePalette}
         onShapesIconsClick={handleShapesIcons}
+        onVoiceRecordingClick={() => console.log('Voice recording clicked')}
         onChapterPresetsClick={handleChapterPresets}
         onExportClick={() => setExportOpen(true)}
         onImportClick={() => setImportOpen(true)}
