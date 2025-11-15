@@ -24,7 +24,6 @@ import { DraggableBoundary } from '@/components/DraggableBoundary';
 import { HorizontalRuler } from '@/components/HorizontalRuler';
 import { VerticalRuler } from '@/components/VerticalRuler';
 import { ShapesIconsDrawer } from '@/components/ShapesIconsDrawer';
-import { NotesDrawer } from '@/components/NotesDrawer';
 import { IconInstanceCropDialog } from '@/components/IconInstanceCropDialog';
 import { RenameDocumentDialog } from '@/components/RenameDocumentDialog';
 import { SaveAsTemplateDialog } from '@/components/SaveAsTemplateDialog';
@@ -35,6 +34,10 @@ import { useToast } from '@/hooks/use-toast';
 import { toast as sonnerToast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
 import purpleBookmark from '@/assets/purple-bookmark.png';
+import { RecordingControls } from '@/components/RecordingControls';
+import { useAudioRecorder } from '@/hooks/useAudioRecorder';
+import { createAudioURL } from '@/utils/audioUtils';
+import { useSpeechRecognition } from '@/hooks/useSpeechRecognition';
 
 const Editor = () => {
   const [searchParams] = useSearchParams();
@@ -106,7 +109,6 @@ const Editor = () => {
   const [showRuler, setShowRuler] = useState(false);
   const [activePageNum, setActivePageNum] = useState(1);
   const [shapesIconsDrawerOpen, setShapesIconsDrawerOpen] = useState(false);
-  const [notesDrawerOpen, setNotesDrawerOpen] = useState(false);
   const [documentName, setDocumentName] = useState('Untitled');
   const [renameDialogOpen, setRenameDialogOpen] = useState(false);
   const [saveAsTemplateDialogOpen, setSaveAsTemplateDialogOpen] = useState(false);
@@ -122,6 +124,35 @@ const Editor = () => {
   } | null>(null);
   
   const [editorElement, setEditorElement] = useState<HTMLElement | null>(null);
+  const [recordingActive, setRecordingActive] = useState(false);
+  
+  const {
+    recordingState,
+    recordingTime,
+    audioBlob,
+    startRecording,
+    pauseRecording,
+    resumeRecording,
+    stopRecording,
+    reset: resetRecording,
+  } = useAudioRecorder();
+  
+  const [interimTranscript, setInterimTranscript] = useState('');
+  
+  const handleTranscript = (text: string, isFinal: boolean) => {
+    if (!editor) return;
+    
+    if (isFinal) {
+      // Insert final transcript into editor
+      editor.commands.insertContent(text + ' ');
+      setInterimTranscript('');
+    } else {
+      // Store interim transcript for display
+      setInterimTranscript(text);
+    }
+  };
+  
+  const { isSupported: isSpeechSupported, startListening, stopListening } = useSpeechRecognition(handleTranscript);
   
   const { toast } = useToast();
 
@@ -849,8 +880,67 @@ const Editor = () => {
   };
 
   const handleVoiceRecording = () => {
-    setNotesDrawerOpen(true);
+    if (!recordingActive) {
+      // Activate recording mode - just show controls, don't start recording yet
+      setRecordingActive(true);
+      
+      // Show warning if speech recognition is not supported
+      if (!isSpeechSupported) {
+        toast({
+          title: 'Speech Recognition Unavailable',
+          description: 'Your browser does not support real-time transcription. Audio will still be recorded.',
+          variant: 'destructive',
+        });
+      }
+    } else {
+      // Deactivate recording mode
+      stopRecording();
+      stopListening();
+      resetRecording();
+      setRecordingActive(false);
+    }
   };
+
+  const handleToggleRecording = () => {
+    if (recordingState === 'idle') {
+      startRecording();
+      if (isSpeechSupported) {
+        startListening();
+      }
+    } else if (recordingState === 'recording') {
+      pauseRecording();
+      stopListening();
+    } else if (recordingState === 'paused') {
+      resumeRecording();
+      if (isSpeechSupported) {
+        startListening();
+      }
+    }
+  };
+
+  const handleStopRecording = () => {
+    stopRecording();
+    stopListening();
+  };
+
+  // Insert audio when recording stops
+  useEffect(() => {
+    if (audioBlob && !recordingActive && editor) {
+      const audioUrl = createAudioURL(audioBlob);
+      editor.commands.insertAudio({
+        src: audioUrl,
+        width: 300,
+        height: 300,
+      });
+      
+      toast({
+        title: 'Audio Inserted',
+        description: 'Your recording has been added to the document',
+      });
+      
+      resetRecording();
+    }
+  }, [audioBlob, recordingActive, editor, toast, resetRecording]);
 
   const handleToggleRuler = () => {
     setShowRuler(prev => !prev);
@@ -1365,6 +1455,7 @@ const Editor = () => {
         onPaletteClick={handlePalette}
         onShapesIconsClick={handleShapesIcons}
         onVoiceRecordingClick={handleVoiceRecording}
+        recordingActive={recordingActive}
         onChapterPresetsClick={handleChapterPresets}
         onExportClick={() => setExportOpen(true)}
         onImportClick={() => setImportOpen(true)}
@@ -1508,6 +1599,16 @@ const Editor = () => {
             pageWidth={pageWidth}
             pageHeight={pageHeight}
           />
+          
+          {recordingActive && (
+            <RecordingControls
+              recordingState={recordingState}
+              recordingTime={recordingTime}
+              onToggleRecording={handleToggleRecording}
+              onStop={handleStopRecording}
+              interimTranscript={interimTranscript}
+            />
+          )}
         </main>
 
         <TextStylePanel editor={editor} wordCount={wordCount} selectedWordCount={selectedWordCount} />
@@ -1628,12 +1729,6 @@ const Editor = () => {
         open={shapesIconsDrawerOpen}
         onOpenChange={setShapesIconsDrawerOpen}
         onInsertIcon={handleInsertAnkh}
-      />
-
-      <NotesDrawer
-        isOpen={notesDrawerOpen}
-        onClose={() => setNotesDrawerOpen(false)}
-        editor={editor}
       />
 
       <RenameDocumentDialog

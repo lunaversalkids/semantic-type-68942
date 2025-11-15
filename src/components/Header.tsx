@@ -31,6 +31,7 @@ interface HeaderProps {
   onTextFrameClick?: () => void;
   onShapesIconsClick?: () => void;
   onVoiceRecordingClick?: () => void;
+  recordingActive?: boolean;
   onChapterPresetsClick?: () => void;
   onPaletteClick?: () => void;
   onExportClick?: () => void;
@@ -64,6 +65,7 @@ export const Header = ({
   onPaletteClick,
   onShapesIconsClick,
   onVoiceRecordingClick,
+  recordingActive,
   onChapterPresetsClick,
   onExportClick,
   onImportClick,
@@ -167,7 +169,11 @@ export const Header = ({
 
         <button 
           onClick={onVoiceRecordingClick} 
-          className="h-8 w-8 border border-[hsl(var(--stroke))] rounded-[var(--r-sm)] grid place-items-center hover:bg-[hsl(var(--panel-2))] transition-all"
+          className={`h-8 w-8 border rounded-[var(--r-sm)] grid place-items-center hover:bg-[hsl(var(--panel-2))] transition-all ${
+            recordingActive 
+              ? 'border-purple-500 bg-purple-500/10 shadow-[0_0_20px_rgba(168,85,247,0.4)]' 
+              : 'border-[hsl(var(--stroke))]'
+          }`}
           title="Note Taking"
         >
           <img src={noteTakingIcon} alt="" className="w-7 h-7 object-contain" />
