@@ -21,8 +21,12 @@ export const RecordingControls = ({
   const [showStop, setShowStop] = useState(false);
   const holdTimerRef = useRef<number | null>(null);
   const isHoldingRef = useRef(false);
+  const stopWasShowingRef = useRef(false);
 
   const handleMouseDown = () => {
+    // Remember if stop was already showing when this press started
+    stopWasShowingRef.current = showStop;
+    
     isHoldingRef.current = true;
     holdTimerRef.current = window.setTimeout(() => {
       if (isHoldingRef.current) {
@@ -38,13 +42,15 @@ export const RecordingControls = ({
       holdTimerRef.current = null;
     }
     
-    // If stop button is showing, this tap hides it (cancel stop)
-    if (showStop) {
+    // If stop was already showing when this press started, hide it (cancel stop)
+    if (stopWasShowingRef.current) {
       setShowStop(false);
-    } else {
-      // If stop button is not showing, this is a tap - toggle recording
+    } 
+    // If this was a short press and stop is not showing, toggle recording
+    else if (!showStop) {
       onToggleRecording();
     }
+    // If this was a long press that just triggered stop, do nothing (keep stop visible)
   };
 
   const handleStopClick = (e: React.MouseEvent) => {
@@ -106,7 +112,7 @@ export const RecordingControls = ({
           onTouchEnd={handleMouseUp}
           className={`relative w-16 h-16 rounded-full border-2 grid place-items-center transition-all duration-200 shadow-[0_10px_28px_rgba(96,48,200,.16)] ${
             recordingState === 'recording'
-              ? 'bg-purple-500/20 border-purple-500'
+              ? 'bg-purple-500/10 border-purple-500'
               : recordingState === 'paused'
               ? 'bg-purple-700/30 border-purple-700'
               : 'bg-[hsl(var(--panel))] border-[hsl(var(--stroke))]'
