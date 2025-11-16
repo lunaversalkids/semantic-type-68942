@@ -184,6 +184,267 @@ export const presetCategories: PresetCategory[] = [
             }
           }
         ]
+      },
+      {
+        id: 'scifi',
+        name: 'Science Fiction Novel',
+        variations: [
+          {
+            id: 'scifi-modern',
+            name: 'Modern',
+            formatting: {
+              marginTop: 1,
+              marginBottom: 1,
+              marginLeft: 1,
+              marginRight: 1,
+              lineHeight: 1.8,
+              paragraphSpacing: 10,
+              indentFirstLine: false,
+              indentSize: 0,
+              fontSize: 11,
+              fontFamily: 'Calibri',
+              chapterTitleFormat: {
+                fontSize: 16,
+                fontWeight: 600,
+                alignment: 'left',
+                spacing: 18
+              },
+              pageSize: 'letter'
+            }
+          }
+        ]
+      },
+      {
+        id: 'thriller',
+        name: 'Thriller Novel',
+        variations: [
+          {
+            id: 'thriller-intense',
+            name: 'Intense',
+            formatting: {
+              marginTop: 1,
+              marginBottom: 1,
+              marginLeft: 1.25,
+              marginRight: 1.25,
+              lineHeight: 1.8,
+              paragraphSpacing: 8,
+              indentFirstLine: true,
+              indentSize: 0.5,
+              fontSize: 11,
+              fontFamily: 'Arial',
+              chapterTitleFormat: {
+                fontSize: 16,
+                fontWeight: 700,
+                alignment: 'left',
+                spacing: 18
+              },
+              pageSize: 'letter'
+            }
+          }
+        ]
+      },
+      {
+        id: 'horror',
+        name: 'Horror Novel',
+        variations: [
+          {
+            id: 'horror-dark',
+            name: 'Dark',
+            formatting: {
+              marginTop: 1,
+              marginBottom: 1,
+              marginLeft: 1.25,
+              marginRight: 1.25,
+              lineHeight: 2,
+              paragraphSpacing: 0,
+              indentFirstLine: true,
+              indentSize: 0.5,
+              fontSize: 12,
+              fontFamily: 'Georgia',
+              chapterTitleFormat: {
+                fontSize: 18,
+                fontWeight: 700,
+                alignment: 'center',
+                spacing: 24
+              },
+              pageSize: 'letter'
+            }
+          }
+        ]
+      },
+      {
+        id: 'historical',
+        name: 'Historical Fiction Novel',
+        variations: [
+          {
+            id: 'historical-classic',
+            name: 'Classic',
+            formatting: {
+              marginTop: 1,
+              marginBottom: 1,
+              marginLeft: 1.25,
+              marginRight: 1.25,
+              lineHeight: 2,
+              paragraphSpacing: 0,
+              indentFirstLine: true,
+              indentSize: 0.5,
+              fontSize: 12,
+              fontFamily: 'Garamond',
+              chapterTitleFormat: {
+                fontSize: 16,
+                fontWeight: 600,
+                alignment: 'center',
+                spacing: 20
+              },
+              pageSize: 'letter'
+            }
+          }
+        ]
+      },
+      {
+        id: 'adventure',
+        name: 'Adventure Novel',
+        variations: [
+          {
+            id: 'adventure-action',
+            name: 'Action',
+            formatting: {
+              marginTop: 1,
+              marginBottom: 1,
+              marginLeft: 1,
+              marginRight: 1,
+              lineHeight: 1.8,
+              paragraphSpacing: 10,
+              indentFirstLine: false,
+              indentSize: 0,
+              fontSize: 11,
+              fontFamily: 'Arial',
+              chapterTitleFormat: {
+                fontSize: 18,
+                fontWeight: 700,
+                alignment: 'left',
+                spacing: 20
+              },
+              pageSize: 'letter'
+            }
+          }
+        ]
+      },
+      {
+        id: 'contemporary',
+        name: 'Contemporary Fiction Novel',
+        variations: [
+          {
+            id: 'contemporary-modern',
+            name: 'Modern',
+            formatting: {
+              marginTop: 1,
+              marginBottom: 1,
+              marginLeft: 1,
+              marginRight: 1,
+              lineHeight: 1.8,
+              paragraphSpacing: 12,
+              indentFirstLine: false,
+              indentSize: 0,
+              fontSize: 11,
+              fontFamily: 'Georgia',
+              chapterTitleFormat: {
+                fontSize: 16,
+                fontWeight: 600,
+                alignment: 'left',
+                spacing: 18
+              },
+              pageSize: 'letter'
+            }
+          }
+        ]
+      },
+      {
+        id: 'literary',
+        name: 'Literary Fiction Novel',
+        variations: [
+          {
+            id: 'literary-elegant',
+            name: 'Elegant',
+            formatting: {
+              marginTop: 1,
+              marginBottom: 1,
+              marginLeft: 1.25,
+              marginRight: 1.25,
+              lineHeight: 2,
+              paragraphSpacing: 0,
+              indentFirstLine: true,
+              indentSize: 0.5,
+              fontSize: 12,
+              fontFamily: 'Garamond',
+              chapterTitleFormat: {
+                fontSize: 16,
+                fontWeight: 600,
+                alignment: 'left',
+                spacing: 20
+              },
+              pageSize: 'letter'
+            }
+          }
+        ]
+      },
+      {
+        id: 'ya',
+        name: 'Young Adult (YA) Novel',
+        variations: [
+          {
+            id: 'ya-modern',
+            name: 'Modern',
+            formatting: {
+              marginTop: 1,
+              marginBottom: 1,
+              marginLeft: 1,
+              marginRight: 1,
+              lineHeight: 1.8,
+              paragraphSpacing: 12,
+              indentFirstLine: false,
+              indentSize: 0,
+              fontSize: 11,
+              fontFamily: 'Georgia',
+              chapterTitleFormat: {
+                fontSize: 18,
+                fontWeight: 700,
+                alignment: 'center',
+                spacing: 20
+              },
+              pageSize: 'letter'
+            }
+          }
+        ]
+      },
+      {
+        id: 'dystopian',
+        name: 'Dystopian Novel',
+        variations: [
+          {
+            id: 'dystopian-modern',
+            name: 'Modern',
+            formatting: {
+              marginTop: 1,
+              marginBottom: 1,
+              marginLeft: 1,
+              marginRight: 1,
+              lineHeight: 1.8,
+              paragraphSpacing: 10,
+              indentFirstLine: false,
+              indentSize: 0,
+              fontSize: 11,
+              fontFamily: 'Arial',
+              chapterTitleFormat: {
+                fontSize: 16,
+                fontWeight: 700,
+                alignment: 'left',
+                spacing: 18
+              },
+              pageSize: 'letter'
+            }
+          }
+        ]
       }
     ]
   },
