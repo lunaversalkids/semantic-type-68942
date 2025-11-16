@@ -39,6 +39,8 @@ import { useAudioRecorder } from '@/hooks/useAudioRecorder';
 import { createAudioURL } from '@/utils/audioUtils';
 import { useSpeechRecognition } from '@/hooks/useSpeechRecognition';
 import { RecordingsLibraryDialog } from '@/components/RecordingsLibraryDialog';
+import { ChapterPresetsDialog } from '@/components/ChapterPresetsDialog';
+import { PresetFormatting } from '@/types/presets';
 
 const Editor = () => {
   const [searchParams] = useSearchParams();
@@ -110,6 +112,7 @@ const Editor = () => {
   const [showRuler, setShowRuler] = useState(false);
   const [activePageNum, setActivePageNum] = useState(1);
   const [shapesIconsDrawerOpen, setShapesIconsDrawerOpen] = useState(false);
+  const [chapterPresetsDialogOpen, setChapterPresetsDialogOpen] = useState(false);
   const [documentName, setDocumentName] = useState('Untitled');
   const [renameDialogOpen, setRenameDialogOpen] = useState(false);
   const [saveAsTemplateDialogOpen, setSaveAsTemplateDialogOpen] = useState(false);
@@ -889,10 +892,15 @@ const Editor = () => {
   };
 
   const handleChapterPresets = () => {
-    toast({ 
-      title: 'Chapter Presets',
-      description: 'Chapter presets feature coming soon'
+    setChapterPresetsDialogOpen(true);
+  };
+
+  const handleApplyPreset = (formatting: PresetFormatting) => {
+    toast({
+      title: 'Preset Applied',
+      description: `Applied ${formatting.pageSize.name} page format with custom styling`,
     });
+    // TODO: Implement actual formatting application to the editor
   };
 
   const handleVoiceRecording = () => {
@@ -1871,6 +1879,12 @@ const Editor = () => {
         onDeleteFromTrash={handleDeleteFromTrash}
         onRestore={handleRestoreRecording}
         onStartNewRecording={handleStartNewRecording}
+      />
+
+      <ChapterPresetsDialog
+        open={chapterPresetsDialogOpen}
+        onOpenChange={setChapterPresetsDialogOpen}
+        onApplyPreset={handleApplyPreset}
       />
       
       <OnboardingTour />
