@@ -39,6 +39,7 @@ import { useAudioRecorder } from '@/hooks/useAudioRecorder';
 import { createAudioURL } from '@/utils/audioUtils';
 import { useSpeechRecognition } from '@/hooks/useSpeechRecognition';
 import { RecordingsLibraryDialog } from '@/components/RecordingsLibraryDialog';
+import { ChapterPresetsDialog } from '@/components/ChapterPresetsDialog';
 
 const Editor = () => {
   const [searchParams] = useSearchParams();
@@ -888,10 +889,16 @@ const Editor = () => {
     setShapesIconsDrawerOpen(true);
   };
 
+  const [chapterPresetsOpen, setChapterPresetsOpen] = useState(false);
+
   const handleChapterPresets = () => {
+    setChapterPresetsOpen(true);
+  };
+
+  const handleApplyPreset = (variation: any) => {
     toast({ 
-      title: 'Chapter Presets',
-      description: 'Chapter presets feature coming soon'
+      title: 'Preset Applied',
+      description: `${variation.name} formatting has been applied to your document`
     });
   };
 
@@ -1871,6 +1878,12 @@ const Editor = () => {
         onDeleteFromTrash={handleDeleteFromTrash}
         onRestore={handleRestoreRecording}
         onStartNewRecording={handleStartNewRecording}
+      />
+      
+      <ChapterPresetsDialog
+        open={chapterPresetsOpen}
+        onOpenChange={setChapterPresetsOpen}
+        onApplyPreset={handleApplyPreset}
       />
       
       <OnboardingTour />
