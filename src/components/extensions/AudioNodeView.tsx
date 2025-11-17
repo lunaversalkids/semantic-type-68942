@@ -2,7 +2,6 @@ import { NodeViewWrapper } from '@tiptap/react';
 import { useState, useRef, useEffect } from 'react';
 import { Play, Pause, SkipBack, SkipForward } from 'lucide-react';
 import { Slider } from '@/components/ui/slider';
-import Draggable from 'react-draggable';
 
 interface AudioNodeViewProps {
   node: any;
@@ -11,8 +10,7 @@ interface AudioNodeViewProps {
 }
 
 export const AudioNodeView = ({ node, updateAttributes, selected }: AudioNodeViewProps) => {
-  const { src, width, height, diamondSize } = node.attrs;
-  const [isExpanded, setIsExpanded] = useState(false);
+  const { src, width = 600 } = node.attrs;
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
@@ -22,7 +20,7 @@ export const AudioNodeView = ({ node, updateAttributes, selected }: AudioNodeVie
 
   // Generate random waveform for visualization
   useEffect(() => {
-    const bars = Array.from({ length: 60 }, () => Math.random() * 100);
+    const bars = Array.from({ length: 80 }, () => Math.random() * 100);
     setWaveformBars(bars);
   }, []);
 
@@ -94,201 +92,106 @@ export const AudioNodeView = ({ node, updateAttributes, selected }: AudioNodeVie
     return `${minutes}:${seconds.toString().padStart(2, '0')}`;
   };
 
-  const handleResize = (e: any, data: any) => {
-    updateAttributes({
-      width: data.size.width,
-      height: data.size.height,
-    });
-  };
-
   return (
-    <NodeViewWrapper className="audio-node-wrapper inline-block my-2">
-      <Draggable
-        bounds="parent"
-        handle=".drag-handle"
-        disabled={!isExpanded}
+    <NodeViewWrapper className="audio-node-wrapper my-4">
+      <div
+        className="relative p-6 rounded-2xl bg-gradient-to-br from-background/50 to-background/30 backdrop-blur-sm border-2 border-purple-200/30"
+        style={{ width: `${width}px`, maxWidth: '100%' }}
       >
-        <div
-          className="relative inline-block"
-          style={{
-            width: isExpanded ? `${width}px` : 'auto',
-            height: isExpanded ? `${height}px` : 'auto',
-          }}
-        >
-          <audio ref={audioRef} src={src} />
-          
-          {!isExpanded ? (
-            // Purple diamond collapsed state
-            <div className="relative inline-block">
-              <div
-                onClick={() => setIsExpanded(true)}
-                className="cursor-pointer inline-block"
-                style={{
-                  width: `${diamondSize}px`,
-                  height: `${diamondSize}px`,
-                  transform: 'rotate(45deg)',
-                  background: 'linear-gradient(135deg, #a855f7, #9333ea)',
-                  borderRadius: '8px',
-                  boxShadow: '0 4px 12px rgba(168, 85, 247, 0.4)',
-                }}
-              >
-                <div
-                  style={{
-                    transform: 'rotate(-45deg)',
-                    width: '100%',
-                    height: '100%',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}
-                >
-                  <Play className="w-6 h-6 text-white" />
-                </div>
-              </div>
-              
-              {/* Resize Handle for Diamond */}
-              {selected && (
-                <div
-                  className="absolute w-3 h-3 bg-primary rounded cursor-se-resize"
-                  style={{
-                    bottom: '-6px',
-                    right: '-6px',
-                  }}
-                  onMouseDown={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    const startX = e.clientX;
-                    const startY = e.clientY;
-                    const startSize = diamondSize;
-
-                    const handleMouseMove = (e: MouseEvent) => {
-                      const deltaX = e.clientX - startX;
-                      const deltaY = e.clientY - startY;
-                      const delta = Math.max(deltaX, deltaY);
-                      updateAttributes({
-                        diamondSize: Math.max(40, startSize + delta),
-                      });
-                    };
-
-                    const handleMouseUp = () => {
-                      document.removeEventListener('mousemove', handleMouseMove);
-                      document.removeEventListener('mouseup', handleMouseUp);
-                    };
-
-                    document.addEventListener('mousemove', handleMouseMove);
-                    document.addEventListener('mouseup', handleMouseUp);
-                  }}
-                />
-              )}
-            </div>
-          ) : (
-            // Expanded audio player
-            <div
-              className={`drag-handle bg-background border-2 rounded-lg p-6 ${
-                selected ? 'border-primary' : 'border-border'
-              }`}
-              style={{ width: '100%', height: '100%' }}
-            >
-              {/* Waveform Visualization */}
-              <div className="flex items-center justify-center gap-0.5 h-32 mb-4">
-                {waveformBars.map((height, i) => {
-                  const isActive = (i / waveformBars.length) * duration < currentTime;
-                  return (
-                    <div
-                      key={i}
-                      className="rounded-full transition-all"
-                      style={{
-                        width: '2px',
-                        height: `${isPlaying && isActive ? height : height * 0.5}%`,
-                        backgroundColor: 'hsl(280, 100%, 60%)',
-                        opacity: isPlaying && isActive ? 1 : 0.3,
-                      }}
-                    />
-                  );
-                })}
-              </div>
-
-              {/* Progress Slider */}
-              <Slider
-                value={[currentTime]}
-                max={duration || 100}
-                step={0.1}
-                onValueChange={handleSeek}
-                className="mb-4"
-              />
-
-              {/* Controls */}
-              <div className="flex items-center justify-between">
-                <span className="text-lg font-semibold text-primary">
-                  {formatTime(currentTime)}
-                </span>
-                
-                <div className="flex items-center gap-4">
-                  <button
-                    onClick={skipBackward}
-                    className="rounded-full p-3 bg-primary/10 hover:bg-primary/20 transition-colors"
-                  >
-                    <SkipBack className="w-5 h-5 text-primary" />
-                  </button>
-                  
-                  <button
-                    onClick={togglePlay}
-                    className="rounded-full p-4 bg-primary hover:bg-primary/90 transition-colors"
-                  >
-                    {isPlaying ? (
-                      <Pause className="w-6 h-6 text-white" />
-                    ) : (
-                      <Play className="w-6 h-6 text-white" />
-                    )}
-                  </button>
-                  
-                  <button
-                    onClick={skipForward}
-                    className="rounded-full p-3 bg-primary/10 hover:bg-primary/20 transition-colors"
-                  >
-                    <SkipForward className="w-5 h-5 text-primary" />
-                  </button>
-                </div>
-
-                <span className="text-lg font-semibold text-primary">
-                  {formatTime(duration)}
-                </span>
-              </div>
-
-              {/* Resize Handle */}
-              {selected && (
-                <div
-                  className="absolute bottom-2 right-2 w-4 h-4 bg-primary rounded cursor-se-resize"
-                  onMouseDown={(e) => {
-                    e.preventDefault();
-                    const startX = e.clientX;
-                    const startY = e.clientY;
-                    const startWidth = width;
-                    const startHeight = height;
-
-                    const handleMouseMove = (e: MouseEvent) => {
-                      const deltaX = e.clientX - startX;
-                      const deltaY = e.clientY - startY;
-                      updateAttributes({
-                        width: Math.max(250, startWidth + deltaX),
-                        height: Math.max(250, startHeight + deltaY),
-                      });
-                    };
-
-                    const handleMouseUp = () => {
-                      document.removeEventListener('mousemove', handleMouseMove);
-                      document.removeEventListener('mouseup', handleMouseUp);
-                    };
-
-                    document.addEventListener('mousemove', handleMouseMove);
-                    document.addEventListener('mouseup', handleMouseUp);
-                  }}
-                />
-              )}
-            </div>
-          )}
+        <audio ref={audioRef} src={src} />
+        
+        {/* Play Button and Title Row */}
+        <div className="flex items-center gap-4 mb-6">
+          <button
+            onClick={togglePlay}
+            className="w-16 h-16 rounded-full bg-gradient-to-br from-purple-400 to-purple-600 hover:from-purple-500 hover:to-purple-700 flex items-center justify-center shadow-lg shadow-purple-500/30 transition-all hover:scale-105"
+          >
+            {isPlaying ? (
+              <Pause className="w-8 h-8 text-white fill-white" />
+            ) : (
+              <Play className="w-8 h-8 text-white fill-white ml-1" />
+            )}
+          </button>
+          <h3 className="text-2xl font-medium text-purple-300/80 tracking-wide">
+            Time for Healing
+          </h3>
         </div>
-      </Draggable>
+
+        {/* Waveform Visualization */}
+        <div className="mb-4 flex items-end justify-center h-32 gap-1 px-2">
+          {waveformBars.map((height, index) => {
+            const progress = duration > 0 ? (currentTime / duration) * 100 : 0;
+            const barProgress = (index / waveformBars.length) * 100;
+            const isActive = barProgress <= progress;
+            
+            return (
+              <div
+                key={index}
+                className="flex-1 rounded-full transition-all duration-150"
+                style={{
+                  height: `${height}%`,
+                  backgroundColor: isActive 
+                    ? 'hsl(266, 100%, 70%)'
+                    : 'hsl(266, 100%, 70%)',
+                  opacity: isActive ? 1 : 0.6,
+                  minWidth: '3px',
+                  maxWidth: '8px',
+                }}
+              />
+            );
+          })}
+        </div>
+
+        {/* Slider */}
+        <div className="mb-2 px-2">
+          <Slider
+            value={[currentTime]}
+            max={duration || 100}
+            step={0.1}
+            onValueChange={handleSeek}
+            className="cursor-pointer"
+          />
+        </div>
+
+        {/* Time Display and Controls */}
+        <div className="flex items-center justify-between px-2">
+          <span className="text-4xl font-bold text-purple-600">
+            {formatTime(currentTime)}
+          </span>
+
+          {/* Control Buttons */}
+          <div className="flex items-center gap-3">
+            <button
+              onClick={skipBackward}
+              className="w-14 h-14 rounded-full bg-purple-600 hover:bg-purple-700 flex items-center justify-center shadow-md shadow-purple-500/30 transition-all hover:scale-105"
+            >
+              <SkipBack className="w-6 h-6 text-white fill-white" />
+            </button>
+            
+            <button
+              onClick={togglePlay}
+              className="w-16 h-16 rounded-full bg-purple-600 hover:bg-purple-700 flex items-center justify-center shadow-lg shadow-purple-500/40 transition-all hover:scale-105"
+            >
+              {isPlaying ? (
+                <Pause className="w-8 h-8 text-white fill-white" />
+              ) : (
+                <Play className="w-8 h-8 text-white fill-white ml-1" />
+              )}
+            </button>
+
+            <button
+              onClick={skipForward}
+              className="w-14 h-14 rounded-full bg-purple-600 hover:bg-purple-700 flex items-center justify-center shadow-md shadow-purple-500/30 transition-all hover:scale-105"
+            >
+              <SkipForward className="w-6 h-6 text-white fill-white" />
+            </button>
+          </div>
+
+          <span className="text-4xl font-bold text-purple-600">
+            {formatTime(duration)}
+          </span>
+        </div>
+      </div>
     </NodeViewWrapper>
   );
 };
