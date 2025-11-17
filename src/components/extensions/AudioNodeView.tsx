@@ -3,6 +3,7 @@ import { useState, useRef, useEffect } from 'react';
 import { Play, Pause, SkipBack, SkipForward } from 'lucide-react';
 import { Slider } from '@/components/ui/slider';
 import { Rnd } from 'react-rnd';
+import newInfinityButton from '@/assets/new-infinity-button.png';
 
 interface AudioNodeViewProps {
   node: any;
@@ -173,30 +174,12 @@ export const AudioNodeView = ({ node, updateAttributes, selected }: AudioNodeVie
               onClick={() => setIsMinimized(true)}
               className="absolute top-3 right-3 w-12 h-12 flex items-center justify-center transition-all hover:scale-105 z-10"
             >
-              <svg
-                viewBox="0 0 100 100"
+              <img 
+                src={newInfinityButton} 
+                alt="Minimize" 
                 className="w-full h-full"
                 style={{ filter: 'drop-shadow(0 2px 8px rgba(167, 139, 250, 0.4))' }}
-              >
-                {/* Rounded triangular play-button shape (Reuleaux Triangle) */}
-                <path
-                  d="M 20 50 Q 20 20, 35 15 Q 50 10, 65 15 Q 80 20, 85 35 Q 90 50, 85 65 Q 80 75, 70 80 Q 60 85, 50 85 Q 35 85, 25 75 Q 20 65, 20 50 Z"
-                  fill="url(#purpleGradient)"
-                  stroke="none"
-                />
-                <defs>
-                  <linearGradient id="purpleGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stopColor="hsl(266, 100%, 75%)" />
-                    <stop offset="100%" stopColor="hsl(266, 100%, 65%)" />
-                  </linearGradient>
-                </defs>
-                {/* Infinity symbol */}
-                <path
-                  d="M 35 50 Q 35 45, 40 45 Q 45 45, 50 50 Q 55 55, 60 55 Q 65 55, 65 50 Q 65 45, 60 45 Q 55 45, 50 50 Q 45 55, 40 55 Q 35 55, 35 50 Z"
-                  fill="white"
-                  stroke="none"
-                />
-              </svg>
+              />
             </button>
         
         {/* Play Button and Title Row */}
