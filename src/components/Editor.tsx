@@ -290,6 +290,8 @@ export const Editor = ({
       <h2 style="font-size: 1.5rem; margin-bottom: 1rem;">Arthropods</h2>
       <p>Insects are an ind-isub sclass units of the class <span style="color: #6366f1; font-weight: 500;">Hexapoda</span> - In from novellisms them from other arthropods by their three-part body, compound eyes, and external skeleton, in an abusant serza.</p>
       
+      <div data-type="audio-node" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" width="300" height="300" diamondSize="60"></div>
+      
       <h2 style="color: #6366f1; font-size: 1.5rem; margin: 1.5rem 0 1rem 0;">Hexapoda</h2>
       <p><span style="color: #6366f1;">Arthroprod</span> <em>soptrtrice</em> <span style="color: #6366f1;">Hexapoda</span></p>
       <p>Insects comprise the most diverse group of animals an Earth.</p>
