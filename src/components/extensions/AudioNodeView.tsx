@@ -16,6 +16,7 @@ export const AudioNodeView = ({ node, updateAttributes, selected }: AudioNodeVie
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [waveformBars, setWaveformBars] = useState<number[]>([]);
+  const [isMinimized, setIsMinimized] = useState(false);
   const audioRef = useRef<HTMLAudioElement>(null);
   const animationRef = useRef<number>();
 
@@ -96,16 +97,16 @@ export const AudioNodeView = ({ node, updateAttributes, selected }: AudioNodeVie
   return (
     <NodeViewWrapper className="audio-node-wrapper my-4">
       <Rnd
-        size={{ width, height: 'auto' }}
+        size={{ width: isMinimized ? 'auto' : width, height: 'auto' }}
         position={{ x: 0, y: 0 }}
         onResizeStop={(e, direction, ref, delta, position) => {
           updateAttributes({
             width: ref.offsetWidth,
           });
         }}
-        minWidth={400}
-        maxWidth={800}
-        enableResizing={{
+        minWidth={isMinimized ? 80 : 400}
+        maxWidth={isMinimized ? 80 : 800}
+        enableResizing={!isMinimized && {
           top: false,
           right: true,
           bottom: false,
@@ -117,14 +118,45 @@ export const AudioNodeView = ({ node, updateAttributes, selected }: AudioNodeVie
         }}
         bounds="parent"
         className="audio-player-rnd"
+        disableDragging={false}
       >
-        <div
-          className="relative p-6 rounded-2xl bg-gradient-to-br from-background/50 to-background/30 backdrop-blur-sm border-2 border-purple-200/30 h-full cursor-move"
-          style={{ 
-            boxShadow: selected ? '0 0 0 3px hsl(266, 100%, 70%)' : 'none',
-          }}
-        >
-          <audio ref={audioRef} src={src} />
+        <audio ref={audioRef} src={src} />
+
+        {isMinimized ? (
+          // Minimized State - Purple Ball with Play Button
+          <div
+            className="relative cursor-move"
+            onClick={() => setIsMinimized(false)}
+          >
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                togglePlay();
+              }}
+              className="w-16 h-16 rounded-full bg-gradient-to-br from-purple-400 to-purple-600 hover:from-purple-500 hover:to-purple-700 flex items-center justify-center shadow-lg shadow-purple-500/30 transition-all hover:scale-105"
+            >
+              {isPlaying ? (
+                <Pause className="w-8 h-8 text-white fill-white" />
+              ) : (
+                <Play className="w-8 h-8 text-white fill-white ml-1" />
+              )}
+            </button>
+          </div>
+        ) : (
+          // Expanded State - Full Player
+          <div
+            className="relative p-6 rounded-2xl bg-gradient-to-br from-background/50 to-background/30 backdrop-blur-sm border-2 border-purple-200/30 h-full cursor-move"
+            style={{ 
+              boxShadow: selected ? '0 0 0 3px hsl(266, 100%, 70%)' : 'none',
+            }}
+          >
+            {/* Minimize Button */}
+            <button
+              onClick={() => setIsMinimized(true)}
+              className="absolute top-3 right-3 w-8 h-8 flex items-center justify-center rounded-full hover:bg-purple-200/20 transition-colors z-10"
+            >
+              <div className="w-5 h-0.5 bg-purple-400 rounded-full" />
+            </button>
         
         {/* Play Button and Title Row */}
         <div className="flex items-center gap-4 mb-6">
@@ -217,10 +249,11 @@ export const AudioNodeView = ({ node, updateAttributes, selected }: AudioNodeVie
             {formatTime(duration)}
           </span>
         </div>
-        </div>
+          </div>
+        )}
         
         {/* Corner Resize Handles */}
-        {selected && (
+        {selected && !isMinimized && (
           <>
             <div className="absolute top-0 left-0 w-4 h-4 bg-purple-600 rounded-full -translate-x-1/2 -translate-y-1/2 shadow-lg shadow-purple-500/50 cursor-nw-resize" />
             <div className="absolute top-0 right-0 w-4 h-4 bg-purple-600 rounded-full translate-x-1/2 -translate-y-1/2 shadow-lg shadow-purple-500/50 cursor-ne-resize" />
