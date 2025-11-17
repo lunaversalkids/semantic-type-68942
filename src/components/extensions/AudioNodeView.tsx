@@ -135,11 +135,12 @@ export const AudioNodeView = ({ node, updateAttributes, selected }: AudioNodeVie
               }}
               className="w-16 h-16 rounded-full bg-gradient-to-br from-purple-400 to-purple-600 hover:from-purple-500 hover:to-purple-700 flex items-center justify-center shadow-lg shadow-purple-500/30 transition-all hover:scale-105"
             >
-              {isPlaying ? (
-                <Pause className="w-8 h-8 text-white fill-white" />
-              ) : (
-                <Play className="w-8 h-8 text-white fill-white ml-1" />
-              )}
+              <svg
+                viewBox="0 0 24 24"
+                className="w-8 h-8 text-white fill-white"
+              >
+                <path d="M 8 12 Q 8 8, 12 8 Q 16 8, 16 12 Q 16 16, 12 16 Q 8 16, 8 12 Z M 12 12 Q 12 8, 16 8 Q 20 8, 20 12 Q 20 16, 16 16 Q 12 16, 12 12 Z" />
+              </svg>
             </button>
             
             {/* Expand Line - appears on hover at top-left corner */}
