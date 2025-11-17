@@ -287,14 +287,12 @@ export const AudioNodeView = ({ node, updateAttributes, selected }: AudioNodeVie
           </div>
         )}
         
-        {/* Corner Resize Handles */}
-        {selected && !isMinimized && (
-          <>
-            <div className="absolute top-0 left-0 w-4 h-4 bg-purple-600 rounded-full -translate-x-1/2 -translate-y-1/2 shadow-lg shadow-purple-500/50 cursor-nw-resize" />
-            <div className="absolute top-0 right-0 w-4 h-4 bg-purple-600 rounded-full translate-x-1/2 -translate-y-1/2 shadow-lg shadow-purple-500/50 cursor-ne-resize" />
-            <div className="absolute bottom-0 left-0 w-4 h-4 bg-purple-600 rounded-full -translate-x-1/2 translate-y-1/2 shadow-lg shadow-purple-500/50 cursor-sw-resize" />
-            <div className="absolute bottom-0 right-0 w-4 h-4 bg-purple-600 rounded-full translate-x-1/2 translate-y-1/2 shadow-lg shadow-purple-500/50 cursor-se-resize" />
-          </>
+        {/* Resize Handle Ball - Bottom Right Corner */}
+        {!isMinimized && (
+          <div 
+            className="absolute bottom-2 right-2 w-5 h-5 bg-gradient-to-br from-purple-400 to-purple-600 rounded-full shadow-lg shadow-purple-500/50 cursor-se-resize hover:scale-110 transition-transform z-20"
+            style={{ pointerEvents: 'auto' }}
+          />
         )}
       </Rnd>
     </NodeViewWrapper>
