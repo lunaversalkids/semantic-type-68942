@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { presetCategories, PresetCategory, Preset, PresetVariation } from '@/types/presets';
 import { cn } from '@/lib/utils';
+import { ArrowLeft } from 'lucide-react';
 
 interface ChapterPresetsDialogProps {
   open: boolean;
@@ -45,18 +46,39 @@ export function ChapterPresetsDialog({ open, onOpenChange, onApplyPreset }: Chap
     setSelectedVariation(null);
   };
 
+  const handleBack = () => {
+    if (selectedVariation) {
+      setSelectedVariation(null);
+    } else if (selectedPreset) {
+      setSelectedPreset(null);
+    } else if (selectedCategory) {
+      setSelectedCategory(null);
+    }
+  };
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-6xl h-[80vh] p-0 bg-[hsl(var(--panel-2))]">
         <DialogHeader className="px-6 py-4 border-b border-[hsl(var(--stroke))]">
           <div className="flex items-center justify-between">
-            <Button
-              variant="secondary"
-              onClick={handleCancel}
-              className="rounded-lg px-6"
-            >
-              Cancel
-            </Button>
+            <div className="flex items-center gap-2">
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={handleBack}
+                disabled={!selectedCategory}
+                className="rounded-lg"
+              >
+                <ArrowLeft className="h-4 w-4" />
+              </Button>
+              <Button
+                variant="secondary"
+                onClick={handleCancel}
+                className="rounded-lg px-6"
+              >
+                Cancel
+              </Button>
+            </div>
             <DialogTitle className="text-2xl font-semibold">Chapter Presets</DialogTitle>
             <Button
               onClick={handleApply}
