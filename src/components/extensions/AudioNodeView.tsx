@@ -2,6 +2,7 @@ import { NodeViewWrapper } from '@tiptap/react';
 import { useState, useRef, useEffect } from 'react';
 import { Play, Pause, SkipBack, SkipForward } from 'lucide-react';
 import { Slider } from '@/components/ui/slider';
+import { Rnd } from 'react-rnd';
 
 interface AudioNodeViewProps {
   node: any;
@@ -94,11 +95,36 @@ export const AudioNodeView = ({ node, updateAttributes, selected }: AudioNodeVie
 
   return (
     <NodeViewWrapper className="audio-node-wrapper my-4">
-      <div
-        className="relative p-6 rounded-2xl bg-gradient-to-br from-background/50 to-background/30 backdrop-blur-sm border-2 border-purple-200/30"
-        style={{ width: `${width}px`, maxWidth: '100%' }}
+      <Rnd
+        size={{ width, height: 'auto' }}
+        position={{ x: 0, y: 0 }}
+        onResizeStop={(e, direction, ref, delta, position) => {
+          updateAttributes({
+            width: ref.offsetWidth,
+          });
+        }}
+        minWidth={400}
+        maxWidth={800}
+        enableResizing={{
+          top: false,
+          right: true,
+          bottom: false,
+          left: true,
+          topRight: true,
+          bottomRight: true,
+          bottomLeft: true,
+          topLeft: true,
+        }}
+        bounds="parent"
+        className="audio-player-rnd"
       >
-        <audio ref={audioRef} src={src} />
+        <div
+          className="relative p-6 rounded-2xl bg-gradient-to-br from-background/50 to-background/30 backdrop-blur-sm border-2 border-purple-200/30 h-full cursor-move"
+          style={{ 
+            boxShadow: selected ? '0 0 0 3px hsl(266, 100%, 70%)' : 'none',
+          }}
+        >
+          <audio ref={audioRef} src={src} />
         
         {/* Play Button and Title Row */}
         <div className="flex items-center gap-4 mb-6">
@@ -191,7 +217,18 @@ export const AudioNodeView = ({ node, updateAttributes, selected }: AudioNodeVie
             {formatTime(duration)}
           </span>
         </div>
-      </div>
+        </div>
+        
+        {/* Corner Resize Handles */}
+        {selected && (
+          <>
+            <div className="absolute top-0 left-0 w-4 h-4 bg-purple-600 rounded-full -translate-x-1/2 -translate-y-1/2 shadow-lg shadow-purple-500/50 cursor-nw-resize" />
+            <div className="absolute top-0 right-0 w-4 h-4 bg-purple-600 rounded-full translate-x-1/2 -translate-y-1/2 shadow-lg shadow-purple-500/50 cursor-ne-resize" />
+            <div className="absolute bottom-0 left-0 w-4 h-4 bg-purple-600 rounded-full -translate-x-1/2 translate-y-1/2 shadow-lg shadow-purple-500/50 cursor-sw-resize" />
+            <div className="absolute bottom-0 right-0 w-4 h-4 bg-purple-600 rounded-full translate-x-1/2 translate-y-1/2 shadow-lg shadow-purple-500/50 cursor-se-resize" />
+          </>
+        )}
+      </Rnd>
     </NodeViewWrapper>
   );
 };
