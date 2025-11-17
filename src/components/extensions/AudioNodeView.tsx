@@ -130,26 +130,13 @@ export const AudioNodeView = ({ node, updateAttributes, selected }: AudioNodeVie
         <div className="flex items-center gap-4 mb-6">
           <button
             onClick={togglePlay}
-            className="relative w-20 h-20 flex items-center justify-center transition-all hover:scale-105"
-            style={{
-              background: '#000000',
-              borderRadius: '20px 8px 20px 8px',
-              clipPath: 'polygon(12% 3%, 92% 50%, 92% 50%, 12% 97%, 3% 90%, 3% 10%)',
-            }}
+            className="w-16 h-16 rounded-full bg-gradient-to-br from-purple-400 to-purple-600 hover:from-purple-500 hover:to-purple-700 flex items-center justify-center shadow-lg shadow-purple-500/30 transition-all hover:scale-105"
           >
-            {/* Infinity Symbol */}
-            <svg 
-              viewBox="0 0 48 24" 
-              className="w-10 h-5 absolute"
-              fill="white"
-            >
-              <path d="M15 12c0-3.3-2.7-6-6-6s-6 2.7-6 6 2.7 6 6 6c1.5 0 2.9-0.6 4-1.5l2-1.5 2 1.5c1.1 0.9 2.5 1.5 4 1.5 3.3 0 6-2.7 6-6s-2.7-6-6-6-6 2.7-6 6" 
-                    stroke="white" 
-                    strokeWidth="3" 
-                    fill="none" 
-                    strokeLinecap="round"
-                    strokeLinejoin="round" />
-            </svg>
+            {isPlaying ? (
+              <Pause className="w-8 h-8 text-white fill-white" />
+            ) : (
+              <Play className="w-8 h-8 text-white fill-white ml-1" />
+            )}
           </button>
           <h3 className="text-2xl font-medium text-purple-300/80 tracking-wide">
             Time for Healing
@@ -209,26 +196,13 @@ export const AudioNodeView = ({ node, updateAttributes, selected }: AudioNodeVie
             
             <button
               onClick={togglePlay}
-              className="relative w-16 h-16 flex items-center justify-center transition-all hover:scale-105"
-              style={{
-                background: '#000000',
-                borderRadius: '16px 6px 16px 6px',
-                clipPath: 'polygon(12% 3%, 92% 50%, 92% 50%, 12% 97%, 3% 90%, 3% 10%)',
-              }}
+              className="w-16 h-16 rounded-full bg-purple-600 hover:bg-purple-700 flex items-center justify-center shadow-lg shadow-purple-500/40 transition-all hover:scale-105"
             >
-              {/* Infinity Symbol */}
-              <svg 
-                viewBox="0 0 48 24" 
-                className="w-8 h-4 absolute"
-                fill="white"
-              >
-                <path d="M15 12c0-3.3-2.7-6-6-6s-6 2.7-6 6 2.7 6 6 6c1.5 0 2.9-0.6 4-1.5l2-1.5 2 1.5c1.1 0.9 2.5 1.5 4 1.5 3.3 0 6-2.7 6-6s-2.7-6-6-6-6 2.7-6 6" 
-                      stroke="white" 
-                      strokeWidth="3" 
-                      fill="none" 
-                      strokeLinecap="round"
-                      strokeLinejoin="round" />
-              </svg>
+              {isPlaying ? (
+                <Pause className="w-8 h-8 text-white fill-white" />
+              ) : (
+                <Play className="w-8 h-8 text-white fill-white ml-1" />
+              )}
             </button>
 
             <button
