@@ -3,6 +3,8 @@ export interface PresetFormatting {
   marginBottom: number;
   marginLeft: number;
   marginRight: number;
+  marginInside?: number; // For binding side (inside margin)
+  marginOutside?: number; // For outer edge
   lineHeight: number;
   paragraphSpacing: number;
   indentFirstLine: boolean;
@@ -20,7 +22,13 @@ export interface PresetFormatting {
     alignment: 'left' | 'center' | 'right';
     spacing: number;
   };
-  pageSize: 'letter' | 'a4' | 'legal';
+  pageSize: 'letter' | 'a4' | 'legal' | 'custom';
+  pageWidth?: number; // In inches (for custom sizes)
+  pageHeight?: number; // In inches (for custom sizes)
+  chapterStartPosition?: number; // Distance from top in inches
+  dropCap?: boolean; // First letter styling
+  runningHeader?: boolean; // Running header with page numbers
+  sectionBreaks?: boolean; // Section breaks between chapters
 }
 
 export interface PresetVariation {
@@ -2810,6 +2818,416 @@ export const presetCategories: PresetCategory[] = [
                 spacing: 12
               },
               pageSize: 'letter'
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    id: 'professional-templates',
+    name: 'Professional Book Templates',
+    presets: [
+      {
+        id: '6x9-standard',
+        name: '6×9 Standard Book',
+        variations: [
+          {
+            id: '6x9-classic',
+            name: 'Classic',
+            formatting: {
+              marginTop: 0.75,
+              marginBottom: 0.75,
+              marginLeft: 0.75,
+              marginRight: 0.75,
+              marginInside: 0.875,
+              marginOutside: 0.625,
+              lineHeight: 1.8,
+              paragraphSpacing: 0,
+              indentFirstLine: true,
+              indentSize: 0.5,
+              fontSize: 12,
+              fontFamily: 'Garamond',
+              chapterTitleFormat: {
+                fontSize: 22,
+                fontWeight: 700,
+                alignment: 'center',
+                spacing: 36
+              },
+              pageSize: 'custom',
+              pageWidth: 6,
+              pageHeight: 9,
+              chapterStartPosition: 2.5,
+              dropCap: false,
+              runningHeader: true,
+              sectionBreaks: true
+            }
+          },
+          {
+            id: '6x9-modern',
+            name: 'Modern',
+            formatting: {
+              marginTop: 0.875,
+              marginBottom: 0.875,
+              marginLeft: 0.75,
+              marginRight: 0.75,
+              marginInside: 1,
+              marginOutside: 0.75,
+              lineHeight: 1.6,
+              paragraphSpacing: 8,
+              indentFirstLine: false,
+              indentSize: 0,
+              fontSize: 11,
+              fontFamily: 'Georgia',
+              chapterTitleFormat: {
+                fontSize: 20,
+                fontWeight: 600,
+                alignment: 'left',
+                spacing: 28
+              },
+              pageSize: 'custom',
+              pageWidth: 6,
+              pageHeight: 9,
+              chapterStartPosition: 2,
+              dropCap: false,
+              runningHeader: true,
+              sectionBreaks: false
+            }
+          },
+          {
+            id: '6x9-premium',
+            name: 'Premium',
+            formatting: {
+              marginTop: 0.875,
+              marginBottom: 0.875,
+              marginLeft: 0.875,
+              marginRight: 0.875,
+              marginInside: 1.125,
+              marginOutside: 0.75,
+              lineHeight: 1.8,
+              paragraphSpacing: 0,
+              indentFirstLine: true,
+              indentSize: 0.5,
+              fontSize: 12,
+              fontFamily: 'Garamond',
+              chapterTitleFormat: {
+                fontSize: 24,
+                fontWeight: 700,
+                alignment: 'center',
+                spacing: 42
+              },
+              pageSize: 'custom',
+              pageWidth: 6,
+              pageHeight: 9,
+              chapterStartPosition: 3,
+              dropCap: true,
+              runningHeader: true,
+              sectionBreaks: true
+            }
+          }
+        ]
+      },
+      {
+        id: '6x9-manuscript',
+        name: '6×9 Manuscript',
+        variations: [
+          {
+            id: '6x9-manuscript-standard',
+            name: 'Standard',
+            formatting: {
+              marginTop: 1,
+              marginBottom: 1,
+              marginLeft: 1,
+              marginRight: 1,
+              marginInside: 1.25,
+              marginOutside: 1,
+              lineHeight: 2,
+              paragraphSpacing: 0,
+              indentFirstLine: true,
+              indentSize: 0.5,
+              fontSize: 12,
+              fontFamily: 'Times New Roman',
+              chapterTitleFormat: {
+                fontSize: 18,
+                fontWeight: 700,
+                alignment: 'center',
+                spacing: 24
+              },
+              pageSize: 'custom',
+              pageWidth: 6,
+              pageHeight: 9,
+              chapterStartPosition: 2,
+              dropCap: false,
+              runningHeader: false,
+              sectionBreaks: true
+            }
+          }
+        ]
+      },
+      {
+        id: '6x9-kdp',
+        name: '6×9 KDP Paperback',
+        variations: [
+          {
+            id: '6x9-kdp-standard',
+            name: 'Standard',
+            formatting: {
+              marginTop: 0.75,
+              marginBottom: 0.75,
+              marginLeft: 0.75,
+              marginRight: 0.75,
+              marginInside: 0.875,
+              marginOutside: 0.625,
+              lineHeight: 1.5,
+              paragraphSpacing: 0,
+              indentFirstLine: true,
+              indentSize: 0.5,
+              fontSize: 11,
+              fontFamily: 'Georgia',
+              chapterTitleFormat: {
+                fontSize: 20,
+                fontWeight: 700,
+                alignment: 'center',
+                spacing: 32
+              },
+              pageSize: 'custom',
+              pageWidth: 6,
+              pageHeight: 9,
+              chapterStartPosition: 2.25,
+              dropCap: false,
+              runningHeader: true,
+              sectionBreaks: true
+            }
+          },
+          {
+            id: '6x9-kdp-compact',
+            name: 'Compact',
+            formatting: {
+              marginTop: 0.625,
+              marginBottom: 0.625,
+              marginLeft: 0.625,
+              marginRight: 0.625,
+              marginInside: 0.75,
+              marginOutside: 0.5,
+              lineHeight: 1.4,
+              paragraphSpacing: 0,
+              indentFirstLine: true,
+              indentSize: 0.4,
+              fontSize: 10,
+              fontFamily: 'Georgia',
+              chapterTitleFormat: {
+                fontSize: 18,
+                fontWeight: 700,
+                alignment: 'center',
+                spacing: 28
+              },
+              pageSize: 'custom',
+              pageWidth: 6,
+              pageHeight: 9,
+              chapterStartPosition: 2,
+              dropCap: false,
+              runningHeader: true,
+              sectionBreaks: false
+            }
+          }
+        ]
+      },
+      {
+        id: '5.5x8.5-digest',
+        name: '5.5×8.5 Digest',
+        variations: [
+          {
+            id: '5.5x8.5-novel',
+            name: 'Novel',
+            formatting: {
+              marginTop: 0.625,
+              marginBottom: 0.625,
+              marginLeft: 0.625,
+              marginRight: 0.625,
+              marginInside: 0.75,
+              marginOutside: 0.5,
+              lineHeight: 1.5,
+              paragraphSpacing: 0,
+              indentFirstLine: true,
+              indentSize: 0.4,
+              fontSize: 11,
+              fontFamily: 'Garamond',
+              chapterTitleFormat: {
+                fontSize: 18,
+                fontWeight: 700,
+                alignment: 'center',
+                spacing: 28
+              },
+              pageSize: 'custom',
+              pageWidth: 5.5,
+              pageHeight: 8.5,
+              chapterStartPosition: 2,
+              dropCap: false,
+              runningHeader: true,
+              sectionBreaks: true
+            }
+          },
+          {
+            id: '5.5x8.5-nonfiction',
+            name: 'Non-Fiction',
+            formatting: {
+              marginTop: 0.75,
+              marginBottom: 0.75,
+              marginLeft: 0.625,
+              marginRight: 0.625,
+              marginInside: 0.875,
+              marginOutside: 0.625,
+              lineHeight: 1.6,
+              paragraphSpacing: 6,
+              indentFirstLine: false,
+              indentSize: 0,
+              fontSize: 10,
+              fontFamily: 'Georgia',
+              chapterTitleFormat: {
+                fontSize: 16,
+                fontWeight: 700,
+                alignment: 'left',
+                spacing: 20
+              },
+              pageSize: 'custom',
+              pageWidth: 5.5,
+              pageHeight: 8.5,
+              chapterStartPosition: 1.5,
+              dropCap: false,
+              runningHeader: true,
+              sectionBreaks: false
+            }
+          },
+          {
+            id: '5.5x8.5-modern',
+            name: 'Modern Interior',
+            formatting: {
+              marginTop: 0.75,
+              marginBottom: 0.75,
+              marginLeft: 0.75,
+              marginRight: 0.75,
+              marginInside: 0.875,
+              marginOutside: 0.625,
+              lineHeight: 1.5,
+              paragraphSpacing: 8,
+              indentFirstLine: false,
+              indentSize: 0,
+              fontSize: 10,
+              fontFamily: 'Georgia',
+              chapterTitleFormat: {
+                fontSize: 18,
+                fontWeight: 600,
+                alignment: 'left',
+                spacing: 24
+              },
+              pageSize: 'custom',
+              pageWidth: 5.5,
+              pageHeight: 8.5,
+              chapterStartPosition: 1.75,
+              dropCap: false,
+              runningHeader: true,
+              sectionBreaks: false
+            }
+          }
+        ]
+      },
+      {
+        id: '8.5x11-textbook',
+        name: '8.5×11 Textbook',
+        variations: [
+          {
+            id: '8.5x11-professional',
+            name: 'Professional',
+            formatting: {
+              marginTop: 1,
+              marginBottom: 1,
+              marginLeft: 1,
+              marginRight: 1,
+              marginInside: 1.25,
+              marginOutside: 1,
+              lineHeight: 1.5,
+              paragraphSpacing: 10,
+              indentFirstLine: false,
+              indentSize: 0,
+              fontSize: 11,
+              fontFamily: 'Georgia',
+              chapterTitleFormat: {
+                fontSize: 20,
+                fontWeight: 700,
+                alignment: 'left',
+                spacing: 24
+              },
+              pageSize: 'letter',
+              chapterStartPosition: 1.5,
+              dropCap: false,
+              runningHeader: true,
+              sectionBreaks: false
+            }
+          },
+          {
+            id: '8.5x11-academic',
+            name: 'Academic',
+            formatting: {
+              marginTop: 1,
+              marginBottom: 1,
+              marginLeft: 1.25,
+              marginRight: 1.25,
+              marginInside: 1.5,
+              marginOutside: 1,
+              lineHeight: 1.8,
+              paragraphSpacing: 12,
+              indentFirstLine: false,
+              indentSize: 0,
+              fontSize: 12,
+              fontFamily: 'Times New Roman',
+              chapterTitleFormat: {
+                fontSize: 18,
+                fontWeight: 700,
+                alignment: 'left',
+                spacing: 20
+              },
+              pageSize: 'letter',
+              chapterStartPosition: 1.5,
+              dropCap: false,
+              runningHeader: true,
+              sectionBreaks: true
+            }
+          }
+        ]
+      },
+      {
+        id: '5.06x7.81-compact',
+        name: '5.06×7.81 Compact Novel',
+        variations: [
+          {
+            id: '5.06x7.81-standard',
+            name: 'Standard',
+            formatting: {
+              marginTop: 0.625,
+              marginBottom: 0.625,
+              marginLeft: 0.5,
+              marginRight: 0.5,
+              marginInside: 0.625,
+              marginOutside: 0.5,
+              lineHeight: 1.5,
+              paragraphSpacing: 0,
+              indentFirstLine: true,
+              indentSize: 0.4,
+              fontSize: 10,
+              fontFamily: 'Garamond',
+              chapterTitleFormat: {
+                fontSize: 16,
+                fontWeight: 700,
+                alignment: 'center',
+                spacing: 24
+              },
+              pageSize: 'custom',
+              pageWidth: 5.06,
+              pageHeight: 7.81,
+              chapterStartPosition: 1.75,
+              dropCap: false,
+              runningHeader: true,
+              sectionBreaks: true
             }
           }
         ]
