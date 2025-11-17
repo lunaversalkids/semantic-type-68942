@@ -123,9 +123,9 @@ export const AudioNodeView = ({ node, updateAttributes, selected }: AudioNodeVie
         <audio ref={audioRef} src={src} />
 
         {isMinimized ? (
-          // Minimized State - Purple Ball with Play Button
+          // Minimized State - Purple Ball with Play Button and Expand Line
           <div
-            className="relative cursor-move"
+            className="relative cursor-move group"
             onClick={() => setIsMinimized(false)}
           >
             <button
@@ -141,6 +141,17 @@ export const AudioNodeView = ({ node, updateAttributes, selected }: AudioNodeVie
                 <Play className="w-8 h-8 text-white fill-white ml-1" />
               )}
             </button>
+            
+            {/* Expand Line - appears on hover on the right side */}
+            <div 
+              className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 cursor-pointer ml-2"
+              onClick={(e) => {
+                e.stopPropagation();
+                setIsMinimized(false);
+              }}
+            >
+              <div className="w-8 h-0.5 bg-purple-400 rounded-full shadow-lg shadow-purple-500/50" />
+            </div>
           </div>
         ) : (
           // Expanded State - Full Player
