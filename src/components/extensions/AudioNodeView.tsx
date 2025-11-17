@@ -123,7 +123,7 @@ export const AudioNodeView = ({ node, updateAttributes, selected }: AudioNodeVie
         <audio ref={audioRef} src={src} />
 
         {isMinimized ? (
-          // Minimized State - Purple Ball with Play Button
+          // Minimized State - Triangular Play Button with Infinity Logo
           <div
             className="relative cursor-move"
             onClick={() => setIsMinimized(false)}
@@ -133,13 +133,19 @@ export const AudioNodeView = ({ node, updateAttributes, selected }: AudioNodeVie
                 e.stopPropagation();
                 togglePlay();
               }}
-              className="w-16 h-16 rounded-full bg-gradient-to-br from-purple-400 to-purple-600 hover:from-purple-500 hover:to-purple-700 flex items-center justify-center shadow-lg shadow-purple-500/30 transition-all hover:scale-105"
+              className="relative w-24 h-24 flex items-center justify-center transition-all hover:scale-105"
+              style={{
+                clipPath: 'polygon(0% 0%, 0% 100%, 100% 50%)',
+                background: 'linear-gradient(135deg, hsl(266, 85%, 70%) 0%, hsl(280, 85%, 65%) 100%)',
+                filter: 'drop-shadow(0 10px 20px rgba(139, 112, 247, 0.4))',
+              }}
             >
-              {isPlaying ? (
-                <Pause className="w-8 h-8 text-white fill-white" />
-              ) : (
-                <Play className="w-8 h-8 text-white fill-white ml-1" />
-              )}
+              <img 
+                src="/src/assets/new-infinity-icon.png" 
+                alt="Infinity" 
+                className="w-10 h-10 ml-2"
+                style={{ filter: 'brightness(0) invert(1)' }}
+              />
             </button>
           </div>
         ) : (
