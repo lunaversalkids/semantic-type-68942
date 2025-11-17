@@ -123,7 +123,7 @@ export const AudioNodeView = ({ node, updateAttributes, selected }: AudioNodeVie
         <audio ref={audioRef} src={src} />
 
         {isMinimized ? (
-          // Minimized State - Curved Play Button with Infinity Logo
+          // Minimized State - Purple Ball with Play Button
           <div
             className="relative cursor-move"
             onClick={() => setIsMinimized(false)}
@@ -133,35 +133,13 @@ export const AudioNodeView = ({ node, updateAttributes, selected }: AudioNodeVie
                 e.stopPropagation();
                 togglePlay();
               }}
-              className="relative transition-all hover:scale-105"
-              style={{ width: '120px', height: '120px' }}
+              className="w-16 h-16 rounded-full bg-gradient-to-br from-purple-400 to-purple-600 hover:from-purple-500 hover:to-purple-700 flex items-center justify-center shadow-lg shadow-purple-500/30 transition-all hover:scale-105"
             >
-              <svg
-                viewBox="0 0 120 120"
-                className="absolute inset-0"
-                style={{
-                  filter: 'drop-shadow(0 10px 25px rgba(139, 112, 247, 0.5))',
-                }}
-              >
-                <defs>
-                  <linearGradient id="playButtonGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stopColor="hsl(266, 85%, 72%)" />
-                    <stop offset="100%" stopColor="hsl(280, 85%, 65%)" />
-                  </linearGradient>
-                </defs>
-                <path
-                  d="M 20 10 Q 10 10 10 20 L 10 100 Q 10 110 20 110 Q 30 110 40 105 L 105 65 Q 115 60 115 60 Q 115 60 105 55 L 40 15 Q 30 10 20 10 Z"
-                  fill="url(#playButtonGradient)"
-                />
-              </svg>
-              <div className="absolute inset-0 flex items-center justify-center pl-3">
-                <img 
-                  src="/src/assets/new-infinity-icon.png" 
-                  alt="Infinity" 
-                  className="w-12 h-12"
-                  style={{ filter: 'brightness(0) invert(1)' }}
-                />
-              </div>
+              {isPlaying ? (
+                <Pause className="w-8 h-8 text-white fill-white" />
+              ) : (
+                <Play className="w-8 h-8 text-white fill-white ml-1" />
+              )}
             </button>
           </div>
         ) : (
