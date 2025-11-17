@@ -152,20 +152,12 @@ export const AudioNodeView = ({ node, updateAttributes, selected }: AudioNodeVie
                     <stop offset="100%" stopColor="hsl(266, 100%, 65%)" />
                   </linearGradient>
                 </defs>
-                
-                {/* Play/Pause Icon */}
-                {isPlaying ? (
-                  <g transform="translate(50, 50)">
-                    <rect x="-8" y="-10" width="5" height="20" fill="white" rx="1" />
-                    <rect x="3" y="-10" width="5" height="20" fill="white" rx="1" />
-                  </g>
-                ) : (
-                  <path
-                    d="M 42 35 L 42 65 L 68 50 Z"
-                    fill="white"
-                    stroke="none"
-                  />
-                )}
+                {/* Infinity symbol */}
+                <path
+                  d="M 35 50 Q 35 45, 40 45 Q 45 45, 50 50 Q 55 55, 60 55 Q 65 55, 65 50 Q 65 45, 60 45 Q 55 45, 50 50 Q 45 55, 40 55 Q 35 55, 35 50 Z"
+                  fill="white"
+                  stroke="none"
+                />
               </svg>
             </button>
             
