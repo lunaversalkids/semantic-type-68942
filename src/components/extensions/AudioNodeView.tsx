@@ -4,6 +4,7 @@ import { Play, Pause, SkipBack, SkipForward } from 'lucide-react';
 import { Slider } from '@/components/ui/slider';
 import { Rnd } from 'react-rnd';
 import newInfinityButton from '@/assets/new-infinity-button.png';
+import infinitySymbol from '@/assets/infinity-symbol.png';
 
 interface AudioNodeViewProps {
   node: any;
@@ -137,9 +138,9 @@ export const AudioNodeView = ({ node, updateAttributes, selected }: AudioNodeVie
               className="w-16 h-16 rounded-full bg-gradient-to-br from-purple-400 to-purple-600 hover:from-purple-500 hover:to-purple-700 flex items-center justify-center shadow-lg shadow-purple-500/30 transition-all hover:scale-105"
             >
               <img 
-                src={newInfinityButton} 
+                src={infinitySymbol} 
                 alt="Infinity" 
-                className="w-8 h-8"
+                className="w-10 h-10"
               />
             </button>
             
