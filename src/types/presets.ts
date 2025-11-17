@@ -445,6 +445,64 @@ export const presetCategories: PresetCategory[] = [
             }
           }
         ]
+      },
+      {
+        id: 'new-adult',
+        name: 'New Adult Novel',
+        variations: [
+          {
+            id: 'new-adult-modern',
+            name: 'Modern',
+            formatting: {
+              marginTop: 1,
+              marginBottom: 1,
+              marginLeft: 1,
+              marginRight: 1,
+              lineHeight: 1.8,
+              paragraphSpacing: 12,
+              indentFirstLine: false,
+              indentSize: 0,
+              fontSize: 11,
+              fontFamily: 'Georgia',
+              chapterTitleFormat: {
+                fontSize: 18,
+                fontWeight: 700,
+                alignment: 'center',
+                spacing: 20
+              },
+              pageSize: 'letter'
+            }
+          }
+        ]
+      },
+      {
+        id: 'post-apocalyptic',
+        name: 'Post-Apocalyptic Novel',
+        variations: [
+          {
+            id: 'post-apocalyptic-gritty',
+            name: 'Gritty',
+            formatting: {
+              marginTop: 1,
+              marginBottom: 1,
+              marginLeft: 1,
+              marginRight: 1,
+              lineHeight: 1.8,
+              paragraphSpacing: 10,
+              indentFirstLine: false,
+              indentSize: 0,
+              fontSize: 11,
+              fontFamily: 'Arial',
+              chapterTitleFormat: {
+                fontSize: 16,
+                fontWeight: 700,
+                alignment: 'left',
+                spacing: 18
+              },
+              pageSize: 'letter'
+            }
+          }
+        ]
       }
     ]
   },
