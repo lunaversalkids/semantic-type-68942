@@ -45,6 +45,15 @@ export const AudioNode = Node.create({
     return [
       {
         tag: 'div[data-type="audio-node"]',
+        getAttrs: (dom) => {
+          const element = dom as HTMLElement;
+          return {
+            src: element.getAttribute('src') || '',
+            width: parseInt(element.getAttribute('width') || '300'),
+            height: parseInt(element.getAttribute('height') || '300'),
+            diamondSize: parseInt(element.getAttribute('diamondSize') || '60'),
+          };
+        },
       },
     ];
   },
