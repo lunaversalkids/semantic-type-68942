@@ -102,7 +102,7 @@ export function ChapterPresetsDialog({ open, onOpenChange, onApplyPreset }: Chap
                     className={cn(
                       "w-full text-left px-4 py-3 rounded-lg mb-1 transition-colors text-base",
                       selectedCategory?.id === category.id
-                        ? "bg-[hsl(var(--accent-2))] text-foreground font-medium"
+                        ? "bg-[hsl(var(--accent-3))] text-foreground font-medium"
                         : "hover:bg-[hsl(var(--panel-2))] text-foreground"
                     )}
                   >
@@ -125,7 +125,7 @@ export function ChapterPresetsDialog({ open, onOpenChange, onApplyPreset }: Chap
                       className={cn(
                         "w-full text-left px-4 py-3 rounded-lg mb-1 transition-colors text-base",
                         selectedPreset?.id === preset.id
-                          ? "bg-[hsl(var(--accent-2))] text-foreground font-medium"
+                          ? "bg-[hsl(var(--accent-3))] text-foreground font-medium"
                           : "hover:bg-[hsl(var(--panel-2))] text-foreground"
                       )}
                     >
@@ -149,7 +149,7 @@ export function ChapterPresetsDialog({ open, onOpenChange, onApplyPreset }: Chap
                       className={cn(
                         "w-full text-left px-4 py-3 rounded-lg mb-1 transition-colors text-base",
                         selectedVariation?.id === variation.id
-                          ? "bg-[hsl(var(--accent-2))] text-foreground font-medium"
+                          ? "bg-[hsl(var(--accent-3))] text-foreground font-medium"
                           : "hover:bg-[hsl(var(--panel-2))] text-foreground"
                       )}
                     >
