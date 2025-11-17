@@ -105,7 +105,7 @@ export const AudioNodeView = ({ node, updateAttributes, selected }: AudioNodeVie
           });
         }}
         minWidth={isMinimized ? 40 : 300}
-        maxWidth={isMinimized ? 120 : 800}
+        maxWidth={isMinimized ? 64 : 800}
         enableResizing={{
           top: false,
           right: false,
