@@ -142,15 +142,15 @@ export const AudioNodeView = ({ node, updateAttributes, selected }: AudioNodeVie
               )}
             </button>
             
-            {/* Expand Line - appears on hover on the right side */}
+            {/* Expand Line - appears on hover at top-left corner */}
             <div 
-              className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 cursor-pointer ml-2"
+              className="absolute left-0 top-0 -translate-y-2 -translate-x-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300 cursor-pointer"
               onClick={(e) => {
                 e.stopPropagation();
                 setIsMinimized(false);
               }}
             >
-              <div className="w-8 h-0.5 bg-purple-400 rounded-full shadow-lg shadow-purple-500/50" />
+              <div className="w-4 h-0.5 bg-purple-400 rounded-full shadow-lg shadow-purple-500/50" />
             </div>
           </div>
         ) : (
