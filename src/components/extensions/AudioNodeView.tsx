@@ -104,17 +104,17 @@ export const AudioNodeView = ({ node, updateAttributes, selected }: AudioNodeVie
             width: ref.offsetWidth,
           });
         }}
-        minWidth={isMinimized ? 40 : 300}
-        maxWidth={isMinimized ? 64 : 800}
-        enableResizing={{
+        minWidth={isMinimized ? 80 : 400}
+        maxWidth={isMinimized ? 80 : 800}
+        enableResizing={!isMinimized && {
           top: false,
-          right: false,
+          right: true,
           bottom: false,
-          left: false,
-          topRight: false,
+          left: true,
+          topRight: true,
           bottomRight: true,
-          bottomLeft: false,
-          topLeft: false,
+          bottomLeft: true,
+          topLeft: true,
         }}
         bounds="parent"
         className="audio-player-rnd"
@@ -133,13 +133,11 @@ export const AudioNodeView = ({ node, updateAttributes, selected }: AudioNodeVie
                 e.stopPropagation();
                 togglePlay();
               }}
-              className="rounded-full bg-gradient-to-br from-purple-400 to-purple-600 hover:from-purple-500 hover:to-purple-700 flex items-center justify-center shadow-lg shadow-purple-500/30 transition-all hover:scale-105"
-              style={{ width: width || 64, height: width || 64 }}
+              className="w-16 h-16 rounded-full bg-gradient-to-br from-purple-400 to-purple-600 hover:from-purple-500 hover:to-purple-700 flex items-center justify-center shadow-lg shadow-purple-500/30 transition-all hover:scale-105"
             >
               <svg
                 viewBox="0 0 24 24"
-                className="text-white fill-white"
-                style={{ width: (width || 64) * 0.5, height: (width || 64) * 0.5 }}
+                className="w-8 h-8 text-white fill-white"
               >
                 <path d="M 8 12 Q 8 8, 12 8 Q 16 8, 16 12 Q 16 16, 12 16 Q 8 16, 8 12 Z M 12 12 Q 12 8, 16 8 Q 20 8, 20 12 Q 20 16, 16 16 Q 12 16, 12 12 Z" />
               </svg>
@@ -158,11 +156,8 @@ export const AudioNodeView = ({ node, updateAttributes, selected }: AudioNodeVie
 
             {/* Resize Handle Ball - Bottom Right Corner of Minimized Ball */}
             <div 
-              className="absolute bottom-0 right-0 w-4 h-4 bg-gradient-to-br from-purple-400 to-purple-600 rounded-full shadow-lg shadow-purple-500/50 cursor-se-resize hover:scale-110 transition-transform z-20"
-              style={{ 
-                pointerEvents: 'none',
-                transform: 'translate(50%, 50%)'
-              }}
+              className="absolute bottom-0 right-0 translate-x-1/2 translate-y-1/2 w-4 h-4 bg-gradient-to-br from-purple-400 to-purple-600 rounded-full shadow-lg shadow-purple-500/50 cursor-se-resize hover:scale-110 transition-transform z-20"
+              style={{ pointerEvents: 'auto' }}
             />
           </div>
         ) : (
@@ -301,8 +296,8 @@ export const AudioNodeView = ({ node, updateAttributes, selected }: AudioNodeVie
         {/* Resize Handle Ball - Bottom Right Corner */}
         {!isMinimized && (
           <div 
-            className="absolute bottom-1 right-1 w-6 h-6 bg-gradient-to-br from-purple-400 to-purple-600 rounded-full shadow-lg shadow-purple-500/50 cursor-se-resize hover:scale-125 hover:shadow-xl hover:shadow-purple-500/60 transition-all z-20"
-            style={{ pointerEvents: 'none' }}
+            className="absolute bottom-2 right-2 w-5 h-5 bg-gradient-to-br from-purple-400 to-purple-600 rounded-full shadow-lg shadow-purple-500/50 cursor-se-resize hover:scale-110 transition-transform z-20"
+            style={{ pointerEvents: 'auto' }}
           />
         )}
       </Rnd>
