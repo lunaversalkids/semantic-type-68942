@@ -153,6 +153,12 @@ export const AudioNodeView = ({ node, updateAttributes, selected }: AudioNodeVie
             >
               <div className="w-4 h-0.5 bg-purple-400 rounded-full shadow-lg shadow-purple-500/50" />
             </div>
+
+            {/* Resize Handle Ball - Bottom Right Corner of Minimized Ball */}
+            <div 
+              className="absolute bottom-0 right-0 translate-x-1/2 translate-y-1/2 w-4 h-4 bg-gradient-to-br from-purple-400 to-purple-600 rounded-full shadow-lg shadow-purple-500/50 cursor-se-resize hover:scale-110 transition-transform z-20"
+              style={{ pointerEvents: 'auto' }}
+            />
           </div>
         ) : (
           // Expanded State - Full Player
