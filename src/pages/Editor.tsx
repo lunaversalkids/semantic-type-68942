@@ -1702,17 +1702,19 @@ const Editor = () => {
         <TextStylePanel editor={editor} wordCount={wordCount} selectedWordCount={selectedWordCount} />
       </div>
       
-      <div className="relative">
-        <PermanentFindReplaceBar />
-        {findReplaceOpen && (
-          <div className="absolute inset-0">
-            <FindReplaceBottomBar 
-              editor={editor} 
-              isVisible={findReplaceOpen}
-              onClose={() => setFindReplaceOpen(false)}
-            />
-          </div>
-        )}
+      <div className="relative w-full flex justify-center">
+        <div className="w-full max-w-7xl">
+          <PermanentFindReplaceBar />
+          {findReplaceOpen && (
+            <div className="absolute inset-0">
+              <FindReplaceBottomBar 
+                editor={editor} 
+                isVisible={findReplaceOpen}
+                onClose={() => setFindReplaceOpen(false)}
+              />
+            </div>
+          )}
+        </div>
       </div>
       
       
